@@ -79,7 +79,7 @@
     });
   }
 
-  /* Contact form: client-side validation + honest "not yet connected" handling */
+  /* Contact form: client-side validation, then hand off to the visitor's own mail client */
   var form = document.querySelector("[data-contact-form]");
   if (form) {
     form.addEventListener("submit", function (e) {
@@ -119,8 +119,8 @@
       var mailto = "mailto:" + (window.SEAL_CONFIG ? window.SEAL_CONFIG.email : "") + "?subject=" + subject + "&body=" + body;
 
       if (statusEl) {
-        statusEl.innerHTML = "Dit formulier is nog niet gekoppeld aan een server (de site draait op GitHub Pages zonder backend). Je gegevens zijn <strong>niet verstuurd</strong>. Klik op de knop hieronder om de aanvraag alsnog via e-mail te versturen, of neem direct contact op via telefoon of WhatsApp.";
-        statusEl.className = "form-status error";
+        statusEl.innerHTML = "Bijna klaar — klik hieronder om uw aanvraag via e-mail naar ons te versturen. Uw ingevulde gegevens worden automatisch meegenomen.";
+        statusEl.className = "form-status success";
         statusEl.hidden = false;
         statusEl.scrollIntoView({ behavior: "smooth", block: "center" });
       }
@@ -128,6 +128,7 @@
       if (mailBtn) {
         mailBtn.href = mailto;
         mailBtn.hidden = false;
+        mailBtn.focus();
       }
     });
   }

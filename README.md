@@ -51,6 +51,12 @@ Projecten staan op `/projecten/index.html` en worden gefilterd op categorie via 
 
 GitHub Pages heeft geen eigen server, dus het contactformulier op `/contact/` kan gegevens nog niet automatisch versturen of opslaan. Het formulier valideert wel netjes en biedt na het invullen een knop om de aanvraag alsnog per e-mail te versturen. Zodra je een formulierdienst koppelt (bijvoorbeeld Formspree, Netlify Forms bij een andere host, of een eigen backend), kan dit in `js/main.js` (functie rond `data-contact-form`) aangepast worden zodat het formulier écht verstuurt.
 
+## Tuinproject-configurator (homepage) en projectlightbox
+
+Op de homepage staat een korte interactieve wizard ("Stel uw tuinproject samen", `#tuinproject`) waarmee bezoekers hun klus omschrijven — dienst, omvang in m²/meters, plaats en periode. De logica staat in `js/wizard.js`; nieuwe diensten of maatvoering-opties voeg je toe in de `SIZE_CONFIG`-tabel bovenin dat bestand. Aan het einde van de wizard gaat de bezoeker naar `/contact/` met de keuzes in de link (querystring); `js/wizard-prefill.js` leest dit uit en vult het contactformulier automatisch in (dienst, plaats, periode, een korte samenvatting in de omschrijving).
+
+Op `/projecten/` opent een klik op een projectfoto een lightbox (grotere foto, vorige/volgende, Escape/pijltjestoetsen) via `js/lightbox.js`. Nieuwe projecttegels werken automatisch mee zolang ze de bestaande `data-lightbox`, `data-full-jpg`, `data-full-webp`, `data-title` en `data-meta` attributen hebben (zie de bestaande tegels als voorbeeld).
+
 ## Domeinmigratie naar sealcleaning.nl
 
 De site verwijst in metadata (canonical-URLs, Open Graph, sitemap.xml, structured data) al naar `https://sealcleaning.nl/`. Zodra het domein gekoppeld is aan GitHub Pages:
@@ -85,6 +91,9 @@ Tot die tijd blijft de site gewoon bereikbaar via de huidige GitHub Pages-URL, z
 css/style.css         → volledig design system (kleuren, typografie, componenten)
 js/config.js          → centrale bedrijfsgegevens
 js/main.js            → menu, formulieren, filters, animaties
+js/wizard.js          → tuinproject-configurator op de homepage
+js/wizard-prefill.js  → vult het contactformulier op basis van de configurator
+js/lightbox.js        → projectlightbox op /projecten/
 sitemap.xml, robots.txt → SEO-bestanden
 ```
 
