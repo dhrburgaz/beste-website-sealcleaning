@@ -262,6 +262,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-lift);
 }
 .hero-visual svg { width: 62%; opacity: 0.92; }
+.hero-visual picture { display: block; width: 100%; height: 100%; }
+.hero-visual img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .hero-visual .caption {
   position: absolute; left: 0; right: 0; bottom: 0; padding: var(--sp-2) var(--sp-3);
   background: linear-gradient(0deg, rgba(18,38,28,0.85), transparent);
@@ -310,6 +312,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .media-frame.ratio-tall { aspect-ratio: 3/4; }
 .media-frame.ratio-square { aspect-ratio: 1/1; }
 .media-frame svg { width: 34%; opacity: 0.55; }
+.media-frame picture { display: block; width: 100%; height: 100%; }
 .media-frame img { width: 100%; height: 100%; object-fit: cover; }
 .media-frame .frame-label {
   position: absolute; left: var(--sp-2); bottom: var(--sp-2); background: rgba(18,38,28,0.78); color: #fff;
