@@ -1,0 +1,1 @@
+Plaats hier het logo van Sealcleaning (bijv. `logo.svg` of `logo.png`, bij voorkeur met transparante achtergrond) en eventuele merkfoto's. Zie de hoofdmap `README.md` voor uitleg over hoe dit vervolgens in de site wordt verwerkt.
