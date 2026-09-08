@@ -12,14 +12,14 @@
 <meta property="og:url" content="https://sealcleaning.nl/bestrating/">
 <meta property="og:image" content="https://sealcleaning.nl/images/projects/terras-grindborder-heesters.jpg">
 <meta property="og:locale" content="nl_NL">
-<meta name="theme-color" content="#1f3a2d">
+<meta name="theme-color" content="#1b2a1e">
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <link rel="icon" href="../images/branding/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="../images/branding/apple-touch-icon.png">
 <link rel="manifest" href="../site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/style.css">
 <script type="application/ld+json">
 {
@@ -44,14 +44,17 @@
         <span class="brand-sub">Groenonderhoud &amp; Aanleg</span>
       </span>
     </a>
+
     <button class="nav-toggle" aria-label="Menu openen" aria-expanded="false" aria-controls="main-nav">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
     </button>
+
     <nav class="main-nav" id="main-nav" aria-label="Hoofdnavigatie">
       <ul class="nav-list">
         <li><a href="../">Home</a></li>
         <li class="has-submenu open">
-          <a href="../projecten/">Diensten</a>
+          <a href="../projecten/" aria-current="page">Diensten</a>
           <ul class="submenu">
             <li><a href="../tuinonderhoud/">Tuinonderhoud</a></li>
             <li><a href="../tuinaanleg/">Tuinaanleg</a></li>
@@ -70,41 +73,33 @@
       </ul>
       <div class="header-cta">
         <a href="#" class="icon-btn" data-tel aria-label="Bel Sealcleaning">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
         </a>
-        <a href="#" class="btn btn-whatsapp btn-sm" data-whatsapp data-whatsapp-msg="Hallo Sealcleaning, ik wil graag informatie over bestrating.">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20zm4.4-5.9c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.8 1-.1.1-.3.2-.5.1-.7-.3-1.5-.8-2.1-1.5-.5-.5-.9-1.1-1-1.3-.1-.2 0-.4.1-.5l.4-.4c.1-.1.2-.3.2-.4.1-.1.1-.3 0-.4-.1-.1-.5-1.2-.7-1.7-.2-.4-.4-.4-.5-.4h-.5c-.2 0-.4.1-.6.3-.6.6-.9 1.3-.9 2.1.1.9.5 1.8 1.1 2.6 1.1 1.6 2.4 2.8 4 3.5.5.2.9.4 1.4.5.6.2 1.1.2 1.5.1.5-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1-.1-.1-.2-.2-.4-.3z"/></svg>
-          WhatsApp
-        </a>
-        <a href="../contact/" class="btn btn-primary btn-sm">Gratis bezichtiging</a>
+        <a href="../contact/" class="btn btn-primary btn-sm">Plan een kennismaking</a>
       </div>
     </nav>
-    <div class="nav-backdrop"></div>
   </div>
 </header>
 
 <main id="main">
-  <div class="container breadcrumbs">
-    <ol>
-      <li><a href="../">Home</a></li>
-      <li><a href="../projecten/">Diensten</a></li>
-      <li>Bestrating</li>
-    </ol>
-  </div>
-
-  <section class="section-tight">
-    <div class="container two-col">
-      <div>
-        <p class="eyebrow">Bestrating Dordrecht</p>
-        <h1>Terrassen, tuinpaden en opritten strak aangelegd</h1>
-        <p class="lede">Een strak bestraat terras of een verzorgd tuinpad maakt direct verschil in de uitstraling van uw tuin. Wij leggen bestrating waterpas en vakkundig aan, in het materiaal van uw keuze.</p>
-        <div class="btn-row">
-          <a href="../contact/" class="btn btn-primary">Plan een gratis bezichtiging</a>
-          <a href="#" class="btn btn-secondary" data-whatsapp data-whatsapp-msg="Hallo Sealcleaning, ik wil graag informatie over bestrating.">WhatsApp over bestrating</a>
-        </div>
+  <section class="page-hero">
+    <div class="hero-media">
+      <picture><source srcset="../images/projects/terras-grindborder-heesters.webp" type="image/webp"><img src="../images/projects/terras-grindborder-heesters.jpg" alt="Bestraat terras met grindborder en beplanting" fetchpriority="high" decoding="async"></picture>
+    </div>
+    <div class="hero-scrim"></div>
+    <div class="container page-hero-inner">
+      <div class="breadcrumbs">
+        <ol><li><a href="../">Home</a></li><li><a href="../projecten/">Diensten</a></li><li>Bestrating</li></ol>
       </div>
-      <div class="media-frame ratio-square">
-        <picture><source srcset="../images/projects/terras-grindborder-heesters.webp" type="image/webp"><img src="../images/projects/terras-grindborder-heesters.jpg" alt="Bestraat terras met grindborder en beplanting" fetchpriority="high" decoding="async"></picture>
+      <p class="eyebrow">Bestrating Dordrecht</p>
+      <h1>Terrassen, tuinpaden en opritten strak aangelegd</h1>
+      <p class="lede">Een strak bestraat terras of een verzorgd tuinpad maakt direct verschil in de uitstraling van uw tuin. Wij leggen bestrating waterpas en vakkundig aan, in het materiaal van uw keuze.</p>
+      <div class="btn-row">
+        <a href="../contact/" class="btn btn-primary btn-lg">Plan een kennismaking</a>
+        <a href="#" class="link-underline" style="color:#fff" data-whatsapp data-whatsapp-msg="Hallo Sealcleaning, ik wil graag informatie over bestrating.">
+          WhatsApp over bestrating
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
       </div>
     </div>
   </section>
@@ -168,12 +163,18 @@
         <p class="eyebrow">Uit de praktijk</p>
         <h2>Relevante projecten</h2>
       </div>
-      <div class="grid grid-3">
-        <a href="../projecten/" class="project-tile">
-          <div class="media-frame"><picture><source srcset="../images/projects/voorpad-bestrating-verlichting.webp" type="image/webp"><img src="../images/projects/voorpad-bestrating-verlichting.jpg" alt="Bestraat voorpad met sfeerverlichting" loading="lazy" decoding="async"></picture></div>
-          <h3>Terras aangelegd, Dordrecht</h3>
-          <p class="meta">Terrastegels op maat gelegd</p>
-        </a>
+      <div class="feature-split reveal">
+        <div class="feature-media reveal-img">
+          <picture><source srcset="../images/projects/voorpad-bestrating-verlichting.webp" type="image/webp"><img src="../images/projects/voorpad-bestrating-verlichting.jpg" alt="Bestraat voorpad met sfeerverlichting" loading="lazy" decoding="async"></picture>
+        </div>
+        <div class="feature-copy">
+          <h3 style="font-size: var(--fs-h2)">Terras aangelegd, Dordrecht</h3>
+          <p class="lede" style="font-size:1.05rem">Terrastegels op maat gelegd</p>
+          <a href="../projecten/" class="link-underline">
+            Bekijk alle projecten
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
       </div>
       <p class="text-center" style="margin-top:2rem"><a href="../projecten/" class="btn btn-secondary">Bekijk alle projecten</a></p>
     </div>
@@ -205,7 +206,7 @@
         <h2>Wilt u aan de slag met bestrating?</h2>
         <p>Plan een gratis bezichtiging in Dordrecht en ontvang een heldere offerte, of stuur direct een bericht via WhatsApp.</p>
         <div class="btn-row" style="justify-content:center">
-          <a href="../contact/" class="btn btn-ghost-light btn-lg" style="background:#fff;color:var(--c-forest-dark);border-color:#fff">Plan mijn bezichtiging</a>
+          <a href="../contact/" class="btn btn-ghost-light btn-lg" style="background:#fff;color:var(--c-forest);border-color:#fff">Plan mijn bezichtiging</a>
           <a href="#" class="btn btn-ghost-light btn-lg" data-whatsapp data-whatsapp-msg="Hallo Sealcleaning, ik wil graag informatie over bestrating.">Stuur een WhatsApp-bericht</a>
         </div>
       </div>
@@ -213,43 +214,47 @@
   </section>
 </main>
 
+<!-- PREMIUM CLOSING CTA -->
+<section class="footer-cta">
+  <div class="container-narrow reveal">
+    <p class="eyebrow">Aan de slag</p>
+    <h2>Laten we uw tuin bespreken.</h2>
+    <p>Plan een gratis, vrijblijvende kennismaking in Dordrecht — of stuur ons een bericht via WhatsApp voor een snel, persoonlijk antwoord.</p>
+    <div class="btn-row" style="justify-content:center">
+      <a href="../contact/" class="btn btn-ghost-light btn-lg" style="background:#fff;color:var(--c-forest);border-color:#fff">Plan mijn kennismaking</a>
+      <a href="#" class="btn btn-ghost-light btn-lg" data-whatsapp data-whatsapp-msg="Hallo Sealcleaning, ik wil graag informatie over jullie diensten.">Stuur een WhatsApp-bericht</a>
+    </div>
+  </div>
+</section>
+
 <footer class="site-footer">
   <div class="container footer-grid">
     <div class="footer-brand">
-      <span class="brand-name" style="color:#fff">Sealcleaning</span>
+      <span class="brand-name">Sealcleaning</span>
       <p>Groenonderhoud en aanleg voor Dordrecht, de Drechtsteden en Rotterdam e.o. Vakwerk voor een eerlijke prijs, met duidelijke afspraken vooraf.</p>
     </div>
-    <div>
-      <h4>Diensten</h4>
-      <ul>
-        <li><a href="../tuinonderhoud/">Tuinonderhoud</a></li>
-        <li><a href="../tuinaanleg/">Tuinaanleg</a></li>
-        <li><a href="../tuinrenovatie/">Tuinrenovatie</a></li>
-        <li><a href="../bestrating/">Bestrating</a></li>
-        <li><a href="../schuttingen/">Schuttingen</a></li>
-        <li><a href="../snoeiwerk/">Snoeiwerk</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4>Bedrijf</h4>
-      <ul>
-        <li><a href="../projecten/">Projecten</a></li>
-        <li><a href="../werkwijze/">Werkwijze</a></li>
-        <li><a href="../over-ons/">Over ons</a></li>
-        <li><a href="../werkgebied/">Werkgebied</a></li>
-        <li><a href="../contact/">Contact</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4>Contact</h4>
-      <ul>
-        <li data-address>Romboutslaan 582<br>3312 KP Dordrecht</li>
-        <li><a href="#" data-tel data-tel-text>06 15 71 09 65</a></li>
-        <li><a href="#" data-whatsapp data-whatsapp-text>06 48 87 19 86</a></li>
-        <li><a href="#" data-email data-email-text>sealcleaningaanleg@gmail.com</a></li>
-        <li data-hours>Dagelijks bereikbaar van 10:00 tot 19:00 uur</li>
-      </ul>
-    </div>
+    <div><h4>Diensten</h4><ul>
+      <li><a href="../tuinonderhoud/">Tuinonderhoud</a></li>
+      <li><a href="../tuinaanleg/">Tuinaanleg</a></li>
+      <li><a href="../tuinrenovatie/">Tuinrenovatie</a></li>
+      <li><a href="../bestrating/">Bestrating</a></li>
+      <li><a href="../schuttingen/">Schuttingen</a></li>
+      <li><a href="../snoeiwerk/">Snoeiwerk</a></li>
+    </ul></div>
+    <div><h4>Bedrijf</h4><ul>
+      <li><a href="../projecten/">Projecten</a></li>
+      <li><a href="../werkwijze/">Werkwijze</a></li>
+      <li><a href="../over-ons/">Over ons</a></li>
+      <li><a href="../werkgebied/">Werkgebied</a></li>
+      <li><a href="../contact/">Contact</a></li>
+    </ul></div>
+    <div><h4>Contact</h4><ul>
+      <li data-address>Romboutslaan 582<br>3312 KP Dordrecht</li>
+      <li><a href="#" data-tel data-tel-text>06 15 71 09 65</a></li>
+      <li><a href="#" data-whatsapp data-whatsapp-text>06 48 87 19 86</a></li>
+      <li><a href="#" data-email data-email-text>sealcleaningaanleg@gmail.com</a></li>
+      <li data-hours>Dagelijks bereikbaar van 10:00 tot 19:00 uur</li>
+    </ul></div>
   </div>
   <div class="container footer-bottom">
     <span>&copy; <span data-year>2026</span> Sealcleaning Groenonderhoud en Aanleg — KvK <span data-kvk>83078665</span></span>
@@ -260,8 +265,8 @@
 <div class="mobile-cta-bar">
   <div class="mobile-cta-inner">
     <a href="#" data-tel><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Bellen</a>
-    <a href="#" data-whatsapp data-whatsapp-msg="Hallo Sealcleaning, ik wil graag informatie over bestrating."><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20z"/></svg>WhatsApp</a>
-    <a href="../contact/" class="cta-primary">Offerte aanvragen</a>
+    <a href="#" data-whatsapp data-whatsapp-msg="Hallo Sealcleaning, ik wil graag informatie over jullie diensten."><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20z"/></svg>WhatsApp</a>
+    <a href="../contact/" class="cta-primary">Kennismaking</a>
   </div>
 </div>
 
