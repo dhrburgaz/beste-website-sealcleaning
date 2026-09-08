@@ -15,18 +15,17 @@ whatsappNumber: "31648871986",
 
 Let op: het **telefoonnummer** is uitsluitend voor bellen (`tel:`-link), het **WhatsApp-nummer** is uitsluitend voor WhatsApp-berichten. Dit zijn bewust twee verschillende nummers.
 
-## Logo en foto's toevoegen
+## Logo en foto's
 
-De site bevat op dit moment **geen echte foto's of logo-bestand** — alleen nette placeholder-illustraties (lijntekeningen) totdat de echte bestanden zijn geüpload. Reden: foto's die in een chatgesprek met Claude worden gedeeld, kunnen niet automatisch als bestand op de site worden gezet. Zo voeg je ze toe:
+Het logo en 47 echte projectfoto's staan inmiddels verwerkt in de site, in `images/branding/` en `images/projects/`. Van elke foto is EXIF-data (waaronder eventuele GPS-locatie van een klantwoning) verwijderd, en er is een WebP-versie naast elke JPEG gezet voor snellere laadtijden. Niet elke aangeleverde foto is gebruikt: een aantal foto's van interieurwerk (badkamer, TV-wandmontage, vloerinstallatie) zijn bewust weggelaten omdat dit geen hoveniersproject is en het de positionering van Sealcleaning als groenbedrijf zou vertroebelen.
 
-1. Upload het logo (bij voorkeur als `.svg` of `.png` met transparante achtergrond) naar de map `images/branding/`, bijvoorbeeld als `logo.png`.
-2. Upload projectfoto's naar `images/projects/`, met een duidelijke bestandsnaam (bijv. `tuinaanleg-dordrecht-achtertuin-1.jpg`), niet `IMG_1234.jpg`.
-3. Laat het weten (of vraag een vervolgsessie met Claude Code) om:
-   - het logo in de header en favicon te verwerken;
-   - de placeholder-illustraties in hero, diensten en projectenpagina te vervangen door de echte foto's;
-   - alt-teksten toe te voegen die de foto's kort en eerlijk omschrijven.
+**Belangrijk over het logo:** het huidige logo toont de tekst "SEAL — Tuin en Onderhoud" (de KvK-naam), terwijl de site "Sealcleaning Groenonderhoud en Aanleg" als publieke handelsnaam gebruikt — dit is bevestigd als bewuste keuze (KvK-naam vs. lakam/handelsnaam). Het logo wordt klein getoond in de header naast de bedrijfsnaam in tekst; op dat formaat is de logotekst niet leesbaar, dus de tekst ernaast blijft de primaire naamsdrager.
 
-**Belangrijk over het huidige logo-ontwerp:** het aangeleverde logo-concept toont de tekst "SEAL — Tuin en Onderhoud". De officiële bedrijfsnaam op deze site is "Sealcleaning Groenonderhoud en Aanleg". Stem dit af vóórdat het logo definitief wordt verwerkt, zodat naam op het logo en op de site consistent zijn.
+Nieuwe foto's toevoegen:
+
+1. Upload nieuwe projectfoto's naar `images/projects/`, met een duidelijke bestandsnaam (bijv. `tuinaanleg-dordrecht-achtertuin-2.jpg`), niet `IMG_1234.jpg`.
+2. Laat het weten (of vraag een vervolgsessie met Claude Code) om ze te verwerken in de projectenpagina of een dienstpagina, inclusief een eerlijke alt-tekst.
+3. Wil je een scherpere, transparante versie van het logo (bijvoorbeeld alleen het figuurtje, zonder cream achtergrond) laten maken? Lever dan een vectorbestand (.ai/.svg) of hoge-resolutie PNG met transparantie aan — dat geeft een beter resultaat dan verder bewerken van de huidige JPEG.
 
 ## Nieuwe projecten toevoegen
 
