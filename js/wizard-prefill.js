@@ -7,7 +7,17 @@
 
   var params = new URLSearchParams(window.location.search);
   var service = params.get("service");
-  if (!service) return;
+
+  /* Overdracht vanuit /project-samenstellen/: een leesbare samenvatting die
+     daar in sessionStorage is gezet (zie js/configurator/app.js,
+     storeHandoffSummary). Eenmalig gebruik: direct verwijderen na lezen. */
+  var configuratorSummary = null;
+  try {
+    configuratorSummary = window.sessionStorage.getItem("sealProjectSummary");
+    if (configuratorSummary) window.sessionStorage.removeItem("sealProjectSummary");
+  } catch (e) { /* privénavigatie: geen sessionStorage, geen overdracht */ }
+
+  if (!service && !configuratorSummary) return;
 
   var SERVICE_TO_OPTION = {
     tuinonderhoud: "Tuinonderhoud",
@@ -18,6 +28,7 @@
     snoeiwerk: "Snoeiwerk",
     bomen: "Snoeiwerk",
     gras: "Tuinonderhoud",
+    kunstgras: "Tuinonderhoud",
     periodiek: "Periodiek onderhoud",
     anders: "Anders / weet ik nog niet"
   };
@@ -30,6 +41,7 @@
     snoeiwerk: "Snoeiwerk",
     bomen: "Bomen verzorgen",
     gras: "Gras/gazon",
+    kunstgras: "Gras/gazon",
     periodiek: "Periodiek onderhoud",
     anders: "Anders"
   };
@@ -56,12 +68,16 @@
 
     var omschrijving = document.getElementById("omschrijving");
     if (omschrijving) {
-      var lines = ["Vanuit de tuinproject-configurator:", "Dienst: " + (SERVICE_LABELS[service] || service)];
-      if (maat) lines.push("Omvang: circa " + maat);
-      if (extra) lines.push("Type: " + extra);
-      if (periode) lines.push("Gewenste periode: " + periode);
-      lines.push("", "(Vul hieronder eventueel meer details aan.)");
-      omschrijving.value = lines.join("\n");
+      if (configuratorSummary) {
+        omschrijving.value = configuratorSummary + "\n\n(Vul hieronder eventueel meer details aan.)";
+      } else {
+        var lines = ["Vanuit de tuinproject-configurator:", "Dienst: " + (SERVICE_LABELS[service] || service)];
+        if (maat) lines.push("Omvang: circa " + maat);
+        if (extra) lines.push("Type: " + extra);
+        if (periode) lines.push("Gewenste periode: " + periode);
+        lines.push("", "(Vul hieronder eventueel meer details aan.)");
+        omschrijving.value = lines.join("\n");
+      }
     }
 
     var note = document.querySelector("[data-wizard-prefill-note]");

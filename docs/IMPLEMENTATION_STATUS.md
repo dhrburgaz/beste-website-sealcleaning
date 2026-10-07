@@ -3,81 +3,131 @@
 Lees dit bestand, `git status` en alleen de relevante hoofdstukken van
 `docs/SEAL_BUILD_BRIEF.md` bij hervatten. Begin niet opnieuw met onderzoek.
 
-**Branch:** `claude/sealcleaning-website-overhaul-gvgtfj` (op `main`, pushed t/m
-commit die dit bestand toevoegt). **Live:** sealcleaning.nl draait op `main`.
-Deze branch moet naar `main` gemerged worden om live te komen — nog niet
-gedaan in deze sessie; vraag de eigenaar wanneer een merge/PR gewenst is.
+**Branch:** `claude/sealcleaning-website-overhaul-gvgtfj`, gebaseerd op de
+huidige `main` (live op sealcleaning.nl). Nog niet gemerged — vraag de
+eigenaar wanneer een PR/merge gewenst is.
 
-## Afgerond (ch.48 tier 1 — Herstel waarheid)
+## Afgerond — ch.48 tier 1 (Herstel waarheid)
 
-- Diensten-link wees naar `/projecten/` i.p.v. een dienstenoverzicht → wijst nu
-  naar `#diensten` (homepage-sectie met de 7 diensten), op alle 16 pagina's.
-- `schutting-horizontaal-lamellen-zon-1.*` toonde een gesnoeide heester, geen
-  schutting → hernoemd naar `snoeiwerk-heester-fors-teruggesnoeid.*`,
-  gecategoriseerd als snoeiwerk op `/projecten/` (incl. zichtbare `<h3>`/meta,
-  niet alleen data-attributen — eerste poging miste dat, inmiddels gefixt).
-  Schuttingen-servicepagina gebruikt nu de echte lamellenfoto (`zon-2`).
-- WhatsApp-nummer stond als zichtbare tekst in footer (alle pagina's) en
-  contactpagina → toont nu een label, wa.me-link blijft werkend.
-- Telefoonnummer bijgewerkt naar +31 78 204 95 17 (bevestigd door eigenaar),
-  overal incl. structured data.
-- Details/bewijs: zie `docs/SOURCE_REGISTER.md`.
+Diensten-link, foto/categorie-mismatch, zichtbaar WhatsApp-nummer, oud
+telefoonnummer. Zie `docs/SOURCE_REGISTER.md` voor bewijs per punt.
 
-## Afgerond (ch.48 tier 2 — Datafundament, gedeeltelijk)
+## Afgerond — ch.48 tier 2 (Datafundament)
 
-- `docs/SEAL_BUILD_BRIEF.md` — volledige kopie van de masterprompt (bron van
-  waarheid voor hoofdstuknummers).
-- `js/project-state.js` — ES-module, projectstate-schema (ch.18), mm/meter-
-  conversie, fence length/gate-validatie, paving m²/overlap/tegelaantal,
-  serialisatie-/variant-helpers. **Nog geen UI gebruikt dit.**
-- `data/services.js` — canonieke dienstlijst + configuratorKind per dienst.
-- `data/fence-systems.js` — generieke schuttingsystemen/hoogtes/materiaalpresets
-  (ch.13), expliciet `verifiedProduct:false`.
-- `data/paving-products.js` — generieke formaten/patronen/kleurpresets (ch.14).
-  Wildverband/visgraat bewust weggelaten (nog niet geïmplementeerd = geen
-  nepoptie tonen).
-- `data/price-sources.json` — alle ch.19-prijzen gestructureerd per ch.20-schema
-  (sourceUrl, observedAt, vatIncluded, scope, reviewAfter). HomingXL-montage-
-  cijfers bewust op `status:"stale"` zodat een prijsengine ze nooit automatisch
-  als actuele regel gebruikt. `unresolved[]` noemt wat nog ontbreekt.
-- `data/projects.js` — 12 bestaande projecttegels gemigreerd naar het ch.8
-  case-schema (slug/services/gallery/tags). **Nog geen volledige nieuwe
-  contact-sheet-audit van alle ~67 bronfoto's** — alleen de al bekende tegels,
-  plus de ene expliciet gecorrigeerde mismatch. `verification` per case geeft
-  eerlijk aan wat visueel bevestigd is vs. alleen bestaande caption.
+`js/project-state.js`, `data/services.js`, `data/fence-systems.js`,
+`data/paving-products.js`, `data/price-sources.json`, `data/projects.js`,
+`data/reviews.js` (leeg). Geverifieerd tegen de ch.28-rekenvoorbeelden,
+incl. een drijvendekommabug die de test zelf opving (zie commit e4c8480).
 
-## Nog niet gestart (ch.48 tier 2 restant + tier 3-12)
+## Afgerond — ch.48 tier 3 (2D + 3D configurator) en deels tier 4
 
-- `data/materials.js`, `data/reviews.js` (leeg/geverifieerd, ch.11 — geen
-  placeholder reviews).
-- `supplierOffer`-model + landed-cost/margin-engine (ch.38-39) — bewust nog
-  niet gebouwd; vereist bedrijfsinterne inkoopgegevens die nog niet zijn
-  aangeleverd.
-- **Tier 3 — 2D + echte 3D configurator:** grootste openstaande stuk.
-  Volgende concrete stap: `/project-samenstellen/` route bouwen op
-  `js/project-state.js`, beginnend met 2D/SVG (volledig zelfstandig bruikbaar
-  per ch.16), daarna Three.js (vendored, pinned versie in `vendor/three/`,
-  geen CDN) als verrijking op dezelfde state. Garden → fence → paving in die
-  volgorde (ch.29 bouwvolgorde).
-- Tier 4-12 (commerciële routes, prijsstatus-UI, leadbackend, projectdetail-
-  routes, B2B/werken-met-ons, document-/factuurarchitectuur, checkout,
-  analytics, eindreview): niet gestart.
+Nieuwe route **`/project-samenstellen/`** (gelinkt vanaf de homepage-hero als
+primaire CTA, en in elke footer). Modules in `js/configurator/`:
 
-## Bekende openstaande vragen voor de eigenaar
+- `geometry.js` — zuivere layoutberekening (schuttingpanelen/passtukken/
+  palen met deduplicatie, bestratingsraster met randsnede), door 2D én 3D
+  gedeeld. Unit-getest tegen ch.28: L-vorm 8,40+4,20m → 12,60m met 1 gedeelde
+  hoekpaal; poort trekt af tot 11,60m; 24m² / 60×60cm / 5% snijverlies → 70
+  tegels (exact, incl. fix van een drijvendekommafout).
+- `svg-scene.js` — altijd-werkende 2D/SVG-weergave (ch.16: volledig bruikbaar
+  zonder WebGL2), met maatlabels, m²-labels, gesneden tegels visueel anders,
+  bestaande-object-laag.
+- `three-scene.js` — echte 3D met **vendored, gepinde Three.js 0.186.1**
+  (`vendor/three/`, MIT-licentie, NOTICE.md met herkomst/upgrade-instructie;
+  importmap in de pagina, geen CDN). WebGL2-detectie vóór lazy-load; zonder
+  support een duidelijke statusmelding + de 2D-tekening blijft volledig
+  bruikbaar. InstancedMesh voor tegels (incl. niet-uniforme schaal voor
+  randstukken). Render-loop stopt in rust (idle-timeout na OrbitControls-
+  damping), pauzeert op `visibilitychange`, pixelratio begrensd (1,5 mobiel /
+  2 desktop), volledige `dispose()` (geometry/material/renderer/listeners).
+  3D/boven/voor camerastanden, camera-reset. Branded PNG-export
+  (`exportPng()`, canvas.toBlob direct na render — geen permanente
+  `preserveDrawingBuffer`) met Sealcleaning-merkbalk.
+- `app.js` — stappen "Uw project → Maten & vorm → Materialen → Situatie →
+  Overzicht" (ch.34), meervoudige dienstkeuze, schutting I/L/U met poorten
+  (geometrie + validatie), bestrating met meerdere vlakken + overlapcheck,
+  materiaal-/systeemkeuze, basis situatie-intake, **5
+  commerciële routes (ch.35, tier 4)**, live samenvatting + prijsindicatie
+  (ch.20: alleen bekende materiaalcomponent, expliciet "geen projecttotaal",
+  bron+peildatum, slaat `status:"stale"`-rijen over), "bewaar op dit
+  apparaat" (30 dagen, expliciet, met "opnieuw beginnen"), "download dossier"
+  (tekstbestand, ch.23-fallback zonder backend) en overdracht naar het
+  bestaande contactformulier via `sessionStorage` + `js/wizard-prefill.js`
+  (uitgebreid, niet vervangen) — geverifieerd end-to-end: omschrijving op
+  `/contact/` bevat de volledige projectsamenvatting.
 
-- Formulierbackend: GitHub Pages heeft geen eigen backend (ch.5/23). Zonder
-  een echt endpoint blijft "aanvraag versturen" een bewuste WhatsApp/mail/
-  download-actie, nooit een valse ontvangstbevestiging. Is er al een
-  voorkeur voor een formulierprovider/serverless endpoint?
-- Domeinmail (info@sealcleaning.nl) nog niet bevestigd te bestaan — huidige
-  Gmail-adres blijft gebruikt totdat dat getest is.
-- Geen leveranciers-/inkoopgegevens aangeleverd — margin-engine (ch.38) kan
-  pas met echte cijfers, niet met aannames.
+**Getest (Playwright, Chromium, incl. software-WebGL):** service-selectie,
+L/U-vormen met poorten, gate-validatiefout toont/verdwijnt live (bug
+gevonden én gefixt tijdens deze sessie — zie "Bekende bugs gefixt"
+hieronder), bestratingsoverlap-waarschuwing, 2D-render, 3D-render in alle
+3 camerastanden, PNG-export + branding, mobiele viewport 390px (geen
+horizontale scroll, sticky onderbalk zichtbaar), localStorage-save/reload,
+volledige handoff naar `/contact/`. Geen consolefouten (behalve een
+sandbox-eigen Google Fonts TLS-fout, niet-repro op een echte host).
+
+### Bekende bugs gefixt tijdens deze sessie
+
+- `deriveTileCount`: drijvendekommaruis (24×1.05/0.36 = 70,00000000000001)
+  duwde een exacte grens naar een tegel te veel. Fix: rond op 6 decimalen
+  vóór `Math.ceil`.
+- `renderScenesAndSummary` riep alleen de scene-render aan, niet het
+  stappaneel: een poort-validatiefout verscheen niet live bij het wijzigen
+  van een zijlengte. Fix: paneel wordt nu altijd meegerenderd (velden
+  gebruiken `change`, niet `input`, dus geen focusverlies).
+- Vendoring miste aanvankelijk `three.core.js` (three.module.js is een dunne
+  wrapper eromheen) → 404 bij 3D-load. Toegevoegd.
+- Eigen regressie uit de tier-1 fix: de projecten-tegel die werd
+  omgezet naar snoeiwerk had bijgewerkte `data-*`-attributen maar nog de
+  oude zichtbare `<h3>`/meta-tekst ("Schutting met horizontale lamellen").
+  Gefixt in dezelfde sessie vóór de tier-2-commit.
+
+### Bewust (nog) niet gebouwd in tier 3 — expliciete scope-keuzes
+
+- **Alleen rechthoekige tuin.** Vrije polygooncontour (ch.15: L/U/vrije vorm
+  voor het tuinvlak zelf, los van de schuttingvorm) is niet geïmplementeerd.
+  `garden.polygon` bestaat in het schema maar wordt nergens gevuld/gebruikt.
+- **Geen drag-to-edit.** Alles gaat via getalsvelden — dat is zelf al de
+  verplichte toegankelijke invoermethode (ch.16: "altijd een alternatief
+  zonder drag"), dus functioneel compliant, maar de optionele drag-laag
+  ontbreekt.
+- **Bestaande/te-verwijderen objecten:** alleen twee checkboxen (bestaande
+  schutting/bestrating weg) in plaats van de volledige catalogus uit ch.37
+  (boom/stronk, kabels, obstakels, etc.) en geen `existingObjects[]`-UI
+  (het datamodel en de scene-rendering ervoor bestaan al in
+  `project-state.js`/`svg-scene.js`, alleen de formulier-UI ontbreekt nog).
+- **Materiaalvergelijking (max. 3 varianten, ch.17)** en **ontwerp-export
+  als JSON/deellink** zijn niet gebouwd.
+- **Gates alleen toevoegen met vaste default-offset/breedte** — er is nog
+  geen veld om een bestaande poort se offset/breedte te wijzigen (wel
+  verwijderen + opnieuw toevoegen).
+- Alleen Chromium met Playwright getest in deze sessie; geen Firefox/WebKit-
+  engine-check, geen fysieke mobiele toestellen.
+
+## Nog niet gestart
+
+- Tier 5 (volledig prijsboek/rekenregels/`/prijzen/`-pagina — nu alleen één
+  voorbeeldregel in de overzichtstap), tier 6 (echt leadbackend/endpoint —
+  nu nog steeds alleen het bestaande contactformulier zonder server), tier 7
+  (projectdetail-routes `/projecten/[slug]/`, kennisbankartikelen), tier 8
+  (B2B/werken-met-ons), tier 9 (document-/factuurarchitectuur), tier 10-12
+  (checkout, analytics, eindreview). `data/materials.js` (officiële
+  productcatalogus, ch.21) ook nog niet aangemaakt — er zijn alleen de
+  generieke presets in `data/fence-systems.js`/`paving-products.js`.
+- Supplier/inkoop/margin-engine (ch.38-39): bewust niet gebouwd, vereist
+  echte bedrijfsinterne cijfers die nog niet zijn aangeleverd.
+
+## Openstaande vragen voor de eigenaar
+
+- Formulierbackend/endpoint-voorkeur (ch.23) — zonder is "aanvraag
+  versturen" altijd een bewuste actie naar het bestaande formulier, nooit
+  een geclaimde ontvangst.
+- Domeinmail (info@sealcleaning.nl) nog niet bevestigd.
+- Leveranciers-/inkoopgegevens voor de margin-engine.
 
 ## Eerstvolgende taak bij hervatten
 
-Start Tier 3: maak `/project-samenstellen/index.html` + een nieuw
-`js/configurator/` modulepakket. Begin met de 2D SVG-tuinscene (rechthoekige
-tuin, schutting I/L/U met poorten, bestratingsvlak) gevoed door
-`js/project-state.js`, vóór de Three.js-laag. Testmatrix ch.28/47 gebruiken
-voor acceptatie.
+Kies op basis van wat de eigenaar het meest oplevert: (a) tier 5 prijsboek
+afmaken + `/prijzen/`-pagina, of (b) `existingObjects[]`-UI + vrije
+tuincontour afmaken in de configurator, of (c) tier 6 een echt
+formulier-endpoint aansluiten. Alle drie bouwen direct voort op wat nu
+staat; geen van drie vereist een herontwerp.
