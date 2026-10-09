@@ -6,8 +6,9 @@
 import {
   createEmptyProject, parseMetersToMm, mmToMeters, formatMeters, formatM2,
   deriveFenceLengths, validateFenceGates, derivePavingTotals,
-  findPavingOverlaps, generateId, assertSerializable, cloneProjectAsVariant
+  findPavingOverlaps, generateId, assertSerializable, withDefaults
 } from "../project-state.js";
+import { checkServiceArea } from "../../data/service-area.js";
 import { renderScene } from "./svg-scene.js";
 import { SERVICES, GARDEN_SCENE_SERVICE_IDS } from "../../data/services.js";
 import { FENCE_SHAPES, FENCE_HEIGHTS_MM, FENCE_SYSTEMS, FENCE_MATERIAL_PRESETS } from "../../data/fence-systems.js";
@@ -77,7 +78,7 @@ export function initConfigurator(root) {
         window.localStorage.removeItem(STORAGE_KEY);
         return null;
       }
-      return payload.project;
+      return withDefaults(payload.project);
     } catch (e) {
       return null;
     }
@@ -191,7 +192,7 @@ export function initConfigurator(root) {
   /* ---- Ontwerp opslaan, openen en delen (alleen niet-persoonlijke state) ---- */
   function adoptProject(next, message) {
     recordHistory();
-    project = next;
+    project = withDefaults(next);
     if (usesFence()) ensureFenceDefaults();
     if (usesPaving()) ensurePavingDefaults();
     fitGardenToContent();
@@ -530,7 +531,54 @@ export function initConfigurator(root) {
     });
     fieldset.appendChild(tiles);
     panel.appendChild(fieldset);
+    if (project.services.length) panel.appendChild(buildWishesFieldset());
     appendNav(false, project.services.length > 0);
+  }
+
+  const SCOPES = [
+    { id: "", label: "Weet ik nog niet" }, { id: "small", label: "Kleine klus" },
+    { id: "partial", label: "Deel van de tuin vernieuwen" }, { id: "complete", label: "Complete tuin" }
+  ];
+  const USES = [
+    { id: "zitten", label: "Zitten en buiten eten" }, { id: "spelen", label: "Spelen (kinderen/huisdieren)" },
+    { id: "toegankelijk", label: "Goed begaanbaar (rollator/rolstoel)" }, { id: "privacy", label: "Privacy en beschutting" },
+    { id: "groen", label: "Veel groen en beplanting" }
+  ];
+  const MAINTENANCE = [
+    { id: "", label: "Geen voorkeur" }, { id: "low", label: "Zo weinig mogelijk onderhoud" },
+    { id: "normal", label: "Normaal onderhoud is prima" }, { id: "high", label: "Ik tuinier graag zelf" }
+  ];
+  const TRI = [{ id: "unknown", label: "Weet ik niet" }, { id: "no", label: "Nee" }, { id: "yes", label: "Ja" }];
+  const optLabel = (list, id) => (list.find((o) => o.id === (id ?? "")) || {}).label || "—";
+
+  /** Projectomvang, gebruik en onderhoudswens (A04/A06/A07) — wensen, geen beloftes. */
+  function buildWishesFieldset() {
+    const fs = document.createElement("fieldset");
+    fs.innerHTML = `<legend class="configurator-section-title">Uw wensen</legend>`;
+    fs.appendChild(selectField("Omvang van het project", SCOPES, project.wishes.scope || "", (val) => {
+      project.wishes.scope = val || null;
+      renderScenesAndSummary();
+    }, (o) => o.label, (o) => o.id));
+    const usesWrap = document.createElement("div");
+    usesWrap.className = "configurator-field";
+    const usesTitle = document.createElement("p");
+    usesTitle.className = "configurator-field-label";
+    usesTitle.textContent = "Waarvoor gebruikt u de tuin?";
+    usesWrap.appendChild(usesTitle);
+    USES.forEach((u) => usesWrap.appendChild(checkboxField(u.label, project.wishes.uses.includes(u.id), (checked) => {
+      project.wishes.uses = checked ? [...new Set([...project.wishes.uses, u.id])] : project.wishes.uses.filter((x) => x !== u.id);
+      renderScenesAndSummary();
+    })));
+    fs.appendChild(usesWrap);
+    fs.appendChild(selectField("Onderhoudswens", MAINTENANCE, project.wishes.maintenance || "", (val) => {
+      project.wishes.maintenance = val || null;
+      renderScenesAndSummary();
+    }, (o) => o.label, (o) => o.id));
+    const hint = document.createElement("p");
+    hint.className = "field-hint";
+    hint.textContent = "Uw wensen sturen ons advies en gaan mee in het dossier. Ze leiden niet tot een vaste prijs of een levensduurbelofte.";
+    fs.appendChild(hint);
+    return fs;
   }
 
   function renderStepMaten() {
@@ -957,45 +1005,130 @@ export function initConfigurator(root) {
 
   function renderStepSituatie() {
     panel.innerHTML = "";
+    const small = project.wishes.scope === "small";
     const fs = document.createElement("fieldset");
-    fs.innerHTML = `<legend class="configurator-section-title">Situatie</legend>`;
+    fs.innerHTML = `<legend class="configurator-section-title">Situatie</legend>
+      <p class="field-hint">Weet u iets niet? Kies "Weet ik niet" — dat is prima, we kijken het bij de bezichtiging na.</p>`;
 
     if (usesFence()) {
-      fs.appendChild(
-        checkboxField("Er staat al een schutting die weg moet", project.removal.existingFence, (checked) => {
+      fs.appendChild(selectField("Wat wilt u met de schutting?", [
+        { id: "new", label: "Nieuwe schutting plaatsen" }, { id: "repair", label: "Bestaande schutting herstellen" }
+      ], project.options.fenceIntent, (val) => { project.options.fenceIntent = val; renderScenesAndSummary(); }, (o) => o.label, (o) => o.id));
+      if (project.options.fenceIntent === "repair") {
+        fs.appendChild(textAreaField("Wat is er beschadigd? (bijv. scheve palen, rotte planken, losse poort)", project.options.repairNote, (v) => { project.options.repairNote = v; }));
+        fs.appendChild(hintEl("Herstel beoordelen we ter plaatse; we adviseren alleen vervanging als herstel niet zinvol is."));
+      } else {
+        fs.appendChild(checkboxField("Er staat al een schutting die weg moet", project.removal.existingFence, (checked) => {
           project.removal.existingFence = checked;
           project.removal.removeFence = checked;
           renderScenesAndSummary();
-        })
-      );
+        }));
+      }
     }
     if (usesPaving()) {
-      fs.appendChild(
-        checkboxField("Er ligt al bestrating die weg moet", project.removal.existingPaving, (checked) => {
-          project.removal.existingPaving = checked;
-          project.removal.removePaving = checked;
-          renderScenesAndSummary();
-        })
-      );
+      fs.appendChild(checkboxField("Er ligt al bestrating die weg moet", project.removal.existingPaving, (checked) => {
+        project.removal.existingPaving = checked;
+        project.removal.removePaving = checked;
+        renderScenesAndSummary();
+      }));
     }
 
     fs.appendChild(selectField("Ondergrond", [
-      { id: "unknown", label: "Onbekend" }, { id: "earth", label: "Aarde" },
+      { id: "unknown", label: "Weet ik niet" }, { id: "earth", label: "Aarde / gras" },
       { id: "paving", label: "Bestrating" }, { id: "concrete", label: "Beton" }
-    ], project.access.surface, (val) => { project.access.surface = val; }, (o) => o.label, (o) => o.id));
+    ], project.access.surface, (val) => { project.access.surface = val; renderScenesAndSummary(); }, (o) => o.label, (o) => o.id));
 
+    const accessTitle = document.createElement("p");
+    accessTitle.className = "configurator-section-title";
+    accessTitle.textContent = "Bereikbaarheid";
+    fs.appendChild(accessTitle);
+    fs.appendChild(selectField("Is de tuin bereikbaar via een achterom of zijpad?", TRI, project.access.rearAccess, (val) => { project.access.rearAccess = val; renderScenesAndSummary(); }, (o) => o.label, (o) => o.id));
+    if (project.access.rearAccess === "yes") {
+      fs.appendChild(numberField("Smalste doorgang (m)", mmToMeters(project.access.rearPassageWidthMm), (v) => {
+        project.access.rearPassageWidthMm = parseMetersToMm(v);
+        renderScenesAndSummary();
+      }));
+    }
+    fs.appendChild(selectField("Trappen of opstapjes op de route?", TRI, project.access.steps, (val) => { project.access.steps = val; renderScenesAndSummary(); }, (o) => o.label, (o) => o.id));
+    fs.appendChild(selectField("Loopafstand van parkeerplek tot tuin", [
+      { id: "unknown", label: "Weet ik niet" }, { id: "short", label: "Kort (tot ±20 m)" },
+      { id: "medium", label: "Gemiddeld (20–50 m)" }, { id: "long", label: "Lang (meer dan 50 m)" }
+    ], project.access.carryDistance, (val) => { project.access.carryDistance = val; renderScenesAndSummary(); }, (o) => o.label, (o) => o.id));
+
+    const extra = document.createElement(small ? "details" : "div");
+    if (small) {
+      const sum = document.createElement("summary");
+      sum.textContent = "Meer over de situatie (optioneel)";
+      extra.appendChild(sum);
+    } else {
+      const t = document.createElement("p");
+      t.className = "configurator-section-title";
+      t.textContent = "Grond en omgeving";
+      extra.appendChild(t);
+    }
+    extra.appendChild(selectField("Hoogteverschillen in de tuin?", TRI, project.site.levelDifference, (val) => { project.site.levelDifference = val; renderScenesAndSummary(); }, (o) => o.label, (o) => o.id));
+    extra.appendChild(selectField("Blijft er water staan na regen?", TRI, project.site.wetSpots, (val) => { project.site.wetSpots = val; renderScenesAndSummary(); }, (o) => o.label, (o) => o.id));
+    extra.appendChild(textField("Obstakels (bijv. boom, put, regenpijp)", project.access.obstacles, (v) => { project.access.obstacles = v; }));
+    extra.appendChild(selectField("Bekende kabels of leidingen in de werkzone?", [
+      { id: "unknown", label: "Weet ik niet" }, { id: "none-known", label: "Niet bij mij bekend" }, { id: "known", label: "Ja, er ligt iets" }
+    ], project.site.utilities, (val) => { project.site.utilities = val; renderScenesAndSummary(); }, (o) => o.label, (o) => o.id));
+    if (project.site.utilities === "known") {
+      extra.appendChild(textAreaField("Wat en waar ongeveer?", project.site.utilitiesNote, (v) => { project.site.utilitiesNote = v; }));
+    }
+    extra.appendChild(hintEl("Wat u hier invult helpt ons voorbereiden, maar vervangt geen onderzoek: bij machinaal grondwerk wordt kabel- en leidinginformatie vooraf gecontroleerd (KLIC-melding waar van toepassing, zie voorwaarden artikel 10)."));
+    if (usesFence()) {
+      extra.appendChild(selectField("Staat de schutting op of bij de erfgrens?", [
+        { id: "unknown", label: "Weet ik niet" }, { id: "own-ground", label: "Volledig op eigen grond" },
+        { id: "shared-agreed", label: "Op de grens, afgesproken met de buren" }, { id: "shared-unclear", label: "Op de grens, nog niet besproken" }
+      ], project.site.boundary, (val) => { project.site.boundary = val; renderScenesAndSummary(); }, (o) => o.label, (o) => o.id));
+      if (project.site.boundary.startsWith("shared")) {
+        extra.appendChild(textAreaField("Bekende afspraken met de buren (optioneel)", project.site.boundaryNote, (v) => { project.site.boundaryNote = v; }));
+      }
+      extra.appendChild(hintEl("Ons ontwerp is geen juridische grensbepaling en geen vergunning. Zie onze voorwaarden (artikel 7 en 8) voor erfgrens en toestemming."));
+    }
+    fs.appendChild(extra);
+
+    if (project.options.route === "install-only") {
+      const t = document.createElement("p");
+      t.className = "configurator-section-title";
+      t.textContent = "Uw eigen materiaal";
+      fs.appendChild(t);
+      fs.appendChild(textField("Systeem of merk", project.options.ownMaterials.system, (v) => { project.options.ownMaterials.system = v; }));
+      fs.appendChild(textField("Artikelnummer (SKU), indien bekend", project.options.ownMaterials.sku, (v) => { project.options.ownMaterials.sku = v; }));
+      fs.appendChild(textField("Aantallen", project.options.ownMaterials.quantity, (v) => { project.options.ownMaterials.quantity = v; }));
+      fs.appendChild(hintEl("Wij controleren of uw materiaal geschikt en compleet is voordat we montage bevestigen; een foto van verpakking of etiket helpt (toe te voegen in het aanvraagformulier)."));
+    }
+
+    const placeTitle = document.createElement("p");
+    placeTitle.className = "configurator-section-title";
+    placeTitle.textContent = "Locatie en planning";
+    fs.appendChild(placeTitle);
     const row = document.createElement("div");
     row.className = "configurator-row";
     row.appendChild(textField("Postcode", project.location.postalCode, (v) => { project.location.postalCode = v || null; }));
-    row.appendChild(textField("Plaats", project.location.city, (v) => { project.location.city = v || null; }));
+    row.appendChild(textField("Plaats", project.location.city, (v) => { project.location.city = v || null; renderScenesAndSummary(); }));
     fs.appendChild(row);
+    const area = checkServiceArea(project.location.city);
+    if (area.message) {
+      const p = hintEl(area.message);
+      p.setAttribute("role", "status");
+      p.className = area.status === "outside" ? "field-hint area-check area-check-outside" : "field-hint area-check";
+      fs.appendChild(p);
+    }
 
     fs.appendChild(selectField("Gewenste periode", [
-      { id: "asap", label: "Zo snel mogelijk" }, { id: "1-3m", label: "Binnen 1-3 maanden" }, { id: "flex", label: "Nog geen haast" }
-    ], project.schedule.preferredPeriod, (val) => { project.schedule.preferredPeriod = val; }, (o) => o.label, (o) => o.id));
+      { id: "", label: "Nog niet gekozen" }, { id: "asap", label: "Zo snel mogelijk" }, { id: "1-3m", label: "Binnen 1-3 maanden" }, { id: "flex", label: "Nog geen haast" }
+    ], project.schedule.preferredPeriod || "", (val) => { project.schedule.preferredPeriod = val || null; renderScenesAndSummary(); }, (o) => o.label, (o) => o.id));
 
     panel.appendChild(fs);
     appendNav(true, true);
+  }
+
+  function hintEl(textContent) {
+    const p = document.createElement("p");
+    p.className = "field-hint";
+    p.textContent = textContent;
+    return p;
   }
 
   function renderStepOverzicht() {
@@ -1033,6 +1166,7 @@ export function initConfigurator(root) {
     priceBox.textContent = "Prijsindicatie wordt geladen…";
     panel.appendChild(priceBox);
     fillPriceStatusBlock(priceBox);
+    panel.appendChild(buildCompletenessBlock());
     panel.appendChild(buildActionsBlock());
     appendNav(true, false);
   }
@@ -1219,6 +1353,69 @@ export function initConfigurator(root) {
     holder.appendChild(note);
   }
 
+  /** Wat zou nog helpen (B10) — informatief, blokkeert niets, geen score. */
+  function missingInfo() {
+    const m = [];
+    const g = project.garden;
+    if (usesGardenScene() && !g.geometryKnown) m.push(["maten", "Tuinmaten (stap Maten & vorm)"]);
+    if (g.shape === "free" && findPolygonProblem(g.polygon)) m.push(["maten", "Een geldige tuincontour (de rand kruist zichzelf nog)"]);
+    if (project.access.surface === "unknown") m.push(["situatie", "Ondergrond"]);
+    if (project.access.rearAccess === "unknown") m.push(["situatie", "Bereikbaarheid via achterom/zijpad"]);
+    if (project.wishes.scope !== "small" && project.site.levelDifference === "unknown") m.push(["situatie", "Hoogteverschillen"]);
+    if (usesFence() && project.site.boundary === "unknown") m.push(["situatie", "Ligging t.o.v. de erfgrens"]);
+    if (usesFence() && project.options.fenceIntent === "repair" && !project.options.repairNote) m.push(["situatie", "Omschrijving van de schade"]);
+    if (project.options.route === "install-only" && !project.options.ownMaterials.system) m.push(["situatie", "Welk eigen materiaal u heeft"]);
+    if (!project.location.city) m.push(["situatie", "Plaats"]);
+    if (!project.options.route) m.push(["overzicht", "Hoe u het wilt laten uitvoeren (hierboven)"]);
+    return m;
+  }
+
+  function photoTips() {
+    const tips = ["Een overzichtsfoto van de hele tuin, vanaf het huis — laat zien hoe alles samenhangt."];
+    if (usesFence()) tips.push("De huidige erfgrens of schutting over de volle lengte — laat palen, hoogte en aansluitingen zien.");
+    if (usesPaving()) tips.push("De huidige ondergrond van dichtbij — bepaalt hoeveel grondwerk nodig is.");
+    if (project.access.rearAccess !== "no") tips.push("De toegang (achterom/poort) — laat zien wat er met materiaal doorheen kan.");
+    if (project.options.fenceIntent === "repair") tips.push("De schade van dichtbij — helpt bepalen of herstel zinvol is.");
+    if (project.options.route === "install-only") tips.push("Het etiket of de verpakking van uw eigen materiaal — voor de controle op geschiktheid.");
+    return tips;
+  }
+
+  function buildCompletenessBlock() {
+    const wrap = document.createElement("div");
+    wrap.className = "configurator-completeness";
+    const missing = missingInfo();
+    const h = document.createElement("p");
+    h.className = "configurator-section-title";
+    h.textContent = missing.length ? "Nuttig om nog aan te vullen" : "Uw dossier is goed gevuld";
+    wrap.appendChild(h);
+    if (missing.length) {
+      wrap.appendChild(hintEl("Niet verplicht — u kunt gewoon doorgaan. Hoe meer we weten, hoe gerichter ons voorstel."));
+      const ul = document.createElement("ul");
+      ul.className = "configurator-missing";
+      missing.forEach(([step, text]) => {
+        const li = document.createElement("li");
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "link-btn";
+        btn.textContent = text;
+        btn.addEventListener("click", () => goToStep(STEPS.indexOf(step)));
+        li.appendChild(btn);
+        ul.appendChild(li);
+      });
+      wrap.appendChild(ul);
+    }
+    const t = document.createElement("p");
+    t.className = "configurator-section-title";
+    t.textContent = "Handige foto's voor uw aanvraag";
+    wrap.appendChild(t);
+    const ul2 = document.createElement("ul");
+    ul2.className = "configurator-photo-tips";
+    photoTips().forEach((tip) => { const li = document.createElement("li"); li.textContent = tip; ul2.appendChild(li); });
+    wrap.appendChild(ul2);
+    wrap.appendChild(hintEl("Foto's voegt u toe in het aanvraagformulier. Ze worden alleen gebruikt om uw aanvraag te beoordelen."));
+    return wrap;
+  }
+
   function buildActionsBlock() {
     const wrap = document.createElement("div");
     wrap.className = "btn-row";
@@ -1288,9 +1485,43 @@ export function initConfigurator(root) {
       const totals = derivePavingTotals(project.paving);
       lines.push(`Bestrating: ${project.paving.areas.length} vlak(ken), totaal ${formatM2(totals.totalM2, 1)}, patroon ${project.paving.pattern}.`);
     }
+    const g = project.garden;
+    if (g.geometryKnown) {
+      lines.push(`Tuinvlak: ${{ rect: "rechthoek", L: "L-vorm", free: "vrije contour" }[g.shape] || "rechthoek"}, ${formatM2(Math.round(polygonAreaMm2(gardenPolygon(g)) / 100000) / 10, 1)}` +
+        (g.shape !== "rect" && g.polygon ? ` (hoekpunten in m: ${g.polygon.map((p) => `${mmToMeters(p.xMm)};${mmToMeters(p.zMm)}`).join(" | ")})` : ""));
+    }
+    if (project.fence && project.options.fenceIntent === "repair") lines.push(`Schutting: HERSTEL gevraagd. Schade: ${project.options.repairNote || "nog niet omschreven"}`);
+    if (project.removal.existingFence || project.removal.existingPaving) {
+      lines.push(`Verwijderen: ${[project.removal.existingFence && "bestaande schutting", project.removal.existingPaving && "bestaande bestrating"].filter(Boolean).join(", ")}`);
+    }
+    for (const o of project.existingObjects || []) {
+      lines.push(`Object: ${o.label || o.type} — ${{ "existing-keep": "bestaand, behouden", "existing-remove": "bestaand, verwijderen", new: "nieuw" }[o.status] || o.status}` +
+        (o.footprint ? `, ${mmToMeters(o.footprint.lengthMm)} × ${mmToMeters(o.footprint.widthMm)} m` : ""));
+    }
+    lines.push("", "Wensen:");
+    lines.push(`- Omvang: ${optLabel(SCOPES, project.wishes.scope)}`);
+    lines.push(`- Gebruik: ${project.wishes.uses.map((u) => optLabel(USES, u)).join(", ") || "—"}`);
+    lines.push(`- Onderhoudswens: ${optLabel(MAINTENANCE, project.wishes.maintenance)}`);
+    lines.push("", "Situatie:");
+    lines.push(`- Ondergrond: ${{ unknown: "onbekend", earth: "aarde/gras", paving: "bestrating", concrete: "beton" }[project.access.surface] || "onbekend"}`);
+    lines.push(`- Achterom/zijpad: ${optLabel(TRI, project.access.rearAccess)}${project.access.rearPassageWidthMm ? `, smalste doorgang ${formatMeters(project.access.rearPassageWidthMm, 2)}` : ""}`);
+    lines.push(`- Trappen/opstapjes: ${optLabel(TRI, project.access.steps)}; loopafstand: ${{ unknown: "onbekend", short: "kort", medium: "gemiddeld", long: "lang" }[project.access.carryDistance]}`);
+    lines.push(`- Hoogteverschillen: ${optLabel(TRI, project.site.levelDifference)}; water blijft staan: ${optLabel(TRI, project.site.wetSpots)}`);
+    if (project.access.obstacles) lines.push(`- Obstakels: ${project.access.obstacles}`);
+    lines.push(`- Kabels/leidingen: ${{ unknown: "onbekend", "none-known": "niet bekend bij klant", known: "ja" }[project.site.utilities]}${project.site.utilitiesNote ? ` (${project.site.utilitiesNote})` : ""} — klantinformatie, vervangt geen eigen onderzoek`);
+    if (project.fence) lines.push(`- Erfgrens: ${{ unknown: "onbekend", "own-ground": "op eigen grond", "shared-agreed": "op de grens, afgesproken", "shared-unclear": "op de grens, nog niet besproken" }[project.site.boundary]}${project.site.boundaryNote ? ` (${project.site.boundaryNote})` : ""}`);
+    if (project.options.route === "install-only") {
+      const om = project.options.ownMaterials;
+      lines.push(`- Eigen materiaal: ${om.system || "—"}, SKU ${om.sku || "—"}, aantallen ${om.quantity || "—"} (controle op geschiktheid volgt)`);
+    }
+    lines.push("");
     lines.push(`Route: ${project.options.route || "nog niet gekozen"}`);
     lines.push(`Plaats: ${project.location.city || "—"}, postcode: ${project.location.postalCode || "—"}`);
+    const area = checkServiceArea(project.location.city);
+    if (area.message) lines.push(`Werkgebied: ${area.message}`);
     lines.push(`Gewenste periode: ${project.schedule.preferredPeriod || "—"}`);
+    const missing = missingInfo();
+    if (missing.length) lines.push("", "Nog niet ingevuld: " + missing.map((x) => x[1]).join("; "));
     lines.push("", "(Prijs wordt na controle van uw samenstelling berekend — zie website voor bekende materiaalindicaties.)");
     return lines.join("\n");
   }
@@ -1387,6 +1618,18 @@ export function initConfigurator(root) {
     label.htmlFor = id; label.textContent = labelText;
     const input = document.createElement("input");
     input.type = "text"; input.id = id; input.value = value || "";
+    input.addEventListener("change", () => onChange(input.value.trim()));
+    wrap.appendChild(label); wrap.appendChild(input);
+    return wrap;
+  }
+  function textAreaField(labelText, value, onChange) {
+    const wrap = document.createElement("div");
+    wrap.className = "configurator-field";
+    const label = document.createElement("label");
+    const id = "f-" + Math.random().toString(36).slice(2, 8);
+    label.htmlFor = id; label.textContent = labelText;
+    const input = document.createElement("textarea");
+    input.id = id; input.rows = 3; input.maxLength = 600; input.value = value || "";
     input.addEventListener("change", () => onChange(input.value.trim()));
     wrap.appendChild(label); wrap.appendChild(input);
     return wrap;

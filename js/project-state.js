@@ -50,8 +50,21 @@ export function createEmptyProject() {
       items: [],
       disposal: "unknown"
     },
-    options: { materialSupply: "advice-needed", route: null },
-    access: { surface: "unknown", rearPassageWidthMm: null, obstacles: "" },
+    options: {
+      materialSupply: "advice-needed", route: null,
+      fenceIntent: "new", repairNote: "",
+      ownMaterials: { system: "", sku: "", quantity: "" }
+    },
+    wishes: { scope: null, uses: [], maintenance: null },
+    site: {
+      levelDifference: "unknown", wetSpots: "unknown",
+      utilities: "unknown", utilitiesNote: "",
+      boundary: "unknown", boundaryNote: ""
+    },
+    access: {
+      surface: "unknown", rearPassageWidthMm: null, obstacles: "",
+      rearAccess: "unknown", steps: "unknown", carryDistance: "unknown"
+    },
     location: { postalCode: null, city: null },
     schedule: { preferredPeriod: null, flexible: true },
     photos: [],
@@ -59,6 +72,23 @@ export function createEmptyProject() {
     customer: { name: null, email: null, phone: null, preferredChannel: null },
     variants: []
   };
+}
+
+/**
+ * Vult ontbrekende velden aan uit het lege schema (oudere opgeslagen
+ * ontwerpen missen nieuwere velden). Bestaande waarden blijven staan.
+ */
+export function withDefaults(project) {
+  const base = createEmptyProject();
+  const out = { ...base, ...project };
+  for (const key of Object.keys(base)) {
+    const b = base[key];
+    if (b && typeof b === "object" && !Array.isArray(b) && out[key] && typeof out[key] === "object") {
+      out[key] = { ...b, ...out[key] };
+    }
+  }
+  out.options.ownMaterials = { ...base.options.ownMaterials, ...(out.options.ownMaterials || {}) };
+  return out;
 }
 
 /* ---------------------------------------------------------------------- */
