@@ -1,0 +1,16 @@
+{
+  "_readme": "SEAL's eigen bevestigde verkoopuurtarief — geen externe marktbenchmark en geen loonkostprijs. Structureel gescheiden van data/price-sources.json (dat bevat alleen onderzochte referenties van anderen). Bron: opdrachtgever, bevestigd via docs/SEAL_MASTER_BRIEF.md (v6.0-dossier, 9/10 oktober 2026). Materiaal, transport, afvoer en huur zijn aparte posten tenzij een expliciet pakket dit omvat. Medewerkeruren, niet teamdagen: twee medewerkers gedurende vier uur is acht medewerkeruren.",
+  "status": "confirmed-sale-rate",
+  "confirmedAt": "2026-10-09",
+  "unit": "hour",
+  "basis": "per medewerker per uur",
+  "rateExclVatCents": 6000,
+  "vatRate": 21,
+  "rateInclVatCents": 7260,
+  "examples": [
+    { "label": "1 medewerker × 8 uur", "personHours": 8, "exclCents": 48000, "inclCents": 58080 },
+    { "label": "2 medewerkers × 8 uur", "personHours": 16, "exclCents": 96000, "inclCents": 116160 },
+    { "label": "3+2+2 medewerkers × 8 uur (3 dagen)", "personHours": 56, "exclCents": 336000, "inclCents": 406560 }
+  ],
+  "notes": "Rekenvoorbeelden voor arbeid, geen all-in dagpakketten. Geen vaste productiviteit, reistijd of afvoer impliciet inbegrepen. Historische projectoffertes (bv. EUR 450 incl. btw tuinwerk, EUR 1.050 excl. btw schuttingaandeel) zijn specifieke oude projectregels, geen algemeen geldige m²- of meterprijs — niet hergebruiken zonder de originele scope te controleren."
+}
