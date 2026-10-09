@@ -54,9 +54,38 @@ export function createThreeScene(host, project) {
   controls.target.set(0, 0, 0);
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.65));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   const sun = new THREE.DirectionalLight(0xffffff, 0.9);
   sun.position.set(8, 12, 6);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(1024, 1024);
+  sun.shadow.bias = -0.0008;
+  sun.shadow.normalBias = 0.03;
   scene.add(sun);
+  scene.add(sun.target);
+  // Illustratieve zonstand (E09): richting in graden (0 = noord/boven in de tekening, 90 = oost) en hoogte.
+  const sunState = { azimuthDeg: 135, elevationDeg: 40 };
+  let gardenCenter = { x: 0, z: 0, span: 10 };
+
+  function placeSun() {
+    const az = (sunState.azimuthDeg * Math.PI) / 180;
+    const el = (sunState.elevationDeg * Math.PI) / 180;
+    const d = gardenCenter.span * 1.5 + 10;
+    // tekening: -z is "boven" (noord); +x is oost
+    sun.position.set(gardenCenter.x + Math.sin(az) * Math.cos(el) * d, Math.sin(el) * d, gardenCenter.z - Math.cos(az) * Math.cos(el) * d);
+    sun.target.position.set(gardenCenter.x, 0, gardenCenter.z);
+    const half = gardenCenter.span * 0.9 + 3;
+    Object.assign(sun.shadow.camera, { left: -half, right: half, top: half, bottom: -half, near: 0.5, far: d * 3 });
+    sun.shadow.camera.updateProjectionMatrix();
+  }
+
+  function setSun(azimuthDeg, elevationDeg) {
+    sunState.azimuthDeg = azimuthDeg;
+    sunState.elevationDeg = elevationDeg;
+    placeSun();
+    scheduleFrame();
+  }
 
   const dynamicGroup = new THREE.Group();
   scene.add(dynamicGroup);
@@ -229,6 +258,7 @@ export function createThreeScene(host, project) {
     const ground = new THREE.Mesh(geom, material);
     ground.rotation.x = -Math.PI / 2; // (x, -z) in vormvlak → (x, 0, z) in de wereld
     ground.position.y = -0.01;
+    ground.userData.isGround = true;
     dynamicGroup.add(ground);
 
     const cx = (b.minX + b.maxX) / 2 * MM, cz = (b.minZ + b.maxZ) / 2 * MM;
@@ -280,6 +310,10 @@ export function createThreeScene(host, project) {
     buildFence(project.fence);
     buildPaving(project.paving);
     buildObjects(project.existingObjects || []);
+
+    gardenCenter = { x: cx, z: cz, span: Math.max(widthM, depthM) };
+    placeSun();
+    dynamicGroup.traverse((o) => { if (o.isMesh) { o.castShadow = !o.userData.isGround; o.receiveShadow = true; } });
 
     if (!controls.target.lengthSq() && widthM && depthM) {
       controls.target.set(cx, 0.3, cz);
@@ -363,5 +397,5 @@ export function createThreeScene(host, project) {
   update(project);
   setView("3d");
 
-  return { update, setView, resetCamera, exportPng, dispose };
+  return { update, setView, resetCamera, exportPng, dispose, setSun };
 }

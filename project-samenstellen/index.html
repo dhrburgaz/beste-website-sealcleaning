@@ -118,6 +118,11 @@
                 <button type="button" data-camera-reset aria-label="Camera resetten">⟲</button>
               </div>
             </div>
+            <div class="scene-sun" role="group" aria-label="Zonstand (illustratie, alleen 3D)">
+              <label>Zonrichting <input type="range" min="0" max="345" step="15" value="135" data-sun-azimuth aria-valuetext="Zuidoost"></label>
+              <label>Zonhoogte <input type="range" min="10" max="70" step="5" value="40" data-sun-elevation></label>
+              <span class="scene-sun-note">Illustratie van licht en schaduw — geen zonstudie voor uw exacte locatie. Noord is boven in de tekening.</span>
+            </div>
             <div class="scene-edit-controls" data-edit-controls role="group" aria-label="Bewerken: ongedaan maken, raster en werkvlak"></div>
             <div class="scene-stage">
               <button type="button" class="scene-canvas-exit btn btn-primary btn-sm" data-canvas-exit hidden>← Terug naar stappen</button>

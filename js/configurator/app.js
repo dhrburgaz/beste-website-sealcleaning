@@ -1159,6 +1159,25 @@ export function initConfigurator(root) {
         productNote.className = "field-hint";
         productNote.textContent = "Dit zijn echte, bij de leverancier onderzochte artikelen — geen Sealcleaning-eigen assortiment of inkoopprijs. Kies deze alleen als richtprijs voor dit specifieke formaat.";
         fs.appendChild(productNote);
+      } else {
+        // G08: suggestie uit de compatibele catalogus; de gebruiker kiest zelf, er wordt niets stil gewisseld.
+        const alt = PAVING_FORMATS_MM.map((f) => ({ f, n: getPavingProductsForFormat(f.lengthMm, f.widthMm).length })).find((x) => x.n > 0);
+        if (alt) {
+          const box = document.createElement("div");
+          box.className = "configurator-suggestion";
+          box.appendChild(hintEl(`Voor dit formaat hebben we nog geen onderzocht product met referentieprijs. Voor ${alt.f.label} zijn er ${alt.n}. Uw keuze blijft staan tenzij u zelf wisselt.`));
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "btn btn-secondary btn-sm";
+          btn.textContent = `Bekijk ${alt.f.label}`;
+          btn.addEventListener("click", () => {
+            project.paving.nominalTileLengthMm = alt.f.lengthMm;
+            project.paving.nominalTileWidthMm = alt.f.widthMm;
+            renderScenesAndSummary();
+          });
+          box.appendChild(btn);
+          fs.appendChild(box);
+        }
       }
       const note = document.createElement("p");
       note.className = "field-hint";
@@ -1913,6 +1932,17 @@ export function initConfigurator(root) {
   root.querySelectorAll("[data-camera-view]").forEach((btn) => {
     btn.addEventListener("click", () => sceneController && sceneController.setView(btn.getAttribute("data-camera-view")));
   });
+  const sunAz = root.querySelector("[data-sun-azimuth]");
+  const sunEl = root.querySelector("[data-sun-elevation]");
+  const COMPASS = ["Noord", "Noordoost", "Oost", "Zuidoost", "Zuid", "Zuidwest", "West", "Noordwest"];
+  function applySun() {
+    if (!sunAz || !sunEl) return;
+    const az = parseInt(sunAz.value, 10);
+    sunAz.setAttribute("aria-valuetext", COMPASS[Math.round(az / 45) % 8]);
+    if (sceneController && sceneController.setSun) sceneController.setSun(az, parseInt(sunEl.value, 10));
+  }
+  if (sunAz) sunAz.addEventListener("input", applySun);
+  if (sunEl) sunEl.addEventListener("input", applySun);
   const canvasExit = root.querySelector("[data-canvas-exit]");
   if (canvasExit) canvasExit.addEventListener("click", () => setFullscreen(false));
   const resetBtn = root.querySelector("[data-camera-reset]");
@@ -1929,6 +1959,7 @@ export function initConfigurator(root) {
       throw new Error("no-webgl2");
     }
     sceneController = createThreeScene(canvasHost, project);
+    applySun();
   }
 
   window.addEventListener("beforeunload", () => { if (sceneController) sceneController.dispose(); });
