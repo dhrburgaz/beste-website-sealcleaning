@@ -106,7 +106,9 @@
         return;
       }
 
-      var subject = encodeURIComponent("Offerteaanvraag via website — " + (form.querySelector("[name=naam]") ? form.querySelector("[name=naam]").value : ""));
+      var subjectPrefix = form.getAttribute("data-subject-prefix") || "Offerteaanvraag via website";
+      var nameField = form.querySelector("[name=naam]") || form.querySelector("[name=contactpersoon]");
+      var subject = encodeURIComponent(subjectPrefix + (nameField ? " — " + nameField.value : ""));
       var lines = [];
       form.querySelectorAll("input, select, textarea").forEach(function (field) {
         if (!field.name || field.type === "file") return;
@@ -120,10 +122,12 @@
 
       var fileField = form.querySelector("[data-file-input]");
       var hasPhotos = fileField && fileField.files && fileField.files.length > 0;
+      var attachmentNoun = form.getAttribute("data-attachment-noun") || "foto's";
+      var attachmentAltChannel = form.getAttribute("data-attachment-alt-channel");
 
       if (statusEl) {
         statusEl.innerHTML = hasPhotos
-          ? "Bijna klaar — klik hieronder om uw aanvraag via e-mail naar ons te versturen. Uw ingevulde gegevens worden automatisch meegenomen. <strong>Let op: uw geselecteerde foto's worden niet automatisch bijgevoegd</strong> — voeg ze in uw mailprogramma zelf als bijlage toe voordat u verstuurt, of stuur ze apart via WhatsApp."
+          ? "Bijna klaar — klik hieronder om uw aanvraag via e-mail naar ons te versturen. Uw ingevulde gegevens worden automatisch meegenomen. <strong>Let op: uw geselecteerde " + attachmentNoun + " worden niet automatisch bijgevoegd</strong> — voeg ze in uw mailprogramma zelf als bijlage toe voordat u verstuurt" + (attachmentAltChannel ? ", of stuur ze apart via " + attachmentAltChannel + "." : ".")
           : "Bijna klaar — klik hieronder om uw aanvraag via e-mail naar ons te versturen. Uw ingevulde gegevens worden automatisch meegenomen.";
         statusEl.className = "form-status success";
         statusEl.hidden = false;
