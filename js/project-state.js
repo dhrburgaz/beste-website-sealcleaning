@@ -50,7 +50,8 @@ export function createEmptyProject() {
       existingPaving: false,
       removePaving: false,
       items: [],
-      disposal: "unknown"
+      disposal: "unknown",
+      existingPavingM2: null
     },
     options: {
       materialSupply: "advice-needed", route: null,
@@ -65,7 +66,14 @@ export function createEmptyProject() {
     },
     access: {
       surface: "unknown", rearPassageWidthMm: null, obstacles: "",
-      rearAccess: "unknown", steps: "unknown", carryDistance: "unknown"
+      rearAccess: "unknown", steps: "unknown", carryDistance: "unknown",
+      parking: "unknown", parkingNote: ""
+    },
+    maintenance: {
+      frequency: null, frequencyWish: "",
+      lawn: { route: null, state: null, areaM2: null },
+      weeds: { locations: [], type: null, backlog: null },
+      pruning: { target: null, action: null, heightBand: null }
     },
     location: { postalCode: null, city: null },
     schedule: { preferredPeriod: null, flexible: true },

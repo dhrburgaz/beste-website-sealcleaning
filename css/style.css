@@ -673,6 +673,8 @@ fieldset > legend { font-weight: 500; font-size: 0.82rem; letter-spacing: 0.04em
 .scene-fence-fit { stroke: var(--c-clay); }
 .scene-gate-opening { stroke: var(--c-ink-soft); stroke-width: 10; stroke-dasharray: 30 24; }
 .scene-post { fill: var(--c-forest-deep); }
+.scene-gate-swing { fill: none; stroke: var(--c-clay); stroke-width: 14; stroke-dasharray: 50 35; }
+.scene-gate-leaf { stroke: var(--c-clay); stroke-width: 40; stroke-linecap: round; }
 .scene-label { font: 500 230px/1 var(--font-body); fill: var(--c-ink); }
 .scene-label-area { fill: var(--c-ink-soft); font-size: 260px; }
 .scene-label-fence { fill: var(--c-forest-deep); font-weight: 600; }

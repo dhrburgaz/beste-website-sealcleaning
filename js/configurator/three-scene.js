@@ -11,7 +11,7 @@
  */
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { computeFenceLayout, computeTileLayout, gardenPolygon, polygonBounds } from "./geometry.js";
+import { computeFenceLayout, computeTileLayout, computeGateSwing, gardenPolygon, polygonBounds } from "./geometry.js";
 import { getFenceSystem, getFenceMaterialPreset } from "../../data/fence-systems.js";
 import { getPavingColorPreset } from "../../data/paving-products.js";
 
@@ -269,6 +269,26 @@ export function createThreeScene(host, project) {
     return { widthM, depthM, cx, cz };
   }
 
+  /** Poortblad op 30° open, zodat draairichting en scharnier ook in 3D zichtbaar zijn (D05). */
+  function buildGateLeaves(fence) {
+    if (!fence) return;
+    const mat = track(new THREE.MeshStandardMaterial({ color: 0x8a5a3a, roughness: 0.8 }));
+    for (const gate of fence.gates || []) {
+      const sw = computeGateSwing(fence, gate);
+      if (!sw) continue;
+      const t = Math.PI / 6;
+      const v0 = { x: sw.closedTip.xMm - sw.hinge.xMm, z: sw.closedTip.zMm - sw.hinge.zMm };
+      const v1 = { x: sw.openTip.xMm - sw.hinge.xMm, z: sw.openTip.zMm - sw.hinge.zMm };
+      const tip = { x: sw.hinge.xMm + v0.x * Math.cos(t) + v1.x * Math.sin(t), z: sw.hinge.zMm + v0.z * Math.cos(t) + v1.z * Math.sin(t) };
+      const h = (gate.heightMm || fence.heightMm || 1800) * MM;
+      const len = gate.clearWidthMm * MM;
+      const leaf = new THREE.Mesh(track(new THREE.BoxGeometry(len, h, 0.04)), mat);
+      leaf.position.set((sw.hinge.xMm + tip.x) / 2 * MM, h / 2 + 0.05, (sw.hinge.zMm + tip.z) / 2 * MM);
+      leaf.rotation.y = -Math.atan2(tip.z - sw.hinge.zMm, tip.x - sw.hinge.xMm);
+      dynamicGroup.add(leaf);
+    }
+  }
+
   /** Bestaande/nieuwe objecten als eenvoudige volumes op dezelfde footprint als 2D. */
   function buildObjects(objects) {
     const COLORS = { "house-wall": 0x8a8a85, shed: 0xa98c6b, hedge: 0x3f6b35, border: 0x7a8f4a, lawn: 0x8fb36a, "gate-existing": 0x6e5338 };
@@ -310,6 +330,7 @@ export function createThreeScene(host, project) {
     buildFence(project.fence);
     buildPaving(project.paving);
     buildObjects(project.existingObjects || []);
+    buildGateLeaves(project.fence);
 
     gardenCenter = { x: cx, z: cz, span: Math.max(widthM, depthM) };
     placeSun();

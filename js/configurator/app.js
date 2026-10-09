@@ -9,6 +9,7 @@ import {
   findPavingOverlaps, generateId, assertSerializable, withDefaults
 } from "../project-state.js";
 import { checkServiceArea } from "../../data/service-area.js";
+import { estimateWaste } from "./waste.js";
 import { OBJECT_TYPES, OBJECT_STATUSES, getObjectType, objectQuantity } from "../../data/garden-objects.js";
 import { renderScene } from "./svg-scene.js";
 import { SERVICES, GARDEN_SCENE_SERVICE_IDS } from "../../data/services.js";
@@ -18,7 +19,7 @@ import { getPavingProduct, getPavingProductsForFormat } from "../../data/materia
 import { attachSvgInteraction, snapMm } from "./svg-interaction.js";
 import { MAX_VARIANTS, captureChoices, applyChoices, sameChoices, pavingIndication, describeChoices, diffChoices } from "./variants.js";
 import { toDesignPayload, sanitizeDesign, encodeShare, decodeShare, MAX_FILE_BYTES } from "./design-io.js";
-import { lPolygon, polygonAreaMm2, polygonBounds, findPolygonProblem, gardenPolygon } from "./geometry.js";
+import { computeGateSwing, lPolygon, polygonAreaMm2, polygonBounds, findPolygonProblem, gardenPolygon } from "./geometry.js";
 
 let priceSourcesCache = null;
 /** fetch() i.p.v. een JSON-importattribuut: breder browserondersteund, geen baseline-risico. */
@@ -975,6 +976,26 @@ export function initConfigurator(root) {
     return fs;
   }
 
+  /** Draait een poort tegen een vast object (schuur, huiswand, boom, haag) of tegen een andere poort? */
+  function findGateSwingConflicts() {
+    const out = [];
+    const solids = (project.existingObjects || []).filter((o) => ["house-wall", "shed", "tree", "hedge"].includes(o.type) && o.status !== "existing-remove");
+    const swings = (project.fence.gates || []).map((g) => computeGateSwing(project.fence, g));
+    swings.forEach((sw, i) => {
+      if (!sw) return;
+      const box = { xMm: sw.bounds.minX, zMm: sw.bounds.minZ, lengthMm: sw.bounds.maxX - sw.bounds.minX, widthMm: sw.bounds.maxZ - sw.bounds.minZ };
+      for (const o of solids) {
+        if (rectsOverlap(box, o.footprint)) out.push(`Poort ${i + 1} draait tegen ${getObjectType(o.type).label.split(" /")[0].toLowerCase()} — kies een andere draairichting of positie.`);
+      }
+      swings.forEach((other, j) => {
+        if (j <= i || !other) return;
+        const b2 = { xMm: other.bounds.minX, zMm: other.bounds.minZ, lengthMm: other.bounds.maxX - other.bounds.minX, widthMm: other.bounds.maxZ - other.bounds.minZ };
+        if (rectsOverlap(box, b2)) out.push(`De draaicirkels van poort ${i + 1} en ${j + 1} raken elkaar.`);
+      });
+    });
+    return out;
+  }
+
   function buildFenceGeometryFieldset() {
     const fs = document.createElement("fieldset");
     fs.innerHTML = `<legend class="configurator-section-title">Schutting — vorm &amp; maten</legend>`;
@@ -1039,13 +1060,39 @@ export function initConfigurator(root) {
     fs.appendChild(gateList);
     const ul = document.createElement("ul");
     ul.className = "configurator-list";
-    (project.fence.gates || []).forEach((gate) => {
+    (project.fence.gates || []).forEach((gate, gi) => {
       const li = document.createElement("li");
-      li.className = "configurator-list-item";
-      li.innerHTML = `<span>Zijde ${gate.sectionId}, op ${formatMeters(gate.offsetMm, 2)}, breedte ${formatMeters(gate.clearWidthMm, 2)}</span>`;
+      li.className = "configurator-list-item configurator-object";
+      const title = document.createElement("p");
+      title.className = "configurator-object-title";
+      title.textContent = `Poort ${gi + 1}`;
+      li.appendChild(title);
+      const r1 = document.createElement("div");
+      r1.className = "configurator-row";
+      r1.appendChild(selectField("Zijde", project.fence.sections.map((x) => ({ id: x.id, label: `Zijde ${x.id}` })), gate.sectionId, (val) => {
+        gate.sectionId = val; renderScenesAndSummary();
+      }, (o) => o.label, (o) => o.id));
+      r1.appendChild(numberField("Vanaf begin zijde (m)", mmToMeters(gate.offsetMm), (v) => {
+        const mm = parseMetersToMm(v); if (mm === null) return;
+        gate.offsetMm = mm; renderScenesAndSummary();
+      }));
+      r1.appendChild(numberField("Doorgang (m)", mmToMeters(gate.clearWidthMm), (v) => {
+        const mm = parseMetersToMm(v); if (mm === null || mm < 300 || mm > 6000) return;
+        gate.clearWidthMm = mm; renderScenesAndSummary();
+      }));
+      li.appendChild(r1);
+      const r2 = document.createElement("div");
+      r2.className = "configurator-row";
+      r2.appendChild(selectField("Scharnier", [{ id: "left", label: "Links" }, { id: "right", label: "Rechts" }], gate.hingeSide || "left", (val) => {
+        gate.hingeSide = val; renderScenesAndSummary();
+      }, (o) => o.label, (o) => o.id));
+      r2.appendChild(selectField("Draait", [{ id: "inward", label: "Naar de tuin" }, { id: "outward", label: "Van de tuin af" }], gate.swing || "inward", (val) => {
+        gate.swing = val; renderScenesAndSummary();
+      }, (o) => o.label, (o) => o.id));
+      li.appendChild(r2);
       const removeBtn = document.createElement("button");
       removeBtn.type = "button";
-      removeBtn.textContent = "Verwijderen";
+      removeBtn.textContent = "Poort verwijderen";
       removeBtn.addEventListener("click", () => {
         project.fence.gates = project.fence.gates.filter((g) => g.id !== gate.id);
         renderAll();
@@ -1055,7 +1102,7 @@ export function initConfigurator(root) {
     });
     fs.appendChild(ul);
 
-    const gateErrors = validateFenceGates(project.fence);
+    const gateErrors = validateFenceGates(project.fence).concat(findGateSwingConflicts());
     if (gateErrors.length) {
       const err = document.createElement("p");
       err.className = "field-error";
@@ -1298,6 +1345,10 @@ export function initConfigurator(root) {
       }));
     }
 
+    if (project.removal.existingPaving || project.removal.existingFence || (project.existingObjects || []).some((o) => o.status === "existing-remove")) {
+      fs.appendChild(buildWasteBlock());
+    }
+
     fs.appendChild(selectField("Ondergrond", [
       { id: "unknown", label: "Weet ik niet" }, { id: "earth", label: "Aarde / gras" },
       { id: "paving", label: "Bestrating" }, { id: "concrete", label: "Beton" }
@@ -1319,6 +1370,28 @@ export function initConfigurator(root) {
       { id: "unknown", label: "Weet ik niet" }, { id: "short", label: "Kort (tot ±20 m)" },
       { id: "medium", label: "Gemiddeld (20–50 m)" }, { id: "long", label: "Lang (meer dan 50 m)" }
     ], project.access.carryDistance, (val) => { project.access.carryDistance = val; renderScenesAndSummary(); }, (o) => o.label, (o) => o.id));
+
+    fs.appendChild(selectField("Parkeren en lossen bij het adres", [
+      { id: "unknown", label: "Weet ik niet" }, { id: "own", label: "Eigen oprit/parkeerplek" },
+      { id: "street-free", label: "Straat, vrij parkeren" }, { id: "street-paid", label: "Betaald of vergunning parkeren" },
+      { id: "restricted", label: "Lastig (smalle straat, venstertijden)" }
+    ], project.access.parking, (val) => { project.access.parking = val; renderScenesAndSummary(); }, (o) => o.label, (o) => o.id));
+    if (["street-paid", "restricted"].includes(project.access.parking)) {
+      fs.appendChild(textField("Bekende beperkingen of ontheffing (optioneel)", project.access.parkingNote, (v) => { project.access.parkingNote = v; }));
+    }
+    const notes = executionNotes();
+    if (notes.length) {
+      const box = document.createElement("div");
+      box.className = "configurator-suggestion";
+      box.appendChild(hintEl("Aandachtspunten voor de uitvoering (we beoordelen dit bij de opname; dit is geen haalbaarheidsoordeel):"));
+      const ul = document.createElement("ul");
+      ul.className = "configurator-photo-tips";
+      notes.forEach((n) => { const li = document.createElement("li"); li.textContent = n; ul.appendChild(li); });
+      box.appendChild(ul);
+      fs.appendChild(box);
+    }
+
+    if (usesMaintenance()) fs.appendChild(buildMaintenanceIntake());
 
     const extra = document.createElement(small ? "details" : "div");
     if (small) {
@@ -1391,6 +1464,142 @@ export function initConfigurator(root) {
 
   function nlNum(n) {
     return Number(n).toLocaleString("nl-NL", { maximumFractionDigits: 3 });
+  }
+
+  function usesMaintenance() {
+    return project.services.some((x) => ["tuinonderhoud", "snoeiwerk", "kunstgras", "periodiek"].includes(x));
+  }
+
+  /** J04: aandachtspunten uit de vastgelegde toegang — geen automatische haalbaarheidsclaim. */
+  function executionNotes() {
+    const a = project.access;
+    const n = [];
+    if (a.rearAccess === "yes" && a.rearPassageWidthMm && a.rearPassageWidthMm < 800) n.push(`Smalle doorgang (${formatMeters(a.rearPassageWidthMm, 2)}): waarschijnlijk handwerk en kruiwagen in plaats van een machine.`);
+    if (a.rearAccess === "no") n.push("Geen achterom: materiaal en afval moeten mogelijk door de woning of via een andere route.");
+    if (a.steps === "yes") n.push("Trappen of opstapjes op de route: extra draagwerk.");
+    if (a.carryDistance === "long") n.push("Lange loopafstand: meer transporttijd voor materiaal en afval.");
+    if (["street-paid", "restricted"].includes(a.parking)) n.push("Parkeren/lossen is beperkt: tijdstip en eventuele ontheffing vooraf afstemmen.");
+    return n;
+  }
+
+  /** J02/J03: wie voert af en hoeveel ongeveer — bandbreedte, geen gewicht of tarief. */
+  function buildWasteBlock() {
+    const wrap = document.createElement("div");
+    wrap.className = "configurator-waste";
+    const t = document.createElement("p");
+    t.className = "configurator-section-title";
+    t.textContent = "Afvoer van wat weg moet";
+    wrap.appendChild(t);
+    wrap.appendChild(selectField("Wie regelt de afvoer?", [
+      { id: "unknown", label: "Weet ik nog niet / graag advies" }, { id: "seal", label: "Sealcleaning voert af" },
+      { id: "customer-container", label: "Ik regel zelf een container" }, { id: "leave", label: "Blijft (deels) liggen voor hergebruik" }
+    ], project.removal.disposal, (val) => { project.removal.disposal = val; renderScenesAndSummary(); }, (o) => o.label, (o) => o.id));
+    if (project.removal.existingPaving) {
+      const def = project.paving ? derivePavingTotals(project.paving).totalM2 : null;
+      wrap.appendChild(numberField(`Oppervlak bestaande bestrating (m²)${def ? ` — leeg = ${def.toLocaleString("nl-NL")} m² zoals getekend` : ""}`, project.removal.existingPavingM2, (v) => {
+        const n = parseFloat(String(v).replace(",", "."));
+        project.removal.existingPavingM2 = Number.isFinite(n) && n > 0 && n < 10000 ? Math.round(n * 10) / 10 : null;
+        renderScenesAndSummary();
+      }));
+    }
+    const rows = estimateWaste(project, project.removal.existingPavingM2);
+    if (rows.length) {
+      const ul = document.createElement("ul");
+      ul.className = "configurator-photo-tips";
+      rows.forEach((r) => {
+        const li = document.createElement("li");
+        li.textContent = `${r.stream}: ${r.m3 ? `ca. ${r.m3[0].toLocaleString("nl-NL")}–${r.m3[1].toLocaleString("nl-NL")} m³` : "volume na opname"} (${r.basis}). ${r.note}`;
+        ul.appendChild(li);
+      });
+      wrap.appendChild(ul);
+      wrap.appendChild(hintEl("Indicatie in vast volume, met bandbreedte. Los gestort neemt afval meer ruimte in. Gewicht, containermaat en kosten bepalen we pas na controle van het materiaal."));
+    }
+    return wrap;
+  }
+
+  /** H05–H08: dienstspecifieke onderhoudsintake. */
+  function buildMaintenanceIntake() {
+    const m = project.maintenance;
+    const wrap = document.createElement("div");
+    const t = document.createElement("p");
+    t.className = "configurator-section-title";
+    t.textContent = "Over het onderhoud";
+    wrap.appendChild(t);
+    wrap.appendChild(selectField("Eenmalig of periodiek?", [
+      { id: "", label: "Weet ik nog niet" }, { id: "once", label: "Eenmalig" }, { id: "periodic", label: "Periodiek" }
+    ], m.frequency || "", (val) => { m.frequency = val || null; renderScenesAndSummary(); }, (o) => o.label, (o) => o.id));
+    if (m.frequency === "periodic") {
+      wrap.appendChild(textField("Gewenste frequentie (bijv. maandelijks, per seizoen)", m.frequencyWish, (v) => { m.frequencyWish = v; }));
+      wrap.appendChild(hintEl("Een vaste frequentie en het tarief spreken we af na de bezichtiging."));
+    }
+    const has = (id) => project.services.includes(id);
+    if (has("kunstgras") || has("tuinonderhoud") || has("periodiek")) {
+      wrap.appendChild(selectField("Gazon: wat is nodig?", [
+        { id: "", label: "Geen gazonwerk" }, { id: "mow", label: "Maaien" }, { id: "repair", label: "Herstellen (kale plekken, mos)" },
+        { id: "seed", label: "Opnieuw inzaaien" }, { id: "sod", label: "Nieuwe graszoden" }, { id: "artificial", label: "Kunstgras" }
+      ], m.lawn.route || "", (val) => { m.lawn.route = val || null; renderScenesAndSummary(); }, (o) => o.label, (o) => o.id));
+      if (m.lawn.route) {
+        const row = document.createElement("div");
+        row.className = "configurator-row";
+        row.appendChild(selectField("Huidige staat", [
+          { id: "", label: "Weet ik niet" }, { id: "ok", label: "Redelijk" }, { id: "patchy", label: "Kale plekken" },
+          { id: "moss", label: "Veel mos/onkruid" }, { id: "none", label: "Geen gazon" }
+        ], m.lawn.state || "", (val) => { m.lawn.state = val || null; renderScenesAndSummary(); }, (o) => o.label, (o) => o.id));
+        row.appendChild(numberField("Oppervlak (m², als bekend)", m.lawn.areaM2, (v) => {
+          const n = parseFloat(String(v).replace(",", "."));
+          m.lawn.areaM2 = Number.isFinite(n) && n > 0 && n < 100000 ? Math.round(n) : null;
+          renderScenesAndSummary();
+        }));
+        wrap.appendChild(row);
+      }
+      const wl = document.createElement("div");
+      wl.className = "configurator-field";
+      const wt = document.createElement("p");
+      wt.className = "configurator-field-label";
+      wt.textContent = "Onkruid: waar?";
+      wl.appendChild(wt);
+      [["paving", "Tussen bestrating"], ["border", "In borders"], ["boundary", "Langs de erfgrens"]].forEach(([id, lab]) => {
+        wl.appendChild(checkboxField(lab, m.weeds.locations.includes(id), (c) => {
+          m.weeds.locations = c ? [...new Set([...m.weeds.locations, id])] : m.weeds.locations.filter((x) => x !== id);
+          renderScenesAndSummary();
+        }));
+      });
+      wrap.appendChild(wl);
+      if (m.weeds.locations.length) {
+        const row = document.createElement("div");
+        row.className = "configurator-row";
+        row.appendChild(selectField("Soort begroeiing", [
+          { id: "", label: "Weet ik niet" }, { id: "grass", label: "Grassen/kiemplanten" }, { id: "root", label: "Wortelonkruid (bijv. heermoes, zevenblad)" }, { id: "climber", label: "Klimop/bramen" }
+        ], m.weeds.type || "", (val) => { m.weeds.type = val || null; renderScenesAndSummary(); }, (o) => o.label, (o) => o.id));
+        row.appendChild(selectField("Achterstand", [
+          { id: "", label: "Weet ik niet" }, { id: "light", label: "Licht" }, { id: "medium", label: "Gemiddeld" }, { id: "heavy", label: "Flink" }
+        ], m.weeds.backlog || "", (val) => { m.weeds.backlog = val || null; renderScenesAndSummary(); }, (o) => o.label, (o) => o.id));
+        wrap.appendChild(row);
+        wrap.appendChild(hintEl("Onkruid komt altijd terug; we beloven geen blijvend onkruidvrije tuin, wel een aanpak die past bij de plek."));
+      }
+    }
+    if (has("snoeiwerk") || has("tuinonderhoud") || has("periodiek")) {
+      const row = document.createElement("div");
+      row.className = "configurator-row";
+      row.appendChild(selectField("Snoeien: wat?", [
+        { id: "", label: "Geen snoeiwerk" }, { id: "hedge", label: "Haag" }, { id: "shrub", label: "Struiken/heesters" }, { id: "tree", label: "Boom" }
+      ], m.pruning.target || "", (val) => { m.pruning.target = val || null; renderScenesAndSummary(); }, (o) => o.label, (o) => o.id));
+      if (m.pruning.target) {
+        row.appendChild(selectField("Gewenste ingreep", [
+          { id: "", label: "Graag advies" }, { id: "shape", label: "In vorm knippen" }, { id: "reduce", label: "Flink terugsnoeien" }, { id: "thin", label: "Uitdunnen" }
+        ], m.pruning.action || "", (val) => { m.pruning.action = val || null; renderScenesAndSummary(); }, (o) => o.label, (o) => o.id));
+      }
+      wrap.appendChild(row);
+      if (m.pruning.target) {
+        wrap.appendChild(selectField("Hoogte ongeveer", [
+          { id: "", label: "Weet ik niet" }, { id: "low", label: "Tot 2 m" }, { id: "mid", label: "2–4 m" }, { id: "high", label: "Hoger dan 4 m" }
+        ], m.pruning.heightBand || "", (val) => { m.pruning.heightBand = val || null; renderScenesAndSummary(); }, (o) => o.label, (o) => o.id));
+        if (m.pruning.target === "tree" || m.pruning.heightBand === "high") {
+          wrap.appendChild(hintEl("Werk aan grote bomen of op hoogte bevestigen we pas na beoordeling ter plaatse; specialistisch boomwerk (zoals kappen) bieden we alleen aan als we het zelf verantwoord kunnen uitvoeren."));
+        }
+      }
+    }
+    return wrap;
   }
 
   function hintEl(textContent) {
@@ -1828,6 +2037,32 @@ export function initConfigurator(root) {
     if (project.options.route === "install-only") {
       const om = project.options.ownMaterials;
       lines.push(`- Eigen materiaal: ${om.system || "—"}, SKU ${om.sku || "—"}, aantallen ${om.quantity || "—"} (controle op geschiktheid volgt)`);
+    }
+    if (project.access.parking !== "unknown") lines.push(`- Parkeren/lossen: ${{ own: "eigen oprit", "street-free": "straat, vrij", "street-paid": "betaald/vergunning", restricted: "lastig" }[project.access.parking]}${project.access.parkingNote ? ` (${project.access.parkingNote})` : ""}`);
+    executionNotes().forEach((n) => lines.push(`- Aandachtspunt: ${n}`));
+    const waste = estimateWaste(project, project.removal.existingPavingM2);
+    if (waste.length || project.removal.disposal !== "unknown") {
+      lines.push("", `Afvoer: ${{ unknown: "nog niet bepaald", seal: "door Sealcleaning", "customer-container": "klant regelt container", leave: "blijft (deels) liggen" }[project.removal.disposal]}`);
+      waste.forEach((r) => lines.push(`- ${r.stream}: ${r.m3 ? `ca. ${nlNum(r.m3[0])}–${nlNum(r.m3[1])} m³ (vast volume, indicatie)` : "volume na opname"} — ${r.basis}`));
+    }
+    if (usesMaintenance()) {
+      const m = project.maintenance;
+      lines.push("", "Onderhoud:");
+      lines.push(`- ${{ once: "Eenmalig", periodic: "Periodiek" }[m.frequency] || "Eenmalig/periodiek nog onbekend"}${m.frequencyWish ? ` (${m.frequencyWish})` : ""}`);
+      const L = {
+        mow: "maaien", repair: "herstellen", seed: "inzaaien", sod: "graszoden", artificial: "kunstgras",
+        ok: "redelijk", patchy: "kale plekken", moss: "veel mos/onkruid", none: "geen gazon",
+        paving: "bestrating", border: "borders", boundary: "erfgrens",
+        grass: "grassen/kiemplanten", root: "wortelonkruid", climber: "klimop/bramen",
+        light: "licht", medium: "gemiddeld", heavy: "flink",
+        hedge: "haag", shrub: "struiken/heesters", tree: "boom",
+        shape: "in vorm knippen", reduce: "flink terugsnoeien", thin: "uitdunnen",
+        low: "tot 2 m", mid: "2–4 m", high: "hoger dan 4 m"
+      };
+      const l = (k) => L[k] || "onbekend";
+      if (m.lawn.route) lines.push(`- Gazon: ${l(m.lawn.route)}, staat ${l(m.lawn.state)}, ${m.lawn.areaM2 ? m.lawn.areaM2 + " m²" : "oppervlak onbekend"}`);
+      if (m.weeds.locations.length) lines.push(`- Onkruid: ${m.weeds.locations.map(l).join(", ")}; soort ${l(m.weeds.type)}; achterstand ${l(m.weeds.backlog)}`);
+      if (m.pruning.target) lines.push(`- Snoei: ${l(m.pruning.target)}, ingreep ${m.pruning.action ? l(m.pruning.action) : "graag advies"}, hoogte ${l(m.pruning.heightBand)}`);
     }
     lines.push("");
     lines.push(`Route: ${project.options.route || "nog niet gekozen"}`);

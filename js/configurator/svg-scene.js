@@ -4,7 +4,7 @@
  * exacte 2D/SVG preview). Tekent uit dezelfde geometry.js-output als de
  * 3D-weergave, dus identieke maten.
  */
-import { computeFenceLayout, computeTileLayout, gardenPolygon, polygonBounds, polygonAreaMm2 } from "./geometry.js";
+import { computeFenceLayout, computeTileLayout, computeGateSwing, gardenPolygon, polygonBounds, polygonAreaMm2 } from "./geometry.js";
 import { getFenceSystem } from "../../data/fence-systems.js";
 import { formatMeters, formatM2 } from "../project-state.js";
 import { getObjectType, objectQuantity } from "../../data/garden-objects.js";
@@ -227,6 +227,14 @@ export function renderScene(svg, project, opts) {
           })
         );
       }
+    }
+
+    // Draaicirkel per poort (D05): blad in open stand + boog
+    for (const gate of project.fence.gates || []) {
+      const sw = computeGateSwing(project.fence, gate);
+      if (!sw) continue;
+      fenceGroup.appendChild(el("polyline", { points: sw.points.map((p) => `${toX(p.xMm)},${toY(p.zMm)}`).join(" "), class: "scene-gate-swing" }));
+      fenceGroup.appendChild(el("line", { x1: toX(sw.hinge.xMm), y1: toY(sw.hinge.zMm), x2: toX(sw.openTip.xMm), y2: toY(sw.openTip.zMm), class: "scene-gate-leaf" }));
     }
 
     for (const post of layout.posts) {

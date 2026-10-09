@@ -228,3 +228,36 @@ export function gardenPolygon(garden) {
   if (garden && Array.isArray(garden.polygon) && garden.polygon.length >= 3) return garden.polygon;
   return rectPolygon(garden?.widthMm || 8000, garden?.depthMm || 6000);
 }
+
+/**
+ * Draaicirkel van een poort (D05). Normaal n = links van de zijderichting;
+ * "inward" draait naar die kant (bij de standaardvormen is dat de tuinzijde).
+ * Boog = hinge + v0·cos(t) + v1·sin(t), t ∈ [0, π/2] — exact cirkelvormig
+ * omdat v0 ⟂ v1 en beide lengte = poortbreedte.
+ * @returns {{hinge, closedTip, openTip, points: Array<{xMm,zMm}>, bounds}|null}
+ */
+export function computeGateSwing(fence, gate) {
+  const section = (fence?.sections || []).find((s) => s.id === gate.sectionId);
+  if (!section) return null;
+  const { dx, dz } = dirVector(section.directionDeg);
+  const a = worldPoint(section, gate.offsetMm);
+  const b = worldPoint(section, gate.offsetMm + gate.clearWidthMm);
+  const hinge = gate.hingeSide === "right" ? b : a;
+  const closedTip = gate.hingeSide === "right" ? a : b;
+  const sign = gate.swing === "outward" ? -1 : 1;
+  const w = gate.clearWidthMm;
+  const openTip = { xMm: hinge.xMm + -dz * sign * w, zMm: hinge.zMm + dx * sign * w };
+  const v0 = { x: closedTip.xMm - hinge.xMm, z: closedTip.zMm - hinge.zMm };
+  const v1 = { x: openTip.xMm - hinge.xMm, z: openTip.zMm - hinge.zMm };
+  const points = [];
+  for (let i = 0; i <= 12; i++) {
+    const t = (i / 12) * (Math.PI / 2);
+    points.push({ xMm: hinge.xMm + v0.x * Math.cos(t) + v1.x * Math.sin(t), zMm: hinge.zMm + v0.z * Math.cos(t) + v1.z * Math.sin(t) });
+  }
+  const all = [hinge, ...points];
+  const bounds = {
+    minX: Math.min(...all.map((p) => p.xMm)), maxX: Math.max(...all.map((p) => p.xMm)),
+    minZ: Math.min(...all.map((p) => p.zMm)), maxZ: Math.max(...all.map((p) => p.zMm))
+  };
+  return { hinge, closedTip, openTip, points, bounds };
+}
