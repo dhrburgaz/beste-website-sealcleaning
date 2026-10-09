@@ -103,18 +103,58 @@ sandbox-eigen Google Fonts TLS-fout, niet-repro op een echte host).
 - Alleen Chromium met Playwright getest in deze sessie; geen Firefox/WebKit-
   engine-check, geen fysieke mobiele toestellen.
 
+## Afgerond — ch.48 tier 5 (prijsboek/`/prijzen/`)
+
+`prijzen/index.html` + `js/prijzen.js`: rendert de prijstabellen rechtstreeks
+uit `data/price-sources.json` (gegroepeerd, bron+peildatum per regel,
+zichtbare "verouderd"-badge op de 3 stale HomingXL-regels), plus uitleg van
+de drie prijsniveaus en kostendrivers uit ch.20. Gelinkt in Diensten-submenu
+en elke footer. `data/price-sources.json` kreeg een `group`-veld per regel
+voor de indeling.
+
+## Afgerond — ch.48 tier 6 (deels — eerlijkheid van de fallback)
+
+Kernprobleem uit ch.23 gefixt: het contactformulier liet foto's selecteren,
+maar een `mailto:`-link kan geen bijlagen meesturen — de succesmelding zei
+dat niet. `js/main.js` toont nu expliciet een waarschuwing wanneer
+bestanden zijn geselecteerd ("voeg ze zelf toe in uw mailprogramma"), herbruikbaar
+via `data-attachment-noun`/`data-attachment-alt-channel` op elk formulier.
+Zelfde fix voor de FAQ-tekst op `/contact/`. **Nog niet gebouwd:** een echt
+`formEndpoint`/adapter-architectuur (ch.23) — er is geen backend/provider
+gekozen; dat vereist een keuze van de eigenaar (zie onder).
+
+## Afgerond — ch.48 tier 8 (B2B + werken met ons)
+
+`voor-aannemers/index.html`: B2B-landingspagina (onderaanneming, schutting/
+hekwerk, herstelbestrating, terreinonderhoud, opleverwerk, periodiek
+onderhoud, tijdelijke capaciteit) met intakeformulier (bedrijf, optioneel
+KvK, contactpersoon/rol, locatie, discipline, scope, planning, veiligheids-/
+toegangseisen, bestek/tekeningen/foto's, prijsvorm) en uitleg dat
+btw-verlegging per aanvraag wordt beoordeeld, nooit automatisch.
+`werken-met-ons/index.html`: expliciet geframed als "open samenwerking /
+interesse", nooit als vacature-belofte, met discipline/regio/beschikbaarheid/
+ervaring/rijbewijs/gereedschap/KvK/VCA/tarief/motivatie en optionele
+CV-upload (met dezelfde bijlage-waarschuwing). Beide herbruiken het
+algemene formulierhandler-patroon uit `js/main.js` (nu met
+`data-subject-prefix` voor een passend e-mailonderwerp per pagina) in
+plaats van het te dupliceren. Gelinkt in elke footer + sitemap.
+
 ## Nog niet gestart
 
-- Tier 5 (volledig prijsboek/rekenregels/`/prijzen/`-pagina — nu alleen één
-  voorbeeldregel in de overzichtstap), tier 6 (echt leadbackend/endpoint —
-  nu nog steeds alleen het bestaande contactformulier zonder server), tier 7
-  (projectdetail-routes `/projecten/[slug]/`, kennisbankartikelen), tier 8
-  (B2B/werken-met-ons), tier 9 (document-/factuurarchitectuur), tier 10-12
-  (checkout, analytics, eindreview). `data/materials.js` (officiële
-  productcatalogus, ch.21) ook nog niet aangemaakt — er zijn alleen de
-  generieke presets in `data/fence-systems.js`/`paving-products.js`.
+- Tier 7: projectdetail-routes `/projecten/[slug]/`, kennisbankartikelen
+  (3 echte artikelen per ch.25), `data/materials.js` (officiële
+  productcatalogus, ch.21 — er zijn alleen de generieke presets in
+  `data/fence-systems.js`/`paving-products.js`).
+- Tier 9: document-/factuurarchitectuur (offerte/werkbon/factuurconcept,
+  `docs/PRICING_OPERATIONS.md`).
+- Tier 10-12: webshop/checkout (bewust niet, vereist backend+juridisch
+  gereed), analytics-laag, onafhankelijke eindreview.
 - Supplier/inkoop/margin-engine (ch.38-39): bewust niet gebouwd, vereist
   echte bedrijfsinterne cijfers die nog niet zijn aangeleverd.
+- Configurator-scope-keuzes uit tier 3 (vrije tuincontour, drag-to-edit,
+  volledige `existingObjects[]`-catalogus, materiaalvergelijking,
+  ontwerp-export als JSON/deellink) staan nog open — zie vorige sectie
+  in de commit-geschiedenis van dit bestand indien nodig.
 
 ## Openstaande vragen voor de eigenaar
 
@@ -124,10 +164,17 @@ sandbox-eigen Google Fonts TLS-fout, niet-repro op een echte host).
 - Domeinmail (info@sealcleaning.nl) nog niet bevestigd.
 - Leveranciers-/inkoopgegevens voor de margin-engine.
 
+## Belangrijk voor hervatten: commit vaak
+
+Deze sessie verloor eenmalig ongecommit werk (de eerste versie van
+`/prijzen/`) doordat de container tussen beurten werd ververst zonder dat
+niet-gepushte bestanden behouden bleven. Commit en push daarom na elk
+afgerond, getest onderdeel — niet pas aan het einde van een tier.
+
 ## Eerstvolgende taak bij hervatten
 
-Kies op basis van wat de eigenaar het meest oplevert: (a) tier 5 prijsboek
-afmaken + `/prijzen/`-pagina, of (b) `existingObjects[]`-UI + vrije
-tuincontour afmaken in de configurator, of (c) tier 6 een echt
-formulier-endpoint aansluiten. Alle drie bouwen direct voort op wat nu
-staat; geen van drie vereist een herontwerp.
+Tier 7: begin met de 3 kennisbankartikelen (schutting opmeten, bestratings-
+oppervlak berekenen, hout-beton vs. composiet) — laagste risico, hoogste
+SEO-waarde, bouwt niet op iets dat nog moet worden ontworpen. Projectdetail-
+routes (`/projecten/[slug]/`) zijn een grotere stap (kleine generator nodig
+voor statische routes op GitHub Pages, ch.8) en kunnen daarna.
