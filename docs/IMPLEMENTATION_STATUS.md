@@ -139,12 +139,27 @@ algemene formulierhandler-patroon uit `js/main.js` (nu met
 `data-subject-prefix` voor een passend e-mailonderwerp per pagina) in
 plaats van het te dupliceren. Gelinkt in elke footer + sitemap.
 
+## Afgerond — ch.48 tier 7 (projectcases/SEO/content)
+
+- `kennisbank/schutting-opmeten/`, `kennisbank/bestratingsoppervlak-berekenen/`,
+  `kennisbank/hout-beton-vs-composiet/`: 3 echte artikelen per ch.25 (geen
+  AI-vulling), met eigen SVG-tekening resp. het al-geverifieerde
+  rekenvoorbeeld resp. een generieke vergelijkingstabel. `kennisbank/index.html`
+  linkt ernaartoe; resterende onderwerpen blijven eerlijk "op de planning".
+- **12 statische detailroutes** `/projecten/<slug>/`, gegenereerd uit
+  `data/projects.js` (één bron, geen duplicatie) — rechtstreeks openbaar en
+  refresh-bestendig op GitHub Pages, met CreativeWork+BreadcrumbList schema,
+  gerelateerde projecten, en een CTA die alleen het diensttype doorgeeft aan
+  de configurator (nooit de getoonde maten als zijnde van de bezoeker).
+  `projecten/index.html`-tegels kregen `data-slug`; de lightbox heeft nu ook
+  een gewone link naar de detailpagina (`js/lightbox.js`).
+- **Nog niet gedaan:** `data/materials.js` (officiële productcatalogus,
+  ch.21) — er zijn alleen de generieke presets in `data/fence-systems.js`/
+  `paving-products.js`; een echte catalogus heeft pas nut zodra een werkelijk
+  product is geverifieerd.
+
 ## Nog niet gestart
 
-- Tier 7: projectdetail-routes `/projecten/[slug]/`, kennisbankartikelen
-  (3 echte artikelen per ch.25), `data/materials.js` (officiële
-  productcatalogus, ch.21 — er zijn alleen de generieke presets in
-  `data/fence-systems.js`/`paving-products.js`).
 - Tier 9: document-/factuurarchitectuur (offerte/werkbon/factuurconcept,
   `docs/PRICING_OPERATIONS.md`).
 - Tier 10-12: webshop/checkout (bewust niet, vereist backend+juridisch
@@ -173,8 +188,12 @@ afgerond, getest onderdeel — niet pas aan het einde van een tier.
 
 ## Eerstvolgende taak bij hervatten
 
-Tier 7: begin met de 3 kennisbankartikelen (schutting opmeten, bestratings-
-oppervlak berekenen, hout-beton vs. composiet) — laagste risico, hoogste
-SEO-waarde, bouwt niet op iets dat nog moet worden ontworpen. Projectdetail-
-routes (`/projecten/[slug]/`) zijn een grotere stap (kleine generator nodig
-voor statische routes op GitHub Pages, ch.8) en kunnen daarna.
+Tier 1-8 zijn afgerond of substantieel afgerond (zie hierboven). Tier 9-12
+vereisen grotendeels echte bedrijfsbeslissingen (formulierbackend,
+leveranciersdata, boekhoud-/factuursysteem, betaalprovider) die niet
+zonder de eigenaar kunnen worden ingevuld. Zinvolle volgende stap zonder
+die input: het datamodel voor offerte/werkbon/factuurconcept (ch.40) en
+`docs/PRICING_OPERATIONS.md` opzetten, als voorbereiding — geen officiële
+factuurnummering genereren vanuit de browser (ch.40: dat vereist een
+backend). Daarna pas tier 10 (checkout, alleen indien backend/juridisch
+gereed) en tier 11-12 (analytics, eindreview).
