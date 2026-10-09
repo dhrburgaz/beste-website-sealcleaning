@@ -31,6 +31,18 @@ export const PAVING_COLOR_PRESETS = [
   { id: "red-brown", label: "Roodbruin", colorHex: "#7a4030", material: "klinker" }
 ];
 
+/**
+ * Generieke onderhoudskenmerken per materiaalsoort — dezelfde voorzichtige
+ * formulering als de kennisbank; exacte eigenschappen verschillen per
+ * fabrikant en worden pas per geverifieerd product vermeld.
+ */
+export const PAVING_MATERIAL_INFO = {
+  beton: { label: "Beton", maintenance: "Kan na verloop van tijd aanslag of verkleuring krijgen; periodiek reinigen en voegen bijhouden." },
+  schelpkalkbeton: { label: "Schelpkalkbeton", maintenance: "Als beton: periodiek reinigen en voegen bijhouden; schelpkalk-toplaag kan door slijtage van uiterlijk veranderen." },
+  keramiek: { label: "Keramiek", maintenance: "Neemt doorgaans weinig vuil op en is relatief eenvoudig te reinigen; voegen bijhouden." },
+  klinker: { label: "Gebakken klinker", maintenance: "Robuust en kleurvast als materiaal; voegen en eventuele onkruidgroei periodiek bijhouden." }
+};
+
 export const EDGING_PRODUCTS = [
   { id: "edging-anthracite", label: "Opsluitband antraciet 100 × 15 × 5 cm", lengthMm: 1000 },
   { id: "edging-grey", label: "Opsluitband grijs 100 × 15 × 5 cm", lengthMm: 1000 }

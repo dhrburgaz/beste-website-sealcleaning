@@ -5,15 +5,16 @@
  */
 import {
   createEmptyProject, parseMetersToMm, mmToMeters, formatMeters, formatM2,
-  deriveFenceLengths, validateFenceGates, derivePavingTotals, deriveTileCount,
+  deriveFenceLengths, validateFenceGates, derivePavingTotals,
   findPavingOverlaps, generateId, assertSerializable, cloneProjectAsVariant
 } from "../project-state.js";
 import { renderScene } from "./svg-scene.js";
 import { SERVICES, GARDEN_SCENE_SERVICE_IDS } from "../../data/services.js";
 import { FENCE_SHAPES, FENCE_HEIGHTS_MM, FENCE_SYSTEMS, FENCE_MATERIAL_PRESETS } from "../../data/fence-systems.js";
 import { PAVING_FORMATS_MM, PAVING_PATTERNS, PAVING_COLOR_PRESETS } from "../../data/paving-products.js";
-import { getPavingProduct, getPavingProductsForFormat } from "../../data/materials.js";
+import { getPavingProductsForFormat } from "../../data/materials.js";
 import { attachSvgInteraction, snapMm } from "./svg-interaction.js";
+import { MAX_VARIANTS, captureChoices, applyChoices, sameChoices, pavingIndication, describeChoices, diffChoices } from "./variants.js";
 import { toDesignPayload, sanitizeDesign, encodeShare, decodeShare, MAX_FILE_BYTES } from "./design-io.js";
 import { lPolygon, polygonAreaMm2, polygonBounds, findPolygonProblem, gardenPolygon } from "./geometry.js";
 
@@ -909,6 +910,7 @@ export function initConfigurator(root) {
       fs.appendChild(note);
       panel.appendChild(fs);
     }
+    if (usesFence() || usesPaving()) panel.appendChild(buildVariantsFieldset());
     if (!usesFence() && !usesPaving()) {
       const p = document.createElement("p");
       p.className = "field-hint";
@@ -1047,31 +1049,143 @@ export function initConfigurator(root) {
   async function fillPriceStatusBlock(box) {
     const priceSources = await loadPriceSources();
     const parts = [];
-    if (project.paving) {
-      const totals = derivePavingTotals(project.paving);
-      const selectedProduct = project.paving.productId ? getPavingProduct(project.paving.productId) : null;
-      const matches = priceSources.rows.filter(
-        (r) =>
-          r.status !== "stale" &&
-          r.tileLengthMm === project.paving.nominalTileLengthMm &&
-          r.tileWidthMm === project.paving.nominalTileWidthMm
-      );
-      const tileRow = selectedProduct
-        ? matches.find((r) => r.id === selectedProduct.priceSourceId)
-        : (matches.length ? matches.reduce((cheapest, r) => (r.amountCents < cheapest.amountCents ? r : cheapest), matches[0]) : null);
-      if (tileRow && totals.totalM2 > 0) {
-        const count = deriveTileCount(totals.totalM2, project.paving.nominalTileLengthMm, project.paving.nominalTileWidthMm, 0.05);
-        const amount = ((count * tileRow.amountCents) / 100).toLocaleString("nl-NL", { style: "currency", currency: "EUR" });
-        const formatLabel = `${project.paving.nominalTileLengthMm / 10}×${project.paving.nominalTileWidthMm / 10} cm`;
-        const basis = selectedProduct ? "uw gekozen product" : "goedkoopste gevonden referentie";
-        parts.push(`Bekende materiaalindicatie voor ${formatLabel} (${basis}, ${tileRow.productLabel}, ${count} stuks, excl. korting): ${amount}. Bron: ${tileRow.sourceUrl} (${tileRow.observedAt}).`);
-      } else if (totals.totalM2 > 0) {
-        const formatLabel = `${project.paving.nominalTileLengthMm / 10}×${project.paving.nominalTileWidthMm / 10} cm`;
+    if (project.paving && derivePavingTotals(project.paving).totalM2 > 0) {
+      const ind = pavingIndication(project, captureChoices(project).paving, priceSources);
+      const formatLabel = `${project.paving.nominalTileLengthMm / 10}×${project.paving.nominalTileWidthMm / 10} cm`;
+      if (ind) {
+        const basis = ind.basis === "gekozen product" ? "uw gekozen product" : ind.basis;
+        parts.push(`Bekende materiaalindicatie voor ${formatLabel} (${basis}, ${ind.row.productLabel}, ${ind.count} stuks, excl. korting): ${euro(ind.amountCents)}. Bron: ${ind.row.sourceUrl} (${ind.row.observedAt}).`);
+      } else {
         parts.push(`Voor formaat ${formatLabel} is nog geen gecontroleerde materiaalprijs beschikbaar — zie alle onderzochte formaten op de prijzenpagina.`);
       }
     }
     parts.push("Montage, ondergrond, afvoer en levering ontbreken nog — dit is geen projecttotaal. Prijs wordt na controle van uw samenstelling berekend.");
     box.textContent = parts.join(" ");
+  }
+
+  function euro(cents) {
+    return (cents / 100).toLocaleString("nl-NL", { style: "currency", currency: "EUR" });
+  }
+
+  /* ---- Varianten A/B/C vergelijken (F03/G06/G07) ---- */
+  function buildVariantsFieldset() {
+    const fs = document.createElement("fieldset");
+    fs.className = "configurator-variants";
+    fs.innerHTML = `<legend class="configurator-section-title">Varianten vergelijken (max. 3)</legend>
+      <p class="field-hint">Bewaar uw huidige materiaalkeuze als variant en probeer daarna iets anders. Alle varianten gebruiken dezelfde tekening en maten, dus u vergelijkt alleen de keuzes.</p>`;
+    project.variants = project.variants || [];
+    const current = captureChoices(project);
+    const duplicate = project.variants.find((v) => sameChoices(v.choices, current));
+    const addBtn = document.createElement("button");
+    addBtn.type = "button";
+    addBtn.className = "btn btn-secondary btn-sm";
+    const nextLabel = "ABC"[project.variants.length];
+    addBtn.textContent = project.variants.length >= MAX_VARIANTS ? "Maximaal 3 varianten" : `Bewaar huidige keuze als variant ${nextLabel}`;
+    addBtn.disabled = project.variants.length >= MAX_VARIANTS || !!duplicate;
+    addBtn.addEventListener("click", () => {
+      project.variants.push({ id: generateId("variant"), label: nextLabel, createdAt: new Date().toISOString(), choices: current });
+      renderScenesAndSummary();
+    });
+    fs.appendChild(addBtn);
+    if (duplicate) {
+      const p = document.createElement("p");
+      p.className = "field-hint";
+      p.textContent = `Uw huidige keuze is gelijk aan variant ${duplicate.label}.`;
+      fs.appendChild(p);
+    }
+    if (project.variants.length) {
+      const holder = document.createElement("div");
+      holder.className = "price-table-wrap variant-table-wrap";
+      holder.textContent = "Vergelijking wordt geladen…";
+      fs.appendChild(holder);
+      loadPriceSources().then((ps) => fillVariantTable(holder, ps));
+    }
+    return fs;
+  }
+
+  function fillVariantTable(holder, priceSources) {
+    const variants = project.variants;
+    const described = variants.map((v) => describeChoices(v.choices));
+    const indications = variants.map((v) => pavingIndication(project, v.choices.paving, priceSources));
+    const table = document.createElement("table");
+    table.className = "price-table variant-table";
+    const thead = document.createElement("thead");
+    const hr = document.createElement("tr");
+    const th0 = document.createElement("th"); th0.scope = "col"; th0.textContent = "Onderdeel"; hr.appendChild(th0);
+    variants.forEach((v) => { const th = document.createElement("th"); th.scope = "col"; th.textContent = `Variant ${v.label}`; hr.appendChild(th); });
+    thead.appendChild(hr);
+    table.appendChild(thead);
+    const tbody = document.createElement("tbody");
+    const addRow = (label, cells) => {
+      const tr = document.createElement("tr");
+      const th = document.createElement("th"); th.scope = "row"; th.textContent = label; tr.appendChild(th);
+      cells.forEach((c) => { const td = document.createElement("td"); if (c instanceof Node) td.appendChild(c); else td.textContent = c; tr.appendChild(td); });
+      tbody.appendChild(tr);
+    };
+    if (project.fence) {
+      addRow("Schuttingsysteem", described.map((d) => d.fenceSystem || "—"));
+      addRow("Materiaal / kleur", described.map((d) => d.fenceMaterial || "—"));
+      addRow("Hoogte", described.map((d) => d.fenceHeight || "—"));
+      addRow("Opbouw", described.map((d) => d.fenceBuildUp || "—"));
+      addRow("Onderhoud schutting", described.map((d) => d.fenceMaintenance || "—"));
+      addRow("Leverstatus schutting", described.map((d) => d.fenceSupply || "—"));
+      addRow("Prijsbasis schutting", variants.map(() => "Geen gecontroleerde prijsregel voor dit systeem — op aanvraag"));
+    }
+    if (project.paving) {
+      addRow("Tegelformaat", described.map((d) => d.pavingFormat || "—"));
+      addRow("Legpatroon", described.map((d) => d.pavingPattern || "—"));
+      addRow("Kleur", described.map((d) => d.pavingColor || "—"));
+      addRow("Product", described.map((d) => d.pavingProduct || "—"));
+      addRow("Onderhoud bestrating", described.map((d) => d.pavingMaintenance || "—"));
+      addRow("Leverstatus bestrating", described.map((d) => d.pavingSupply || "—"));
+      addRow("Materiaalindicatie tegels", indications.map((ind) => {
+        if (!ind) return "Onbekend — geen gecontroleerde prijsregel voor dit formaat";
+        const span = document.createElement("span");
+        span.appendChild(document.createTextNode(`${euro(ind.amountCents)} (${ind.count} st., ${ind.basis}, excl. korting). Bron: `));
+        const a = document.createElement("a");
+        a.href = ind.row.sourceUrl; a.rel = "noopener"; a.target = "_blank";
+        a.textContent = `${new URL(ind.row.sourceUrl).hostname} (${ind.row.observedAt})`;
+        span.appendChild(a);
+        return span;
+      }));
+      const ref = indications[0];
+      addRow(`Verschil t.o.v. variant A`, indications.map((ind, i) => {
+        if (i === 0) return "Referentie";
+        if (!ind || !ref) return "Niet te berekenen — minstens één variant heeft geen bekende prijsregel";
+        const d = ind.amountCents - ref.amountCents;
+        return `${d > 0 ? "+" : d < 0 ? "−" : "±"}${euro(Math.abs(d))} op tegels`;
+      }));
+    }
+    addRow("Wijzigt t.o.v. A", variants.map((v, i) => i === 0 ? "—" : (diffChoices(variants[0].choices, v.choices).join(", ") || "niets")));
+    const actionCells = variants.map((v) => {
+      const wrap = document.createElement("div");
+      wrap.className = "variant-actions";
+      const apply = document.createElement("button");
+      apply.type = "button"; apply.className = "btn btn-secondary btn-sm";
+      apply.textContent = `Gebruik ${v.label}`;
+      apply.setAttribute("aria-label", `Variant ${v.label} toepassen op mijn ontwerp`);
+      apply.disabled = sameChoices(v.choices, captureChoices(project));
+      apply.addEventListener("click", () => { applyChoices(project, v.choices); renderScenesAndSummary(); });
+      const rm = document.createElement("button");
+      rm.type = "button"; rm.className = "link-btn";
+      rm.textContent = "Verwijderen";
+      rm.setAttribute("aria-label", `Variant ${v.label} verwijderen`);
+      rm.addEventListener("click", () => {
+        project.variants = project.variants.filter((x) => x.id !== v.id);
+        project.variants.forEach((x, i) => { x.label = "ABC"[i]; });
+        renderScenesAndSummary();
+      });
+      wrap.appendChild(apply); wrap.appendChild(rm);
+      return wrap;
+    });
+    addRow("", actionCells);
+    table.appendChild(tbody);
+    holder.textContent = "";
+    holder.appendChild(table);
+    const note = document.createElement("p");
+    note.className = "field-hint";
+    note.textContent = "Onbekende impact in alle varianten: schuttingmateriaal, montage, ondergrond, afvoer en levering. Een verschil wordt alleen getoond als beide varianten een gecontroleerde prijsregel hebben.";
+    holder.appendChild(note);
   }
 
   function buildActionsBlock() {

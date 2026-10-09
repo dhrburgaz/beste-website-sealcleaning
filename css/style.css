@@ -622,7 +622,7 @@ fieldset > legend { font-weight: 500; font-size: 0.82rem; letter-spacing: 0.04em
 
 /* Configurator (/project-samenstellen/) */
 .configurator-shell { display: grid; grid-template-columns: minmax(280px, 360px) 1fr; gap: var(--sp-4); align-items: start; }
-.configurator-panel { display: flex; flex-direction: column; gap: var(--sp-3); }
+.configurator-panel { display: flex; flex-direction: column; gap: var(--sp-3); min-width: 0; }
 .configurator-stepnav { display: flex; flex-wrap: wrap; gap: 0.4em; margin-bottom: var(--sp-3); }
 .configurator-stepnav button {
   font: inherit; font-size: 0.82rem; padding: 0.45em 0.9em; border: 1px solid var(--c-line); border-radius: 999px;
@@ -736,6 +736,15 @@ fieldset > legend { font-weight: 500; font-size: 0.82rem; letter-spacing: 0.04em
 .design-file-label { cursor: pointer; }
 .design-file-label:focus-within { outline: 2px solid var(--c-forest); outline-offset: 2px; }
 .design-share-input { width: 100%; font: inherit; font-size: 0.85rem; padding: 0.6em; border: 1px solid var(--c-line); min-height: 44px; margin-top: 0.4em; }
+
+.configurator-variants { margin-top: var(--sp-3); }
+.configurator-panel fieldset { min-width: 0; min-inline-size: 0; }
+.variant-table-wrap { margin-top: var(--sp-2); }
+.variant-table { min-width: 0; width: 100%; font-size: 0.84rem; }
+.variant-table th[scope="row"] { font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--c-ink-soft); font-weight: 500; text-align: left; width: 7.5em; }
+.variant-table td { min-width: 9.5em; }
+.variant-actions { display: flex; flex-direction: column; gap: 0.3em; align-items: flex-start; }
+.variant-actions .link-btn { background: none; border: none; color: var(--c-error); text-decoration: underline; cursor: pointer; min-height: 44px; font: inherit; font-size: 0.8rem; }
 
 .configurator-mobile-bar { display: none; }
 

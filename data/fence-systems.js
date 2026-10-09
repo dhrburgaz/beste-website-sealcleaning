@@ -12,6 +12,8 @@ export const FENCE_HEIGHTS_MM = [1000, 1200, 1500, 1800, 2000];
 export const FENCE_SYSTEMS = [
   {
     id: "generic-wood",
+    buildUp: "Houten palen in de grond of op poeren, houten schermen.",
+    maintenance: "Periodiek beitsen/oliën om kleur en bescherming te behouden; frequentie hangt af van houtsoort en ligging.",
     label: "Volledig hout",
     description: "Houten planken op houten palen, generieke visualisatie.",
     nominalPanelWidthMm: 1800,
@@ -21,6 +23,8 @@ export const FENCE_SYSTEMS = [
   },
   {
     id: "generic-wood-concrete",
+    buildUp: "Betonpalen met betonnen onderplaat; houten scherm erboven (onderplaat telt mee in de totale hoogte).",
+    maintenance: "Hout periodiek beitsen/oliën; beton heeft geen grondcontact-houtrot, wel af en toe reinigen.",
     label: "Hout op beton",
     description: "Houten scherm op een betonnen onderplaat; totale hoogte is schermhoogte plus onderplaat.",
     nominalPanelWidthMm: 1800,
@@ -31,6 +35,8 @@ export const FENCE_SYSTEMS = [
   },
   {
     id: "generic-composite",
+    buildUp: "Composiet planken in aluminium of composiet profielen, vaak op een onderplaat.",
+    maintenance: "Nauwelijks onderhoud; schoonmaken is doorgaans voldoende. Vervangbaarheid van losse delen is systeemafhankelijk.",
     label: "Composiet",
     description: "Composiet planken op aluminium of composiet profielen, generieke visualisatie.",
     nominalPanelWidthMm: 1800,
@@ -41,6 +47,8 @@ export const FENCE_SYSTEMS = [
   },
   {
     id: "generic-horizontal-lamellen",
+    buildUp: "Horizontale lamellen tussen palen, met kleine tussenruimte.",
+    maintenance: "Afhankelijk van materiaal: hout periodiek behandelen, composiet/aluminium doorgaans alleen reinigen.",
     label: "Horizontale lamellen",
     description: "Horizontaal gemonteerde lamellen met kleine tussenruimte.",
     nominalPanelWidthMm: 1800,
@@ -50,6 +58,8 @@ export const FENCE_SYSTEMS = [
   },
   {
     id: "generic-mesh",
+    buildUp: "Gaaspanelen of hekwerk tussen dunne palen, visueel open.",
+    maintenance: "Weinig onderhoud; begroeiing en beschadigingen periodiek nalopen.",
     label: "Gaas / hekwerk",
     description: "Transparant gaas of hekwerk; visueel lichter dan een massief scherm.",
     nominalPanelWidthMm: 2500,
