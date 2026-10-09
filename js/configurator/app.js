@@ -159,24 +159,56 @@ export function initConfigurator(root) {
     fitGardenToContent();
   }
 
+  /**
+   * Schuttingvormen met een rechtsafslag (bv. L-right) geven secties een
+   * negatieve richting (sin(-90°) = -1), dus negatieve z-coördinaten. De 2D/3D-
+   * scenes gaan uit van een oorsprong bij (0,0) met alleen positieve ruimte —
+   * zonder verschuiving valt zo'n vorm deels buiten de zichtbare viewBox/scene
+   * (v6.0 H04-bevinding). Verschuif daarom eerst alle geometrie zodat de
+   * kleinste x/z op 0 uitkomt, bepaal pas daarna de tuingrootte.
+   */
   function fitGardenToContent() {
-    let maxX = project.garden.widthMm || 0;
-    let maxZ = project.garden.depthMm || 0;
+    let minX = 0, minZ = 0, maxX = project.garden.widthMm || 0, maxZ = project.garden.depthMm || 0;
     if (project.fence) {
       for (const s of project.fence.sections) {
         const rad = (s.directionDeg * Math.PI) / 180;
         const endX = s.start.xMm + Math.cos(rad) * s.lengthMm;
         const endZ = s.start.zMm + Math.sin(rad) * s.lengthMm;
+        minX = Math.min(minX, s.start.xMm, endX);
+        minZ = Math.min(minZ, s.start.zMm, endZ);
         maxX = Math.max(maxX, s.start.xMm, endX);
         maxZ = Math.max(maxZ, s.start.zMm, endZ);
       }
     }
     if (project.paving) {
       for (const a of project.paving.areas) {
+        minX = Math.min(minX, a.position.xMm);
+        minZ = Math.min(minZ, a.position.zMm);
         maxX = Math.max(maxX, a.position.xMm + a.lengthMm);
         maxZ = Math.max(maxZ, a.position.zMm + a.widthMm);
       }
     }
+
+    if (minX < 0 || minZ < 0) {
+      const dx = -minX, dz = -minZ;
+      if (project.fence) {
+        for (const s of project.fence.sections) {
+          s.start.xMm += dx;
+          s.start.zMm += dz;
+        }
+      }
+      if (project.paving) {
+        for (const a of project.paving.areas) {
+          a.position.xMm += dx;
+          a.position.zMm += dz;
+        }
+      }
+      maxX += dx;
+      maxZ += dz;
+      minX = 0;
+      minZ = 0;
+    }
+
     if (!project.garden.geometryKnown || !project.garden.widthMm) {
       project.garden.widthMm = Math.max(3000, Math.round((maxX + 1500) / 100) * 100);
     }
@@ -587,16 +619,33 @@ export function initConfigurator(root) {
     return wrap;
   }
 
+  /**
+   * Toont alleen een materiaalindicatie wanneer er een prijsregel bestaat
+   * voor het daadwerkelijk gekozen tegelformaat (v6.0 H04-bevinding: de
+   * vorige versie gebruikte altijd dezelfde 60×60-productregel, ook bij
+   * 30×30 of 80×80). Geen passende regel → geen verzonnen prijs, alleen de
+   * generieke "op aanvraag"-tekst.
+   */
   async function fillPriceStatusBlock(box) {
     const priceSources = await loadPriceSources();
     const parts = [];
     if (project.paving) {
       const totals = derivePavingTotals(project.paving);
-      const tileRow = priceSources.rows.find((r) => r.id === "price-flairstone-garden-moon-6060");
-      if (tileRow && tileRow.status !== "stale" && totals.totalM2 > 0) {
+      const matches = priceSources.rows.filter(
+        (r) =>
+          r.status !== "stale" &&
+          r.tileLengthMm === project.paving.nominalTileLengthMm &&
+          r.tileWidthMm === project.paving.nominalTileWidthMm
+      );
+      if (matches.length && totals.totalM2 > 0) {
+        const tileRow = matches.reduce((cheapest, r) => (r.amountCents < cheapest.amountCents ? r : cheapest), matches[0]);
         const count = deriveTileCount(totals.totalM2, project.paving.nominalTileLengthMm, project.paving.nominalTileWidthMm, 0.05);
         const amount = ((count * tileRow.amountCents) / 100).toLocaleString("nl-NL", { style: "currency", currency: "EUR" });
-        parts.push(`Bekende materiaalindicatie tegels (${count} stuks, excl. korting): ${amount}. Bron: ${tileRow.sourceUrl} (${tileRow.observedAt}).`);
+        const formatLabel = `${project.paving.nominalTileLengthMm / 10}×${project.paving.nominalTileWidthMm / 10} cm`;
+        parts.push(`Bekende materiaalindicatie voor ${formatLabel} (goedkoopste gevonden referentie, ${tileRow.productLabel}, ${count} stuks, excl. korting): ${amount}. Bron: ${tileRow.sourceUrl} (${tileRow.observedAt}).`);
+      } else if (totals.totalM2 > 0) {
+        const formatLabel = `${project.paving.nominalTileLengthMm / 10}×${project.paving.nominalTileWidthMm / 10} cm`;
+        parts.push(`Voor formaat ${formatLabel} is nog geen gecontroleerde materiaalprijs beschikbaar — zie alle onderzochte formaten op de prijzenpagina.`);
       }
     }
     parts.push("Montage, ondergrond, afvoer en levering ontbreken nog — dit is geen projecttotaal. Prijs wordt na controle van uw samenstelling berekend.");
