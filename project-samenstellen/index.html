@@ -105,24 +105,26 @@
         </div>
 
         <div class="configurator-scene-wrap">
-          <div class="scene-toolbar">
-            <div class="scene-view-toggle" role="group" aria-label="2D of 3D bekijken">
-              <button type="button" data-scene-view="2d" aria-pressed="true">2D</button>
-              <button type="button" data-scene-view="3d" aria-pressed="false">3D</button>
+          <div class="scene-sticky">
+            <div class="scene-toolbar">
+              <div class="scene-view-toggle" role="group" aria-label="2D of 3D bekijken">
+                <button type="button" data-scene-view="2d" aria-pressed="true">2D</button>
+                <button type="button" data-scene-view="3d" aria-pressed="false">3D</button>
+              </div>
+              <div class="scene-camera-controls" role="group" aria-label="Camerastand (alleen 3D)">
+                <button type="button" data-camera-view="3d" aria-label="3D-aanzicht">3D</button>
+                <button type="button" data-camera-view="top" aria-label="Bovenaanzicht">Boven</button>
+                <button type="button" data-camera-view="front" aria-label="Vooraanzicht">Voor</button>
+                <button type="button" data-camera-reset aria-label="Camera resetten">⟲</button>
+              </div>
             </div>
-            <div class="scene-camera-controls" role="group" aria-label="Camerastand (alleen 3D)">
-              <button type="button" data-camera-view="3d" aria-label="3D-aanzicht">3D</button>
-              <button type="button" data-camera-view="top" aria-label="Bovenaanzicht">Boven</button>
-              <button type="button" data-camera-view="front" aria-label="Vooraanzicht">Voor</button>
-              <button type="button" data-camera-reset aria-label="Camera resetten">⟲</button>
+            <div class="scene-edit-controls" data-edit-controls role="group" aria-label="Bewerken: ongedaan maken, raster en werkvlak"></div>
+            <div class="scene-stage">
+              <button type="button" class="scene-canvas-exit btn btn-primary btn-sm" data-canvas-exit hidden>← Terug naar stappen</button>
+              <svg class="scene-svg" data-scene-svg></svg>
+              <div class="scene-canvas-host" data-scene-canvas-host hidden></div>
+              <div class="scene-status" data-scene-status hidden></div>
             </div>
-          </div>
-          <div class="scene-edit-controls" data-edit-controls role="group" aria-label="Bewerken: ongedaan maken, raster en werkvlak"></div>
-          <div class="scene-stage">
-            <button type="button" class="scene-canvas-exit btn btn-primary btn-sm" data-canvas-exit hidden>← Terug naar stappen</button>
-            <svg class="scene-svg" data-scene-svg></svg>
-            <div class="scene-canvas-host" data-scene-canvas-host hidden></div>
-            <div class="scene-status" data-scene-status hidden></div>
           </div>
           <p class="scene-aria-live" data-scene-aria-live aria-live="polite"></p>
           <p class="field-hint">De 2D-tekening hierboven is altijd de volledige, exacte beschrijving van uw ontwerp — ook zonder 3D. Tik of klik op een vlak of genummerd hoekpunt om het te selecteren en sleep het daarna; tik op een lege plek om te stoppen.</p>

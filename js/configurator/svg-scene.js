@@ -214,19 +214,28 @@ export function renderScene(svg, project, opts) {
     );
   }
 
-  // Hoekpunt-handgrepen voor vrije contour (bovenop alles)
+  // Hoekpunt-handgrepen voor vrije contour (bovenop alles). Grootte in
+  // schermpixels: een raakvlak van ±44px, ongeacht de tuinmaat (E08).
   if (editable && garden.shape === "free") {
+    const rect = svg.getBoundingClientRect();
+    const mmPerPx = rect.width > 0 && rect.height > 0 ? Math.max(viewW / rect.width, viewH / rect.height) : 25;
     polygon.forEach((p, i) => {
       const id = `vertex-${i}`;
-      const handle = el("circle", {
-        cx: toX(p.xMm), cy: toY(p.zMm), r: id === selectedId ? 170 : 130,
-        class: id === selectedId ? "scene-vertex scene-selected" : "scene-vertex"
-      });
-      handle.dataset.drag = "vertex";
-      handle.dataset.id = id;
-      handle.dataset.index = String(i);
-      group.appendChild(handle);
-      group.appendChild(text(toX(p.xMm), toY(p.zMm) + 70, String(i + 1), { "text-anchor": "middle", class: "scene-label scene-label-vertex" }));
+      const selected = id === selectedId;
+      group.appendChild(el("circle", {
+        cx: toX(p.xMm), cy: toY(p.zMm), r: (selected ? 13 : 10) * mmPerPx,
+        "stroke-width": 2.5 * mmPerPx,
+        class: selected ? "scene-vertex scene-selected" : "scene-vertex"
+      }));
+      group.appendChild(text(toX(p.xMm), toY(p.zMm) + 4 * mmPerPx, String(i + 1), {
+        "text-anchor": "middle", "font-size": 11 * mmPerPx, class: "scene-label scene-label-vertex"
+      }));
+      const hit = el("circle", { cx: toX(p.xMm), cy: toY(p.zMm), r: 22 * mmPerPx, class: "scene-vertex-hit" });
+      hit.dataset.drag = "vertex";
+      hit.dataset.id = id;
+      hit.dataset.index = String(i);
+      hit.setAttribute("aria-hidden", "true");
+      group.appendChild(hit);
     });
   }
 

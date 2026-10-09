@@ -628,6 +628,8 @@ fieldset > legend { font-weight: 500; font-size: 0.82rem; letter-spacing: 0.04em
   font: inherit; font-size: 0.82rem; padding: 0.45em 0.9em; border: 1px solid var(--c-line); border-radius: 999px;
   background: transparent; color: var(--c-ink-soft); cursor: pointer; transition: var(--transition);
 }
+.configurator-stepnav button, .scene-view-toggle button { min-height: 44px; }
+.configurator-shell .btn-sm, .configurator-mobile-bar .btn-sm { min-height: 44px; }
 .configurator-stepnav button[aria-current="step"] { background: var(--c-forest); border-color: var(--c-forest); color: #fff; }
 .configurator-stepnav button:disabled { opacity: 0.4; cursor: not-allowed; }
 .configurator-field { margin-bottom: var(--sp-3); }
@@ -696,9 +698,10 @@ fieldset > legend { font-weight: 500; font-size: 0.82rem; letter-spacing: 0.04em
 .scene-grid-major { stroke-opacity: 0.25; stroke-width: 10; }
 .scene-hit { fill: transparent; stroke: none; cursor: move; }
 .scene-hit.scene-selected { stroke: var(--c-clay); stroke-width: 40; stroke-dasharray: 120 60; }
-.scene-vertex { fill: #fff; stroke: var(--c-forest-deep); stroke-width: 30; cursor: move; }
+.scene-vertex { fill: #fff; stroke: var(--c-forest-deep); pointer-events: none; }
+.scene-vertex-hit { fill: transparent; cursor: move; }
 .scene-vertex.scene-selected { fill: var(--c-clay); }
-.scene-label-vertex { font-size: 150px; font-weight: 700; fill: var(--c-forest-deep); pointer-events: none; }
+.scene-label-vertex { font-weight: 700; fill: var(--c-forest-deep); pointer-events: none; }
 .scene-label-edge { font-size: 190px; fill: var(--c-ink-soft); }
 .scene-label { pointer-events: none; }
 .scene-svg.is-editing { touch-action: none; }
@@ -720,13 +723,14 @@ fieldset > legend { font-weight: 500; font-size: 0.82rem; letter-spacing: 0.04em
 .configurator-list-item button { min-height: 44px; }
 
 /* Vergroot werkvlak (E08): tekening vult het scherm, duidelijke terugknop */
-.is-canvas-fullscreen .configurator-scene-wrap {
-  position: fixed; inset: 0; z-index: 200; background: var(--c-sand, #f2ece0); padding: 0.6em;
+.scene-sticky { display: flex; flex-direction: column; gap: var(--sp-2); }
+.configurator-shell.is-canvas-fullscreen .scene-sticky {
+  position: fixed; inset: 0; z-index: 200; background: var(--c-sand); padding: 0.6em;
   padding-bottom: calc(0.6em + env(safe-area-inset-bottom)); gap: 0.5em;
 }
 .configurator-shell.is-canvas-fullscreen .scene-stage { flex: 1; aspect-ratio: auto; min-height: 0; max-height: none; }
 .is-canvas-fullscreen .scene-svg { touch-action: none; }
-.is-canvas-fullscreen .configurator-scene-wrap > .field-hint { display: none; }
+[data-view="2d"] .scene-camera-controls { display: none; }
 .configurator-fullscreen-lock, .configurator-fullscreen-lock body { overflow: hidden; }
 
 .design-tools { border: 1px solid var(--c-line); background: #fff; padding: 0 var(--sp-3); }
@@ -750,13 +754,31 @@ fieldset > legend { font-weight: 500; font-size: 0.82rem; letter-spacing: 0.04em
 
 @media (max-width: 860px) {
   .configurator-shell { grid-template-columns: 1fr; }
-  .configurator-scene-wrap { order: -1; gap: var(--sp-2); }
+  /* Mobiel: tekenvlak boven het formulier; hint en opslaan/delen eronder */
+  .configurator-scene-wrap { display: contents; }
+  .scene-sticky { order: -1; gap: 0.4em; }
+  .configurator-scene-wrap > .field-hint, .configurator-scene-wrap > .design-tools { order: 2; }
+  .scene-toolbar, .scene-edit-controls { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .scene-toolbar::-webkit-scrollbar, .scene-edit-controls::-webkit-scrollbar { display: none; }
+  .scene-edit-controls > * { flex-shrink: 0; }
+  .scene-edit-controls { gap: 0.3em; }
+  .scene-edit-controls select { padding-inline: 0.4em; }
+  .scene-snap-toggle { padding: 0 0.45em; }
   .configurator-shell .scene-stage { aspect-ratio: 4 / 3; max-height: 55vh; }
   .configurator-mobile-bar {
     display: flex; position: sticky; bottom: 0; z-index: 5; gap: 0.6em; padding: 0.7em var(--sp-3);
     background: #fff; border-top: 1px solid var(--c-line); align-items: center; justify-content: space-between;
     padding-bottom: calc(0.7em + env(safe-area-inset-bottom));
   }
+}
+
+@media (max-width: 480px) {
+  .scene-snap-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+}
+@media (max-width: 860px) and (min-height: 560px) {
+  /* Tekening blijft in beeld tijdens invullen, direct onder de vaste header */
+  [data-step="maten"] .scene-sticky, [data-step="materialen"] .scene-sticky { position: sticky; top: var(--cfg-sticky-top, 0px); z-index: 4; background: var(--c-sand); padding-block: 0.4em; border-bottom: 1px solid var(--c-line); }
+  .configurator-shell .scene-stage { max-height: 30vh; }
 }
 
 /* Prijzen (/prijzen/) */

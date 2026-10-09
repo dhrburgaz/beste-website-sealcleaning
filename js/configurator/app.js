@@ -52,7 +52,8 @@ export function initConfigurator(root) {
   const ariaLive = root.querySelector("[data-scene-aria-live]");
   const canvasHost = root.querySelector("[data-scene-canvas-host]");
   const sceneStatus = root.querySelector("[data-scene-status]");
-  const mobileBar = root.querySelector("[data-configurator-mobile-bar]");
+  // De mobiele balk staat buiten root (onderaan <main>, sticky), dus op document zoeken.
+  const mobileBar = root.querySelector("[data-configurator-mobile-bar]") || document.querySelector("[data-configurator-mobile-bar]");
   const editControls = root.querySelector("[data-edit-controls]");
   const designTools = root.querySelector("[data-design-tools]");
   let designMessage = null; // { text, error }
@@ -309,6 +310,14 @@ export function initConfigurator(root) {
     if (target.kind === "vertex") return project.garden.polygon?.[target.index] || null;
     return null;
   }
+  if (svg && "ResizeObserver" in window) {
+    let pending = false;
+    new ResizeObserver(() => {
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(() => { pending = false; if (project.garden.shape === "free") renderScenes(); });
+    }).observe(svg);
+  }
   if (svg) {
     attachSvgInteraction(svg, {
       getSelectedId: () => selectedId,
@@ -355,8 +364,30 @@ export function initConfigurator(root) {
   function goToStep(i) {
     stepIndex = Math.max(0, Math.min(STEPS.length - 1, i));
     renderAll();
-    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    scrollPanelIntoView();
   }
+
+  /** Scroll naar het stappaneel, rekening houdend met vaste header en (mobiel) vaste tekening. */
+  function scrollPanelIntoView() {
+    const header = document.querySelector(".site-header");
+    const sticky = root.querySelector(".scene-sticky");
+    let offset = header ? header.offsetHeight : 0;
+    if (sticky && getComputedStyle(sticky).position === "sticky") offset += sticky.offsetHeight;
+    const target = stepNav.getBoundingClientRect().top + window.scrollY - offset - 8;
+    if (Math.abs(target - window.scrollY) > 4) window.scrollTo({ top: target, behavior: "smooth" });
+  }
+
+  function syncStickyTop() {
+    const header = document.querySelector(".site-header");
+    const headerH = header ? header.offsetHeight : 0;
+    root.style.setProperty("--cfg-sticky-top", `${headerH}px`);
+    const sticky = root.querySelector(".scene-sticky");
+    const stickyH = sticky && getComputedStyle(sticky).position === "sticky" ? sticky.offsetHeight : 0;
+    document.documentElement.style.scrollPaddingTop = `${headerH + stickyH + 8}px`;
+  }
+  syncStickyTop();
+  window.addEventListener("resize", syncStickyTop);
+  root.dataset.view = "2d";
 
   function usesFence() { return project.services.includes("schutting"); }
   function usesPaving() { return project.services.includes("bestrating"); }
@@ -1419,12 +1450,14 @@ export function initConfigurator(root) {
   }
 
   function renderAll() {
+    root.dataset.step = STEPS[stepIndex];
     recordHistory();
     renderStepNav();
     renderPanel();
     renderScenes();
     renderEditControls();
     renderDesignTools();
+    syncStickyTop();
   }
 
   // 2D/3D toggle
@@ -1436,6 +1469,7 @@ export function initConfigurator(root) {
         await load3D();
       }
       currentView = view;
+      root.dataset.view = view;
       toggleButtons.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
       if (svg) svg.hidden = view === "3d";
       if (canvasHost) canvasHost.hidden = view !== "3d";
