@@ -14,7 +14,7 @@ import { renderScene } from "./svg-scene.js";
 import { SERVICES, GARDEN_SCENE_SERVICE_IDS } from "../../data/services.js";
 import { FENCE_SHAPES, FENCE_HEIGHTS_MM, FENCE_SYSTEMS, FENCE_MATERIAL_PRESETS } from "../../data/fence-systems.js";
 import { PAVING_FORMATS_MM, PAVING_PATTERNS, PAVING_COLOR_PRESETS } from "../../data/paving-products.js";
-import { getPavingProductsForFormat } from "../../data/materials.js";
+import { getPavingProduct, getPavingProductsForFormat } from "../../data/materials.js";
 import { attachSvgInteraction, snapMm } from "./svg-interaction.js";
 import { MAX_VARIANTS, captureChoices, applyChoices, sameChoices, pavingIndication, describeChoices, diffChoices } from "./variants.js";
 import { toDesignPayload, sanitizeDesign, encodeShare, decodeShare, MAX_FILE_BYTES } from "./design-io.js";
@@ -519,8 +519,76 @@ export function initConfigurator(root) {
     }
   }
 
+  const GOALS = [
+    { id: "privacy", label: "Meer privacy", services: ["schutting"] },
+    { id: "onderhoud", label: "Tuin laten bijhouden", services: ["tuinonderhoud"] },
+    { id: "groen", label: "Meer groen", services: ["tuinrenovatie"] },
+    { id: "herstel", label: "Iets laten herstellen", services: [] },
+    { id: "aanleg", label: "Complete nieuwe tuin", services: ["tuinaanleg"] }
+  ];
+
+  function applyGoal(goalId) {
+    const goal = GOALS.find((g) => g.id === goalId);
+    if (!goal) return;
+    project.goal = goal.id;
+    for (const sId of goal.services) if (!project.services.includes(sId)) project.services.push(sId);
+    if (goal.id === "herstel") project.options.fenceIntent = "repair";
+    if (usesFence()) ensureFenceDefaults();
+    if (usesPaving()) ensurePavingDefaults();
+    fitGardenToContent();
+  }
+
+  /** ?doel= of ?service= vanaf een dienst-/projectpagina: alleen toepassen op een leeg ontwerp. */
+  function applyUrlPreselection() {
+    const params = new URLSearchParams(location.search);
+    if (project.services.length) return;
+    const doel = params.get("doel");
+    const service = params.get("service");
+    if (doel) applyGoal(doel);
+    if (service && SERVICES.some((x) => x.id === service) && !project.services.includes(service)) {
+      project.services.push(service);
+      if (usesFence()) ensureFenceDefaults();
+      if (usesPaving()) ensurePavingDefaults();
+      fitGardenToContent();
+    }
+  }
+
   function renderStepProject() {
     panel.innerHTML = "";
+    const who = document.createElement("fieldset");
+    who.innerHTML = `<legend class="configurator-section-title">Voor wie is het project?</legend>`;
+    who.appendChild(selectField("Ik vraag aan als", [
+      { id: "private", label: "Particulier" }, { id: "business", label: "Zakelijk (bedrijf, VvE, aannemer)" }
+    ], project.customerType, (val) => { project.customerType = val; renderScenesAndSummary(); }, (o) => o.label, (o) => o.id));
+    if (project.customerType === "business") {
+      const p = document.createElement("p");
+      p.className = "field-hint";
+      p.innerHTML = 'Voor zakelijke opdrachten (onderaanneming, VvE, meerdere locaties) is er een aparte <a href="../voor-aannemers/">zakelijke intake</a>. Uw ontwerp hier blijft bewaard en gaat mee in het dossier.';
+      who.appendChild(p);
+    }
+    panel.appendChild(who);
+
+    const goalFs = document.createElement("fieldset");
+    goalFs.innerHTML = `<legend class="configurator-section-title">Wat is uw doel?</legend>
+      <p class="field-hint">Kies een doel — wij zetten de passende dienst alvast aan. U kunt hieronder altijd aanpassen.</p>`;
+    const goalTiles = document.createElement("div");
+    goalTiles.className = "wizard-tiles";
+    goalTiles.setAttribute("role", "group");
+    goalTiles.setAttribute("aria-label", "Kies uw doel");
+    GOALS.forEach((g) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "wizard-tile wizard-tile-sm";
+      btn.setAttribute("aria-pressed", project.goal === g.id ? "true" : "false");
+      btn.textContent = g.label;
+      btn.addEventListener("click", () => { applyGoal(g.id); renderAll(); });
+      goalTiles.appendChild(btn);
+    });
+    goalFs.appendChild(goalTiles);
+    if (project.goal === "herstel") {
+      goalFs.appendChild(hintEl("Kies hieronder wat hersteld moet worden. Bij een schutting staat 'herstellen' in stap Situatie al aan — we adviseren pas vervanging als herstel niet zinvol is."));
+    }
+    panel.appendChild(goalFs);
     const fieldset = document.createElement("fieldset");
     fieldset.innerHTML = `<legend class="configurator-section-title">Wat wilt u laten uitvoeren?</legend>
       <p class="field-hint">Meerdere diensten combineren kan — kies alles wat van toepassing is.</p>`;
@@ -1186,6 +1254,7 @@ export function initConfigurator(root) {
       panel.appendChild(fs);
     }
     if (usesFence() || usesPaving()) panel.appendChild(buildVariantsFieldset());
+    if ((usesFence() || usesPaving()) && window.SealInspiration) panel.appendChild(buildInspirationSave());
     if (!usesFence() && !usesPaving()) {
       const p = document.createElement("p");
       p.className = "field-hint";
@@ -1430,6 +1499,43 @@ export function initConfigurator(root) {
 
   function euro(cents) {
     return (cents / 100).toLocaleString("nl-NL", { style: "currency", currency: "EUR" });
+  }
+
+  /** Materiaalkeuze bewaren op het inspiratiebord (I06), alleen lokaal. */
+  function buildInspirationSave() {
+    const wrap = document.createElement("div");
+    wrap.className = "configurator-inspiration";
+    const items = [];
+    if (project.paving) {
+      const product = project.paving.productId ? getPavingProduct(project.paving.productId) : null;
+      const color = PAVING_COLOR_PRESETS.find((c) => c.id === project.paving.colorPresetId);
+      const fmt = `${project.paving.nominalTileLengthMm / 10}×${project.paving.nominalTileWidthMm / 10} cm`;
+      items.push(product
+        ? { kind: "material", id: `paving:${product.id}`, title: product.label, group: "Bestrating", colorHex: null, note: "Referentieartikel bij externe leverancier (zie prijzenpagina voor bron)." }
+        : { kind: "material", id: `paving:${color?.id}:${fmt}`, title: `Tegel ${fmt}, ${color?.label || ""}`.trim(), group: "Bestrating", colorHex: color?.colorHex || null, note: "Generieke kleur — visuele indicatie, geen specifiek product." });
+    }
+    if (project.fence) {
+      const sys = FENCE_SYSTEMS.find((x) => x.id === project.fence.systemId);
+      const preset = FENCE_MATERIAL_PRESETS.find((x) => x.id === project.fence.materialPresetId);
+      items.push({ kind: "material", id: `fence:${sys?.id}:${preset?.id}`, title: `${sys?.label || "Schutting"} — ${preset?.label || ""}`, group: "Schutting", colorHex: preset?.colorHex || null, note: "Generiek systeem — visuele indicatie, geen specifiek product." });
+    }
+    const allSaved = items.every((it) => window.SealInspiration.has(it.kind, it.id));
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "btn btn-secondary btn-sm";
+    btn.textContent = allSaved ? "Bewaard op inspiratiebord ✓" : "Bewaar deze materiaalkeuze op mijn inspiratiebord";
+    btn.disabled = allSaved;
+    btn.addEventListener("click", () => {
+      items.forEach((it) => window.SealInspiration.add(it));
+      renderPanel();
+    });
+    wrap.appendChild(btn);
+    const a = document.createElement("a");
+    a.href = "../inspiratie/";
+    a.className = "inspiration-link";
+    a.textContent = "Bekijk inspiratiebord";
+    wrap.appendChild(a);
+    return wrap;
   }
 
   /* ---- Varianten A/B/C vergelijken (F03/G06/G07) ---- */
@@ -1706,6 +1812,7 @@ export function initConfigurator(root) {
     }
     const protect = objs.filter((o) => o.status === "existing-keep" && getObjectType(o.type)?.protect);
     if (protect.length) lines.push(`Beschermen tijdens het werk: ${protect.map((o) => getObjectType(o.type).label).join(", ")} — werkzone rondom aangegeven in de tekening.`);
+    lines.push(`Aanvrager: ${project.customerType === "business" ? "zakelijk" : "particulier"}${project.goal ? `; doel: ${GOALS.find((x) => x.id === project.goal)?.label || project.goal}` : ""}`);
     lines.push("", "Wensen:");
     lines.push(`- Omvang: ${optLabel(SCOPES, project.wishes.scope)}`);
     lines.push(`- Gebruik: ${project.wishes.uses.map((u) => optLabel(USES, u)).join(", ") || "—"}`);
@@ -1964,6 +2071,7 @@ export function initConfigurator(root) {
 
   window.addEventListener("beforeunload", () => { if (sceneController) sceneController.dispose(); });
 
+  applyUrlPreselection();
   openSharedDesignFromHash();
   window.addEventListener("hashchange", () => { openSharedDesignFromHash(); renderDesignTools(); });
   renderAll();

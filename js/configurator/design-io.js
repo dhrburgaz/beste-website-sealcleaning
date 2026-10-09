@@ -28,6 +28,8 @@ export function toDesignPayload(project) {
     schemaVersion: SCHEMA_VERSION,
     design: {
       services: project.services,
+      goal: project.goal || null,
+      customerType: project.customerType || "private",
       garden: project.garden,
       fence: project.fence,
       paving: project.paving,
@@ -181,6 +183,8 @@ export function sanitizeDesign(raw) {
   const serviceIds = SERVICES.map((s) => s.id);
   project.services = [...new Set(list(d.services, serviceIds.length, "diensten").filter((s) => serviceIds.includes(s)))];
   project.garden = sanitizeGarden(d.garden, project.garden);
+  project.goal = oneOf(d.goal, ["privacy", "onderhoud", "groen", "herstel", "aanleg"], null);
+  project.customerType = oneOf(d.customerType, ["private", "business"], "private");
   project.fence = project.services.includes("schutting") ? sanitizeFence(d.fence) : null;
   project.paving = project.services.includes("bestrating") ? sanitizePaving(d.paving) : null;
   project.existingObjects = list(d.existingObjects, 30, "objecten").map((o, i) => {

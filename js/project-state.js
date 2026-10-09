@@ -26,6 +26,8 @@ export function createEmptyProject() {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     projectType: "single",
+    goal: null,
+    customerType: "private",
     services: [],
     sourceCaseId: null,
     garden: {
