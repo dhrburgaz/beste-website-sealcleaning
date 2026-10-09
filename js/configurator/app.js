@@ -12,6 +12,7 @@ import { renderScene } from "./svg-scene.js";
 import { SERVICES, GARDEN_SCENE_SERVICE_IDS } from "../../data/services.js";
 import { FENCE_SHAPES, FENCE_HEIGHTS_MM, FENCE_SYSTEMS, FENCE_MATERIAL_PRESETS } from "../../data/fence-systems.js";
 import { PAVING_FORMATS_MM, PAVING_PATTERNS, PAVING_COLOR_PRESETS } from "../../data/paving-products.js";
+import { getPavingProduct, getPavingProductsForFormat } from "../../data/materials.js";
 
 let priceSourcesCache = null;
 /** fetch() i.p.v. een JSON-importattribuut: breder browserondersteund, geen baseline-risico. */
@@ -480,6 +481,11 @@ export function initConfigurator(root) {
         const fmt = PAVING_FORMATS_MM.find((f) => f.id === val);
         project.paving.nominalTileLengthMm = fmt.lengthMm;
         project.paving.nominalTileWidthMm = fmt.widthMm;
+        if (project.paving.productId) {
+          const stillValid = getPavingProductsForFormat(fmt.lengthMm, fmt.widthMm).some((p) => p.id === project.paving.productId);
+          if (!stillValid) project.paving.productId = null;
+        }
+        renderStepMaterialen();
         renderScenesAndSummary();
       }, (f) => f.label, (f) => f.id));
       fs.appendChild(selectField("Legpatroon", PAVING_PATTERNS, project.paving.pattern, (val) => {
@@ -490,6 +496,18 @@ export function initConfigurator(root) {
         project.paving.colorPresetId = val;
         renderScenesAndSummary();
       }, (p) => p.label, (p) => p.id));
+      const verifiedProducts = getPavingProductsForFormat(project.paving.nominalTileLengthMm, project.paving.nominalTileWidthMm);
+      if (verifiedProducts.length) {
+        const options = [{ id: "", label: "Geen specifiek product — generieke kleur" }, ...verifiedProducts.map((p) => ({ id: p.id, label: p.label }))];
+        fs.appendChild(selectField("Specifiek product (optioneel)", options, project.paving.productId || "", (val) => {
+          project.paving.productId = val || null;
+          renderScenesAndSummary();
+        }, (o) => o.label, (o) => o.id));
+        const productNote = document.createElement("p");
+        productNote.className = "field-hint";
+        productNote.textContent = "Dit zijn echte, bij de leverancier onderzochte artikelen — geen Sealcleaning-eigen assortiment of inkoopprijs. Kies deze alleen als richtprijs voor dit specifieke formaat.";
+        fs.appendChild(productNote);
+      }
       const note = document.createElement("p");
       note.className = "field-hint";
       note.textContent = "Een kleur maakt een tegel niet automatisch geschikt voor een oprit — geschiktheid wordt na uw aanvraag beoordeeld.";
@@ -631,18 +649,22 @@ export function initConfigurator(root) {
     const parts = [];
     if (project.paving) {
       const totals = derivePavingTotals(project.paving);
+      const selectedProduct = project.paving.productId ? getPavingProduct(project.paving.productId) : null;
       const matches = priceSources.rows.filter(
         (r) =>
           r.status !== "stale" &&
           r.tileLengthMm === project.paving.nominalTileLengthMm &&
           r.tileWidthMm === project.paving.nominalTileWidthMm
       );
-      if (matches.length && totals.totalM2 > 0) {
-        const tileRow = matches.reduce((cheapest, r) => (r.amountCents < cheapest.amountCents ? r : cheapest), matches[0]);
+      const tileRow = selectedProduct
+        ? matches.find((r) => r.id === selectedProduct.priceSourceId)
+        : (matches.length ? matches.reduce((cheapest, r) => (r.amountCents < cheapest.amountCents ? r : cheapest), matches[0]) : null);
+      if (tileRow && totals.totalM2 > 0) {
         const count = deriveTileCount(totals.totalM2, project.paving.nominalTileLengthMm, project.paving.nominalTileWidthMm, 0.05);
         const amount = ((count * tileRow.amountCents) / 100).toLocaleString("nl-NL", { style: "currency", currency: "EUR" });
         const formatLabel = `${project.paving.nominalTileLengthMm / 10}×${project.paving.nominalTileWidthMm / 10} cm`;
-        parts.push(`Bekende materiaalindicatie voor ${formatLabel} (goedkoopste gevonden referentie, ${tileRow.productLabel}, ${count} stuks, excl. korting): ${amount}. Bron: ${tileRow.sourceUrl} (${tileRow.observedAt}).`);
+        const basis = selectedProduct ? "uw gekozen product" : "goedkoopste gevonden referentie";
+        parts.push(`Bekende materiaalindicatie voor ${formatLabel} (${basis}, ${tileRow.productLabel}, ${count} stuks, excl. korting): ${amount}. Bron: ${tileRow.sourceUrl} (${tileRow.observedAt}).`);
       } else if (totals.totalM2 > 0) {
         const formatLabel = `${project.paving.nominalTileLengthMm / 10}×${project.paving.nominalTileWidthMm / 10} cm`;
         parts.push(`Voor formaat ${formatLabel} is nog geen gecontroleerde materiaalprijs beschikbaar — zie alle onderzochte formaten op de prijzenpagina.`);
