@@ -68,6 +68,18 @@ v5.0→v4.0→v3.0 om de reeds bekende v2.0 heen) is gelezen en verwerkt:
 - `docs/PRICING_OPERATIONS.md` en `docs/LEGAL_AND_DOCUMENTS.md` (door v6.0
   gevraagde opleverartefacten) **nog niet aangemaakt** — zinvol pas zodra
   er daadwerkelijk een prijsengine/documentbackend wordt gebouwd (tier 9).
+- **24-artikelen voorwaarden-concept + volledige privacy-tabel geschreven:**
+  `/voorwaarden/` heeft nu de volledige 24-artikel-structuur (partijen/KvK,
+  offerte, prijssoort+btw met het bevestigde tarief, inmeting, ontwerp,
+  erfgrens, vergunning, materiaal, planning, meer-/minderwerk, oplevering,
+  garantie, factuur, herroeping, aansprakelijkheid, privacy/geschillen) en
+  `/privacy/` heeft de volledige verwerkingstabel (8 categorieën met doel
+  en bewaartermijn/grondslag) + secties over bijlagen, delen met derden,
+  AP-klachtrecht, cookies, EXIF. Beide geverifieerd met Playwright (0
+  consolefouten, 0 gebroken afbeeldingen, correcte h2-structuur, geen
+  horizontale scroll op 390px). **Status blijft "wacht op goedkeuring"**
+  (REQUIREMENTS_INDEX N02/N04) — de tekst is inhoudelijk compleet maar
+  vereist juridische toets vóór bindende publicatie.
 
 ## Nog niet gestart
 
@@ -76,10 +88,6 @@ v5.0→v4.0→v3.0 om de reeds bekende v2.0 heen) is gelezen en verwerkt:
   in `js/project-state.js`; UI/document-rendering niet.
 - **Tier 10-12:** webshop/checkout (bewust niet — vereist backend +
   juridisch gereed), analytics-laag, onafhankelijke eindreview.
-- **24-artikelen voorwaarden-concept + volledige privacy-tabel (v4 §6, §8):**
-  `/voorwaarden/` en `/privacy/` zijn nog de eenvoudige v1-pagina's, niet de
-  v4-structuur. Vereist uiteindelijk juridische toets vóór bindende
-  publicatie, maar de tekst kan al worden voorbereid.
 - **Materiaalcatalogus (`data/materials.js`, F01):** alleen generieke
   presets, geen echte SKU's/leveranciersdata.
 - **Vrije tuincontour, volledige existingObjects-catalogus,
@@ -108,9 +116,31 @@ einde van een tier.
 
 ## Eerstvolgende taak bij hervatten
 
-Tier 1-8 zijn afgerond of substantieel afgerond. Tier 9-12 vereisen
-grotendeels echte bedrijfsbeslissingen die niet zonder de eigenaar kunnen
-worden ingevuld. Zinvolle volgende stap zonder die input: de 24-artikelen
-voorwaarden-tekst en volledige privacy-tabel uitschrijven (v4 §6/§8) — puur
-tekst-/structuurwerk, geen backend nodig, en direct bruikbaar zodra
-juridische toets volgt.
+Tier 1-8 zijn afgerond of substantieel afgerond, inclusief de 24-artikelen
+voorwaarden-tekst en volledige privacy-tabel (10 oktober 2026). Tier 9-12
+vereisen grotendeels echte bedrijfsbeslissingen die niet zonder de eigenaar
+kunnen worden ingevuld (zie BLOCKERS hierboven).
+
+Resterende stappen die zonder die input mogelijk zijn, in volgorde van
+waarde/haalbaarheid:
+
+1. **`data/materials.js` echte productcatalogus (F01):** de configurator
+   gebruikt nu generieke presets; een gestructureerde catalogus (nog zonder
+   echte inkoopprijzen, wel met echte producteigenschappen/afmetingen per
+   bron uit `data/price-sources.json`) maakt materiaalkeuze eerlijker.
+2. **Materiaalvergelijking max. 3 varianten (F03/G06):** UI-component die
+   naast elkaar vergelijkt, puur front-end, geen backend nodig.
+3. **Ontwerp-export als JSON/deellink:** het datamodel
+   (`js/project-state.js`) is al JSON-serialiseerbaar; ontbreekt is een
+   export-/importknop en een leesbare samenvatting, geen backend nodig
+   (een deellink kan clientside via `URLSearchParams`/`localStorage`-import
+   werken, zonder serverside opslag te claimen die er niet is).
+4. **Snap/grid in de 2D-configurator (E02):** zuiver front-end UX-werk in
+   `js/configurator/svg-scene.js` / `app.js`.
+5. **Vrije tuincontour (D02) en volledige existingObjects-catalogus
+   (C01/C05):** grotere configurator-uitbreidingen, meer werk per stuk —
+   na 1-4 als er nog sessietijd over is.
+
+Niet starten zonder eigenaarinput: webshop/checkout, CRM/portaal,
+margin-engine (vereist inkoopcijfers), bindend publiceren van
+voorwaarden/privacy (vereist juridische toets).

@@ -168,9 +168,9 @@ in a browser this session.
 | ID | Status | Bewijs / opmerking |
 | --- | --- | --- |
 | N01 | wacht op goedkeuring | `js/config.js` heeft gegevens; juridische verificatie (KvK/btw/naam) nog nodig |
-| N02 | nog te bouwen | `/voorwaarden/` bestaat (v1-bouw), niet de 24-artikel v4-structuur |
+| N02 | wacht op goedkeuring | `/voorwaarden/` heeft nu de volledige 24-artikel v6.0-structuur; vereist juridische toets vóór bindende publicatie |
 | N03 | nog te bouwen | — |
-| N04 | nog te bouwen | `/privacy/` bestaat (v1-bouw), niet de volledige v4-tabel per verwerkingscategorie |
+| N04 | wacht op goedkeuring | `/privacy/` heeft nu de volledige verwerkingstabel (8 categorieën, doel + bewaartermijn/grondslag); vereist juridische toets |
 | N05 | nog te bouwen | Geen cookiemodule (momenteel ook geen tracking actief) |
 | N06 | nog te bouwen | — |
 | N07 | nog te bouwen | — |
