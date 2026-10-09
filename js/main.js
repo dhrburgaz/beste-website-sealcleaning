@@ -118,8 +118,13 @@
       var body = encodeURIComponent(lines.join("\n"));
       var mailto = "mailto:" + (window.SEAL_CONFIG ? window.SEAL_CONFIG.email : "") + "?subject=" + subject + "&body=" + body;
 
+      var fileField = form.querySelector("[data-file-input]");
+      var hasPhotos = fileField && fileField.files && fileField.files.length > 0;
+
       if (statusEl) {
-        statusEl.innerHTML = "Bijna klaar — klik hieronder om uw aanvraag via e-mail naar ons te versturen. Uw ingevulde gegevens worden automatisch meegenomen.";
+        statusEl.innerHTML = hasPhotos
+          ? "Bijna klaar — klik hieronder om uw aanvraag via e-mail naar ons te versturen. Uw ingevulde gegevens worden automatisch meegenomen. <strong>Let op: uw geselecteerde foto's worden niet automatisch bijgevoegd</strong> — voeg ze in uw mailprogramma zelf als bijlage toe voordat u verstuurt, of stuur ze apart via WhatsApp."
+          : "Bijna klaar — klik hieronder om uw aanvraag via e-mail naar ons te versturen. Uw ingevulde gegevens worden automatisch meegenomen.";
         statusEl.className = "form-status success";
         statusEl.hidden = false;
         statusEl.scrollIntoView({ behavior: "smooth", block: "center" });
