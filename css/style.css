@@ -691,10 +691,50 @@ fieldset > legend { font-weight: 500; font-size: 0.82rem; letter-spacing: 0.04em
 .configurator-route-grid strong { display: block; font-family: var(--font-display); font-size: 1.02rem; margin-bottom: 0.2em; }
 .configurator-route-grid span { font-size: 0.86rem; color: var(--c-ink-soft); }
 
+.scene-garden-fill { fill: #b9c4a3; fill-opacity: 0.35; }
+.scene-grid-line { stroke: var(--c-ink-soft); stroke-opacity: 0.12; stroke-width: 6; }
+.scene-grid-major { stroke-opacity: 0.25; stroke-width: 10; }
+.scene-hit { fill: transparent; stroke: none; cursor: move; }
+.scene-hit.scene-selected { stroke: var(--c-clay); stroke-width: 40; stroke-dasharray: 120 60; }
+.scene-vertex { fill: #fff; stroke: var(--c-forest-deep); stroke-width: 30; cursor: move; }
+.scene-vertex.scene-selected { fill: var(--c-clay); }
+.scene-label-vertex { font-size: 150px; font-weight: 700; fill: var(--c-forest-deep); pointer-events: none; }
+.scene-label-edge { font-size: 190px; fill: var(--c-ink-soft); }
+.scene-label { pointer-events: none; }
+.scene-svg.is-editing { touch-action: none; }
+
+.scene-edit-controls { display: flex; flex-wrap: wrap; gap: 0.4em; align-items: center; }
+.scene-edit-controls button, .scene-edit-controls select {
+  font: inherit; font-size: 0.86rem; min-width: 44px; min-height: 44px; padding: 0.3em 0.7em; border: 1px solid var(--c-line); background: #fff; color: var(--c-ink); cursor: pointer;
+}
+.scene-edit-controls button:disabled, .scene-edit-controls select:disabled { opacity: 0.4; cursor: not-allowed; }
+.scene-snap-toggle { display: inline-flex; align-items: center; gap: 0.35em; min-height: 44px; padding: 0 0.6em; border: 1px solid var(--c-line); background: #fff; font-size: 0.86rem; cursor: pointer; }
+.scene-snap-toggle input { width: 18px; height: 18px; }
+.scene-snap-status { font-size: 0.8rem; color: var(--c-ink-soft); }
+.scene-canvas-exit { position: absolute; top: 0.6em; left: 0.6em; z-index: 2; }
+.scene-canvas-exit[hidden] { display: none; }
+.configurator-list-item.is-selected { background: var(--c-sand-deep); box-shadow: inset 3px 0 0 var(--c-clay); padding-left: 0.6em; }
+.configurator-vertex { flex-direction: column; align-items: stretch; }
+.configurator-vertex-actions { display: flex; gap: var(--sp-2); justify-content: flex-end; }
+.configurator-list-item .link-btn { color: var(--c-forest-deep); }
+.configurator-list-item button { min-height: 44px; }
+
+/* Vergroot werkvlak (E08): tekening vult het scherm, duidelijke terugknop */
+.is-canvas-fullscreen .configurator-scene-wrap {
+  position: fixed; inset: 0; z-index: 200; background: var(--c-sand, #f2ece0); padding: 0.6em;
+  padding-bottom: calc(0.6em + env(safe-area-inset-bottom)); gap: 0.5em;
+}
+.configurator-shell.is-canvas-fullscreen .scene-stage { flex: 1; aspect-ratio: auto; min-height: 0; max-height: none; }
+.is-canvas-fullscreen .scene-svg { touch-action: none; }
+.is-canvas-fullscreen .configurator-scene-wrap > .field-hint { display: none; }
+.configurator-fullscreen-lock, .configurator-fullscreen-lock body { overflow: hidden; }
+
 .configurator-mobile-bar { display: none; }
 
 @media (max-width: 860px) {
   .configurator-shell { grid-template-columns: 1fr; }
+  .configurator-scene-wrap { order: -1; gap: var(--sp-2); }
+  .configurator-shell .scene-stage { aspect-ratio: 4 / 3; max-height: 55vh; }
   .configurator-mobile-bar {
     display: flex; position: sticky; bottom: 0; z-index: 5; gap: 0.6em; padding: 0.7em var(--sp-3);
     background: #fff; border-top: 1px solid var(--c-line); align-items: center; justify-content: space-between;

@@ -4,7 +4,7 @@
  * exacte 2D/SVG preview). Tekent uit dezelfde geometry.js-output als de
  * 3D-weergave, dus identieke maten.
  */
-import { computeFenceLayout, computeTileLayout } from "./geometry.js";
+import { computeFenceLayout, computeTileLayout, gardenPolygon, polygonBounds, polygonAreaMm2 } from "./geometry.js";
 import { getFenceSystem } from "../../data/fence-systems.js";
 import { formatMeters, formatM2 } from "../project-state.js";
 
@@ -23,51 +23,104 @@ function text(x, y, content, extraAttrs) {
   return t;
 }
 
+/** Begrenzing van alles wat getekend wordt (tuin + schutting + bestrating), in mm. */
+function sceneBounds(project) {
+  const b = polygonBounds(gardenPolygon(project.garden || {}));
+  const grow = (x, z) => { b.minX = Math.min(b.minX, x); b.minZ = Math.min(b.minZ, z); b.maxX = Math.max(b.maxX, x); b.maxZ = Math.max(b.maxZ, z); };
+  for (const s of project.fence?.sections || []) {
+    const rad = (s.directionDeg * Math.PI) / 180;
+    grow(s.start.xMm, s.start.zMm);
+    grow(s.start.xMm + Math.cos(rad) * s.lengthMm, s.start.zMm + Math.sin(rad) * s.lengthMm);
+  }
+  for (const a of project.paving?.areas || []) {
+    grow(a.position.xMm, a.position.zMm);
+    grow(a.position.xMm + a.lengthMm, a.position.zMm + a.widthMm);
+  }
+  return b;
+}
+
 /**
  * @param {SVGSVGElement} svg leeg <svg>-element om te vullen
  * @param {object} project projectstate (zie js/project-state.js)
- * @param {{paddingMm?:number}} [opts]
+ * @param {{paddingMm?:number, gridMm?:number, selectedId?:string|null, editable?:boolean}} [opts]
+ *  editable: tekent sleepbare handgrepen (data-drag) voor bestratingsvlakken en
+ *  hoekpunten van een vrije contour. Het SVG-element krijgt data-origin-x/z zodat
+ *  svg-coördinaten terug te rekenen zijn naar projectmillimeters.
  */
 export function renderScene(svg, project, opts) {
   while (svg.firstChild) svg.removeChild(svg.firstChild);
 
   const garden = project.garden || {};
-  const widthMm = garden.widthMm || 8000;
-  const depthMm = garden.depthMm || 6000;
   const padding = (opts && opts.paddingMm) ?? 800;
+  const selectedId = opts?.selectedId || null;
+  const editable = !!opts?.editable;
+  const polygon = gardenPolygon(garden);
+  const bounds = sceneBounds(project);
+  const widthMm = bounds.maxX - bounds.minX;
+  const depthMm = bounds.maxZ - bounds.minZ;
+  const originX = bounds.minX - padding;
+  const originZ = bounds.minZ - padding;
 
   const viewW = widthMm + padding * 2;
   const viewH = depthMm + padding * 2;
   svg.setAttribute("viewBox", `0 0 ${viewW} ${viewH}`);
   svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
   svg.setAttribute("role", "img");
+  svg.dataset.originX = String(originX);
+  svg.dataset.originZ = String(originZ);
+  const gardenArea = polygonAreaMm2(polygon) / 1_000_000;
   svg.setAttribute(
     "aria-label",
-    `Bovenaanzicht van de tuin, ${formatMeters(widthMm, 2)} bij ${formatMeters(depthMm, 2)}.` +
-      (project.fence ? " Inclusief schutting." : "") +
-      (project.paving ? " Inclusief bestrating." : "")
+    `Bovenaanzicht van de tuin, circa ${formatM2(Math.round(gardenArea * 10) / 10, 1)}` +
+      (garden.shape === "free" ? `, vrije contour met ${polygon.length} hoekpunten` : garden.shape === "L" ? ", L-vorm" : "") +
+      "." + (project.fence ? " Inclusief schutting." : "") + (project.paving ? " Inclusief bestrating." : "")
   );
 
-  const toX = (xMm) => xMm + padding;
-  const toY = (zMm) => zMm + padding;
+  const toX = (xMm) => xMm - originX;
+  const toY = (zMm) => zMm - originZ;
 
   const group = el("g", { class: "scene-root" });
   svg.appendChild(group);
 
+  // Raster (alleen zichtbaar als snap aan staat)
+  const gridMm = opts?.gridMm || 0;
+  if (gridMm > 0) {
+    const gridGroup = el("g", { class: "scene-grid", "aria-hidden": "true" });
+    const startX = Math.floor(originX / gridMm) * gridMm;
+    const startZ = Math.floor(originZ / gridMm) * gridMm;
+    const lines = (viewW / gridMm) + (viewH / gridMm);
+    if (lines < 600) {
+      for (let x = startX; x <= originX + viewW; x += gridMm) {
+        gridGroup.appendChild(el("line", { x1: toX(x), y1: 0, x2: toX(x), y2: viewH, class: x % 1000 === 0 ? "scene-grid-line scene-grid-major" : "scene-grid-line" }));
+      }
+      for (let z = startZ; z <= originZ + viewH; z += gridMm) {
+        gridGroup.appendChild(el("line", { x1: 0, y1: toY(z), x2: viewW, y2: toY(z), class: z % 1000 === 0 ? "scene-grid-line scene-grid-major" : "scene-grid-line" }));
+      }
+    }
+    group.appendChild(gridGroup);
+  }
+
   // Tuingrens
-  group.appendChild(
-    el("rect", {
-      x: toX(0), y: toY(0), width: widthMm, height: depthMm,
-      class: "scene-garden-outline"
-    })
-  );
-  group.appendChild(text(toX(widthMm / 2), toY(-80), formatMeters(widthMm, 2), { "text-anchor": "middle" }));
-  group.appendChild(
-    text(toX(-80), toY(depthMm / 2), formatMeters(depthMm, 2), {
-      "text-anchor": "middle",
-      transform: `rotate(-90 ${toX(-80)} ${toY(depthMm / 2)})`
-    })
-  );
+  const pts = polygon.map((p) => `${toX(p.xMm)},${toY(p.zMm)}`).join(" ");
+  group.appendChild(el("polygon", { points: pts, class: "scene-garden-fill" }));
+  group.appendChild(el("polygon", { points: pts, class: "scene-garden-outline" }));
+  if (garden.shape === "free" || garden.shape === "L") {
+    polygon.forEach((p, i) => {
+      const q = polygon[(i + 1) % polygon.length];
+      const len = Math.hypot(q.xMm - p.xMm, q.zMm - p.zMm);
+      if (len < 600) return;
+      group.appendChild(text(toX((p.xMm + q.xMm) / 2), toY((p.zMm + q.zMm) / 2) - 90, formatMeters(len, 2), { "text-anchor": "middle", class: "scene-label scene-label-edge" }));
+    });
+  } else {
+    const gw = garden.widthMm || 8000, gd = garden.depthMm || 6000;
+    group.appendChild(text(toX(gw / 2), toY(-80), formatMeters(gw, 2), { "text-anchor": "middle" }));
+    group.appendChild(
+      text(toX(-80), toY(gd / 2), formatMeters(gd, 2), {
+        "text-anchor": "middle",
+        transform: `rotate(-90 ${toX(-80)} ${toY(gd / 2)})`
+      })
+    );
+  }
 
   // Bestrating
   if (project.paving && Array.isArray(project.paving.areas)) {
@@ -88,6 +141,12 @@ export function renderScene(svg, project, opts) {
         );
       }
       group.appendChild(areaGroup);
+      const hit = el("rect", {
+        x: toX(area.position.xMm), y: toY(area.position.zMm), width: area.lengthMm, height: area.widthMm,
+        class: area.id === selectedId ? "scene-hit scene-selected" : "scene-hit"
+      });
+      if (editable) { hit.dataset.drag = "area"; hit.dataset.id = area.id; }
+      group.appendChild(hit);
       const labelX = toX(area.position.xMm + area.lengthMm / 2);
       const labelY = toY(area.position.zMm + area.widthMm / 2);
       const m2 = Math.round(((area.lengthMm * area.widthMm) / 1_000_000) * 100) / 100;
@@ -153,6 +212,22 @@ export function renderScene(svg, project, opts) {
         class: "scene-label scene-label-existing"
       })
     );
+  }
+
+  // Hoekpunt-handgrepen voor vrije contour (bovenop alles)
+  if (editable && garden.shape === "free") {
+    polygon.forEach((p, i) => {
+      const id = `vertex-${i}`;
+      const handle = el("circle", {
+        cx: toX(p.xMm), cy: toY(p.zMm), r: id === selectedId ? 170 : 130,
+        class: id === selectedId ? "scene-vertex scene-selected" : "scene-vertex"
+      });
+      handle.dataset.drag = "vertex";
+      handle.dataset.id = id;
+      handle.dataset.index = String(i);
+      group.appendChild(handle);
+      group.appendChild(text(toX(p.xMm), toY(p.zMm) + 70, String(i + 1), { "text-anchor": "middle", class: "scene-label scene-label-vertex" }));
+    });
   }
 
   return svg;

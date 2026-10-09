@@ -36,6 +36,7 @@ export function createEmptyProject() {
       geometryKnown: false,
       areaM2Reported: null,
       polygon: null,
+      lCut: null,
       houseSide: "north"
     },
     fence: null,

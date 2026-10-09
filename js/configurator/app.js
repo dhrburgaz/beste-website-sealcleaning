@@ -13,6 +13,8 @@ import { SERVICES, GARDEN_SCENE_SERVICE_IDS } from "../../data/services.js";
 import { FENCE_SHAPES, FENCE_HEIGHTS_MM, FENCE_SYSTEMS, FENCE_MATERIAL_PRESETS } from "../../data/fence-systems.js";
 import { PAVING_FORMATS_MM, PAVING_PATTERNS, PAVING_COLOR_PRESETS } from "../../data/paving-products.js";
 import { getPavingProduct, getPavingProductsForFormat } from "../../data/materials.js";
+import { attachSvgInteraction, snapMm } from "./svg-interaction.js";
+import { lPolygon, polygonAreaMm2, polygonBounds, findPolygonProblem, gardenPolygon } from "./geometry.js";
 
 let priceSourcesCache = null;
 /** fetch() i.p.v. een JSON-importattribuut: breder browserondersteund, geen baseline-risico. */
@@ -37,6 +39,10 @@ export function initConfigurator(root) {
   let stepIndex = 0;
   let sceneController = null; // 3D controller, lazy
   let currentView = "2d";
+  let selectedId = null; // geselecteerd object in de 2D-tekening (vlak-id of "vertex-<n>")
+  const snap = { enabled: false, stepMm: 500 };
+  const history = { stack: [], index: -1, max: 60 };
+  let dragOrigin = null;
 
   const svg = root.querySelector("[data-scene-svg]");
   const stepNav = root.querySelector("[data-step-nav]");
@@ -45,6 +51,7 @@ export function initConfigurator(root) {
   const canvasHost = root.querySelector("[data-scene-canvas-host]");
   const sceneStatus = root.querySelector("[data-scene-status]");
   const mobileBar = root.querySelector("[data-configurator-mobile-bar]");
+  const editControls = root.querySelector("[data-edit-controls]");
 
   function persist() {
     try {
@@ -89,9 +96,121 @@ export function initConfigurator(root) {
   }
 
   function renderScenes() {
-    if (svg) renderScene(svg, project);
+    if (svg) {
+      renderScene(svg, project, { gridMm: snap.enabled ? snap.stepMm : 0, selectedId, editable: true });
+      svg.classList.toggle("is-editing", !!selectedId);
+    }
     if (sceneController) sceneController.update(project);
     announceScene();
+  }
+
+  /* ---- Ongedaan maken / opnieuw (E04): momentopnamen van de volledige state ---- */
+  function recordHistory() {
+    const snapshot = JSON.stringify(project);
+    if (history.stack[history.index] === snapshot) return;
+    history.stack = history.stack.slice(0, history.index + 1);
+    history.stack.push(snapshot);
+    if (history.stack.length > history.max) history.stack.shift();
+    history.index = history.stack.length - 1;
+  }
+  function stepHistory(delta) {
+    const target = history.index + delta;
+    if (target < 0 || target >= history.stack.length) return;
+    history.index = target;
+    project = JSON.parse(history.stack[target]);
+    selectedId = null;
+    renderAll();
+    if (ariaLive) ariaLive.textContent = delta < 0 ? "Laatste wijziging ongedaan gemaakt." : "Wijziging opnieuw toegepast.";
+  }
+
+  function renderEditControls() {
+    if (!editControls) return;
+    editControls.innerHTML = "";
+    const mk = (label, aria, onClick, disabled) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.textContent = label; b.setAttribute("aria-label", aria);
+      b.disabled = !!disabled; b.addEventListener("click", onClick);
+      editControls.appendChild(b);
+      return b;
+    };
+    mk("↶", "Ongedaan maken (Ctrl+Z)", () => stepHistory(-1), history.index <= 0);
+    mk("↷", "Opnieuw (Ctrl+Shift+Z)", () => stepHistory(1), history.index >= history.stack.length - 1);
+
+    const snapLabel = document.createElement("label");
+    snapLabel.className = "scene-snap-toggle";
+    const cb = document.createElement("input");
+    cb.type = "checkbox"; cb.checked = snap.enabled;
+    cb.addEventListener("change", () => { snap.enabled = cb.checked; renderEditControls(); renderScenes(); });
+    snapLabel.appendChild(cb);
+    snapLabel.appendChild(document.createTextNode(" Raster"));
+    editControls.appendChild(snapLabel);
+    const stepSel = document.createElement("select");
+    stepSel.setAttribute("aria-label", "Rastermaat");
+    [[100, "10 cm"], [250, "25 cm"], [500, "50 cm"], [1000, "1 m"]].forEach(([mm, label]) => {
+      const o = document.createElement("option");
+      o.value = mm; o.textContent = label; o.selected = snap.stepMm === mm;
+      stepSel.appendChild(o);
+    });
+    stepSel.disabled = !snap.enabled;
+    stepSel.addEventListener("change", () => { snap.stepMm = parseInt(stepSel.value, 10); renderEditControls(); renderScenes(); });
+    editControls.appendChild(stepSel);
+    const status = document.createElement("span");
+    status.className = "scene-snap-status";
+    status.setAttribute("role", "status");
+    status.textContent = snap.enabled ? `Snap aan · ${snap.stepMm >= 1000 ? snap.stepMm / 1000 + " m" : snap.stepMm / 10 + " cm"}` : "Snap uit";
+    editControls.appendChild(status);
+    mk("⛶", "Werkvlak vergroten", () => setFullscreen(!root.classList.contains("is-canvas-fullscreen")));
+  }
+
+  function setFullscreen(on) {
+    root.classList.toggle("is-canvas-fullscreen", on);
+    document.documentElement.classList.toggle("configurator-fullscreen-lock", on);
+    const exitBtn = root.querySelector("[data-canvas-exit]");
+    if (exitBtn) { exitBtn.hidden = !on; if (on) exitBtn.focus(); }
+    renderScenes();
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && root.classList.contains("is-canvas-fullscreen")) { setFullscreen(false); return; }
+    const tag = (e.target && e.target.tagName) || "";
+    if (/INPUT|SELECT|TEXTAREA/.test(tag)) return;
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
+      e.preventDefault();
+      stepHistory(e.shiftKey ? 1 : -1);
+    } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "y") {
+      e.preventDefault();
+      stepHistory(1);
+    }
+  });
+
+  /* ---- Selecteren en slepen in 2D (E01/E02) ---- */
+  function findDragObject(target) {
+    if (target.kind === "area") return project.paving?.areas.find((a) => a.id === target.id)?.position || null;
+    if (target.kind === "vertex") return project.garden.polygon?.[target.index] || null;
+    return null;
+  }
+  if (svg) {
+    attachSvgInteraction(svg, {
+      getSelectedId: () => selectedId,
+      onSelect: (id) => {
+        selectedId = id;
+        renderScenes();
+        if (STEPS[stepIndex] === "maten") renderPanel();
+      },
+      onDragMove: (target, delta) => {
+        const obj = findDragObject(target);
+        if (!obj) return;
+        if (!dragOrigin) dragOrigin = { xMm: obj.xMm, zMm: obj.zMm };
+        const step = snap.enabled ? snap.stepMm : 0;
+        obj.xMm = Math.max(0, snapMm(dragOrigin.xMm + delta.dxMm, step));
+        obj.zMm = Math.max(0, snapMm(dragOrigin.zMm + delta.dzMm, step));
+        renderScenes();
+      },
+      onDragEnd: (moved) => {
+        dragOrigin = null;
+        if (moved) { fitGardenToContent(); renderScenesAndSummary(); }
+      }
+    });
   }
 
   function renderStepNav() {
@@ -169,7 +288,13 @@ export function initConfigurator(root) {
    * kleinste x/z op 0 uitkomt, bepaal pas daarna de tuingrootte.
    */
   function fitGardenToContent() {
-    let minX = 0, minZ = 0, maxX = project.garden.widthMm || 0, maxZ = project.garden.depthMm || 0;
+    const g = project.garden;
+    const hasContour = g.shape !== "rect" && Array.isArray(g.polygon);
+    let minX = 0, minZ = 0, maxX = g.widthMm || 0, maxZ = g.depthMm || 0;
+    if (hasContour) {
+      const b = polygonBounds(g.polygon);
+      minX = Math.min(0, b.minX); minZ = Math.min(0, b.minZ);
+    }
     if (project.fence) {
       for (const s of project.fence.sections) {
         const rad = (s.directionDeg * Math.PI) / 180;
@@ -204,17 +329,25 @@ export function initConfigurator(root) {
           a.position.zMm += dz;
         }
       }
+      if (hasContour) {
+        for (const p of g.polygon) { p.xMm += dx; p.zMm += dz; }
+      }
       maxX += dx;
       maxZ += dz;
-      minX = 0;
-      minZ = 0;
     }
 
-    if (!project.garden.geometryKnown || !project.garden.widthMm) {
-      project.garden.widthMm = Math.max(3000, Math.round((maxX + 1500) / 100) * 100);
+    if (hasContour) {
+      // Contour is leidend; breedte/diepte zijn dan de omhullende rechthoek.
+      const b = polygonBounds(g.polygon);
+      g.widthMm = Math.round(b.maxX);
+      g.depthMm = Math.round(b.maxZ);
+      return;
     }
-    if (!project.garden.geometryKnown || !project.garden.depthMm) {
-      project.garden.depthMm = Math.max(3000, Math.round((maxZ + 1500) / 100) * 100);
+    if (!g.geometryKnown || !g.widthMm) {
+      g.widthMm = Math.max(3000, Math.round((maxX + 1500) / 100) * 100);
+    }
+    if (!g.geometryKnown || !g.depthMm) {
+      g.depthMm = Math.max(3000, Math.round((maxZ + 1500) / 100) * 100);
     }
   }
 
@@ -251,24 +384,7 @@ export function initConfigurator(root) {
 
   function renderStepMaten() {
     panel.innerHTML = "";
-    if (usesGardenScene()) {
-      const gardenFs = document.createElement("fieldset");
-      gardenFs.innerHTML = `<legend class="configurator-section-title">Tuinvlak</legend>`;
-      const row = document.createElement("div");
-      row.className = "configurator-row";
-      row.appendChild(numberField("Breedte (m)", mmToMeters(project.garden.widthMm), (v) => {
-        project.garden.widthMm = parseMetersToMm(v) ?? project.garden.widthMm;
-        project.garden.geometryKnown = true;
-        renderScenesAndSummary();
-      }));
-      row.appendChild(numberField("Diepte (m)", mmToMeters(project.garden.depthMm), (v) => {
-        project.garden.depthMm = parseMetersToMm(v) ?? project.garden.depthMm;
-        project.garden.geometryKnown = true;
-        renderScenesAndSummary();
-      }));
-      gardenFs.appendChild(row);
-      panel.appendChild(gardenFs);
-    }
+    if (usesGardenScene()) panel.appendChild(buildGardenFieldset());
 
     if (usesFence()) {
       ensureFenceDefaults();
@@ -279,6 +395,154 @@ export function initConfigurator(root) {
       panel.appendChild(buildPavingGeometryFieldset());
     }
     appendNav(true, true);
+  }
+
+  /** Tuinvlak: rechthoek, L-vorm (maatgestuurd) of vrije contour (hoekpunten). */
+  function buildGardenFieldset() {
+    const g = project.garden;
+    const fs = document.createElement("fieldset");
+    fs.innerHTML = `<legend class="configurator-section-title">Tuinvlak</legend>`;
+    fs.appendChild(selectField("Vorm van de tuin", [
+      { id: "rect", label: "Rechthoek" }, { id: "L", label: "L-vorm" }, { id: "free", label: "Vrije contour (hoekpunten)" }
+    ], g.shape || "rect", (val) => setGardenShape(val), (o) => o.label, (o) => o.id));
+
+    if (g.shape !== "free") {
+      const row = document.createElement("div");
+      row.className = "configurator-row";
+      row.appendChild(numberField("Breedte (m)", mmToMeters(g.widthMm), (v) => {
+        const mm = parseMetersToMm(v);
+        if (mm === null || mm < 1000) return;
+        g.widthMm = mm; g.geometryKnown = true; syncLPolygon(); renderScenesAndSummary();
+      }));
+      row.appendChild(numberField("Diepte (m)", mmToMeters(g.depthMm), (v) => {
+        const mm = parseMetersToMm(v);
+        if (mm === null || mm < 1000) return;
+        g.depthMm = mm; g.geometryKnown = true; syncLPolygon(); renderScenesAndSummary();
+      }));
+      fs.appendChild(row);
+    }
+    if (g.shape === "L") {
+      const row = document.createElement("div");
+      row.className = "configurator-row";
+      row.appendChild(numberField("Uitsparing breedte (m)", mmToMeters(g.lCut.widthMm), (v) => {
+        const mm = parseMetersToMm(v);
+        if (mm === null) return;
+        g.lCut.widthMm = mm; syncLPolygon(); renderScenesAndSummary();
+      }));
+      row.appendChild(numberField("Uitsparing diepte (m)", mmToMeters(g.lCut.depthMm), (v) => {
+        const mm = parseMetersToMm(v);
+        if (mm === null) return;
+        g.lCut.depthMm = mm; syncLPolygon(); renderScenesAndSummary();
+      }));
+      fs.appendChild(row);
+      const hint = document.createElement("p");
+      hint.className = "field-hint";
+      hint.textContent = "De uitsparing zit rechtsonder in de tekening. Wilt u een andere vorm? Kies dan vrije contour.";
+      fs.appendChild(hint);
+    }
+    if (g.shape === "free") fs.appendChild(buildVertexEditor());
+
+    const areaM2 = polygonAreaMm2(gardenPolygon(g)) / 1_000_000;
+    const info = document.createElement("p");
+    info.className = "field-hint";
+    info.textContent = g.geometryKnown
+      ? `Oppervlak tuinvlak: ${formatM2(Math.round(areaM2 * 10) / 10, 1)} (in 2D en 3D dezelfde contour).`
+      : "Nog geen tuinmaten ingevuld — het tuinvlak wordt voorlopig afgeleid uit uw schutting/bestrating.";
+    fs.appendChild(info);
+    return fs;
+  }
+
+  function setGardenShape(shape) {
+    const g = project.garden;
+    const current = gardenPolygon(g).map((p) => ({ ...p }));
+    g.shape = shape;
+    g.geometryKnown = true;
+    if (shape === "rect") {
+      const b = polygonBounds(current);
+      g.polygon = null;
+      g.widthMm = Math.round(b.maxX - b.minX);
+      g.depthMm = Math.round(b.maxZ - b.minZ);
+    } else if (shape === "L") {
+      g.lCut = g.lCut || { widthMm: Math.round((g.widthMm || 8000) / 3), depthMm: Math.round((g.depthMm || 6000) / 3) };
+      syncLPolygon();
+    } else {
+      g.polygon = current; // vrije contour start vanaf de huidige vorm
+    }
+    selectedId = null;
+    renderAll();
+  }
+
+  function syncLPolygon() {
+    const g = project.garden;
+    if (g.shape !== "L") return;
+    g.polygon = lPolygon(g.widthMm || 8000, g.depthMm || 6000, g.lCut.widthMm, g.lCut.depthMm);
+  }
+
+  function buildVertexEditor() {
+    const g = project.garden;
+    const wrap = document.createElement("div");
+    const hint = document.createElement("p");
+    hint.className = "field-hint";
+    hint.textContent = "Versleep de genummerde hoekpunten in de tekening, of typ de positie (m vanaf linksboven). Met raster/snap aan springen gesleepte punten naar het raster; getypte waarden blijven exact.";
+    wrap.appendChild(hint);
+    const ul = document.createElement("ul");
+    ul.className = "configurator-list";
+    g.polygon.forEach((pt, i) => {
+      const li = document.createElement("li");
+      li.className = "configurator-list-item configurator-vertex" + (selectedId === `vertex-${i}` ? " is-selected" : "");
+      const row = document.createElement("div");
+      row.className = "configurator-row";
+      row.appendChild(numberField(`Punt ${i + 1} — x (m)`, mmToMeters(pt.xMm), (v) => {
+        const mm = parseMetersToMm(v);
+        if (mm === null) return;
+        pt.xMm = mm; fitGardenToContent(); renderScenesAndSummary();
+      }));
+      row.appendChild(numberField(`z (m)`, mmToMeters(pt.zMm), (v) => {
+        const mm = parseMetersToMm(v);
+        if (mm === null) return;
+        pt.zMm = mm; fitGardenToContent(); renderScenesAndSummary();
+      }));
+      li.appendChild(row);
+      const actions = document.createElement("div");
+      actions.className = "configurator-vertex-actions";
+      const addBtn = document.createElement("button");
+      addBtn.type = "button";
+      addBtn.className = "link-btn";
+      addBtn.textContent = "+ punt erna";
+      addBtn.setAttribute("aria-label", `Hoekpunt toevoegen tussen punt ${i + 1} en ${((i + 1) % g.polygon.length) + 1}`);
+      addBtn.addEventListener("click", () => {
+        if (g.polygon.length >= 40) return;
+        const next = g.polygon[(i + 1) % g.polygon.length];
+        g.polygon.splice(i + 1, 0, { xMm: Math.round((pt.xMm + next.xMm) / 2), zMm: Math.round((pt.zMm + next.zMm) / 2) });
+        selectedId = `vertex-${i + 1}`;
+        renderAll();
+      });
+      actions.appendChild(addBtn);
+      if (g.polygon.length > 3) {
+        const rm = document.createElement("button");
+        rm.type = "button";
+        rm.textContent = "Verwijderen";
+        rm.setAttribute("aria-label", `Hoekpunt ${i + 1} verwijderen`);
+        rm.addEventListener("click", () => {
+          g.polygon.splice(i, 1);
+          selectedId = null;
+          renderAll();
+        });
+        actions.appendChild(rm);
+      }
+      li.appendChild(actions);
+      ul.appendChild(li);
+    });
+    wrap.appendChild(ul);
+    const problem = findPolygonProblem(g.polygon);
+    if (problem) {
+      const err = document.createElement("p");
+      err.className = "field-error";
+      err.setAttribute("role", "alert");
+      err.textContent = problem;
+      wrap.appendChild(err);
+    }
+    return wrap;
   }
 
   function buildFenceGeometryFieldset() {
@@ -410,6 +674,18 @@ export function initConfigurator(root) {
         if (mm !== null) { area.widthMm = mm; fitGardenToContent(); renderScenesAndSummary(); }
       }));
       li.appendChild(row);
+      if (selectedId === area.id) li.classList.add("is-selected");
+      const posRow = document.createElement("div");
+      posRow.className = "configurator-row";
+      posRow.appendChild(numberField(`Positie x (m)`, mmToMeters(area.position.xMm), (v) => {
+        const mm = parseMetersToMm(v);
+        if (mm !== null) { area.position.xMm = mm; fitGardenToContent(); renderScenesAndSummary(); }
+      }));
+      posRow.appendChild(numberField(`Positie z (m)`, mmToMeters(area.position.zMm), (v) => {
+        const mm = parseMetersToMm(v);
+        if (mm !== null) { area.position.zMm = mm; fitGardenToContent(); renderScenesAndSummary(); }
+      }));
+      li.appendChild(posRow);
       if (project.paving.areas.length > 1) {
         const removeBtn = document.createElement("button");
         removeBtn.type = "button";
@@ -615,6 +891,11 @@ export function initConfigurator(root) {
     const dl = document.createElement("dl");
     const rows = [];
     rows.push(["Diensten", project.services.map((id) => SERVICES.find((s) => s.id === id)?.label || id).join(", ") || "—"]);
+    if (project.garden.geometryKnown) {
+      const gardenM2 = polygonAreaMm2(gardenPolygon(project.garden)) / 1_000_000;
+      const shapeLabel = { rect: "rechthoek", L: "L-vorm", free: "vrije contour" }[project.garden.shape] || "rechthoek";
+      rows.push(["Tuinvlak", `${shapeLabel}, ${formatM2(Math.round(gardenM2 * 10) / 10, 1)}`]);
+    }
     if (project.fence) {
       const lens = deriveFenceLengths(project.fence);
       rows.push(["Schutting — lijnlengte", formatMeters(lens.totalLineLengthMm, 2)]);
@@ -898,14 +1179,18 @@ export function initConfigurator(root) {
    * een volledige re-render van het paneel verstoort geen actieve invoer.
    */
   function renderScenesAndSummary() {
+    recordHistory();
     renderPanel();
     renderScenes();
+    renderEditControls();
   }
 
   function renderAll() {
+    recordHistory();
     renderStepNav();
     renderPanel();
     renderScenes();
+    renderEditControls();
   }
 
   // 2D/3D toggle
@@ -928,6 +1213,8 @@ export function initConfigurator(root) {
   root.querySelectorAll("[data-camera-view]").forEach((btn) => {
     btn.addEventListener("click", () => sceneController && sceneController.setView(btn.getAttribute("data-camera-view")));
   });
+  const canvasExit = root.querySelector("[data-canvas-exit]");
+  if (canvasExit) canvasExit.addEventListener("click", () => setFullscreen(false));
   const resetBtn = root.querySelector("[data-camera-reset]");
   if (resetBtn) resetBtn.addEventListener("click", () => sceneController && sceneController.resetCamera());
 

@@ -136,3 +136,95 @@ export function computeTileLayout(area, tileLengthMm, tileWidthMm, pattern) {
   }
   return tiles;
 }
+
+/* ---------------------------------------------------------------------- */
+/* Tuincontour (rechthoek, L-vorm, vrije polygon)                          */
+/* ---------------------------------------------------------------------- */
+
+export function rectPolygon(widthMm, depthMm) {
+  return [
+    { xMm: 0, zMm: 0 }, { xMm: widthMm, zMm: 0 },
+    { xMm: widthMm, zMm: depthMm }, { xMm: 0, zMm: depthMm }
+  ];
+}
+
+/** L-vorm: rechthoek met de hoek rechtsonder (max x, max z) uitgespaard. */
+export function lPolygon(widthMm, depthMm, cutWidthMm, cutDepthMm) {
+  const cw = Math.min(Math.max(cutWidthMm, 0), widthMm - 100);
+  const cd = Math.min(Math.max(cutDepthMm, 0), depthMm - 100);
+  return [
+    { xMm: 0, zMm: 0 }, { xMm: widthMm, zMm: 0 },
+    { xMm: widthMm, zMm: depthMm - cd }, { xMm: widthMm - cw, zMm: depthMm - cd },
+    { xMm: widthMm - cw, zMm: depthMm }, { xMm: 0, zMm: depthMm }
+  ];
+}
+
+/** Shoelace-formule; altijd positief, in mm². */
+export function polygonAreaMm2(points) {
+  if (!points || points.length < 3) return 0;
+  let sum = 0;
+  for (let i = 0; i < points.length; i++) {
+    const a = points[i], b = points[(i + 1) % points.length];
+    sum += a.xMm * b.zMm - b.xMm * a.zMm;
+  }
+  return Math.abs(sum) / 2;
+}
+
+export function polygonBounds(points) {
+  let minX = Infinity, minZ = Infinity, maxX = -Infinity, maxZ = -Infinity;
+  for (const p of points || []) {
+    minX = Math.min(minX, p.xMm); minZ = Math.min(minZ, p.zMm);
+    maxX = Math.max(maxX, p.xMm); maxZ = Math.max(maxZ, p.zMm);
+  }
+  return { minX, minZ, maxX, maxZ };
+}
+
+function orient(a, b, c) {
+  const v = (b.xMm - a.xMm) * (c.zMm - a.zMm) - (b.zMm - a.zMm) * (c.xMm - a.xMm);
+  return Math.abs(v) < 1e-6 ? 0 : v > 0 ? 1 : -1;
+}
+function onSegment(a, b, p) {
+  return Math.min(a.xMm, b.xMm) <= p.xMm && p.xMm <= Math.max(a.xMm, b.xMm) &&
+    Math.min(a.zMm, b.zMm) <= p.zMm && p.zMm <= Math.max(a.zMm, b.zMm);
+}
+function segmentsIntersect(p1, p2, q1, q2) {
+  const o1 = orient(p1, p2, q1), o2 = orient(p1, p2, q2), o3 = orient(q1, q2, p1), o4 = orient(q1, q2, p2);
+  if (o1 !== o2 && o3 !== o4) return true;
+  if (o1 === 0 && onSegment(p1, p2, q1)) return true;
+  if (o2 === 0 && onSegment(p1, p2, q2)) return true;
+  if (o3 === 0 && onSegment(q1, q2, p1)) return true;
+  if (o4 === 0 && onSegment(q1, q2, p2)) return true;
+  return false;
+}
+
+/**
+ * Controleert of een contour een geldig, gesloten vlak is.
+ * @returns {string|null} Nederlandse uitleg van het probleem, of null als geldig.
+ */
+export function findPolygonProblem(points) {
+  const n = points ? points.length : 0;
+  if (n < 3) return "Een tuincontour heeft minimaal 3 hoekpunten nodig.";
+  for (let i = 0; i < n; i++) {
+    const a = points[i], b = points[(i + 1) % n];
+    if (Math.hypot(b.xMm - a.xMm, b.zMm - a.zMm) < 10) {
+      return `Hoekpunt ${i + 1} en ${((i + 1) % n) + 1} liggen op dezelfde plek. Verschuif of verwijder er één.`;
+    }
+  }
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      const adjacent = j === i + 1 || (i === 0 && j === n - 1);
+      if (adjacent) continue;
+      if (segmentsIntersect(points[i], points[(i + 1) % n], points[j], points[(j + 1) % n])) {
+        return `De zijden ${i + 1}–${((i + 1) % n) + 1} en ${j + 1}–${((j + 1) % n) + 1} kruisen elkaar. Een tuin kan zichzelf niet doorsnijden — verschuif een hoekpunt zodat de rand rondloopt zonder kruising.`;
+      }
+    }
+  }
+  if (polygonAreaMm2(points) < 1_000_000) return "De contour is kleiner dan 1 m². Controleer de maten.";
+  return null;
+}
+
+/** Garden → contourpunten; rechthoek zonder polygon levert een rechthoekpolygon. */
+export function gardenPolygon(garden) {
+  if (garden && Array.isArray(garden.polygon) && garden.polygon.length >= 3) return garden.polygon;
+  return rectPolygon(garden?.widthMm || 8000, garden?.depthMm || 6000);
+}

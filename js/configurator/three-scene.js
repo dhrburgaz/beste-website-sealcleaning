@@ -11,7 +11,7 @@
  */
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { computeFenceLayout, computeTileLayout } from "./geometry.js";
+import { computeFenceLayout, computeTileLayout, gardenPolygon, polygonBounds } from "./geometry.js";
 import { getFenceSystem, getFenceMaterialPreset } from "../../data/fence-systems.js";
 import { getPavingColorPreset } from "../../data/paving-products.js";
 
@@ -218,20 +218,25 @@ export function createThreeScene(host, project) {
   }
 
   function buildGardenGround(garden) {
-    const widthM = (garden?.widthMm || 8000) * MM;
-    const depthM = (garden?.depthMm || 6000) * MM;
-    const geom = track(new THREE.PlaneGeometry(widthM, depthM));
-    const material = track(new THREE.MeshStandardMaterial({ color: 0x9fb088, roughness: 1 }));
+    // Zelfde contour als de 2D-weergave (gardenPolygon), dus identiek oppervlak.
+    const polygon = gardenPolygon(garden);
+    const b = polygonBounds(polygon);
+    const widthM = (b.maxX - b.minX) * MM;
+    const depthM = (b.maxZ - b.minZ) * MM;
+    const shape = new THREE.Shape(polygon.map((p) => new THREE.Vector2(p.xMm * MM, -p.zMm * MM)));
+    const geom = track(new THREE.ShapeGeometry(shape));
+    const material = track(new THREE.MeshStandardMaterial({ color: 0x9fb088, roughness: 1, side: THREE.DoubleSide }));
     const ground = new THREE.Mesh(geom, material);
-    ground.rotation.x = -Math.PI / 2;
-    ground.position.set(widthM / 2, -0.01, depthM / 2);
+    ground.rotation.x = -Math.PI / 2; // (x, -z) in vormvlak → (x, 0, z) in de wereld
+    ground.position.y = -0.01;
     dynamicGroup.add(ground);
 
+    const cx = (b.minX + b.maxX) / 2 * MM, cz = (b.minZ + b.maxZ) / 2 * MM;
     const grid = track(new THREE.GridHelper(Math.max(widthM, depthM) * 1.4, Math.round(Math.max(widthM, depthM))));
-    grid.position.set(widthM / 2, 0, depthM / 2);
+    grid.position.set(cx, 0, cz);
     dynamicGroup.add(grid);
 
-    return { widthM, depthM };
+    return { widthM, depthM, cx, cz };
   }
 
   function update(nextProject) {
@@ -242,13 +247,13 @@ export function createThreeScene(host, project) {
     disposables.clear();
     clearGroup(dynamicGroup);
 
-    const { widthM, depthM } = buildGardenGround(project.garden);
+    const { widthM, depthM, cx, cz } = buildGardenGround(project.garden);
     buildFence(project.fence);
     buildPaving(project.paving);
 
     if (!controls.target.lengthSq() && widthM && depthM) {
-      controls.target.set(widthM / 2, 0.3, depthM / 2);
-      camera.position.set(widthM / 2 + widthM * 0.7, Math.max(widthM, depthM) * 0.6, depthM / 2 + depthM * 0.9);
+      controls.target.set(cx, 0.3, cz);
+      camera.position.set(cx + widthM * 0.7, Math.max(widthM, depthM) * 0.6, cz + depthM * 0.9);
     }
     scheduleFrame();
   }
