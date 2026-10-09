@@ -18,6 +18,9 @@
   <url><loc>https://sealcleaning.nl/werkgebied/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://sealcleaning.nl/contact/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://sealcleaning.nl/kennisbank/</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://sealcleaning.nl/kennisbank/schutting-opmeten/</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://sealcleaning.nl/kennisbank/bestratingsoppervlak-berekenen/</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://sealcleaning.nl/kennisbank/hout-beton-vs-composiet/</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
   <url><loc>https://sealcleaning.nl/privacy/</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>
   <url><loc>https://sealcleaning.nl/voorwaarden/</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>
 </urlset>
