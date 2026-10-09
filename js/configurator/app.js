@@ -9,6 +9,7 @@ import {
   findPavingOverlaps, generateId, assertSerializable, withDefaults
 } from "../project-state.js";
 import { checkServiceArea } from "../../data/service-area.js";
+import { OBJECT_TYPES, OBJECT_STATUSES, getObjectType, objectQuantity } from "../../data/garden-objects.js";
 import { renderScene } from "./svg-scene.js";
 import { SERVICES, GARDEN_SCENE_SERVICE_IDS } from "../../data/services.js";
 import { FENCE_SHAPES, FENCE_HEIGHTS_MM, FENCE_SYSTEMS, FENCE_MATERIAL_PRESETS } from "../../data/fence-systems.js";
@@ -309,6 +310,10 @@ export function initConfigurator(root) {
   function findDragObject(target) {
     if (target.kind === "area") return project.paving?.areas.find((a) => a.id === target.id)?.position || null;
     if (target.kind === "vertex") return project.garden.polygon?.[target.index] || null;
+    if (target.kind === "object") {
+      const o = project.existingObjects?.find((x) => x.id === target.id);
+      return o && !o.locked ? o.footprint : null;
+    }
     return null;
   }
   if (svg && "ResizeObserver" in window) {
@@ -467,6 +472,14 @@ export function initConfigurator(root) {
       }
     }
 
+    for (const o of project.existingObjects || []) {
+      if (!o.footprint) continue;
+      minX = Math.min(minX, o.footprint.xMm);
+      minZ = Math.min(minZ, o.footprint.zMm);
+      maxX = Math.max(maxX, o.footprint.xMm + o.footprint.lengthMm);
+      maxZ = Math.max(maxZ, o.footprint.zMm + o.footprint.widthMm);
+    }
+
     if (minX < 0 || minZ < 0) {
       const dx = -minX, dz = -minZ;
       if (project.fence) {
@@ -483,6 +496,9 @@ export function initConfigurator(root) {
       }
       if (hasContour) {
         for (const p of g.polygon) { p.xMm += dx; p.zMm += dz; }
+      }
+      for (const o of project.existingObjects || []) {
+        if (o.footprint) { o.footprint.xMm += dx; o.footprint.zMm += dz; }
       }
       maxX += dx;
       maxZ += dz;
@@ -593,6 +609,7 @@ export function initConfigurator(root) {
       ensurePavingDefaults();
       panel.appendChild(buildPavingGeometryFieldset());
     }
+    if (usesGardenScene()) panel.appendChild(buildObjectsFieldset());
     appendNav(true, true);
   }
 
@@ -744,6 +761,152 @@ export function initConfigurator(root) {
     return wrap;
   }
 
+  function rectsOverlap(a, b) {
+    return a.xMm < b.xMm + b.lengthMm && b.xMm < a.xMm + a.lengthMm && a.zMm < b.zMm + b.widthMm && b.zMm < a.zMm + a.widthMm;
+  }
+
+  /** Nieuwe objecten die overlappen met bestrating of elkaar: kosten zouden dubbel tellen (E06). */
+  function findObjectOverlaps() {
+    const news = (project.existingObjects || []).filter((o) => o.status === "new" && getObjectType(o.type)?.unit);
+    const pav = (project.paving?.areas || []).map((a) => ({ label: "bestrating", xMm: a.position.xMm, zMm: a.position.zMm, lengthMm: a.lengthMm, widthMm: a.widthMm }));
+    const out = [];
+    news.forEach((o, i) => {
+      for (const p of pav) if (rectsOverlap(o.footprint, p)) out.push(`${getObjectType(o.type).label.split(" /")[0]} en bestrating`);
+      for (const q of news.slice(i + 1)) if (rectsOverlap(o.footprint, q.footprint)) out.push(`${getObjectType(o.type).label.split(" /")[0]} en ${getObjectType(q.type).label.split(" /")[0]}`);
+    });
+    return [...new Set(out)];
+  }
+
+  /** Bestaande en nieuwe objecten (C01/C04/C05/C06/D07/D08/E05/E06). */
+  function buildObjectsFieldset() {
+    project.existingObjects = project.existingObjects || [];
+    const fs = document.createElement("fieldset");
+    fs.innerHTML = `<legend class="configurator-section-title">Bestaande en nieuwe objecten</legend>
+      <p class="field-hint">Teken wat er al staat (huiswand, schuur, boom, haag) en wat er nieuw bij komt (haag, border, gazon). Bestaande objecten zijn een referentie en worden niet als nieuw materiaal of montage gerekend. Te behouden objecten staan standaard vast zodat ze niet per ongeluk verschuiven.</p>`;
+    const ul = document.createElement("ul");
+    ul.className = "configurator-list";
+    project.existingObjects.forEach((obj, i) => {
+      const type = getObjectType(obj.type);
+      if (!type) return;
+      const li = document.createElement("li");
+      li.className = "configurator-list-item configurator-object" + (selectedId === obj.id ? " is-selected" : "");
+      const title = document.createElement("p");
+      title.className = "configurator-object-title";
+      const qty = objectQuantity(obj);
+      title.textContent = `${type.label}${qty ? ` — ${qty.value.toLocaleString("nl-NL")} ${qty.unit}` : ""}${obj.locked ? " · vast" : ""}`;
+      li.appendChild(title);
+      li.appendChild(selectField("Status", type.statuses.map((id) => ({ id, label: OBJECT_STATUSES[id] })), obj.status, (val) => {
+        obj.status = val;
+        if (val !== "existing-keep") obj.locked = false;
+        renderScenesAndSummary();
+      }, (o) => o.label, (o) => o.id));
+      if (obj.locked) {
+        li.appendChild(hintEl(`Vast op ${formatMeters(obj.footprint.xMm, 2)} / ${formatMeters(obj.footprint.zMm, 2)}, ${formatMeters(obj.footprint.lengthMm, 2)} × ${formatMeters(obj.footprint.widthMm, 2)}.`));
+      } else {
+        const r1 = document.createElement("div");
+        r1.className = "configurator-row";
+        r1.appendChild(numberField(type.id === "tree" ? "Kroon (m)" : "Lengte (m)", mmToMeters(obj.footprint.lengthMm), (v) => {
+          const mm = parseMetersToMm(v); if (mm === null || mm < 100) return;
+          obj.footprint.lengthMm = mm; if (type.id === "tree") obj.footprint.widthMm = mm;
+          fitGardenToContent(); renderScenesAndSummary();
+        }));
+        if (type.id !== "tree") r1.appendChild(numberField("Breedte (m)", mmToMeters(obj.footprint.widthMm), (v) => {
+          const mm = parseMetersToMm(v); if (mm === null || mm < 50) return;
+          obj.footprint.widthMm = mm; fitGardenToContent(); renderScenesAndSummary();
+        }));
+        li.appendChild(r1);
+        const r2 = document.createElement("div");
+        r2.className = "configurator-row";
+        r2.appendChild(numberField("Positie x (m)", mmToMeters(obj.footprint.xMm), (v) => {
+          const mm = parseMetersToMm(v); if (mm === null) return;
+          obj.footprint.xMm = mm; fitGardenToContent(); renderScenesAndSummary();
+        }));
+        r2.appendChild(numberField("Positie z (m)", mmToMeters(obj.footprint.zMm), (v) => {
+          const mm = parseMetersToMm(v); if (mm === null) return;
+          obj.footprint.zMm = mm; fitGardenToContent(); renderScenesAndSummary();
+        }));
+        li.appendChild(r2);
+      }
+      const actions = document.createElement("div");
+      actions.className = "configurator-vertex-actions";
+      if (obj.status === "existing-keep") {
+        const lockBtn = document.createElement("button");
+        lockBtn.type = "button";
+        lockBtn.className = "link-btn";
+        lockBtn.textContent = obj.locked ? "Ontgrendelen" : "Vastzetten";
+        lockBtn.setAttribute("aria-label", `${type.label} ${obj.locked ? "ontgrendelen om te verplaatsen" : "vastzetten"}`);
+        lockBtn.addEventListener("click", () => { obj.locked = !obj.locked; renderScenesAndSummary(); });
+        actions.appendChild(lockBtn);
+      }
+      const dup = document.createElement("button");
+      dup.type = "button";
+      dup.className = "link-btn";
+      dup.textContent = "Dupliceren";
+      dup.setAttribute("aria-label", `${type.label} dupliceren`);
+      dup.addEventListener("click", () => {
+        const copy = JSON.parse(JSON.stringify(obj));
+        copy.id = generateId("obj");
+        copy.locked = false;
+        copy.footprint.xMm += 500; copy.footprint.zMm += 500;
+        project.existingObjects.splice(i + 1, 0, copy);
+        selectedId = copy.id;
+        fitGardenToContent(); renderAll();
+      });
+      actions.appendChild(dup);
+      const rm = document.createElement("button");
+      rm.type = "button";
+      rm.textContent = "Verwijderen";
+      rm.setAttribute("aria-label", `${type.label} uit de tekening halen`);
+      rm.addEventListener("click", () => {
+        project.existingObjects.splice(i, 1);
+        selectedId = null;
+        renderAll();
+      });
+      actions.appendChild(rm);
+      li.appendChild(actions);
+      ul.appendChild(li);
+    });
+    fs.appendChild(ul);
+
+    const overlaps = findObjectOverlaps();
+    if (overlaps.length) {
+      const err = document.createElement("p");
+      err.className = "field-error";
+      err.setAttribute("role", "alert");
+      err.textContent = `Let op: ${overlaps.join("; ")} overlappen. Overlappende oppervlakken zouden dubbel worden gerekend — pas positie of maat aan.`;
+      fs.appendChild(err);
+    }
+
+    const addRow = document.createElement("div");
+    addRow.className = "configurator-row configurator-add-object";
+    const typeSel = selectField("Object toevoegen", OBJECT_TYPES, OBJECT_TYPES[0].id, () => {}, (t) => t.label, (t) => t.id);
+    addRow.appendChild(typeSel);
+    const addBtn = document.createElement("button");
+    addBtn.type = "button";
+    addBtn.className = "btn btn-secondary btn-sm";
+    addBtn.textContent = "+ Toevoegen";
+    addBtn.addEventListener("click", () => {
+      if (project.existingObjects.length >= 30) return;
+      const type = getObjectType(typeSel.querySelector("select").value);
+      const status = type.statuses.includes("new") && ["border", "lawn"].includes(type.id) ? "new" : type.statuses[0];
+      const obj = {
+        id: generateId("obj"), type: type.id, status, locked: status === "existing-keep",
+        footprint: { xMm: 0, zMm: 0, lengthMm: type.lengthMm, widthMm: type.widthMm }
+      };
+      // midden in de tuin; de gebruiker schuift het daarna naar de juiste plek
+      const b = polygonBounds(gardenPolygon(project.garden));
+      obj.footprint.xMm = Math.max(0, Math.round(((b.minX + b.maxX) / 2 - type.lengthMm / 2) / 100) * 100);
+      obj.footprint.zMm = Math.max(0, Math.round(((b.minZ + b.maxZ) / 2 - type.widthMm / 2) / 100) * 100);
+      project.existingObjects.push(obj);
+      selectedId = obj.id;
+      fitGardenToContent();
+      renderAll();
+    });
+    addRow.appendChild(addBtn);
+    fs.appendChild(addRow);
+    return fs;
+  }
+
   function buildFenceGeometryFieldset() {
     const fs = document.createElement("fieldset");
     fs.innerHTML = `<legend class="configurator-section-title">Schutting — vorm &amp; maten</legend>`;
@@ -885,6 +1048,20 @@ export function initConfigurator(root) {
         if (mm !== null) { area.position.zMm = mm; fitGardenToContent(); renderScenesAndSummary(); }
       }));
       li.appendChild(posRow);
+      const dupBtn = document.createElement("button");
+      dupBtn.type = "button";
+      dupBtn.className = "link-btn";
+      dupBtn.textContent = "Vlak dupliceren";
+      dupBtn.addEventListener("click", () => {
+        if (project.paving.areas.length >= 20) return;
+        const copy = JSON.parse(JSON.stringify(area));
+        copy.id = generateId("area");
+        copy.position.xMm += area.lengthMm + 500;
+        project.paving.areas.splice(i + 1, 0, copy);
+        selectedId = copy.id;
+        fitGardenToContent(); renderAll();
+      });
+      li.appendChild(dupBtn);
       if (project.paving.areas.length > 1) {
         const removeBtn = document.createElement("button");
         removeBtn.type = "button";
@@ -1122,6 +1299,10 @@ export function initConfigurator(root) {
 
     panel.appendChild(fs);
     appendNav(true, true);
+  }
+
+  function nlNum(n) {
+    return Number(n).toLocaleString("nl-NL", { maximumFractionDigits: 3 });
   }
 
   function hintEl(textContent) {
@@ -1488,16 +1669,24 @@ export function initConfigurator(root) {
     const g = project.garden;
     if (g.geometryKnown) {
       lines.push(`Tuinvlak: ${{ rect: "rechthoek", L: "L-vorm", free: "vrije contour" }[g.shape] || "rechthoek"}, ${formatM2(Math.round(polygonAreaMm2(gardenPolygon(g)) / 100000) / 10, 1)}` +
-        (g.shape !== "rect" && g.polygon ? ` (hoekpunten in m: ${g.polygon.map((p) => `${mmToMeters(p.xMm)};${mmToMeters(p.zMm)}`).join(" | ")})` : ""));
+        (g.shape !== "rect" && g.polygon ? ` (hoekpunten in m: ${g.polygon.map((p) => `${nlNum(mmToMeters(p.xMm))};${nlNum(mmToMeters(p.zMm))}`).join(" | ")})` : ""));
     }
     if (project.fence && project.options.fenceIntent === "repair") lines.push(`Schutting: HERSTEL gevraagd. Schade: ${project.options.repairNote || "nog niet omschreven"}`);
     if (project.removal.existingFence || project.removal.existingPaving) {
       lines.push(`Verwijderen: ${[project.removal.existingFence && "bestaande schutting", project.removal.existingPaving && "bestaande bestrating"].filter(Boolean).join(", ")}`);
     }
-    for (const o of project.existingObjects || []) {
-      lines.push(`Object: ${o.label || o.type} — ${{ "existing-keep": "bestaand, behouden", "existing-remove": "bestaand, verwijderen", new: "nieuw" }[o.status] || o.status}` +
-        (o.footprint ? `, ${mmToMeters(o.footprint.lengthMm)} × ${mmToMeters(o.footprint.widthMm)} m` : ""));
+    const objs = project.existingObjects || [];
+    for (const [status, title] of [["existing-keep", "Bestaand, behouden"], ["existing-remove", "Bestaand, verwijderen (sloop/afvoer)"], ["new", "Nieuw aanleggen"]]) {
+      const group = objs.filter((o) => o.status === status);
+      if (!group.length) continue;
+      lines.push(`${title}: ` + group.map((o) => {
+        const t = getObjectType(o.type);
+        const q = objectQuantity(o);
+        return `${t ? t.label : o.type} (${nlNum(mmToMeters(o.footprint.lengthMm))} × ${nlNum(mmToMeters(o.footprint.widthMm))} m${q ? `, ${q.value.toLocaleString("nl-NL")} ${q.unit}` : ""})`;
+      }).join("; "));
     }
+    const protect = objs.filter((o) => o.status === "existing-keep" && getObjectType(o.type)?.protect);
+    if (protect.length) lines.push(`Beschermen tijdens het werk: ${protect.map((o) => getObjectType(o.type).label).join(", ")} — werkzone rondom aangegeven in de tekening.`);
     lines.push("", "Wensen:");
     lines.push(`- Omvang: ${optLabel(SCOPES, project.wishes.scope)}`);
     lines.push(`- Gebruik: ${project.wishes.uses.map((u) => optLabel(USES, u)).join(", ") || "—"}`);

@@ -38,6 +38,7 @@ export function attachSvgInteraction(svg, handlers) {
     const id = handle.dataset.id;
     const alreadySelected = handlers.getSelectedId() === id;
     if (!alreadySelected) handlers.onSelect(id);
+    if (handle.dataset.drag === "locked") return; // vergrendeld: wel selecteren, nooit verplaatsen (E05)
     if (e.pointerType === "touch" && !alreadySelected) return;
     const start = svgPointToMm(svg, e.clientX, e.clientY);
     if (!start) return;

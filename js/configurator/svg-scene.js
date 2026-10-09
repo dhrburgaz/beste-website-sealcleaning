@@ -7,6 +7,9 @@
 import { computeFenceLayout, computeTileLayout, gardenPolygon, polygonBounds, polygonAreaMm2 } from "./geometry.js";
 import { getFenceSystem } from "../../data/fence-systems.js";
 import { formatMeters, formatM2 } from "../project-state.js";
+import { getObjectType, objectQuantity } from "../../data/garden-objects.js";
+
+const FLAT_OBJECTS = ["lawn", "border"];
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 
@@ -35,6 +38,11 @@ function sceneBounds(project) {
   for (const a of project.paving?.areas || []) {
     grow(a.position.xMm, a.position.zMm);
     grow(a.position.xMm + a.lengthMm, a.position.zMm + a.widthMm);
+  }
+  for (const o of project.existingObjects || []) {
+    if (!o.footprint) continue;
+    grow(o.footprint.xMm, o.footprint.zMm);
+    grow(o.footprint.xMm + o.footprint.lengthMm, o.footprint.zMm + o.footprint.widthMm);
   }
   return b;
 }
@@ -122,6 +130,38 @@ export function renderScene(svg, project, opts) {
     );
   }
 
+  /** Objecten: bestaand (behouden/verwijderen) en nieuw groen, per type gestyled. */
+  function drawObjects(filter) {
+    for (const obj of (project.existingObjects || []).filter(filter)) {
+      if (!obj.footprint) continue;
+      const { xMm, zMm, lengthMm, widthMm: wMm } = obj.footprint;
+      const type = getObjectType(obj.type);
+      const cls = `scene-object scene-object-${obj.type} scene-status-${obj.status}` + (obj.id === selectedId ? " scene-selected" : "");
+      if (obj.type === "tree") {
+        const r = Math.min(lengthMm, wMm) / 2;
+        if (obj.status === "existing-keep") {
+          group.appendChild(el("circle", { cx: toX(xMm + lengthMm / 2), cy: toY(zMm + wMm / 2), r: r + 1000, class: "scene-protect-zone" }));
+        }
+        group.appendChild(el("circle", { cx: toX(xMm + lengthMm / 2), cy: toY(zMm + wMm / 2), r, class: cls }));
+      } else {
+        if (type?.protect && obj.status === "existing-keep") {
+          group.appendChild(el("rect", { x: toX(xMm - 500), y: toY(zMm - 500), width: lengthMm + 1000, height: wMm + 1000, class: "scene-protect-zone" }));
+        }
+        group.appendChild(el("rect", { x: toX(xMm), y: toY(zMm), width: lengthMm, height: wMm, class: cls }));
+      }
+      const hit = el("rect", { x: toX(xMm), y: toY(zMm), width: lengthMm, height: wMm, class: "scene-hit" + (obj.id === selectedId ? " scene-selected" : "") });
+      if (editable && !obj.locked) { hit.dataset.drag = "object"; hit.dataset.id = obj.id; }
+      else if (editable) { hit.dataset.drag = "locked"; hit.dataset.id = obj.id; hit.classList.add("scene-hit-locked"); }
+      group.appendChild(hit);
+      const qty = objectQuantity(obj);
+      const name = (type ? type.label.split(" /")[0] : obj.type) + (obj.status === "existing-remove" ? " (weg)" : obj.status === "new" ? " (nieuw)" : "") +
+        (qty ? ` ${qty.value.toLocaleString("nl-NL")} ${qty.unit}` : "");
+      group.appendChild(text(toX(xMm + lengthMm / 2), toY(zMm + wMm / 2), name, { "text-anchor": "middle", class: "scene-label scene-label-existing" }));
+    }
+  }
+
+  drawObjects((o) => FLAT_OBJECTS.includes(o.type));
+
   // Bestrating
   if (project.paving && Array.isArray(project.paving.areas)) {
     for (const area of project.paving.areas) {
@@ -196,23 +236,7 @@ export function renderScene(svg, project, opts) {
     group.appendChild(fenceGroup);
   }
 
-  // Bestaande objecten (existing-keep / existing-remove)
-  for (const obj of project.existingObjects || []) {
-    if (!obj.footprint) continue;
-    const { xMm, zMm, lengthMm, widthMm: wMm } = obj.footprint;
-    group.appendChild(
-      el("rect", {
-        x: toX(xMm), y: toY(zMm), width: lengthMm, height: wMm,
-        class: obj.status === "existing-remove" ? "scene-existing scene-existing-remove" : "scene-existing scene-existing-keep"
-      })
-    );
-    group.appendChild(
-      text(toX(xMm + lengthMm / 2), toY(zMm + wMm / 2), obj.label || obj.type, {
-        "text-anchor": "middle",
-        class: "scene-label scene-label-existing"
-      })
-    );
-  }
+  drawObjects((o) => !FLAT_OBJECTS.includes(o.type));
 
   // Hoekpunt-handgrepen voor vrije contour (bovenop alles). Grootte in
   // schermpixels: een raakvlak van ±44px, ongeacht de tuinmaat (E08).

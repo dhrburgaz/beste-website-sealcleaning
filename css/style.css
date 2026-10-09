@@ -677,6 +677,18 @@ fieldset > legend { font-weight: 500; font-size: 0.82rem; letter-spacing: 0.04em
 .scene-label-area { fill: var(--c-ink-soft); font-size: 260px; }
 .scene-label-fence { fill: var(--c-forest-deep); font-weight: 600; }
 .scene-label-existing { fill: var(--c-ink-soft); font-size: 200px; }
+.scene-object { stroke-width: 24; }
+.scene-object-lawn { fill: #8fb36a; fill-opacity: 0.45; stroke: #6b8f4a; }
+.scene-object-border { fill: #7a8f4a; fill-opacity: 0.55; stroke: #55682f; }
+.scene-object-hedge { fill: #3f6b35; fill-opacity: 0.8; stroke: #2c4d25; }
+.scene-object-tree { fill: #4f7d3a; fill-opacity: 0.55; stroke: #2c4d25; }
+.scene-object-shed { fill: #a98c6b; fill-opacity: 0.8; stroke: #6e5338; }
+.scene-object-house-wall { fill: #8a8a85; stroke: #5f5f5a; }
+.scene-object-gate-existing { fill: #6e5338; stroke: #6e5338; }
+.scene-status-existing-remove { fill-opacity: 0.18; stroke: var(--c-error); stroke-dasharray: 80 40; }
+.scene-status-new { stroke-dasharray: none; stroke-width: 36; }
+.scene-protect-zone { fill: none; stroke: #d08a1e; stroke-width: 18; stroke-dasharray: 40 40; }
+.scene-hit-locked { cursor: not-allowed; }
 .scene-existing { fill: none; stroke: var(--c-stone); stroke-width: 24; stroke-dasharray: 70 36; }
 .scene-existing-remove { stroke: var(--c-error); }
 
@@ -717,7 +729,10 @@ fieldset > legend { font-weight: 500; font-size: 0.82rem; letter-spacing: 0.04em
 .scene-canvas-exit { position: absolute; top: 0.6em; left: 0.6em; z-index: 2; }
 .scene-canvas-exit[hidden] { display: none; }
 .configurator-list-item.is-selected { background: var(--c-sand-deep); box-shadow: inset 3px 0 0 var(--c-clay); padding-left: 0.6em; }
-.configurator-vertex { flex-direction: column; align-items: stretch; }
+.configurator-vertex, .configurator-object { flex-direction: column; align-items: stretch; }
+.configurator-object-title { font-weight: 500; margin: 0; }
+.configurator-add-object { align-items: flex-end; }
+.configurator-add-object .btn { margin-bottom: var(--sp-3); flex-shrink: 0; }
 .configurator-vertex-actions { display: flex; gap: var(--sp-2); justify-content: flex-end; }
 .configurator-list-item .link-btn { color: var(--c-forest-deep); }
 .configurator-list-item button { min-height: 44px; }
@@ -759,7 +774,7 @@ fieldset > legend { font-weight: 500; font-size: 0.82rem; letter-spacing: 0.04em
 .configurator-completeness { margin-top: var(--sp-3); }
 .configurator-missing, .configurator-photo-tips { margin: 0 0 var(--sp-2); padding-left: 1.2em; font-size: 0.9rem; }
 .configurator-missing li { margin-bottom: 0.2em; }
-.configurator-missing .link-btn { background: none; border: none; padding: 0.3em 0; min-height: 44px; font: inherit; color: var(--c-forest-deep); text-decoration: underline; cursor: pointer; text-align: left; }
+.configurator-missing .link-btn { background: none; border: none; padding: 0.3em 0; min-height: 44px; min-width: 44px; font: inherit; color: var(--c-forest-deep); text-decoration: underline; cursor: pointer; text-align: left; }
 .configurator-photo-tips li { margin-bottom: 0.35em; }
 
 .configurator-mobile-bar { display: none; }

@@ -239,6 +239,35 @@ export function createThreeScene(host, project) {
     return { widthM, depthM, cx, cz };
   }
 
+  /** Bestaande/nieuwe objecten als eenvoudige volumes op dezelfde footprint als 2D. */
+  function buildObjects(objects) {
+    const COLORS = { "house-wall": 0x8a8a85, shed: 0xa98c6b, hedge: 0x3f6b35, border: 0x7a8f4a, lawn: 0x8fb36a, "gate-existing": 0x6e5338 };
+    const HEIGHTS = { "house-wall": 2.7, shed: 2.3, hedge: 1.5, border: 0.12, lawn: 0.03, "gate-existing": 1.8 };
+    for (const o of objects) {
+      if (!o.footprint) continue;
+      const { xMm, zMm, lengthMm, widthMm } = o.footprint;
+      const remove = o.status === "existing-remove";
+      const mat = track(new THREE.MeshStandardMaterial({
+        color: remove ? 0xb5523b : (COLORS[o.type] ?? 0x4f7d3a), roughness: 0.9,
+        transparent: remove, opacity: remove ? 0.35 : 1
+      }));
+      const cx = (xMm + lengthMm / 2) * MM, cz = (zMm + widthMm / 2) * MM;
+      if (o.type === "tree") {
+        const crownR = Math.min(lengthMm, widthMm) / 2 * MM;
+        const trunk = new THREE.Mesh(track(new THREE.CylinderGeometry(0.12, 0.16, 2.2, 10)), track(new THREE.MeshStandardMaterial({ color: remove ? 0xb5523b : 0x6e5338, transparent: remove, opacity: remove ? 0.35 : 1 })));
+        trunk.position.set(cx, 1.1, cz);
+        const crown = new THREE.Mesh(track(new THREE.SphereGeometry(crownR, 16, 12)), mat);
+        crown.position.set(cx, 2.2 + crownR * 0.8, cz);
+        dynamicGroup.add(trunk, crown);
+        continue;
+      }
+      const h = HEIGHTS[o.type] ?? 1;
+      const box = new THREE.Mesh(track(new THREE.BoxGeometry(lengthMm * MM, h, widthMm * MM)), mat);
+      box.position.set(cx, h / 2, cz);
+      dynamicGroup.add(box);
+    }
+  }
+
   function update(nextProject) {
     project = nextProject;
     for (const obj of disposables) {
@@ -250,6 +279,7 @@ export function createThreeScene(host, project) {
     const { widthM, depthM, cx, cz } = buildGardenGround(project.garden);
     buildFence(project.fence);
     buildPaving(project.paving);
+    buildObjects(project.existingObjects || []);
 
     if (!controls.target.lengthSq() && widthM && depthM) {
       controls.target.set(cx, 0.3, cz);

@@ -12,6 +12,7 @@ import { SERVICES } from "../../data/services.js";
 import { FENCE_SHAPES, FENCE_HEIGHTS_MM, FENCE_SYSTEMS, FENCE_MATERIAL_PRESETS } from "../../data/fence-systems.js";
 import { PAVING_APPLICATIONS, PAVING_FORMATS_MM, PAVING_PATTERNS, PAVING_COLOR_PRESETS } from "../../data/paving-products.js";
 import { getPavingProduct } from "../../data/materials.js";
+import { getObjectType } from "../../data/garden-objects.js";
 
 export const DESIGN_FORMAT = "sealcleaning-ontwerp";
 export const MAX_SHARE_CHARS = 6000;
@@ -30,6 +31,7 @@ export function toDesignPayload(project) {
       garden: project.garden,
       fence: project.fence,
       paving: project.paving,
+      existingObjects: (project.existingObjects || []).map((o) => ({ id: o.id, type: o.type, status: o.status, locked: !!o.locked, footprint: o.footprint })),
       removal: project.removal,
       options: project.options,
       variants: project.variants || []
@@ -181,6 +183,19 @@ export function sanitizeDesign(raw) {
   project.garden = sanitizeGarden(d.garden, project.garden);
   project.fence = project.services.includes("schutting") ? sanitizeFence(d.fence) : null;
   project.paving = project.services.includes("bestrating") ? sanitizePaving(d.paving) : null;
+  project.existingObjects = list(d.existingObjects, 30, "objecten").map((o, i) => {
+    const type = getObjectType(o && o.type);
+    if (!type) throw new Error("Onbekend objecttype in ontwerp.");
+    const status = oneOf(o.status, type.statuses, type.statuses[0]);
+    return {
+      id: id(o.id, `obj-${i}`), type: type.id, status, locked: status === "existing-keep" && o.locked === true,
+      footprint: {
+        ...point(o.footprint, "object"),
+        lengthMm: req(o.footprint.lengthMm, 50, 100000, "objectmaat"),
+        widthMm: req(o.footprint.widthMm, 50, 100000, "objectmaat")
+      }
+    };
+  });
   if (d.removal && typeof d.removal === "object") {
     for (const k of ["existingFence", "removeFence", "existingPaving", "removePaving"]) project.removal[k] = d.removal[k] === true;
   }
