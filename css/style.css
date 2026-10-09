@@ -729,6 +729,14 @@ fieldset > legend { font-weight: 500; font-size: 0.82rem; letter-spacing: 0.04em
 .is-canvas-fullscreen .configurator-scene-wrap > .field-hint { display: none; }
 .configurator-fullscreen-lock, .configurator-fullscreen-lock body { overflow: hidden; }
 
+.design-tools { border: 1px solid var(--c-line); background: #fff; padding: 0 var(--sp-3); }
+.design-tools summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-weight: 500; }
+.design-tools[open] { padding-bottom: var(--sp-3); }
+.design-tools .btn-row { gap: 0.5em; flex-wrap: wrap; }
+.design-file-label { cursor: pointer; }
+.design-file-label:focus-within { outline: 2px solid var(--c-forest); outline-offset: 2px; }
+.design-share-input { width: 100%; font: inherit; font-size: 0.85rem; padding: 0.6em; border: 1px solid var(--c-line); min-height: 44px; margin-top: 0.4em; }
+
 .configurator-mobile-bar { display: none; }
 
 @media (max-width: 860px) {

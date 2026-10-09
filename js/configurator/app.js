@@ -14,6 +14,7 @@ import { FENCE_SHAPES, FENCE_HEIGHTS_MM, FENCE_SYSTEMS, FENCE_MATERIAL_PRESETS }
 import { PAVING_FORMATS_MM, PAVING_PATTERNS, PAVING_COLOR_PRESETS } from "../../data/paving-products.js";
 import { getPavingProduct, getPavingProductsForFormat } from "../../data/materials.js";
 import { attachSvgInteraction, snapMm } from "./svg-interaction.js";
+import { toDesignPayload, sanitizeDesign, encodeShare, decodeShare, MAX_FILE_BYTES } from "./design-io.js";
 import { lPolygon, polygonAreaMm2, polygonBounds, findPolygonProblem, gardenPolygon } from "./geometry.js";
 
 let priceSourcesCache = null;
@@ -52,6 +53,8 @@ export function initConfigurator(root) {
   const sceneStatus = root.querySelector("[data-scene-status]");
   const mobileBar = root.querySelector("[data-configurator-mobile-bar]");
   const editControls = root.querySelector("[data-edit-controls]");
+  const designTools = root.querySelector("[data-design-tools]");
+  let designMessage = null; // { text, error }
 
   function persist() {
     try {
@@ -182,6 +185,122 @@ export function initConfigurator(root) {
       stepHistory(1);
     }
   });
+
+  /* ---- Ontwerp opslaan, openen en delen (alleen niet-persoonlijke state) ---- */
+  function adoptProject(next, message) {
+    recordHistory();
+    project = next;
+    if (usesFence()) ensureFenceDefaults();
+    if (usesPaving()) ensurePavingDefaults();
+    fitGardenToContent();
+    selectedId = null;
+    stepIndex = project.services.length ? 1 : 0;
+    designMessage = { text: message, error: false };
+    renderAll();
+  }
+
+  function renderDesignTools() {
+    if (!designTools) return;
+    const body = designTools.querySelector("[data-design-tools-body]");
+    body.innerHTML = "";
+    const row = document.createElement("div");
+    row.className = "btn-row";
+
+    const dl = document.createElement("button");
+    dl.type = "button";
+    dl.className = "btn btn-secondary btn-sm";
+    dl.textContent = "Download ontwerpbestand";
+    dl.addEventListener("click", () => {
+      const blob = new Blob([JSON.stringify(toDesignPayload(project), null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `sealcleaning-ontwerp-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      designMessage = { text: "Ontwerpbestand gedownload. Open het later hier via ‘Ontwerpbestand openen’.", error: false };
+      renderDesignTools();
+    });
+    row.appendChild(dl);
+
+    const openLabel = document.createElement("label");
+    openLabel.className = "btn btn-secondary btn-sm design-file-label";
+    openLabel.textContent = "Ontwerpbestand openen";
+    const file = document.createElement("input");
+    file.type = "file";
+    file.accept = ".json,application/json";
+    file.className = "visually-hidden";
+    file.addEventListener("change", () => {
+      const f = file.files && file.files[0];
+      if (!f) return;
+      if (f.size > MAX_FILE_BYTES) {
+        designMessage = { text: "Dit bestand is te groot voor een ontwerpbestand.", error: true };
+        renderDesignTools();
+        return;
+      }
+      f.text().then((text) => {
+        const next = sanitizeDesign(JSON.parse(text));
+        adoptProject(next, "Ontwerpbestand geopend. Met ↶ gaat u terug naar uw vorige ontwerp.");
+      }).catch((e) => {
+        designMessage = { text: e instanceof SyntaxError ? "Dit bestand is geen geldig ontwerpbestand." : e.message, error: true };
+        renderDesignTools();
+      });
+    });
+    openLabel.appendChild(file);
+    row.appendChild(openLabel);
+
+    const share = document.createElement("button");
+    share.type = "button";
+    share.className = "btn btn-secondary btn-sm";
+    share.textContent = "Maak deellink";
+    share.addEventListener("click", async () => {
+      const encoded = encodeShare(project);
+      if (!encoded) {
+        designMessage = { text: "Dit ontwerp is te groot voor een link. Gebruik ‘Download ontwerpbestand’ en deel het bestand.", error: true };
+        renderDesignTools();
+        return;
+      }
+      const link = `${location.origin}${location.pathname}#ontwerp=${encoded}`;
+      let copied = false;
+      try { await navigator.clipboard.writeText(link); copied = true; } catch (e) { /* handmatig kopiëren via veld */ }
+      designMessage = { text: copied ? "Deellink gekopieerd." : "Kopieer de link hieronder.", error: false, link };
+      renderDesignTools();
+    });
+    row.appendChild(share);
+    body.appendChild(row);
+
+    if (designMessage) {
+      const msg = document.createElement("p");
+      msg.className = designMessage.error ? "field-error" : "field-hint";
+      msg.setAttribute("role", designMessage.error ? "alert" : "status");
+      msg.textContent = designMessage.text;
+      body.appendChild(msg);
+      if (designMessage.link) {
+        const input = document.createElement("input");
+        input.type = "text";
+        input.readOnly = true;
+        input.value = designMessage.link;
+        input.className = "design-share-input";
+        input.setAttribute("aria-label", "Deellink");
+        input.addEventListener("focus", () => input.select());
+        body.appendChild(input);
+      }
+    }
+  }
+
+  function openSharedDesignFromHash() {
+    const m = /^#ontwerp=([A-Za-z0-9_-]+)$/.exec(location.hash || "");
+    if (!m) return;
+    try {
+      const next = decodeShare(m[1]);
+      adoptProject(next, "U bekijkt een gedeeld ontwerp. Uw eigen opgeslagen ontwerp is niet overschreven; met ↶ gaat u terug.");
+      if (designTools) designTools.open = true;
+    } catch (e) {
+      designMessage = { text: e.message, error: true };
+      if (designTools) designTools.open = true;
+    }
+    try { window.history.replaceState(null, "", location.pathname + location.search); } catch (e) { /* oude browser */ }
+  }
 
   /* ---- Selecteren en slepen in 2D (E01/E02) ---- */
   function findDragObject(target) {
@@ -1191,6 +1310,7 @@ export function initConfigurator(root) {
     renderPanel();
     renderScenes();
     renderEditControls();
+    renderDesignTools();
   }
 
   // 2D/3D toggle
@@ -1233,6 +1353,8 @@ export function initConfigurator(root) {
 
   window.addEventListener("beforeunload", () => { if (sceneController) sceneController.dispose(); });
 
+  openSharedDesignFromHash();
+  window.addEventListener("hashchange", () => { openSharedDesignFromHash(); renderDesignTools(); });
   renderAll();
   return {
     getProject: () => project,
