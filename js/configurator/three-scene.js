@@ -291,8 +291,8 @@ export function createThreeScene(host, project) {
 
   /** Bestaande/nieuwe objecten als eenvoudige volumes op dezelfde footprint als 2D. */
   function buildObjects(objects) {
-    const COLORS = { "house-wall": 0x8a8a85, shed: 0xa98c6b, hedge: 0x3f6b35, border: 0x7a8f4a, lawn: 0x8fb36a, "gate-existing": 0x6e5338 };
-    const HEIGHTS = { "house-wall": 2.7, shed: 2.3, hedge: 1.5, border: 0.12, lawn: 0.03, "gate-existing": 1.8 };
+    const COLORS = { plant: 0x55803f, lamp: 0x2f2f2f, gravel: 0xc9c2b2, deck: 0x9c7451, planter: 0x7d6650, "house-wall": 0x8a8a85, shed: 0xa98c6b, hedge: 0x3f6b35, border: 0x7a8f4a, lawn: 0x8fb36a, "gate-existing": 0x6e5338 };
+    const HEIGHTS = { plant: 1.2, lamp: 0.6, gravel: 0.04, deck: 0.15, planter: 0.5, "house-wall": 2.7, shed: 2.3, hedge: 1.5, border: 0.12, lawn: 0.03, "gate-existing": 1.8 };
     for (const o of objects) {
       if (!o.footprint) continue;
       const { xMm, zMm, lengthMm, widthMm } = o.footprint;
@@ -309,6 +309,21 @@ export function createThreeScene(host, project) {
         const crown = new THREE.Mesh(track(new THREE.SphereGeometry(crownR, 16, 12)), mat);
         crown.position.set(cx, 2.2 + crownR * 0.8, cz);
         dynamicGroup.add(trunk, crown);
+        continue;
+      }
+      if (o.type === "plant") {
+        const r = Math.min(lengthMm, widthMm) / 2 * MM;
+        const bush = new THREE.Mesh(track(new THREE.SphereGeometry(r, 14, 10)), mat);
+        bush.position.set(cx, r, cz);
+        dynamicGroup.add(bush);
+        continue;
+      }
+      if (o.type === "lamp") {
+        const pole = new THREE.Mesh(track(new THREE.CylinderGeometry(0.04, 0.05, 0.6, 10)), mat);
+        pole.position.set(cx, 0.3, cz);
+        const glow = new THREE.Mesh(track(new THREE.SphereGeometry(0.07, 10, 8)), track(new THREE.MeshStandardMaterial({ color: 0xfff1c4, emissive: 0xffd77a, emissiveIntensity: 0.8 })));
+        glow.position.set(cx, 0.64, cz);
+        dynamicGroup.add(pole, glow);
         continue;
       }
       const h = HEIGHTS[o.type] ?? 1;

@@ -685,6 +685,11 @@ fieldset > legend { font-weight: 500; font-size: 0.82rem; letter-spacing: 0.04em
 .scene-object-hedge { fill: #3f6b35; fill-opacity: 0.8; stroke: #2c4d25; }
 .scene-object-tree { fill: #4f7d3a; fill-opacity: 0.55; stroke: #2c4d25; }
 .scene-object-shed { fill: #a98c6b; fill-opacity: 0.8; stroke: #6e5338; }
+.scene-object-plant { fill: #55803f; fill-opacity: 0.6; stroke: #2c4d25; }
+.scene-object-lamp { fill: #ffd77a; stroke: #2f2f2f; }
+.scene-object-gravel { fill: #c9c2b2; fill-opacity: 0.8; stroke: #8f887a; }
+.scene-object-deck { fill: #9c7451; fill-opacity: 0.75; stroke: #6e5338; }
+.scene-object-planter { fill: #7d6650; fill-opacity: 0.8; stroke: #55432f; }
 .scene-object-house-wall { fill: #8a8a85; stroke: #5f5f5a; }
 .scene-object-gate-existing { fill: #6e5338; stroke: #6e5338; }
 .scene-status-existing-remove { fill-opacity: 0.18; stroke: var(--c-error); stroke-dasharray: 80 40; }

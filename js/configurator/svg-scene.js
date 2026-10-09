@@ -9,7 +9,7 @@ import { getFenceSystem } from "../../data/fence-systems.js";
 import { formatMeters, formatM2 } from "../project-state.js";
 import { getObjectType, objectQuantity } from "../../data/garden-objects.js";
 
-const FLAT_OBJECTS = ["lawn", "border"];
+const FLAT_OBJECTS = ["lawn", "border", "gravel", "deck"];
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 
@@ -137,7 +137,7 @@ export function renderScene(svg, project, opts) {
       const { xMm, zMm, lengthMm, widthMm: wMm } = obj.footprint;
       const type = getObjectType(obj.type);
       const cls = `scene-object scene-object-${obj.type} scene-status-${obj.status}` + (obj.id === selectedId ? " scene-selected" : "");
-      if (obj.type === "tree") {
+      if (obj.type === "tree" || type?.round) {
         const r = Math.min(lengthMm, wMm) / 2;
         if (obj.status === "existing-keep") {
           group.appendChild(el("circle", { cx: toX(xMm + lengthMm / 2), cy: toY(zMm + wMm / 2), r: r + 1000, class: "scene-protect-zone" }));

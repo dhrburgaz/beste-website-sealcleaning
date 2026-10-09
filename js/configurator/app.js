@@ -836,7 +836,7 @@ export function initConfigurator(root) {
 
   /** Nieuwe objecten die overlappen met bestrating of elkaar: kosten zouden dubbel tellen (E06). */
   function findObjectOverlaps() {
-    const news = (project.existingObjects || []).filter((o) => o.status === "new" && getObjectType(o.type)?.unit);
+    const news = (project.existingObjects || []).filter((o) => o.status === "new" && ["m", "m2"].includes(getObjectType(o.type)?.unit)); // losse planten/lampen mogen in een vak staan
     const pav = (project.paving?.areas || []).map((a) => ({ label: "bestrating", xMm: a.position.xMm, zMm: a.position.zMm, lengthMm: a.lengthMm, widthMm: a.widthMm }));
     const out = [];
     news.forEach((o, i) => {
@@ -874,12 +874,12 @@ export function initConfigurator(root) {
       } else {
         const r1 = document.createElement("div");
         r1.className = "configurator-row";
-        r1.appendChild(numberField(type.id === "tree" ? "Kroon (m)" : "Lengte (m)", mmToMeters(obj.footprint.lengthMm), (v) => {
+        r1.appendChild(numberField(type.id === "tree" ? "Kroon (m)" : type.round ? "Doorsnede (m)" : "Lengte (m)", mmToMeters(obj.footprint.lengthMm), (v) => {
           const mm = parseMetersToMm(v); if (mm === null || mm < 100) return;
-          obj.footprint.lengthMm = mm; if (type.id === "tree") obj.footprint.widthMm = mm;
+          obj.footprint.lengthMm = mm; if (type.id === "tree" || type.round) obj.footprint.widthMm = mm;
           fitGardenToContent(); renderScenesAndSummary();
         }));
-        if (type.id !== "tree") r1.appendChild(numberField("Breedte (m)", mmToMeters(obj.footprint.widthMm), (v) => {
+        if (type.id !== "tree" && !type.round) r1.appendChild(numberField("Breedte (m)", mmToMeters(obj.footprint.widthMm), (v) => {
           const mm = parseMetersToMm(v); if (mm === null || mm < 50) return;
           obj.footprint.widthMm = mm; fitGardenToContent(); renderScenesAndSummary();
         }));
@@ -957,7 +957,7 @@ export function initConfigurator(root) {
     addBtn.addEventListener("click", () => {
       if (project.existingObjects.length >= 30) return;
       const type = getObjectType(typeSel.querySelector("select").value);
-      const status = type.statuses.includes("new") && ["border", "lawn"].includes(type.id) ? "new" : type.statuses[0];
+      const status = type.statuses.includes("new") && !["hedge"].includes(type.id) ? "new" : type.statuses[0];
       const obj = {
         id: generateId("obj"), type: type.id, status, locked: status === "existing-keep",
         footprint: { xMm: 0, zMm: 0, lengthMm: type.lengthMm, widthMm: type.widthMm }
