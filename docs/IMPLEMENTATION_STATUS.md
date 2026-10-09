@@ -81,20 +81,48 @@ v5.0→v4.0→v3.0 om de reeds bekende v2.0 heen) is gelezen en verwerkt:
   (REQUIREMENTS_INDEX N02/N04) — de tekst is inhoudelijk compleet maar
   vereist juridische toets vóór bindende publicatie.
 
+## Afgerond — configurator- en site-uitbreiding (10 oktober 2026)
+
+Alle frontend-eisen die zonder eigenaarsgegevens kunnen, zijn gebouwd en in
+Chromium getest (desktop 1280px, mobiel 360/390px portret en 740px
+landschap met touch). Detail per eis-ID: `docs/REQUIREMENTS_INDEX.md`.
+
+- **Tekenen:** tuin als rechthoek, L-vorm of vrije contour (hoekpunten
+  slepen/typen, zelfdoorsnijding geblokkeerd); bestaande en nieuwe objecten
+  (huiswand, schuur, boom, haag, border, gazon, bestaande poort) met status
+  behouden/verwijderen/nieuw, vergrendelen, dupliceren, beschermingszone;
+  poorten met scharnier en draairichting plus botsingscontrole. 2D en 3D
+  gebruiken dezelfde geometrie (`js/configurator/geometry.js`).
+- **Bediening:** selecteren en slepen in 2D, optioneel raster/snap met
+  status, undo/redo (Ctrl+Z), vergroot-werkvlakmodus, sticky tekening op
+  mobiel, 44px-raakvlakken, zon-/schaduwillustratie in 3D.
+- **Opslaan/delen:** ontwerpbestand (.json) en deellink (in URL-hash,
+  niet naar server), strikte witte-lijst-sanitizer
+  (`js/configurator/design-io.js`); alleen niet-persoonlijke state.
+- **Vergelijken:** varianten A/B/C op dezelfde geometrie
+  (`js/configurator/variants.js`) met onderhoud, opbouw, leverstatus,
+  prijsbasis, bron en verschil alleen bij bekende prijsregels.
+- **Intake:** doel, particulier/zakelijk, omvang, gebruik, onderhoudswens,
+  situatie (ondergrond, hoogte, water, kabels, erfgrens), toegang en
+  parkeren met uitvoeringsaandachtspunten, afvoer + volume-indicatie
+  (`js/configurator/waste.js`), eigen materiaal, herstel,
+  gazon/onkruid/snoei, werkgebiedcheck, compleetheidslijst en fototips.
+  Alles gaat mee in het tekstdossier en de overdracht naar `/contact/`.
+- **Site:** `/zoeken/` (index via `node tools/build-search-index.mjs` →
+  `data/search-index.json`; opnieuw draaien na contentwijzigingen),
+  `/inspiratie/` (inspiratiebord in de browser, bewaarknop op
+  projectpagina's en in de configurator), footerlinks op alle pagina's.
+- **Gevonden en hersteld:** mobiele actiebalk werd nooit gevuld;
+  `?service=`-links naar de configurator werden genegeerd; 404-knop
+  "Bekijk diensten" wees naar projecten.
+
 ## Nog niet gestart
 
 - **Tier 9 (documentarchitectuur):** offerte/werkbon/factuurconcept,
-  `docs/PRICING_OPERATIONS.md`. Datamodel (ch.18/40 in de brief) bestaat al
-  in `js/project-state.js`; UI/document-rendering niet.
-- **Tier 10-12:** webshop/checkout (bewust niet — vereist backend +
-  juridisch gereed), analytics-laag, onafhankelijke eindreview.
-- **Materiaalcatalogus (`data/materials.js`, F01):** alleen generieke
-  presets, geen echte SKU's/leveranciersdata.
-- **Vrije tuincontour, volledige existingObjects-catalogus,
-  materiaalvergelijking (max. 3 varianten), ontwerp-export als
-  JSON/deellink:** zie `docs/REQUIREMENTS_INDEX.md` (D02, C01/C05, F03/G06).
-- Supplier/inkoop/margin-engine (ch.38-39 / v6.0 §V6-05): vereist echte
-  interne inkoopcijfers die nog niet zijn aangeleverd.
+  `docs/PRICING_OPERATIONS.md`, `docs/LEGAL_AND_DOCUMENTS.md`.
+- **Tier 10-12:** webshop/checkout, analytics, onafhankelijke eindreview.
+- **Formele WCAG 2.2 AA-audit (N10):** tot nu toe gerichte handmatige en
+  geautomatiseerde controles, geen volledige audit.
 
 ## Openstaande vragen voor de eigenaar (BLOCKERS)
 
@@ -103,9 +131,15 @@ v5.0→v4.0→v3.0 om de reeds bekende v2.0 heen) is gelezen en verwerkt:
   geclaimde ontvangst.
 - Domeinmail (info@sealcleaning.nl) nog niet bevestigd als werkende
   ontvangstmailbox.
-- Leveranciers-/inkoopgegevens voor de margin-engine.
-- Juridische verificatie van KvK/btw/handelsnaam/adres vóór bindende
-  verkoopdocumenten (N01-N04).
+- Leveranciers-/inkoopgegevens voor de margin-engine en meer echte
+  producten (nu alleen 3 × 60×60-bestrating).
+- Juridische verificatie van KvK/btw/handelsnaam/adres en toets van
+  `/voorwaarden/` en `/privacy/` vóór bindende publicatie (N01-N04).
+- Stijllabels per projectcase (A05), gecontroleerde plantdata voor
+  plantkeuze/haagcalculator/onderhoudskalender (H01-H04, H09), echte
+  voor/na-fotoparen van dezelfde plek (I04), geleverde SKU's en
+  garantievoorwaarden (M04-M05).
+- Wanneer mag deze branch naar `main` (= live)? Er is nog niets gemerged.
 
 ## Belangrijk voor hervatten: commit vaak
 
@@ -116,32 +150,8 @@ einde van een tier.
 
 ## Eerstvolgende taak bij hervatten
 
-Tier 1-8 zijn afgerond of substantieel afgerond, inclusief de 24-artikelen
-voorwaarden-tekst en volledige privacy-tabel (10 oktober 2026). Tier 9-12
-vereisen grotendeels echte bedrijfsbeslissingen die niet zonder de eigenaar
-kunnen worden ingevuld (zie BLOCKERS hierboven).
-
-Resterende stappen die zonder die input mogelijk zijn, in volgorde van
-waarde/haalbaarheid:
-
-1. ~~`data/materials.js` echte productcatalogus (F01)~~ — **afgerond** (10
-   okt 2026): 3 echte, bron-gekoppelde 60×60-bestratingsproducten
-   selecteerbaar in de configurator, geverifieerd met Playwright. Schutting
-   en overige categorieën blijven generieke presets (F01 dus "deels
-   gebouwd", zie REQUIREMENTS_INDEX.md).
-2. **Materiaalvergelijking max. 3 varianten (F03/G06):** UI-component die
-   naast elkaar vergelijkt, puur front-end, geen backend nodig.
-3. **Ontwerp-export als JSON/deellink:** het datamodel
-   (`js/project-state.js`) is al JSON-serialiseerbaar; ontbreekt is een
-   export-/importknop en een leesbare samenvatting, geen backend nodig
-   (een deellink kan clientside via `URLSearchParams`/`localStorage`-import
-   werken, zonder serverside opslag te claimen die er niet is).
-4. **Snap/grid in de 2D-configurator (E02):** zuiver front-end UX-werk in
-   `js/configurator/svg-scene.js` / `app.js`.
-5. **Vrije tuincontour (D02) en volledige existingObjects-catalogus
-   (C01/C05):** grotere configurator-uitbreidingen, meer werk per stuk —
-   na 1-4 als er nog sessietijd over is.
-
-Niet starten zonder eigenaarinput: webshop/checkout, CRM/portaal,
-margin-engine (vereist inkoopcijfers), bindend publiceren van
-voorwaarden/privacy (vereist juridische toets).
+Alle frontend-eisen zonder eigenaarsinput zijn gebouwd. Verder kan pas met
+input uit de BLOCKERS hierboven, of met een besluit over een
+formulier-/documentbackend (tier 9). Zonder die input is het enige
+zinvolle resterende werk een formele toegankelijkheidsaudit (N10) en een
+onafhankelijke eindreview van de branch vóór een eventuele merge.
