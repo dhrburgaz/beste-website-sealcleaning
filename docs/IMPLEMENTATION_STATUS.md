@@ -124,10 +124,11 @@ kunnen worden ingevuld (zie BLOCKERS hierboven).
 Resterende stappen die zonder die input mogelijk zijn, in volgorde van
 waarde/haalbaarheid:
 
-1. **`data/materials.js` echte productcatalogus (F01):** de configurator
-   gebruikt nu generieke presets; een gestructureerde catalogus (nog zonder
-   echte inkoopprijzen, wel met echte producteigenschappen/afmetingen per
-   bron uit `data/price-sources.json`) maakt materiaalkeuze eerlijker.
+1. ~~`data/materials.js` echte productcatalogus (F01)~~ — **afgerond** (10
+   okt 2026): 3 echte, bron-gekoppelde 60×60-bestratingsproducten
+   selecteerbaar in de configurator, geverifieerd met Playwright. Schutting
+   en overige categorieën blijven generieke presets (F01 dus "deels
+   gebouwd", zie REQUIREMENTS_INDEX.md).
 2. **Materiaalvergelijking max. 3 varianten (F03/G06):** UI-component die
    naast elkaar vergelijkt, puur front-end, geen backend nodig.
 3. **Ontwerp-export als JSON/deellink:** het datamodel

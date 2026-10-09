@@ -87,7 +87,7 @@ in a browser this session.
 
 | ID | Status | Bewijs / opmerking |
 | --- | --- | --- |
-| F01 | nog te bouwen | Alleen generieke presets (`data/fence-systems.js`/`paving-products.js`), geen echte SKU's |
+| F01 | deels gebouwd | `data/materials.js`: 3 echte, bron-gekoppelde bestratingsproducten (60×60) selecteerbaar in de configurator; schutting/overige categorieën nog generieke presets, geen inkoopprijzen |
 | F02 | gebouwd, getest | Materiaal-/kleurkeuze wijzigt 3D-weergave |
 | F03 | nog te bouwen | Geen 3-variantenvergelijking |
 | F04 | gebouwd | `kennisbank/hout-beton-vs-composiet/`, statisch, niet interactief |
