@@ -702,6 +702,19 @@ fieldset > legend { font-weight: 500; font-size: 0.82rem; letter-spacing: 0.04em
   }
 }
 
+/* Prijzen (/prijzen/) */
+.price-group { margin-bottom: var(--sp-5); }
+.price-group h3 { font-family: var(--font-display); font-size: 1.2rem; margin-bottom: var(--sp-2); }
+.price-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.price-table { font-size: 0.9rem; min-width: 640px; }
+.price-table th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--c-ink-soft); font-weight: 500; font-family: var(--font-body); }
+.price-table td { vertical-align: top; }
+.price-row-stale { opacity: 0.6; }
+.price-badge-stale { display: inline-block; font-size: 0.74rem; color: var(--c-error); border: 1px solid var(--c-error); border-radius: 999px; padding: 0.15em 0.6em; margin-top: 0.3em; }
+.price-driver-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--sp-3); margin: var(--sp-4) 0; }
+.price-driver-grid > div { border-top: 2px solid var(--c-forest); padding-top: 0.8em; }
+.price-driver-grid h4 { font-family: var(--font-display); font-size: 1.05rem; margin-bottom: 0.3em; }
+
 /* Utility */
 .text-center { text-align: center; }
 .mt-0 { margin-top: 0; }

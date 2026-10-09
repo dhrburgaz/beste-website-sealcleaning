@@ -14,14 +14,29 @@
       "amountCents": 885,
       "vatIncluded": true,
       "vatRate": 21,
-      "quantityTiers": [{ "minQuantity": 28, "amountCents": 840 }],
+      "quantityTiers": [
+        {
+          "minQuantity": 28,
+          "amountCents": 840
+        }
+      ],
       "minimumQuantity": null,
-      "scopeIncluded": ["materiaal"],
-      "scopeExcluded": ["verzending", "montage", "ondergrond", "voegwerk"],
+      "scopeIncluded": [
+        "materiaal"
+      ],
+      "scopeExcluded": [
+        "verzending",
+        "montage",
+        "ondergrond",
+        "voegwerk"
+      ],
       "region": "NL",
-      "assumptions": ["m2-prijs in bron (24,58/m2) is afgerond; stukprijs is rekenbasis"],
+      "assumptions": [
+        "m2-prijs in bron (24,58/m2) is afgerond; stukprijs is rekenbasis"
+      ],
       "status": "active",
-      "reviewAfter": "2026-11-06"
+      "reviewAfter": "2026-11-06",
+      "group": "bestrating"
     },
     {
       "id": "price-excluton-keramisch-madrid-6060",
@@ -34,12 +49,25 @@
       "amountCents": 1250,
       "vatIncluded": true,
       "vatRate": 21,
-      "quantityTiers": [{ "minQuantity": 60, "amountCents": 1185 }],
-      "scopeIncluded": ["materiaal"],
-      "scopeExcluded": ["verzending", "montage", "ondergrond", "voegwerk"],
+      "quantityTiers": [
+        {
+          "minQuantity": 60,
+          "amountCents": 1185
+        }
+      ],
+      "scopeIncluded": [
+        "materiaal"
+      ],
+      "scopeExcluded": [
+        "verzending",
+        "montage",
+        "ondergrond",
+        "voegwerk"
+      ],
       "region": "NL",
       "status": "active",
-      "reviewAfter": "2026-11-06"
+      "reviewAfter": "2026-11-06",
+      "group": "bestrating"
     },
     {
       "id": "price-flairstone-garden-moon-6060",
@@ -52,12 +80,25 @@
       "amountCents": 1395,
       "vatIncluded": true,
       "vatRate": 21,
-      "quantityTiers": [{ "minQuantity": 64, "amountCents": 1325 }],
-      "scopeIncluded": ["materiaal"],
-      "scopeExcluded": ["verzending", "montage", "ondergrond", "voegwerk"],
+      "quantityTiers": [
+        {
+          "minQuantity": 64,
+          "amountCents": 1325
+        }
+      ],
+      "scopeIncluded": [
+        "materiaal"
+      ],
+      "scopeExcluded": [
+        "verzending",
+        "montage",
+        "ondergrond",
+        "voegwerk"
+      ],
       "region": "NL",
       "status": "active",
-      "reviewAfter": "2026-11-06"
+      "reviewAfter": "2026-11-06",
+      "group": "bestrating"
     },
     {
       "id": "price-excluton-opsluitband-antraciet",
@@ -70,11 +111,17 @@
       "amountCents": 280,
       "vatIncluded": true,
       "vatRate": 21,
-      "scopeIncluded": ["materiaal"],
-      "scopeExcluded": ["verzending", "montage"],
+      "scopeIncluded": [
+        "materiaal"
+      ],
+      "scopeExcluded": [
+        "verzending",
+        "montage"
+      ],
       "region": "NL",
       "status": "active",
-      "reviewAfter": "2026-11-06"
+      "reviewAfter": "2026-11-06",
+      "group": "bestrating"
     },
     {
       "id": "price-excluton-opsluitband-grijs",
@@ -87,11 +134,17 @@
       "amountCents": 230,
       "vatIncluded": true,
       "vatRate": 21,
-      "scopeIncluded": ["materiaal"],
-      "scopeExcluded": ["verzending", "montage"],
+      "scopeIncluded": [
+        "materiaal"
+      ],
+      "scopeExcluded": [
+        "verzending",
+        "montage"
+      ],
       "region": "NL",
       "status": "active",
-      "reviewAfter": "2026-11-06"
+      "reviewAfter": "2026-11-06",
+      "group": "bestrating"
     },
     {
       "id": "price-elephant-finch-grenen-scherm",
@@ -104,12 +157,23 @@
       "amountCents": 7900,
       "vatIncluded": null,
       "vatRate": null,
-      "scopeIncluded": ["scherm"],
-      "scopeExcluded": ["palen", "beton", "beslag", "montage", "levering"],
+      "scopeIncluded": [
+        "scherm"
+      ],
+      "scopeExcluded": [
+        "palen",
+        "beton",
+        "beslag",
+        "montage",
+        "levering"
+      ],
       "region": "NL",
-      "assumptions": ["btw-basis nog te bevestigen"],
+      "assumptions": [
+        "btw-basis nog te bevestigen"
+      ],
       "status": "active",
-      "reviewAfter": "2026-11-06"
+      "reviewAfter": "2026-11-06",
+      "group": "schutting"
     },
     {
       "id": "price-graszoden-premium-siergras",
@@ -123,12 +187,20 @@
       "vatIncluded": true,
       "vatRate": 9,
       "minimumQuantity": 30,
-      "scopeIncluded": ["materiaal"],
-      "scopeExcluded": ["levering", "leggen"],
+      "scopeIncluded": [
+        "materiaal"
+      ],
+      "scopeExcluded": [
+        "levering",
+        "leggen"
+      ],
       "region": "NL",
-      "assumptions": ["btw 9% sierteeltproduct per ch.26/S26; herclassificeer bij levering als onderdeel van aanlegdienst"],
+      "assumptions": [
+        "btw 9% sierteeltproduct per ch.26/S26; herclassificeer bij levering als onderdeel van aanlegdienst"
+      ],
       "status": "active",
-      "reviewAfter": "2026-11-06"
+      "reviewAfter": "2026-11-06",
+      "group": "gras-kunstgras"
     },
     {
       "id": "price-gardenplace-nancy-30",
@@ -141,12 +213,21 @@
       "amountCents": 1195,
       "vatIncluded": true,
       "vatRate": 21,
-      "scopeIncluded": ["materiaal"],
-      "scopeExcluded": ["levering", "leggen", "ondergrond"],
+      "scopeIncluded": [
+        "materiaal"
+      ],
+      "scopeExcluded": [
+        "levering",
+        "leggen",
+        "ondergrond"
+      ],
       "region": "NL",
-      "assumptions": ["rolbreedte 200cm beinvloedt snijverlies"],
+      "assumptions": [
+        "rolbreedte 200cm beinvloedt snijverlies"
+      ],
       "status": "active",
-      "reviewAfter": "2026-11-06"
+      "reviewAfter": "2026-11-06",
+      "group": "gras-kunstgras"
     },
     {
       "id": "price-gardenplace-dela-35",
@@ -159,11 +240,18 @@
       "amountCents": 1995,
       "vatIncluded": true,
       "vatRate": 21,
-      "scopeIncluded": ["materiaal"],
-      "scopeExcluded": ["levering", "leggen", "ondergrond"],
+      "scopeIncluded": [
+        "materiaal"
+      ],
+      "scopeExcluded": [
+        "levering",
+        "leggen",
+        "ondergrond"
+      ],
       "region": "NL",
       "status": "active",
-      "reviewAfter": "2026-11-06"
+      "reviewAfter": "2026-11-06",
+      "group": "gras-kunstgras"
     },
     {
       "id": "price-boels-trilplaat-licht",
@@ -176,12 +264,21 @@
       "amountCents": 3993,
       "vatIncluded": true,
       "vatRate": 21,
-      "scopeIncluded": ["huur machine"],
-      "scopeExcluded": ["verzekering", "extra kosten", "transport"],
+      "scopeIncluded": [
+        "huur machine"
+      ],
+      "scopeExcluded": [
+        "verzekering",
+        "extra kosten",
+        "transport"
+      ],
       "region": "NL",
-      "assumptions": ["vanafprijs excl. btw was 33/dag; incl. 21% berekend"],
+      "assumptions": [
+        "vanafprijs excl. btw was 33/dag; incl. 21% berekend"
+      ],
       "status": "active",
-      "reviewAfter": "2026-11-06"
+      "reviewAfter": "2026-11-06",
+      "group": "huur-transport"
     },
     {
       "id": "price-afval-bouw-sloop-6m3",
@@ -194,11 +291,17 @@
       "amountCents": 40500,
       "vatIncluded": true,
       "vatRate": 21,
-      "scopeIncluded": ["plaatsing", "verwerking"],
-      "scopeExcluded": ["vergunning indien nodig"],
+      "scopeIncluded": [
+        "plaatsing",
+        "verwerking"
+      ],
+      "scopeExcluded": [
+        "vergunning indien nodig"
+      ],
       "region": "NL",
       "status": "active",
-      "reviewAfter": "2026-11-06"
+      "reviewAfter": "2026-11-06",
+      "group": "afval"
     },
     {
       "id": "price-afval-schoon-puin-6m3",
@@ -211,11 +314,17 @@
       "amountCents": 20200,
       "vatIncluded": true,
       "vatRate": 21,
-      "scopeIncluded": ["plaatsing", "verwerking"],
-      "scopeExcluded": ["gemengd tuin-/grondafval"],
+      "scopeIncluded": [
+        "plaatsing",
+        "verwerking"
+      ],
+      "scopeExcluded": [
+        "gemengd tuin-/grondafval"
+      ],
       "region": "NL",
       "status": "active",
-      "reviewAfter": "2026-11-06"
+      "reviewAfter": "2026-11-06",
+      "group": "afval"
     },
     {
       "id": "price-afval-tuin-plantsoen-6m3",
@@ -228,11 +337,15 @@
       "amountCents": 23800,
       "vatIncluded": true,
       "vatRate": 21,
-      "scopeIncluded": ["plaatsing", "verwerking"],
+      "scopeIncluded": [
+        "plaatsing",
+        "verwerking"
+      ],
       "scopeExcluded": [],
       "region": "NL",
       "status": "active",
-      "reviewAfter": "2026-11-06"
+      "reviewAfter": "2026-11-06",
+      "group": "afval"
     },
     {
       "id": "price-afval-schone-grond-6m3",
@@ -245,12 +358,18 @@
       "amountCents": 47500,
       "vatIncluded": true,
       "vatRate": 21,
-      "scopeIncluded": ["plaatsing", "verwerking"],
+      "scopeIncluded": [
+        "plaatsing",
+        "verwerking"
+      ],
       "scopeExcluded": [],
       "region": "NL",
-      "assumptions": ["afwijkende vanafprijs elders aangetroffen; grondkwaliteit/gewicht/regio controleren"],
+      "assumptions": [
+        "afwijkende vanafprijs elders aangetroffen; grondkwaliteit/gewicht/regio controleren"
+      ],
       "status": "active",
-      "reviewAfter": "2026-11-06"
+      "reviewAfter": "2026-11-06",
+      "group": "afval"
     },
     {
       "id": "price-homingxl-schermmontage",
@@ -264,12 +383,20 @@
       "amountCents": 4600,
       "vatIncluded": true,
       "vatRate": 21,
-      "scopeIncluded": ["montage per scherm"],
-      "scopeExcluded": ["materiaal", "reiskosten"],
+      "scopeIncluded": [
+        "montage per scherm"
+      ],
+      "scopeExcluded": [
+        "materiaal",
+        "reiskosten"
+      ],
       "region": "NL",
-      "assumptions": ["vanafprijs, gepubliceerde peildatum okt 2025 — geen actuele Sealcleaning-arbeidsregel"],
+      "assumptions": [
+        "vanafprijs, gepubliceerde peildatum okt 2025 — geen actuele Sealcleaning-arbeidsregel"
+      ],
       "status": "stale",
-      "reviewAfter": "2026-10-07"
+      "reviewAfter": "2026-10-07",
+      "group": "schutting"
     },
     {
       "id": "price-homingxl-paal-plaatsen",
@@ -283,11 +410,17 @@
       "amountCents": 4900,
       "vatIncluded": true,
       "vatRate": 21,
-      "scopeIncluded": ["plaatsing per paal"],
-      "scopeExcluded": ["materiaal", "reiskosten"],
+      "scopeIncluded": [
+        "plaatsing per paal"
+      ],
+      "scopeExcluded": [
+        "materiaal",
+        "reiskosten"
+      ],
       "region": "NL",
       "status": "stale",
-      "reviewAfter": "2026-10-07"
+      "reviewAfter": "2026-10-07",
+      "group": "schutting"
     },
     {
       "id": "price-homingxl-poort-plaatsen",
@@ -301,12 +434,20 @@
       "amountCents": 21900,
       "vatIncluded": true,
       "vatRate": 21,
-      "scopeIncluded": ["plaatsing per poort"],
-      "scopeExcluded": ["materiaal", "reiskosten"],
+      "scopeIncluded": [
+        "plaatsing per poort"
+      ],
+      "scopeExcluded": [
+        "materiaal",
+        "reiskosten"
+      ],
       "region": "NL",
-      "assumptions": ["minimumklus 99, reiskosten vanaf 45/dag"],
+      "assumptions": [
+        "minimumklus 99, reiskosten vanaf 45/dag"
+      ],
       "status": "stale",
-      "reviewAfter": "2026-10-07"
+      "reviewAfter": "2026-10-07",
+      "group": "schutting"
     },
     {
       "id": "benchmark-rietpoel-uurtarief",
@@ -317,15 +458,26 @@
       "observedAt": "2026-10-07",
       "sourceEffectiveDate": "2026-09-01",
       "unit": "hour",
-      "rangeCents": [5500, 6500],
+      "rangeCents": [
+        5500,
+        6500
+      ],
       "vatIncluded": true,
       "vatRate": 21,
-      "scopeIncluded": ["arbeid per medewerker"],
-      "scopeExcluded": ["materiaal", "afvoer buiten hun voorwaarden"],
+      "scopeIncluded": [
+        "arbeid per medewerker"
+      ],
+      "scopeExcluded": [
+        "materiaal",
+        "afvoer buiten hun voorwaarden"
+      ],
       "region": "Rotterdam/Drechtsteden",
-      "assumptions": ["benchmark van andere uitvoerder, geen Sealcleaning-tarief"],
+      "assumptions": [
+        "benchmark van andere uitvoerder, geen Sealcleaning-tarief"
+      ],
       "status": "active",
-      "reviewAfter": "2027-01-05"
+      "reviewAfter": "2027-01-05",
+      "group": "arbeid-onderhoud"
     },
     {
       "id": "benchmark-rietpoel-onderhoudsbeurt",
@@ -335,13 +487,19 @@
       "sourceRef": "S14",
       "observedAt": "2026-10-07",
       "unit": "visit",
-      "rangeCents": [12000, 28000],
+      "rangeCents": [
+        12000,
+        28000
+      ],
       "vatIncluded": true,
       "vatRate": 21,
-      "scopeIncluded": ["eenmalig 150-400, periodiek 120-280 incl. regulier groenafval"],
+      "scopeIncluded": [
+        "eenmalig 150-400, periodiek 120-280 incl. regulier groenafval"
+      ],
       "region": "Rotterdam/Drechtsteden",
       "status": "active",
-      "reviewAfter": "2027-01-05"
+      "reviewAfter": "2027-01-05",
+      "group": "arbeid-onderhoud"
     },
     {
       "id": "benchmark-rietpoel-boomsnoei",
@@ -351,14 +509,23 @@
       "sourceRef": "S14",
       "observedAt": "2026-10-07",
       "unit": "tree",
-      "rangeCents": [15000, 60000],
+      "rangeCents": [
+        15000,
+        60000
+      ],
       "vatIncluded": true,
       "vatRate": 21,
-      "scopeIncluded": ["klein <4m: 150-300", "4-8m: 300-600"],
+      "scopeIncluded": [
+        "klein <4m: 150-300",
+        "4-8m: 300-600"
+      ],
       "region": "Rotterdam/Drechtsteden",
-      "assumptions": ["referentie van andere uitvoerder, geen tarief op alleen boomhoogte voor Sealcleaning"],
+      "assumptions": [
+        "referentie van andere uitvoerder, geen tarief op alleen boomhoogte voor Sealcleaning"
+      ],
       "status": "active",
-      "reviewAfter": "2027-01-05"
+      "reviewAfter": "2027-01-05",
+      "group": "arbeid-onderhoud"
     },
     {
       "id": "benchmark-hoofddorp-terras",
@@ -371,11 +538,18 @@
       "unit": "m2",
       "amountCents": 8000,
       "vatIncluded": null,
-      "scopeIncluded": ["grondwerk", "ondergrond", "bestrating volgens bron"],
+      "scopeIncluded": [
+        "grondwerk",
+        "ondergrond",
+        "bestrating volgens bron"
+      ],
       "region": "Hoofddorp",
-      "assumptions": ["vanafprijs, minimum en exacte toepassing niet vastgesteld, andere regio"],
+      "assumptions": [
+        "vanafprijs, minimum en exacte toepassing niet vastgesteld, andere regio"
+      ],
       "status": "active",
-      "reviewAfter": "2027-01-05"
+      "reviewAfter": "2027-01-05",
+      "group": "bestrating"
     },
     {
       "id": "benchmark-hoofddorp-complete-tuin",
@@ -386,13 +560,21 @@
       "observedAt": "2026-10-07",
       "sourceEffectiveDate": "2026-08-07",
       "unit": "m2",
-      "rangeCents": [10000, 20000],
+      "rangeCents": [
+        10000,
+        20000
+      ],
       "vatIncluded": null,
-      "scopeIncluded": ["contextuele indicatie"],
+      "scopeIncluded": [
+        "contextuele indicatie"
+      ],
       "region": "Hoofddorp",
-      "assumptions": ["geen lokale marktprijs en geen optelpost naast alle onderdelen"],
+      "assumptions": [
+        "geen lokale marktprijs en geen optelpost naast alle onderdelen"
+      ],
       "status": "active",
-      "reviewAfter": "2027-01-05"
+      "reviewAfter": "2027-01-05",
+      "group": "complete-tuin"
     },
     {
       "id": "benchmark-limberger-houtbeton-grenen",
@@ -404,11 +586,16 @@
       "unit": "meter",
       "amountCents": 14500,
       "vatIncluded": null,
-      "scopeIncluded": ["montage inbegrepen per bron, standaardhoogte 2m"],
-      "scopeExcluded": ["btw, reis, poort, afvoer niet bevestigd"],
+      "scopeIncluded": [
+        "montage inbegrepen per bron, standaardhoogte 2m"
+      ],
+      "scopeExcluded": [
+        "btw, reis, poort, afvoer niet bevestigd"
+      ],
       "region": "NL",
       "status": "active",
-      "reviewAfter": "2027-01-05"
+      "reviewAfter": "2027-01-05",
+      "group": "schutting"
     },
     {
       "id": "benchmark-limberger-houtbeton-douglas",
@@ -420,11 +607,16 @@
       "unit": "meter",
       "amountCents": 16000,
       "vatIncluded": null,
-      "scopeIncluded": ["montage inbegrepen per bron"],
-      "scopeExcluded": ["btw, reis, poort, afvoer niet bevestigd"],
+      "scopeIncluded": [
+        "montage inbegrepen per bron"
+      ],
+      "scopeExcluded": [
+        "btw, reis, poort, afvoer niet bevestigd"
+      ],
       "region": "NL",
       "status": "active",
-      "reviewAfter": "2027-01-05"
+      "reviewAfter": "2027-01-05",
+      "group": "schutting"
     },
     {
       "id": "benchmark-schuttingdirect-redclass",
@@ -436,12 +628,19 @@
       "unit": "meter",
       "amountCents": 12000,
       "vatIncluded": null,
-      "scopeIncluded": ["montage per productpagina"],
-      "scopeExcluded": ["btw en extra werkzaamheden onvoldoende bevestigd"],
+      "scopeIncluded": [
+        "montage per productpagina"
+      ],
+      "scopeExcluded": [
+        "btw en extra werkzaamheden onvoldoende bevestigd"
+      ],
       "region": "NL",
-      "assumptions": ["uitsluitend benchmark, niet gebruiken als Sealcleaning-offerte"],
+      "assumptions": [
+        "uitsluitend benchmark, niet gebruiken als Sealcleaning-offerte"
+      ],
       "status": "active",
-      "reviewAfter": "2027-01-05"
+      "reviewAfter": "2027-01-05",
+      "group": "schutting"
     }
   ],
   "unresolved": [
