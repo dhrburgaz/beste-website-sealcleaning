@@ -27,10 +27,18 @@ jobs:
         uses: actions/configure-pages@v5
         with:
           enablement: true
+      - name: Prepare site (alleen publieke sitebestanden)
+        run: |
+          mkdir _site
+          tar --exclude='./.git' --exclude='./.github' --exclude='./.claude' \
+              --exclude='./docs' --exclude='./tests' --exclude='./tools' \
+              --exclude='./package.json' --exclude='./package-lock.json' --exclude='./node_modules' \
+              --exclude='./README.md' --exclude='./_site' -cf - . | tar -xf - -C _site
+          test -f _site/index.html && test -f _site/CNAME && test ! -e _site/docs
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: '_site'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
