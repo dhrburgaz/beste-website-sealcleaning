@@ -552,6 +552,16 @@ export function initConfigurator(root) {
       if (usesPaving()) ensurePavingDefaults();
       fitGardenToContent();
     }
+    // ?product= vanuit /materialen/: alleen geverifieerde bestratingsproducten, maat volgt het product.
+    const product = getPavingProduct(params.get("product") || "");
+    if (product) {
+      if (!project.services.includes("bestrating")) project.services.push("bestrating");
+      ensurePavingDefaults();
+      project.paving.productId = product.id;
+      project.paving.nominalTileLengthMm = product.lengthMm;
+      project.paving.nominalTileWidthMm = product.widthMm;
+      fitGardenToContent();
+    }
   }
 
   function renderStepProject() {

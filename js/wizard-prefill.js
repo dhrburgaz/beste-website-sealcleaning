@@ -7,6 +7,8 @@
 
   var params = new URLSearchParams(window.location.search);
   var service = params.get("service");
+  // ?materiaal= vanuit /materialen/: alleen als tekst in de omschrijving (textarea.value, geen HTML).
+  var materiaal = (params.get("materiaal") || "").slice(0, 140);
 
   /* Overdracht vanuit /project-samenstellen/: een leesbare samenvatting die
      daar in sessionStorage is gezet (zie js/configurator/app.js,
@@ -17,7 +19,7 @@
     if (configuratorSummary) window.sessionStorage.removeItem("sealProjectSummary");
   } catch (e) { /* privénavigatie: geen sessionStorage, geen overdracht */ }
 
-  if (!service && !configuratorSummary) return;
+  if (!service && !configuratorSummary && !materiaal) return;
 
   var SERVICE_TO_OPTION = {
     tuinonderhoud: "Tuinonderhoud",
@@ -68,7 +70,11 @@
 
     var omschrijving = document.getElementById("omschrijving");
     if (omschrijving) {
-      if (configuratorSummary) {
+      if (materiaal && !service && !configuratorSummary) {
+        omschrijving.value = materiaal === "advies"
+          ? "Ik wil graag advies over welk materiaal past bij mijn tuin.\n\n(Vertel hier kort over uw tuin en wensen.)"
+          : "Ik wil graag een offerte met dit materiaal: " + materiaal + "\n\n(Vul hieronder het oppervlak of de lengte en uw wensen aan.)";
+      } else if (configuratorSummary) {
         omschrijving.value = configuratorSummary + "\n\n(Vul hieronder eventueel meer details aan.)";
       } else {
         var lines = ["Vanuit de tuinproject-configurator:", "Dienst: " + (SERVICE_LABELS[service] || service)];
