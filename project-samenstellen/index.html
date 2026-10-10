@@ -105,7 +105,19 @@
 
   <section class="section-tight">
     <div class="container">
-      <p class="field-hint" style="margin-bottom:var(--sp-3)">Prijzen op deze pagina zijn indicaties op basis van openbaar onderzochte materiaalprijzen, geen bindende Sealcleaning-offerte. Zie <a href="../prijzen/">prijzen en uitgangspunten</a> voor alle bronnen en peildata.</p>
+      <div class="route-choice" role="group" aria-label="Kies hoe u wilt beginnen">
+        <a class="card card-link route-card" href="../contact/#formulier">
+          <span class="route-kicker">Snel project · ± 2 minuten</span>
+          <strong>Alleen een korte aanvraag</strong>
+          <span>Dienst, plaats en een korte omschrijving. Tekenen hoeft niet; wij nemen contact op.</span>
+        </a>
+        <a class="card card-link route-card route-card--active" href="#ontwerper" aria-current="true">
+          <span class="route-kicker">Zelf ontwerpen · in uw eigen tempo</span>
+          <strong>Teken uw tuin in 2D en 3D</strong>
+          <span>Maten, materialen en varianten; uw ontwerp wordt in deze browser bewaard, ook zonder account.</span>
+        </a>
+      </div>
+      <p class="notice notice--estimated configurator-note" id="ontwerper"><strong>Indicaties, geen offerte.</strong> <span>Prijzen hier zijn gebaseerd op openbaar onderzochte materiaalprijzen. Zie <a href="../prijzen/">prijzen en uitgangspunten</a> voor bronnen en peildata.</span></p>
 
       <div class="configurator-shell" data-configurator-root>
         <div class="configurator-panel">
@@ -124,6 +136,7 @@
                 <button type="button" data-camera-view="3d" aria-label="3D-aanzicht">3D</button>
                 <button type="button" data-camera-view="top" aria-label="Bovenaanzicht">Boven</button>
                 <button type="button" data-camera-view="front" aria-label="Vooraanzicht">Voor</button>
+                <button type="button" data-camera-view="eye" aria-label="Op ooghoogte, 1,6 meter">Ooghoogte</button>
                 <button type="button" data-camera-reset aria-label="Camera resetten">⟲</button>
               </div>
             </div>

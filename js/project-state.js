@@ -58,7 +58,7 @@ export function createEmptyProject() {
       fenceIntent: "new", repairNote: "",
       ownMaterials: { system: "", sku: "", quantity: "" }
     },
-    wishes: { scope: null, uses: [], maintenance: null },
+    wishes: { scope: null, uses: [], maintenance: null, light: null, soil: null },
     site: {
       levelDifference: "unknown", wetSpots: "unknown",
       utilities: "unknown", utilitiesNote: "",

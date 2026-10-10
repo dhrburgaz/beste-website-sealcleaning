@@ -50,3 +50,12 @@ test("afvalindicatie geeft bandbreedte, geen gewicht", () => {
   const w = estimateWaste(p, 20);
   assert.deepEqual(w[0].m3, [0.8, 1.6]);
 });
+
+test("deellink: wensen en plantprofiel (H01) gaan mee, alleen toegestane waarden", async () => {
+  const { createEmptyProject } = await import("../js/project-state.js");
+  const io = await import("../js/configurator/design-io.js");
+  const p = createEmptyProject();
+  p.wishes = { scope: "complete", uses: ["privacy", "<script>"], maintenance: "low", light: "sun", soil: "evil" };
+  const r = io.decodeShare(io.encodeShare(p));
+  assert.deepEqual(r.wishes, { scope: "complete", uses: ["privacy"], maintenance: "low", light: "sun", soil: null });
+});

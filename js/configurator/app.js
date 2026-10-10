@@ -643,6 +643,9 @@ export function initConfigurator(root) {
     { id: "", label: "Geen voorkeur" }, { id: "low", label: "Zo weinig mogelijk onderhoud" },
     { id: "normal", label: "Normaal onderhoud is prima" }, { id: "high", label: "Ik tuinier graag zelf" }
   ];
+  // H01 plantprofiel: alleen intake voor advies, geen plantgarantie of automatische plantkeuze.
+  const LIGHT = [{ id: "", label: "Weet ik niet" }, { id: "sun", label: "Zon (meer dan 6 uur per dag)" }, { id: "half", label: "Halfschaduw" }, { id: "shade", label: "Schaduw" }, { id: "mixed", label: "Wisselend per plek" }];
+  const SOIL = [{ id: "", label: "Weet ik niet" }, { id: "sand", label: "Zandgrond" }, { id: "clay", label: "Kleigrond" }, { id: "peat", label: "Veengrond" }, { id: "mixed", label: "Gemengd / opgehoogd" }];
   const TRI = [{ id: "unknown", label: "Weet ik niet" }, { id: "no", label: "Nee" }, { id: "yes", label: "Ja" }];
   const optLabel = (list, id) => (list.find((o) => o.id === (id ?? "")) || {}).label || "—";
 
@@ -669,9 +672,17 @@ export function initConfigurator(root) {
       project.wishes.maintenance = val || null;
       renderScenesAndSummary();
     }, (o) => o.label, (o) => o.id));
+    fs.appendChild(selectField("Licht in de tuin (voor beplantingsadvies)", LIGHT, project.wishes.light || "", (val) => {
+      project.wishes.light = val || null;
+      renderScenesAndSummary();
+    }, (o) => o.label, (o) => o.id));
+    fs.appendChild(selectField("Grondsoort", SOIL, project.wishes.soil || "", (val) => {
+      project.wishes.soil = val || null;
+      renderScenesAndSummary();
+    }, (o) => o.label, (o) => o.id));
     const hint = document.createElement("p");
     hint.className = "field-hint";
-    hint.textContent = "Uw wensen sturen ons advies en gaan mee in het dossier. Ze leiden niet tot een vaste prijs of een levensduurbelofte.";
+    hint.textContent = "Uw wensen en het plantprofiel sturen ons advies en gaan mee in het dossier. Ze leiden niet tot een vaste prijs, een plantgarantie of een levensduurbelofte. ‘Weet ik niet’ is prima: we kijken het ter plaatse na.";
     fs.appendChild(hint);
     return fs;
   }
@@ -2039,6 +2050,7 @@ export function initConfigurator(root) {
     lines.push(`- Omvang: ${optLabel(SCOPES, project.wishes.scope)}`);
     lines.push(`- Gebruik: ${project.wishes.uses.map((u) => optLabel(USES, u)).join(", ") || "—"}`);
     lines.push(`- Onderhoudswens: ${optLabel(MAINTENANCE, project.wishes.maintenance)}`);
+    lines.push(`- Licht / grond: ${optLabel(LIGHT, project.wishes.light)} / ${optLabel(SOIL, project.wishes.soil)}`);
     lines.push("", "Situatie:");
     lines.push(`- Ondergrond: ${{ unknown: "onbekend", earth: "aarde/gras", paving: "bestrating", concrete: "beton" }[project.access.surface] || "onbekend"}`);
     lines.push(`- Achterom/zijpad: ${optLabel(TRI, project.access.rearAccess)}${project.access.rearPassageWidthMm ? `, smalste doorgang ${formatMeters(project.access.rearPassageWidthMm, 2)}` : ""}`);

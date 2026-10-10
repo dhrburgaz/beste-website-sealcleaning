@@ -361,6 +361,15 @@ export function createThreeScene(host, project) {
   function setView(viewName) {
     const target = controls.target.clone();
     const dist = Math.max(camera.position.distanceTo(target), 6);
+    if (viewName === "eye" && gardenCenter) {
+      // Ooghoogte: staand mens (±1,6 m) aan de rand van de tuin, kijkend over de tuin.
+      const span = gardenCenter.span || 8;
+      controls.target.set(gardenCenter.x, 0.9, gardenCenter.z - span * 0.15);
+      camera.position.set(gardenCenter.x, 1.6, gardenCenter.z + span * 0.55);
+      controls.update();
+      scheduleFrame();
+      return;
+    }
     if (viewName === "top") {
       camera.position.set(target.x, dist * 1.3, target.z + 0.001);
     } else if (viewName === "front") {

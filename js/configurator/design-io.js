@@ -36,6 +36,7 @@ export function toDesignPayload(project) {
       existingObjects: (project.existingObjects || []).map((o) => ({ id: o.id, type: o.type, status: o.status, locked: !!o.locked, footprint: o.footprint })),
       removal: project.removal,
       options: project.options,
+      wishes: project.wishes,
       variants: project.variants || []
     }
   };
@@ -206,6 +207,16 @@ export function sanitizeDesign(raw) {
   if (d.options && typeof d.options === "object") {
     project.options.route = oneOf(d.options.route, ROUTES, null);
     project.options.materialSupply = oneOf(d.options.materialSupply, SUPPLY, "advice-needed");
+  }
+  if (d.wishes && typeof d.wishes === "object") {
+    const w = d.wishes;
+    project.wishes = {
+      scope: oneOf(w.scope, ["small", "partial", "complete"], null),
+      uses: Array.isArray(w.uses) ? [...new Set(w.uses.filter((u) => ["zitten", "spelen", "toegankelijk", "privacy", "groen"].includes(u)))] : [],
+      maintenance: oneOf(w.maintenance, ["low", "normal", "high"], null),
+      light: oneOf(w.light, ["sun", "half", "shade", "mixed"], null),
+      soil: oneOf(w.soil, ["sand", "clay", "peat", "mixed"], null)
+    };
   }
   project.variants = list(d.variants, 3, "varianten").map(sanitizeVariant);
   return project;
