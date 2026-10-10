@@ -386,6 +386,7 @@ function renderQuotes() {
       card.appendChild(h("div", { class: "beheer-grid" },
         field("Prijssoort", select(Object.entries(PRICE_TYPES).map(([k, v]) => [k, v[0]]), q.priceType || "richtprijs", async (v) => { q.priceType = v; await persist(); render(); }),
           q.result.readiness !== "gereed voor controle" && (q.priceType || "richtprijs") === "vast" ? "Let op: berekening is nog niet volledig — een vaste prijs is dan riskant." : null),
+        field("Referentie / PO-nummer klant (zakelijk)", textInput(q.poRef || "", async (v) => { q.poRef = v.slice(0, 60); await persist(); })),
         field("Niet inbegrepen", (() => { const ta = h("textarea", { rows: "3" }); ta.value = q.excluded ?? DEFAULT_EXCLUDED; ta.addEventListener("change", async () => { q.excluded = ta.value.slice(0, 1500); await persist(); }); return ta; })()),
         field("Door de opdrachtgever (klantwerk)", (() => { const ta = h("textarea", { rows: "3" }); ta.value = q.customerWork || ""; ta.addEventListener("change", async () => { q.customerWork = ta.value.slice(0, 1500); await persist(); }); return ta; })())));
     } else {
@@ -485,6 +486,7 @@ function printDoc(kind, q, inv) {
   doc.appendChild(h("h1", { text: title }));
   const dateLine = ["factuur", "credit"].includes(kind) ? `Factuurdatum: ${inv.date}${inv.deliveryDate ? ` · Prestatiedatum: ${inv.deliveryDate}` : ""}` : `Datum: ${q.createdAt.slice(0, 10)}`;
   doc.appendChild(h("p", { text: `Project: ${p?.title || "—"} · ${dateLine}` }));
+  if (q.poRef && kind !== "werkbon") doc.appendChild(h("p", { text: `Uw referentie: ${q.poRef}` }));
   if (kind !== "werkbon") doc.appendChild(customerBlock(c));
 
   const cust = customerLines(q.result, q.manualLines);

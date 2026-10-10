@@ -116,6 +116,38 @@ landschap met touch). Detail per eis-ID: `docs/REQUIREMENTS_INDEX.md`.
   `?service=`-links naar de configurator werden genegeerd; 404-knop
   "Bekijk diensten" wees naar projecten.
 
+## Afgerond — calculatie en beheerplatform (10 oktober 2026)
+
+- **Calculatiemotor** (`js/calc/`): hoeveelhedenstaat uit het ontwerp en
+  rekenmotor met arbeid (bevestigd € 60 excl. btw), materiaal, machines,
+  afvoer, transport, opslag per soort, algemene kosten, risico,
+  minimumorder, afronding en btw — elk afzonderlijk. Werkelijke kostprijs
+  en brutomarge alleen als alle kosten echt bekend zijn; marktprijzen
+  gelden als gelabelde benadering. Zie `docs/PRICING_OPERATIONS.md`.
+- **Beheeromgeving** `/beheer/` (niet gelinkt, noindex, strikte CSP):
+  versleutelde kluis op het eigen apparaat (PBKDF2 → AES-GCM), automatisch
+  vergrendelen na 15 min, clickjacking-bescherming. Calculatie vanuit
+  deellink/bestand/browser met scenariovergelijking, offertes met
+  prijssoort/scope/versies, werkbon, factuur met betalingen, creditnota,
+  opleverdocument, projecten met statuspijplijn en uren, klanten (AVG
+  verwijderen), leveranciers en inkoop, instellingen, auditlog, CSV-export,
+  versleutelde back-up/herstel. Zie `docs/LEGAL_AND_DOCUMENTS.md`.
+- **Klantketen getest:** configurator → aanvraagdossier met ontwerplink →
+  contactformulier → beheercalculatie → offerte → akkoord → factuur →
+  betaling → status "Betaald".
+- **Tests:** `npm test` (23 unit-/beveiligingstests) en `tests/e2e/`
+  (kluis/versleuteling/herstel, facturatie, site-crawl met axe-core over
+  38 pagina's: 0 consolefouten, 0 dode links, 0 kapotte afbeeldingen,
+  0 mobiele overflow, 0 WCAG-bevindingen na fixes).
+
+### Bewuste grens: geen klantportaal of server
+
+De site draait statisch op GitHub Pages. Een klantomgeving met
+projectstatus, digitale akkoorden, berichten en documenten vereist
+authenticatie en server-side autorisatie per object (masterdossier
+ch. 42 / L01). Dat is **niet** gesimuleerd. De beheeromgeving is een
+echte, werkende interne tool, maar per apparaat en zonder synchronisatie.
+
 ## Nog niet gestart
 
 - **Tier 9 (documentarchitectuur):** offerte/werkbon/factuurconcept,
@@ -126,20 +158,22 @@ landschap met touch). Detail per eis-ID: `docs/REQUIREMENTS_INDEX.md`.
 
 ## Openstaande vragen voor de eigenaar (BLOCKERS)
 
-- Formulierbackend/endpoint-voorkeur — zonder is "aanvraag versturen"
-  altijd een bewuste actie naar het bestaande formulier, nooit een
-  geclaimde ontvangst.
-- Domeinmail (info@sealcleaning.nl) nog niet bevestigd als werkende
-  ontvangstmailbox.
-- Leveranciers-/inkoopgegevens voor de margin-engine en meer echte
-  producten (nu alleen 3 × 60×60-bestrating).
-- Juridische verificatie van KvK/btw/handelsnaam/adres en toets van
-  `/voorwaarden/` en `/privacy/` vóór bindende publicatie (N01-N04).
-- Stijllabels per projectcase (A05), gecontroleerde plantdata voor
-  plantkeuze/haagcalculator/onderhoudskalender (H01-H04, H09), echte
-  voor/na-fotoparen van dezelfde plek (I04), geleverde SKU's en
-  garantievoorwaarden (M04-M05).
-- Wanneer mag deze branch naar `main` (= live)? Er is nog niets gemerged.
+In de beheerkluis in te vullen (geen code nodig): interne kostprijs per
+uur, opslag materiaal/machines/afvoer, algemene kosten, risico, transport
+per werkdag, minimumorder, bevestiging/aanpassing productiviteitsnormen,
+inkoopprijzen per artikel, geldigheid offerte, betaaltermijn, IBAN.
+
+Beslissingen/gegevens:
+- Juridische toets van voorwaarden en privacy (N01–N04) vóór bindend gebruik.
+- Formulierbackend/endpoint en werkende domeinmail (info@sealcleaning.nl).
+- Backend/hosting-keuze voor klantportaal, digitaal akkoord, synchronisatie
+  van de beheeromgeving tussen apparaten, betalingen en webshop.
+- Boekhoudpakket voor koppeling (nu CSV-export).
+- Stijllabels per projectcase (A05), gecontroleerde plantdata (H01–H04,
+  H09), voor/na-fotoparen (I04), geleverde SKU's en garantievoorwaarden
+  (M04–M05), meer echte producten/leveranciers (F01).
+- Btw-verlegging bij zakelijke opdrachten: per geval laten toetsen.
+- Akkoord om de branch naar `main` (live) te mergen — zie de pull request.
 
 ## Belangrijk voor hervatten: commit vaak
 
@@ -150,8 +184,7 @@ einde van een tier.
 
 ## Eerstvolgende taak bij hervatten
 
-Alle frontend-eisen zonder eigenaarsinput zijn gebouwd. Verder kan pas met
-input uit de BLOCKERS hierboven, of met een besluit over een
-formulier-/documentbackend (tier 9). Zonder die input is het enige
-zinvolle resterende werk een formele toegankelijkheidsaudit (N10) en een
-onafhankelijke eindreview van de branch vóór een eventuele merge.
+Alle eisen die zonder externe toegang of eigenaarsgegevens kunnen, zijn
+gebouwd en getest. Volgende stappen hangen af van de BLOCKERS: na
+juridische toets en akkoord de PR mergen (live), daarna de backendkeuze
+voor portaal/akkoord/synchronisatie.
