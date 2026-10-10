@@ -178,7 +178,7 @@ Niet operationeel zonder account (eerlijk gemarkeerd in het beheer): e-mailverze
 
 ## Afgerond — v7.0 premium ervaring en commerce (10 oktober 2026)
 
-Specificatieversie 7.0 (`docs/SEAL_MASTER_BRIEF.md`). Status per eis in `docs/UX_REQUIREMENTS.md` (174 regels: 64 gebouwd en getest, 60 gebouwd, 34 deels, 6 wachten op de eigenaar, 6 nog te bouwen, 1 extern geblokkeerd) en `docs/REQUIREMENTS_INDEX.md` (160 IDs, elk precies één keer, met kolommen Code/Test/Live).
+Specificatieversie 7.0 (`docs/SEAL_MASTER_BRIEF.md`). Status per eis in `docs/UX_REQUIREMENTS.md` (174 regels: 65 gebouwd en getest, 63 gebouwd, 33 deels, 6 wachten op de eigenaar, 5 nog te bouwen, 1 extern geblokkeerd, 1 n.v.t.) en `docs/REQUIREMENTS_INDEX.md` (160 IDs, elk precies één keer, met kolommen Code/Test/Live).
 
 - **Design:** drie werkende concepten vergeleken op echte pagina's; richting A "Architectural Forest" doorgevoerd (bestaand merk, beter dan de alternatieven). Semantische kleurrollen, componentbibliotheek met toestanden, hero die op mobiel leesbaar is, navigatie met Tuin ontwerpen/Materialen/Prijzen, copy-systeem. Zelf gehoste fonts (geen Google-verzoeken). Zie `docs/DESIGN_SYSTEM.md` en `docs/DESIGN_AUDIT.md`.
 - **Catalogus:** `/materialen/` met 45 items, zoeken met synoniemen en tikfouttolerantie, filters, vergelijken tot 3, productdetail met bron en peildatum, hoeveelheidsrekenaar waar valide. Niets claimt voorraad, levertijd of SKU zonder bron.
@@ -193,6 +193,21 @@ Niet gedaan of niet mogelijk in deze omgeving:
 - **Schermlezer en gebruikerstests:** niet uitgevoerd.
 - **Echte bezoekersmeting:** geen analytics, bewust.
 - **Docker-image:** niet gebouwd (geen daemon).
+
+## Hervatting v7.0 (10 oktober 2026): verschilkaart en afwerking
+
+Resultaat per punt uit het hervattingsdossier:
+
+- **Verschilkaart:** `docs/GAP_MAP.md` (open ID's per categorie BOUW / EIGENAAR / EXTERN / BEWUST met volgende actie).
+- **Materiaalbeleid (C1):** `docs/MATERIAL_POLICY.md`. Route 1 (advies, klant bestelt zelf) blijft de uitvoerbare route; verkoop door SEAL is gebouwd maar uit en wacht op een keuze van de eigenaar. Geen levering beloofd.
+- **Tikdoelen (C3):** de resterende kleine doelen zijn tekstlinks binnen lopende tekst (toegestaan onder WCAG 2.2 inline-uitzondering), de bestandskiezer en het raster-vinkje van de configurator (omhuld door een label van 44 px) en de verborgen honeypot. Er bleek geen link zonder naam: de eerdere "lege link" was een meetfout (navigatie op 320 px verborgen). Honeypot staat buiten beeld, `tabindex=-1`, `aria-hidden`.
+- **Overflow 320 px (C4):** echte oorzaak was `white-space: nowrap` op `.btn` met een label van 300 px in een kolom van 280 px. Knoppen breken nu af onder 440 px. Gemeten: horizontale paginascroll op alle 42 pagina's 0; brede tabellen zitten in eigen scrollcontainers.
+- **Lightbox (C5):** beeld in vast 3:2-vlak met `object-fit: contain`; gemeten bij 390, 844×390 en 1440 px: kadergrootte gelijk voor staande en liggende foto's.
+- **UX096 contactvoorkeur:** gebouwd, test in `tests/server.test.mjs`. **UX130:** knop "Start een vergelijkbaar project" op casepagina's. **UX084/UX085:** door code beoordeeld (diepe kopie; verwijderen is via undo terug te draaien), geen aparte browsertest.
+- **Prestaties (C7):** het 40 px-logo was 56 kB en blokkeerde de trage verbinding; nu 4 kB (`logo-120.webp`). Extra 800 px-beeldvariant. Lab-LCP (CPU 4×, 1,6 Mbit/s, geen veldwaarde): `/` 1,96 s, `/schuttingen/` 2,19 s, `/materialen/` 2,05 s, `/project-samenstellen/` 1,98 s, `/projecten/` 2,02 s. CLS 0.
+- **Tests:** 66 unit- en integratietests groen; e2e site-crawl (90 interne links, geen consolefouten, geen kapotte afbeeldingen, geen overflow), server-keten en webwinkel groen.
+
+Nog steeds niet bewezen: fysieke toestellen, schermlezer, zoom 200 %, gebruikerstest, veldmetrics, Docker-build, juridische toets, hosting/SMTP/Mollie/back-up, concurrentieaudit.
 
 ## Nog niet gestart
 
