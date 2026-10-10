@@ -799,7 +799,22 @@ function renderBackup() {
   if (raw) app.appendChild(h("p", { class: "field-hint", text: `Laatst opgeslagen: ${new Date(raw.savedAt).toLocaleString("nl-NL")} · ${db.customers.length} klanten · ${db.projects.length} projecten · ${db.quotes.length} offertes.` }));
 }
 
-if (!window.crypto?.subtle) {
+/* Automatisch vergrendelen na 15 minuten zonder activiteit: de sleutel verdwijnt uit het geheugen. */
+const IDLE_MS = 15 * 60 * 1000;
+let idleTimer = null;
+function resetIdle() {
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => { if (vault) { vault = null; db = null; calcState = null; renderLock("Automatisch vergrendeld na 15 minuten zonder activiteit."); } }, IDLE_MS);
+}
+["pointerdown", "keydown", "scroll"].forEach((ev) => window.addEventListener(ev, resetIdle, { passive: true }));
+resetIdle();
+
+if (window.top !== window.self) {
+  // Clickjacking-bescherming: GitHub Pages kan geen frame-ancestors-header sturen.
+  document.body.innerHTML = "";
+  document.body.appendChild(h("p", { text: "De beheeromgeving kan niet binnen een andere pagina worden geopend." }));
+  throw new Error("framed");
+} else if (!window.crypto?.subtle) {
   app.appendChild(h("p", { class: "field-error", text: "Deze browser ondersteunt de benodigde versleuteling niet (vereist HTTPS en een moderne browser)." }));
 } else {
   renderLock();
