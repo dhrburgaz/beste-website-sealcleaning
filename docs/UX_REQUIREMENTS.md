@@ -88,8 +88,8 @@ Status: `gebouwd, getest` (bewijs in kolom), `gebouwd`, `deels gebouwd`, `nog te
 | UX081 | Microdetail | V7-12.24 | tekenvenster blijft scherp na rotatie | gebouwd | Canvas herschaalt; rotatie niet op toestel getest |
 | UX082 | Microdetail | V7-12.25 | omrekenen m²/m/element per juiste eenheid | gebouwd, getest | Eenhedenomrekening in unit tests |
 | UX083 | Microdetail | V7-12.26 | ongeldige contour geeft visuele uitleg | gebouwd | Ongeldige contour: uitleg in configurator |
-| UX084 | Microdetail | V7-12.27 | kopiëren van een vlak behoudt materiaalinformatie | niet beoordeeld | Niet in deze ronde gecontroleerd |
-| UX085 | Microdetail | V7-12.28 | bescherming tegen per ongeluk verwijderen | niet beoordeeld | Niet in deze ronde gecontroleerd |
+| UX084 | Microdetail | V7-12.27 | kopiëren van een vlak behoudt materiaalinformatie | gebouwd | Vlak en bestaand object dupliceren via diepe kopie (alle materiaal- en afmetingsvelden blijven); `js/configurator/app.js` 'Vlak dupliceren'. Alleen door code gelezen, geen aparte browsertest. |
+| UX085 | Microdetail | V7-12.28 | bescherming tegen per ongeluk verwijderen | gebouwd | Elke verwijdering loopt via renderAll → recordHistory, dus ongedaan te maken met ↶; 'opnieuw beginnen' vraagt bevestiging. Alleen door code gelezen, geen aparte browsertest. |
 | UX086 | Microdetail | V7-12.29 | varianten consistent en synchroniseerbaar | gebouwd | Varianten en exportaannames |
 | UX087 | Microdetail | V7-12.30 | export bevat verwerkingsstatus en aannames | gebouwd | Varianten en exportaannames |
 | UX088 | Microdetail | V7-12.31 | juiste toetsenbordtype | gebouwd | inputmode/autocomplete op formulieren; 0 velden zonder label |
@@ -100,7 +100,7 @@ Status: `gebouwd, getest` (bewijs in kolom), `gebouwd`, `deels gebouwd`, `nog te
 | UX093 | Microdetail | V7-12.36 | fotoformaat/limiet duidelijk | gebouwd | Fotolimiet in formulier vermeld |
 | UX094 | Microdetail | V7-12.37 | success state niet te vroeg | gebouwd, getest | Success pas na serveracceptatie (e2e) |
 | UX095 | Microdetail | V7-12.38 | 'ik weet het niet' waar zinvol | gebouwd | 'Weet ik niet' in intake |
-| UX096 | Microdetail | V7-12.39 | contactvoorkeur | nog te bouwen | Contactvoorkeur niet in het formulier |
+| UX096 | Microdetail | V7-12.39 | contactvoorkeur | gebouwd, getest | Keuzeveld 'Hoe neemt u het liefst contact op?' op /contact/; gaat mee in mailto en in server-lead (payload, zichtbaar in beheer). Test: tests/server.test.mjs. |
 | UX097 | Microdetail | V7-12.40 | WhatsApp-bericht met korte, niet-privacygevoelige context | gebouwd | WhatsApp-bericht zonder persoonsgegevens |
 | UX098 | Microdetail | V7-12.41 | promotiecode foutmelding vriendelijk | gebouwd, getest | Concrete redenen: verlopen, op, minimum (tests/commerce, shop) |
 | UX099 | Microdetail | V7-12.42 | uitgeputte code toont echt reden | gebouwd, getest | Concrete redenen: verlopen, op, minimum (tests/commerce, shop) |
@@ -134,7 +134,7 @@ Status: `gebouwd, getest` (bewijs in kolom), `gebouwd`, `deels gebouwd`, `nog te
 | UX127 | Hoofdstuk-eis | V7-03 | Benchmark ≥12 Nederlandse branchevoorbeelden + 6 aangrenzende categorieën met bron, datum, matrix en principe-advies | extern geblokkeerd | Netwerkpolicy blokkeert externe sites; zie docs/COMPETITOR_BENCHMARK.md |
 | UX128 | Hoofdstuk-eis | V7-05 | Homepage volgens template (echte foto, propositie, werkgebied, twee paden, wat-gebeurt-er-daarna, bewijs, 5–7 diensten, case, materiaal, werkwijze, FAQ, zakelijk, slot-CTA) | gebouwd | Home volgens template (screenshots) |
 | UX129 | Hoofdstuk-eis | V7-05 | Dienstpagina volgens template incl. inbegrepen/niet inbegrepen en kostenfactoren | gebouwd | Dienstpagina's met aanpak en inbegrepen/niet standaard |
-| UX130 | Hoofdstuk-eis | V7-05 | Projectcase volgens template (galerij, situatie/uitdaging/uitvoering/resultaat, vergelijkbaar project starten) | deels gebouwd | 'Vergelijkbaar project starten' ontbreekt |
+| UX130 | Hoofdstuk-eis | V7-05 | Projectcase volgens template (galerij, situatie/uitdaging/uitvoering/resultaat, vergelijkbaar project starten) | gebouwd | Casepagina's eindigen met 'Start een vergelijkbaar project' naar de configurator met de bijbehorende dienst. |
 | UX131 | Hoofdstuk-eis | V7-05 | Materialencategorie met vakfilters, sortering, reset, actieve filters, resultaatcount, no-results, vergelijken | gebouwd, getest | Catalogus en productdetail (tests/e2e) |
 | UX132 | Hoofdstuk-eis | V7-05 | Productdetail met specs, eenheid, verpakking, benodigde hoeveelheid, status, alternatief; geen zelfbedachte SKU | gebouwd, getest | Catalogus en productdetail (tests/e2e) |
 | UX133 | Hoofdstuk-eis | V7-05 | Configurator: 'Snel project' en 'Zelf ontwerpen', persistente maat-/prijsstatus, heropenen na sluiten | gebouwd, getest | Instapkeuze en autosave |

@@ -93,7 +93,7 @@ test("CSRF: zonder header of van andere herkomst geweigerd", async () => {
 
 test("publiek formulier: upload, ontwerp, CORS, antispam en bestandscontrole", async () => {
   const fd = new FormData();
-  for (const [k, v] of Object.entries({ kind: "configurator", naam: "Jan Tuin", email: "jan@example.test", telefoon: "0612345678", woonplaats: "Dordrecht", werkzaamheden: "Bestrating", omschrijving: "Terras 24 m2", privacy: "ja", design: `https://sealcleaning.nl/project-samenstellen/#ontwerp=${demoDesign()}` })) fd.append(k, v);
+  for (const [k, v] of Object.entries({ kind: "configurator", naam: "Jan Tuin", email: "jan@example.test", telefoon: "0612345678", woonplaats: "Dordrecht", werkzaamheden: "Bestrating", omschrijving: "Terras 24 m2", contactvoorkeur: "WhatsApp", privacy: "ja", design: `https://sealcleaning.nl/project-samenstellen/#ontwerp=${demoDesign()}` })) fd.append(k, v);
   fd.append("fotos", new Blob([JPEG], { type: "image/jpeg" }), "tuin.jpg");
   let r = await fetch(base + "/api/public/leads", { method: "POST", body: fd, headers: { Origin: "https://sealcleaning.nl" } });
   assert.equal(r.status, 201);
@@ -124,6 +124,8 @@ test("aanvraag omzetten naar klant + project (met ontwerp en foto)", async () =>
   let r = await S.staff("GET", "/api/admin/leads");
   const lead = r.body.find((l) => l.ref === S.leadRef);
   assert.ok(lead.has_design);
+  const detail = await S.staff("GET", `/api/admin/leads/${lead.id}`);
+  assert.equal(detail.body.payload.contactvoorkeur, "WhatsApp");
   r = await S.staff("POST", `/api/admin/leads/${lead.id}/convert`, { title: "Terras Jan" });
   assert.equal(r.status, 201);
   S.projectId = r.body.projectId; S.customerId = r.body.customerId;

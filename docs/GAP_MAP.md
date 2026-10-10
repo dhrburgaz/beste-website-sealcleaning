@@ -26,9 +26,6 @@ Categorieën: **BOUW** = zelf te bouwen zonder externe data · **EIGENAAR** = ve
 
 | ID | Categorie | Bewijs nu | Volgende actie |
 |---|---|---|---|
-| UX096 | BOUW | niet in formulier | Contactvoorkeur-veld in lead-formulier en payload |
-| UX084, UX085 | BOUW | niet beoordeeld | Test + eventueel fix: kopie behoudt materiaal; verwijderen vraagt bevestiging/undo |
-| UX130 | BOUW | knop ontbreekt | "Vergelijkbaar project starten" op casepagina's |
 | UX136 | BOUW | contact beperkt | Korte keuzehulp op contactpagina |
 | UX055, UX148, UX144, UX146, UX147, UX065, UX126(focal) | BOUW (groot) | nee/deels | Burenproject, wat-als, meerdere zones, extra camerastandpunten, dupliceren, focal points |
 | UX009, UX010, UX012, UX015, UX016, UX017, UX023, UX029, UX034, UX036, UX038, UX041, UX052, UX053, UX056, UX112, UX117, UX145, UX149, UX167, UX172 | BOUW/deels | deels | Per regel gedeeltelijke dekking; verfijning staat in UX_REQUIREMENTS |
@@ -41,3 +38,5 @@ Categorieën: **BOUW** = zelf te bouwen zonder externe data · **EIGENAAR** = ve
 ## Doorlopend niet bewezen
 
 Docker-image niet gebouwd (geen daemon), geen fysieke toestellen, geen schermlezertest, geen gebruikerstest, geen veldmetrics, geen juridische toets, hosting/SMTP/Mollie/externe back-up niet gekoppeld.
+
+Gesloten in deze ronde: UX084, UX085 (via code, geen browsertest), UX096 (getest), UX130.
