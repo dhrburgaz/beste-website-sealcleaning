@@ -3,6 +3,7 @@
  * (terugknop en delen behouden filters); vergelijken tot 3; productdetail met hoeveelheid en alternatieven.
  */
 import { CATALOG, CATALOG_CATEGORIES, CATALOG_STATUSES } from "../../data/catalog.js";
+import { addToCart, apiBase, shopConfig, cartCount } from "../shop/cart-store.js";
 import { searchCatalog, suggest, filterCatalog, facetCounts, sortCatalog, priceInfo, quantityFor, FACETS, SORTS } from "./search.js";
 
 const root = document.querySelector("[data-catalog-app]");
@@ -10,6 +11,7 @@ const UNIT = { piece: "per stuk", m2: "per m²", day: "per dag", container: "per
 const CAT_LABEL = Object.fromEntries(CATALOG_CATEGORIES.map((c) => [c.id, c.label]));
 const MAX_COMPARE = 3;
 let prices = { rows: [] };
+let shop = { open: false, products: new Map() };
 let state = readUrl();
 let lastListScroll = 0;
 let openedFromList = false;
@@ -298,10 +300,17 @@ function renderProduct(item) {
         h("div", { class: "btn-row product-ctas" },
           h("a", { class: "btn btn-primary", href: `../contact/?materiaal=${encodeURIComponent(item.title)}`, text: "Vraag een offerte met dit materiaal aan" }),
           designHref ? h("a", { class: "btn btn-secondary", href: designHref, text: "Gebruik in mijn ontwerp" }) : null,
+          shopButton(item),
           compareBtn(item), saveBtn(item)))),
     alts.length ? h("section", { class: "product-alts" }, h("h2", { text: item.status === "unavailable" ? "Alternatieven" : "Vergelijkbare materialen" }), h("div", { class: "catalog-grid" }, ...alts.map(card))) : null,
     compareTray(), live);
   document.title = `${item.title} — Materialen — Sealcleaning`;
+}
+
+function shopButton(item) {
+  const sp = shop.open ? shop.products.get(item.id) : null;
+  if (!sp) return null;
+  return h("button", { type: "button", class: "btn btn-primary", onclick: (e) => { addToCart(sp.id, 1); e.currentTarget.textContent = "✓ Toegevoegd, bekijk winkelmandje"; e.currentTarget.onclick = () => location.assign("../winkelmandje/"); announce(`${item.title} toegevoegd aan uw winkelmandje (${cartCount()} artikelen)`); } }, "In winkelmandje");
 }
 
 function qtyCalc(item) {
@@ -337,5 +346,12 @@ window.addEventListener("popstate", () => { state = readUrl(); render(); });
   live = h("p", { class: "visually-hidden", role: "status", "aria-live": "polite" });
   try { prices = await (await fetch("../data/price-sources.json")).json(); }
   catch { prices = { rows: [] }; }
+  try {
+    const cfg = await shopConfig();
+    if (cfg.checkoutOpen) {
+      const list = await (await fetch(apiBase() + "/api/public/shop/products", { credentials: "omit" })).json();
+      shop = { open: true, products: new Map(list.products.filter((x) => x.catalogId).map((x) => [x.catalogId, x])) };
+    }
+  } catch { /* winkel niet bereikbaar: catalogus blijft werken als informatiebron */ }
   render();
 })();

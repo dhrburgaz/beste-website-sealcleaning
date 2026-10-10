@@ -80,7 +80,7 @@ console.log("invoices:", (await a.locator(".beheer-invoice").allTextContents()).
 await a.getByRole("button", { name: "Betaling registreren" }).click().catch(() => console.log("no pay btn"));
 await a.waitForTimeout(800);
 console.log("invoices:", (await a.locator(".beheer-invoice").allTextContents()).join(" | ").slice(0, 300));
-for (const t of ["overzicht", "klanten", "facturen", "instellingen", "email", "audit", "account"]) { await a.goto(B + "/admin/#" + t); await a.waitForTimeout(400); const e = await a.locator("[data-app] .field-error").allTextContents(); if (e.length) console.log(t, "errors:", e); }
+for (const t of ["overzicht", "klanten", "facturen", "winkel", "instellingen", "email", "audit", "account"]) { await a.goto(B + "/admin/#" + t); await a.waitForTimeout(400); const e = await a.locator("[data-app] .field-error").allTextContents(); if (e.length) console.log(t, "errors:", e); }
 const inv = db.get("SELECT * FROM invoices WHERE number IS NOT NULL");
 assert.equal(inv.status, "betaald");
 assert.equal(db.get("SELECT status FROM quotes").status, "akkoord");

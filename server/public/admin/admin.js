@@ -11,7 +11,7 @@ let me = null, meta = null;
 logoutBtn.addEventListener("click", async () => { await api("POST", "/api/auth/logout", {}); location.hash = ""; location.reload(); });
 window.addEventListener("hashchange", route);
 
-const TABS = [["overzicht", "Overzicht"], ["aanvragen", "Aanvragen"], ["projecten", "Projecten"], ["klanten", "Klanten"], ["facturen", "Facturen"], ["instellingen", "Instellingen"], ["email", "E-mail"], ["audit", "Audit"], ["account", "Account"]];
+const TABS = [["overzicht", "Overzicht"], ["aanvragen", "Aanvragen"], ["projecten", "Projecten"], ["klanten", "Klanten"], ["facturen", "Facturen"], ["winkel", "Winkel"], ["instellingen", "Instellingen"], ["email", "E-mail"], ["audit", "Audit"], ["account", "Account"]];
 const KIND = { contact: "Contact", b2b: "Zakelijk", werken: "Werken met ons", configurator: "Configurator" };
 const BASIS = { purchase: ["eigen inkoop", "badge-ok"], market: ["marktprijs (benadering)", "badge-warn"], confirmed: ["bevestigd", "badge-ok"], example: ["voorbeeldnorm", "badge-warn"], missing: ["ontbreekt", "badge-block"] };
 
@@ -34,7 +34,7 @@ async function route() {
   renderTabs(tab);
   app.replaceChildren(msg("Laden…"));
   try {
-    const fn = { overzicht: viewDashboard, aanvragen: id ? viewLead : viewLeads, projecten: id ? viewProject : viewProjects, klanten: id ? viewCustomer : viewCustomers, facturen: viewInvoices, instellingen: viewSettings, email: viewEmail, audit: viewAudit, account: viewAccount }[tab] || viewDashboard;
+    const fn = { overzicht: viewDashboard, aanvragen: id ? viewLead : viewLeads, projecten: id ? viewProject : viewProjects, klanten: id ? viewCustomer : viewCustomers, facturen: viewInvoices, winkel: viewShop, instellingen: viewSettings, email: viewEmail, audit: viewAudit, account: viewAccount }[tab] || viewDashboard;
     await fn(id);
   } catch (e) {
     if (e.status === 401) return location.reload();
@@ -332,6 +332,45 @@ async function viewInvoices() {
   app.replaceChildren(h("h1", { text: "Facturen" }),
     h("p", {}, h("a", { href: "/api/admin/export/invoices.csv", text: "Export facturen (CSV)" }), " · ", h("a", { href: "/api/admin/export/hours.csv", text: "Export uren (CSV)" })),
     table(["Nummer", "Soort", "Datum", "Vervalt", "Klant", "Project", "Incl. btw", "Betaald", "Status", ""], list.map((i) => [i.number || "concept", i.kind === "credit" ? "creditnota" : "factuur", d(i.issue_date), d(i.due_date), i.customer || "", i.project || "", euro(i.total_incl), euro(i.paid), i.status, i.project_id ? h("a", { href: `#projecten/${i.project_id}`, text: "Project" }) : ""])));
+}
+
+
+/* ---------- winkel (feature flags, producten, bezorging, kortingscodes, bestellingen) ---------- */
+const FLAG_LABELS = { catalog_enabled: "Catalogus tonen", quotes_enabled: "Offertes", checkout_enabled: "Online bestellen openen", coupon_enabled: "Kortingscodes accepteren", payments_enabled: "Online betalen", appointments_enabled: "Afspraken" };
+async function viewShop() {
+  const s = await api("GET", "/api/admin/shop");
+  const owner = me.role === "owner";
+  const cents = (v) => (v.value.trim() === "" ? null : Math.round(parseFloat(v.value.replace(/\./g, "").replace(",", ".")) * 100));
+  const flags = h("div", { class: "beheer-grid" }, ...s.flags.map((k) => { const cb = h("input", { type: "checkbox", id: `fl-${k}` }); cb.checked = !!s.features[k]; cb.disabled = !owner;
+    cb.addEventListener("change", async () => { try { await api("PUT", "/api/admin/shop/features", { [k]: cb.checked }); route(); } catch (e) { cb.checked = !cb.checked; alert(e.message); } });
+    return h("label", { class: "facet-option", for: cb.id }, cb, h("span", { text: FLAG_LABELS[k] || k })); }));
+  const delivery = s.delivery.map((m) => { const price = input("text", m.priceExclCents == null ? "" : (m.priceExclCents / 100).toFixed(2).replace(".", ","), { inputmode: "decimal", "aria-label": `Prijs ${m.label} excl. btw` }); const on = h("input", { type: "checkbox" }); on.checked = m.enabled;
+    return { m, price, on }; });
+  const np = { title: input("text"), unit: input("text", "stuks"), category: input("text"), catalogId: input("text"), price: input("text", "", { inputmode: "decimal" }), max: input("text", "", { inputmode: "numeric" }) };
+  const vat = select([["21", "21 %"], ["9", "9 %"], ["0", "0 %"]], "21");
+  const nc = { code: input("text"), value: input("text", "10"), scopeIds: input("text", "bestrating"), starts: input("text", "", { placeholder: "2026-11-01T00:00" }), ends: input("text", "", { placeholder: "2026-12-01T00:00" }), min: input("text"), maxd: input("text"), total: input("text"), per: input("text", "1") };
+  const type = select([["percentage", "Percentage"], ["fixed", "Vast bedrag"], ["free_shipping", "Gratis bezorging"]], "percentage");
+  const scope = select([["categories", "Categorieën"], ["products", "Producten (id)"], ["order", "Hele bestelling"]], "categories");
+  const act = h("input", { type: "checkbox" });
+  app.replaceChildren(h("h1", { text: "Winkel" }),
+    msg("Alles hier staat standaard uit. Er is niets te bestellen totdat u zelf de schakelaars aanzet.", false),
+    h("div", { class: "beheer-card" }, h("h2", { text: "Status" }), s.state.open ? msg("Bestellen is open.") : h("ul", {}, ...s.state.reasons.map((r) => h("li", { text: r }))), flags,
+      h("p", { class: "field-hint", text: "Online betalen werkt pas met een betaalprovider-account (Mollie) en geteste webhook. Kortingscodes en prijzen controleert de server altijd zelf." })),
+    h("div", { class: "beheer-card" }, h("h2", { text: "Bezorgen en afhalen" }), h("p", { class: "field-hint", text: "Zonder vastgestelde prijs is een methode niet te kiezen: onbekende kosten worden nooit als € 0 getoond. Afhalen: vul 0 in." }),
+      table(["Methode", "Prijs excl. btw (€)", "Aan"], delivery.map(({ m, price, on }) => [m.label, price, on])),
+      owner ? action("Opslaan", async () => { await api("PUT", "/api/admin/shop/delivery", { methods: delivery.map(({ m, price, on }) => ({ id: m.id, priceExclCents: cents(price), enabled: on.checked })) }); route(); }, "btn btn-primary btn-sm") : null),
+    h("div", { class: "beheer-card" }, h("h2", { text: "Producten in de webwinkel" }),
+      s.products.length ? table(["Titel", "Eenheid", "Prijs excl.", "Btw", "Actief", "Catalogus-id"], s.products.map((p) => [p.title, p.unit, euro(p.price_excl), `${p.vat_rate} %`, p.active ? "ja" : "nee", p.catalog_id || ""])) : h("p", { text: "Nog geen producten. Voeg alleen artikelen toe waarvoor u de inkoop, voorraad en levering zeker heeft afgesproken." }),
+      owner ? h("div", { class: "beheer-grid" }, field("Titel", np.title), field("Eenheid", np.unit), field("Categorie (bijv. bestrating)", np.category), field("Catalogus-id (optioneel)", np.catalogId), field("Verkoopprijs excl. btw (€)", np.price), field("Btw", vat), field("Max. per bestelling", np.max)) : null,
+      owner ? action("Product toevoegen (actief)", async () => { await api("POST", "/api/admin/shop/products", { title: np.title.value, unit: np.unit.value, category: np.category.value, catalogId: np.catalogId.value, priceExclCents: cents(np.price), vatRate: Number(vat.value), maxPerOrder: np.max.value || null, active: true }); route(); }, "btn btn-primary btn-sm") : null),
+    h("div", { class: "beheer-card" }, h("h2", { text: "Kortingscodes" }),
+      s.promotions.length ? table(["Code", "Soort", "Waarde", "Bereik", "Periode", "Gebruikt", "Actief"], s.promotions.map((p) => [p.code, p.type, p.type === "percentage" ? `${p.value / 100} %` : p.type === "fixed" ? euro(p.value) : "gratis bezorging", `${p.scope}${p.scopeIds.length ? `: ${p.scopeIds.join(", ")}` : ""}`, `${p.startsAt || "—"} t/m ${p.endsAt || "—"}`, `${p.usesCount}${p.maxUsesTotal != null ? ` / ${p.maxUsesTotal}` : ""}`, p.active ? "ja" : "nee"])) : h("p", { text: "Nog geen codes." }),
+      owner ? [h("div", { class: "beheer-grid" }, field("Code", nc.code), field("Soort", type), field("Waarde (basispunten 1000 = 10 %, of centen)", nc.value), field("Bereik", scope), field("Categorieën/product-id's (komma)", nc.scopeIds), field("Start (Amsterdam)", nc.starts), field("Einde (Amsterdam)", nc.ends), field("Minimum excl. (centen)", nc.min), field("Max. voordeel (centen)", nc.maxd), field("Max. totaal gebruik", nc.total), field("Max. per klant", nc.per)),
+        h("label", { class: "facet-option" }, act, " Direct actief"),
+        h("p", { class: "field-hint", text: "Let op de marge: een code mag nooit onder uw kostprijs uitkomen. Commerciële voorwaarden bevestigt u zelf; er staat niets standaard actief." }),
+        action("Code opslaan", async () => { await api("POST", "/api/admin/shop/promotions", { code: nc.code.value, type: type.value, value: Number(nc.value.value), scope: scope.value, scopeIds: nc.scopeIds.value.split(",").map((x) => x.trim()).filter(Boolean), startsAt: nc.starts.value || null, endsAt: nc.ends.value || null, minSubtotalCents: nc.min.value, maxDiscountCents: nc.maxd.value, maxUsesTotal: nc.total.value, maxUsesPerCustomer: nc.per.value, active: act.checked }); route(); }, "btn btn-primary btn-sm")] : null),
+    h("div", { class: "beheer-card" }, h("h2", { text: "Bestellingen" }),
+      s.orders.length ? table(["Referentie", "Status", "Naam", "E-mail", "Levering", "Totaal incl.", "Besteld", "Betaald"], s.orders.map((o) => [o.ref, o.status, o.name, o.email, o.delivery_method, euro(o.total_incl), dt(o.created_at), o.paid_at ? dt(o.paid_at) : "—"])) : h("p", { text: "Nog geen bestellingen." })));
 }
 
 /* ---------- instellingen ---------- */

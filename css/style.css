@@ -1203,3 +1203,31 @@ dialog.dialog::backdrop { background: var(--role-overlay); }
 .route-card--active { border-color: var(--role-primary); box-shadow: inset 0 0 0 1px var(--role-primary); }
 .configurator-note { margin-bottom: var(--sp-3); scroll-margin-top: 90px; }
 @media (max-width: 640px) { .route-choice { grid-template-columns: 1fr; } .route-card span:last-child { font-size: .88rem; } }
+
+/* ---- Winkelmandje en afrekenen ---- */
+.shop-container { max-width: 1100px; }
+.shop-grid { display: grid; grid-template-columns: 1fr 340px; gap: 2rem; align-items: start; }
+.shop-lines { list-style: none; padding: 0; margin: 0 0 1rem; display: grid; gap: .75rem; }
+.shop-line { display: grid; grid-template-columns: 1fr auto auto auto; gap: .5rem 1rem; align-items: center; padding: .9rem 1rem; border: 1px solid var(--c-line-soft); border-radius: var(--radius-l); background: var(--role-surface-raised); }
+.shop-lines--review .shop-line { grid-template-columns: 1fr auto; }
+.shop-summary { position: sticky; top: 96px; }
+.shop-summary .muted { color: var(--c-ink-soft); }
+.shop-discount .price { color: var(--role-positive); }
+.shop-next { margin-top: 1rem; }
+.shop-coupon { margin: 1rem 0; }
+.shop-coupon summary { cursor: pointer; min-height: var(--tap); display: flex; align-items: center; }
+.shop-coupon-row { display: flex; gap: .5rem; }
+.shop-coupon-row input, .shop-form input:not([type=radio]):not([type=checkbox]) { border: 1px solid var(--c-line); border-radius: var(--radius-l); padding: .7em .9em; background: #fff; min-height: var(--tap); width: 100%; font: inherit; }
+.shop-form .field.error input { border-color: var(--role-danger); }
+.shop-form .error-msg { color: var(--role-danger); }
+.shop-terms { display: flex; gap: .6rem; margin: 1rem 0; align-items: flex-start; }
+.shop-terms input { width: 22px; height: 22px; flex: none; margin-top: .15rem; }
+.shop-closed { max-width: 640px; }
+.shop-sticky { display: none; }
+@media (max-width: 900px) {
+  .shop-grid { grid-template-columns: 1fr; }
+  .shop-summary { position: static; }
+  .shop-line { grid-template-columns: 1fr auto; }
+  .shop-line .qty { grid-column: 1; }
+  .shop-sticky { display: flex; position: sticky; bottom: calc(66px + env(safe-area-inset-bottom)); z-index: 80; justify-content: space-between; background: var(--c-forest); color: #fff; padding: .7rem 1rem; border-radius: var(--radius-l); margin-top: 1rem; }
+}
