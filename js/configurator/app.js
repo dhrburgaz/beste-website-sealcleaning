@@ -2286,7 +2286,7 @@ export function initConfigurator(root) {
     btn.addEventListener("click", async () => {
       const view = btn.getAttribute("data-scene-view");
       if (view === "3d" && !sceneController) {
-        await load3D();
+        try { await load3D(); } catch (err) { return; /* geen WebGL2: melding staat al, de 2D-weergave blijft actief */ }
       }
       currentView = view;
       root.dataset.view = view;

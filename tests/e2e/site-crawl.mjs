@@ -6,7 +6,7 @@ import fs from 'fs';
 const SP = process.env.E2E_TMP || (await import('node:os')).tmpdir();
 const axeSrc = process.env.AXE ? fs.readFileSync(process.env.AXE, 'utf8') : null; // pad naar axe.min.js (optioneel)
 const ROOT = new URL('../../', import.meta.url).pathname;
-const walk = (d) => fs.readdirSync(ROOT + d, { withFileTypes: true }).flatMap((e) => e.isDirectory() ? (['vendor', 'node_modules', '.git', 'tests', 'docs', 'images'].includes(e.name) ? [] : walk(d + e.name + '/')) : e.name === 'index.html' ? [d] : []);
+const walk = (d) => fs.readdirSync(ROOT + d, { withFileTypes: true }).flatMap((e) => e.isDirectory() ? (['vendor', 'node_modules', '.git', 'tests', 'docs', 'images', 'server', 'deploy', 'tools'].includes(e.name) ? [] : walk(d + e.name + '/')) : e.name === 'index.html' ? [d] : []);
 const pages = walk('').concat(['404.html']);
 const B=BASE + '';
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM || undefined });

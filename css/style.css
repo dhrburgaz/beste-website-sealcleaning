@@ -1231,3 +1231,29 @@ dialog.dialog::backdrop { background: var(--role-overlay); }
   .shop-line .qty { grid-column: 1; }
   .shop-sticky { display: flex; position: sticky; bottom: calc(66px + env(safe-area-inset-bottom)); z-index: 80; justify-content: space-between; background: var(--c-forest); color: #fff; padding: .7rem 1rem; border-radius: var(--radius-l); margin-top: 1rem; }
 }
+
+/* Smalle telefoons (320 px): geen horizontale overflow, menuknop blijft 44 px */
+.nav-toggle { flex: 0 0 var(--tap); }
+.brand { min-width: 0; flex: 1 1 auto; }
+.brand-text { min-width: 0; }
+.configurator-shell > *, .two-col > *, .shop-grid > *, .catalog-layout > *, .form-grid > *, .contact-grid > * { min-width: 0; }
+.field input, .field select, .field textarea { min-width: 0; max-width: 100%; }
+.configurator-stepnav { flex-wrap: wrap; }
+h1, h2, h3, .checklist li, .lede, p { overflow-wrap: break-word; }
+@media (max-width: 360px) {
+  .brand-sub { font-size: .56rem; letter-spacing: .08em; }
+  .brand-name { font-size: 1.15rem; }
+  .header-inner { gap: .5rem; }
+}
+@media (max-width: 900px) { .configurator-shell { grid-template-columns: minmax(0, 1fr); } }
+.catalog-card-link { display: block; min-height: var(--tap); padding-block: .15rem; }
+.catalog-card h3 { margin: 0; }
+.price-table-wrap { max-width: 100%; min-width: 0; }
+.content-body, .article, main section > .container-narrow, main section > .container-text { min-width: 0; }
+
+/* Focusring ook op formuliervelden (bestaande .field-stijlen zetten outline uit) */
+html body .field input:focus-visible, html body .field select:focus-visible, html body .field textarea:focus-visible,
+html body .shop-form input:focus-visible, html body .catalog-toolbar input:focus-visible, html body .catalog-toolbar select:focus-visible,
+html body input:focus-visible, html body select:focus-visible, html body textarea:focus-visible {
+  outline: 3px solid var(--role-focus); outline-offset: 2px; box-shadow: 0 0 0 5px rgba(255,255,255,.85);
+}

@@ -73,7 +73,7 @@ function media(item, size = "card") {
   if (item.image) {
     const src = "../" + item.image.src;
     return h("figure", { class: `catalog-media catalog-media--${size}` },
-      h("picture", {}, h("source", { srcset: src.replace(/\.jpg$/, ".webp"), type: "image/webp" }),
+      h("picture", {}, h("source", { srcset: size === "card" ? `${src.replace(/\.jpg$/, "-640.webp")} 640w, ${src.replace(/\.jpg$/, ".webp")} 1600w` : `${src.replace(/\.jpg$/, "-960.webp")} 960w, ${src.replace(/\.jpg$/, ".webp")} 1600w`, sizes: size === "card" ? "(max-width: 600px) 104px, 300px" : "(max-width: 900px) 92vw, 560px", type: "image/webp" }),
         h("img", { src, alt: item.image.alt, loading: size === "card" ? "lazy" : "eager", decoding: "async", width: "800", height: "600" })),
       h("figcaption", { text: item.image.project ? "Foto uit eigen werk" : "Foto uit eigen werk (materiaal volgens bestandsnaam)" }));
   }

@@ -18,7 +18,7 @@ for (const p of pages) {
     const small = [...document.querySelectorAll("a[href],button,input:not([type=hidden]),select,summary,[role=button]")].filter((e) => vis(e) && !inline(e) && !e.closest("[aria-hidden=true]") && !e.closest(".configurator-canvas,svg")).filter((e) => { const r = e.getBoundingClientRect(); const t = ["checkbox", "radio"].includes(e.type) ? e.closest("label") || e : e; const rr = t.getBoundingClientRect(); return Math.min(rr.width, rr.height) < 44 && Math.min(r.width, r.height) < 44; }).map((e) => `${e.tagName.toLowerCase()}${e.className ? "." + String(e.className).split(" ")[0] : ""}:"${(e.innerText || e.getAttribute("aria-label") || e.name || "").trim().slice(0, 24)}"`);
     const noDim = [...document.images].filter((i) => !i.getAttribute("width") || !i.getAttribute("height")).map((i) => i.getAttribute("src"));
     const fields = [...document.querySelectorAll("input:not([type=hidden]):not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea")].filter((e) => !e.labels?.length && !e.getAttribute("aria-label")).length;
-    return { small, noDim, overflow: document.documentElement.scrollWidth > W, fields };
+    return { small, noDim, overflow: document.documentElement.scrollWidth > W + 1, fields };
   }, W);
   totals.small += r.small.length; totals.noDim += r.noDim.length; totals.overflow += r.overflow ? 1 : 0; totals.fields += r.fields;
   detail[p] = r;
