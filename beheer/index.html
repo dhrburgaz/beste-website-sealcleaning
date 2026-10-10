@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Beheer — Sealcleaning</title>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/beheer.css">
+</head>
+<body class="beheer">
+<header class="beheer-header">
+  <div class="beheer-brand"><img src="../images/branding/logo.webp" alt="" width="36" height="36"> <strong>Sealcleaning</strong> <span>beheer</span></div>
+  <nav class="beheer-tabs" data-tabs aria-label="Beheeronderdelen" hidden></nav>
+  <button type="button" class="btn btn-secondary btn-sm" data-lock hidden>Vergrendelen</button>
+</header>
+<main class="beheer-main" id="main">
+  <noscript><p>De beheeromgeving vraagt JavaScript.</p></noscript>
+  <div data-app></div>
+</main>
+<div id="print-root" aria-hidden="true"></div>
+<script src="../js/config.js"></script>
+<script type="module" src="../js/beheer/app.js"></script>
+</body>
+</html>

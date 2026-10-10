@@ -94,12 +94,14 @@ export function calculate({ takeoffRows, settings: ownerSettings, priceSources, 
     if (!link) continue;
     const own = purchasePrices[t.key];
     let unitCost = null, basis = "missing", source = null, band = [];
+    const market = resolveMarketRows(t, link, null, rows);
+    band = market.band;
     if (own && Number.isFinite(own.amountExclCents)) {
       unitCost = own.amountExclCents; basis = "purchase";
       source = [own.supplier, own.sku, own.observedAt].filter(Boolean).join(" · ") || "eigen inkoop";
+      if (own.observedAt && (Date.now() - Date.parse(own.observedAt)) / 86400000 > 30) flag("warn", `Inkoopprijs "${t.label}" is ouder dan 30 dagen — controleer bij de leverancier.`);
     } else {
-      const res = resolveMarketRows(t, link, null, rows);
-      band = res.band;
+      const res = market;
       if (res.chosen) {
         const m = marketUnitExcl(res.chosen, t.qty, settings.vatRate);
         unitCost = m.cents; basis = "market";
@@ -117,7 +119,8 @@ export function calculate({ takeoffRows, settings: ownerSettings, priceSources, 
     }
     if (markup == null) flag("warn", `Opslag voor ${({ material: "materiaal", machine: "machines", waste: "afvoer" })[link.kind]} is niet ingesteld — 0% gebruikt.`);
     const unitSale = unitCost * (1 + (markup || 0) / 100);
-    if (basis === "market" && band.length) {
+    // Margeconflict alleen zinvol bij echte inkoop: verkoopprijs boven de hoogste gevonden marktprijs.
+    if (basis === "purchase" && band.length) {
       const maxMarket = Math.max(...band.map((r) => marketUnitExcl(r, t.qty, settings.vatRate).cents));
       if (unitSale > maxMarket * 1.0001) flag("warn", `Margeconflict: verkoopprijs "${t.label}" ligt boven de hoogste gevonden marktprijs — kies lagere opslag, andere leverancier of bespreek de meerwaarde.`);
     }
@@ -154,8 +157,12 @@ export function calculate({ takeoffRows, settings: ownerSettings, priceSources, 
   }
   if (settings.roundToCents) saleExcl = Math.round(saleExcl / settings.roundToCents) * settings.roundToCents;
   const vat = round(saleExcl * settings.vatRate / 100);
-  const costKnown = lines.every((l) => l.saleExclCents == null || l.costExclCents != null);
-  const cost = lines.reduce((s, l) => s + (l.costExclCents || 0), 0);
+  // Werkelijke kostprijs alleen als iedere geprijsde regel een echte kostprijs heeft:
+  // marktprijzen zijn een benadering en tellen dan niet als bekende kostprijs.
+  const priced = lines.filter((l) => l.saleExclCents != null);
+  const costKnown = priced.length > 0 && priced.every((l) => l.costExclCents != null && l.basis !== "market");
+  const cost = priced.reduce((s, l) => s + (l.costExclCents || 0), 0);
+  const approxPossible = priced.every((l) => l.costExclCents != null);
   const missing = lines.filter((l) => l.basis === "missing").length;
 
   return {
@@ -169,6 +176,7 @@ export function calculate({ takeoffRows, settings: ownerSettings, priceSources, 
       vatCents: vat,
       saleInclCents: saleExcl + vat,
       costExclCents: costKnown ? cost : null,
+      costApproxExclCents: !costKnown && approxPossible ? cost : null, // incl. marktprijzen als benadering — geen marge op baseren
       grossMarginCents: costKnown ? saleExcl - cost : null,
       grossMarginPct: costKnown && saleExcl > 0 ? Math.round(((saleExcl - cost) / saleExcl) * 1000) / 10 : null,
       missingLines: missing
@@ -184,4 +192,23 @@ export function markupToMarginPct(markupPct) {
 }
 export function marginToMarkupPct(marginPct) {
   return Math.round((marginPct / (100 - marginPct)) * 1000) / 10;
+}
+
+/**
+ * Klantregels: algemene kosten, risico, minimumorder en afronding worden naar
+ * rato verwerkt in de geprijsde regels, zodat de klant geen interne opbouw
+ * (opslagen/percentages) ziet en de regels exact optellen tot het totaal.
+ * Regels zonder prijs komen terug als `onRequest`.
+ */
+export function customerLines(result, manualLines = []) {
+  const priced = result.lines.filter((l) => l.saleExclCents != null);
+  const manual = manualLines.map((l) => ({ label: l.label, qty: l.qty, unit: l.unit, saleExclCents: Math.round(l.qty * l.unitSaleExclCents) }));
+  const base = priced.reduce((s, l) => s + l.saleExclCents, 0);
+  const target = result.totals.saleExclCents;
+  const factor = base > 0 ? target / base : 1;
+  const out = priced.map((l) => ({ label: l.label, qty: l.qty, unit: l.unit, saleExclCents: Math.round(l.saleExclCents * factor) }));
+  const diff = target - out.reduce((s, l) => s + l.saleExclCents, 0);
+  if (out.length) out[out.length - 1].saleExclCents += diff;
+  const all = out.concat(manual).map((l) => ({ ...l, unitSaleExclCents: l.qty ? Math.round(l.saleExclCents / l.qty) : l.saleExclCents }));
+  return { lines: all, totalExclCents: all.reduce((s, l) => s + l.saleExclCents, 0), onRequest: result.lines.filter((l) => l.saleExclCents == null).map((l) => l.label) };
 }

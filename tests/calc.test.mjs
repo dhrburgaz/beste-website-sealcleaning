@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createEmptyProject, deriveTileCount } from "../js/project-state.js";
 import { takeoff } from "../js/calc/quantities.js";
-import { calculate, markupToMarginPct, marginToMarkupPct } from "../js/calc/engine.js";
+import { calculate, markupToMarginPct, marginToMarkupPct, customerLines } from "../js/calc/engine.js";
 
 const priceSources = JSON.parse(readFileSync(new URL("../data/price-sources.json", import.meta.url)));
 
@@ -71,17 +71,31 @@ test("engine: eigen inkoop + instellingen → volledige berekening met brutomarg
   const sand = res.lines.find((l) => l.key === "paving.sand");
   assert.equal(sand.basis, "purchase");
   assert.equal(sand.saleExclCents, Math.round(4500 * 1.25 * 1.2));
-  assert.ok(res.totals.costExclCents > 0);
-  assert.ok(res.totals.grossMarginPct > 0 && res.totals.grossMarginPct < 100);
+  // Tegels/opsluitband/trilplaat rusten nog op marktprijzen → geen echte marge
+  assert.equal(res.totals.costExclCents, null);
+  assert.equal(res.totals.grossMarginPct, null);
+  assert.ok(res.totals.costApproxExclCents > 0);
   assert.equal(res.totals.saleExclCents % 100, 0); // afgerond op hele euro's
   assert.equal(res.totals.vatCents, Math.round(res.totals.saleExclCents * 0.21));
   // margeconflict: 25% opslag op goedkoopste tegel ligt nog onder duurste marktprijs → geen conflict
   assert.ok(!res.flags.some((f) => /Margeconflict: verkoopprijs "Tegels/.test(f.text)));
 });
 
-test("engine: margeconflict als verkoopprijs boven marktband uitkomt", () => {
-  const res = calculate({ takeoffRows: takeoff(pavingProject()), settings: { materialMarkupPct: 200 }, priceSources });
-  assert.ok(res.flags.some((f) => /Margeconflict/.test(f.text)));
+test("engine: margeconflict alleen bij eigen inkoop boven de marktband", () => {
+  let res = calculate({ takeoffRows: takeoff(pavingProject()), settings: { materialMarkupPct: 200 }, priceSources });
+  assert.ok(!res.flags.some((f) => /Margeconflict/.test(f.text))); // marktprijs als kostprijs: geen zinvolle vergelijking
+  res = calculate({ takeoffRows: takeoff(pavingProject()), settings: { materialMarkupPct: 100 }, priceSources, purchasePrices: { "paving.tiles": { amountExclCents: 900 } } });
+  assert.ok(res.flags.some((f) => /Margeconflict: verkoopprijs "Tegels/.test(f.text))); // 18 € excl > duurste 60×60 (13,95 incl.)
+  res = calculate({ takeoffRows: takeoff(pavingProject()), settings: { materialMarkupPct: 10 }, priceSources, purchasePrices: { "paving.tiles": { amountExclCents: 600 } } });
+  assert.ok(!res.flags.some((f) => /Margeconflict: verkoopprijs "Tegels/.test(f.text)));
+});
+
+test("klantregels: geen opslagregels, som = totaal exact", () => {
+  const res = calculate({ takeoffRows: takeoff(pavingProject()), settings: { overheadPct: 7, riskPct: 3, transportPerDayCents: 4500 }, priceSources });
+  const c = customerLines(res, [{ label: "Extra", qty: 1, unit: "post", unitSaleExclCents: 8500 }]);
+  assert.equal(c.totalExclCents, res.totals.saleExclCents + 8500);
+  assert.ok(!c.lines.some((l) => /Algemene kosten|Risico|%/.test(l.label)));
+  assert.ok(c.onRequest.includes("Straatzand (zandbed)"));
 });
 
 test("engine: schuttingscherm alleen gekoppeld bij houten systeem op 180 cm", () => {
@@ -106,4 +120,29 @@ test("opslag ↔ marge: 25% opslag = 20% marge", () => {
 
 test("deriveTileCount: geen floating-point overtelling", () => {
   assert.equal(deriveTileCount(24, 600, 600, 0.05), 70);
+});
+
+test("engine: brutomarge alleen als alle kosten echt bekend zijn", () => {
+  const settings = { materialMarkupPct: 25, machineMarkupPct: 10, wasteMarkupPct: 10, overheadPct: 0, riskPct: 0, transportPerDayCents: 5000, laborCostRateCents: 3500, roundToCents: 0 };
+  const purchase = {
+    "paving.tiles": { amountExclCents: 600 }, "paving.edging": { amountExclCents: 180 },
+    "paving.sand": { amountExclCents: 4500 }, "machine.plate": { amountExclCents: 3000 }
+  };
+  const res = calculate({ takeoffRows: takeoff(pavingProject()), settings, priceSources, purchasePrices: purchase });
+  const t = res.totals;
+  // Handmatige controle van de som: kostprijs en verkoop afzonderlijk
+  const lines = res.lines;
+  const cost = lines.reduce((s, l) => s + l.costExclCents, 0);
+  const sale = lines.reduce((s, l) => s + l.saleExclCents, 0);
+  assert.equal(t.costExclCents, cost);
+  assert.equal(t.saleExclCents, sale);
+  assert.equal(t.grossMarginCents, sale - cost);
+  assert.equal(t.vatCents, Math.round(sale * 0.21));
+  assert.equal(t.saleInclCents, sale + t.vatCents);
+  // Arbeid: verkoop 60/u, kost 35/u
+  const labor = lines.filter((l) => l.kind === "labor");
+  for (const l of labor) { assert.equal(l.saleExclCents, Math.round(l.qty * 6000)); assert.equal(l.costExclCents, Math.round(l.qty * 3500)); }
+  // Materiaal: verkoop = inkoop × 1,25
+  const tiles = lines.find((l) => l.key === "paving.tiles");
+  assert.equal(tiles.saleExclCents, Math.round(600 * 1.25 * 70));
 });

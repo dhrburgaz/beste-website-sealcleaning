@@ -1,0 +1,52 @@
+/* Beheeromgeving (/beheer/) — alleen intern, geen externe bronnen (CSP). */
+body.beheer { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--c-sand); }
+.beheer h1, .beheer h2, .beheer h3 { font-family: Georgia, "Times New Roman", serif; }
+.beheer-header { position: sticky; top: 0; z-index: 10; display: flex; flex-wrap: wrap; gap: 0.6em 1.2em; align-items: center; justify-content: space-between; padding: 0.6em 16px; background: #fff; border-bottom: 1px solid var(--c-line); }
+.beheer-brand { display: flex; align-items: center; gap: 0.5em; }
+.beheer-brand span { color: var(--c-clay); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.beheer-tabs { display: flex; gap: 0.3em; overflow-x: auto; max-width: 100%; scrollbar-width: none; }
+.beheer-tabs button { font: inherit; font-size: 0.86rem; white-space: nowrap; min-height: 44px; padding: 0.4em 0.9em; border: 1px solid var(--c-line); border-radius: 999px; background: transparent; cursor: pointer; }
+.beheer-tabs button[aria-current="page"] { background: var(--c-forest); border-color: var(--c-forest); color: #fff; }
+.beheer-main { max-width: 1180px; margin: 0 auto; padding: 1.2em 16px 4em; }
+.beheer-main h1 { font-size: clamp(1.6rem, 3vw, 2.2rem); margin: 0.4em 0; }
+.beheer-card { background: #fff; border: 1px solid var(--c-line); padding: 1em; margin: 1em 0; }
+.beheer-card > summary { cursor: pointer; min-height: 44px; display: flex; flex-wrap: wrap; align-items: center; gap: 0.3em; }
+.beheer-row { display: flex; flex-wrap: wrap; gap: 0.5em; align-items: flex-end; }
+.beheer-row > input, .beheer-row > select { flex: 1 1 140px; min-width: 0; font: inherit; padding: 0.6em; min-height: 44px; border: 1px solid var(--c-line); border-radius: 4px; background: #fff; }
+.beheer-row .configurator-field { flex: 1 1 260px; margin-bottom: 0; }
+.beheer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0 1em; }
+.beheer textarea { width: 100%; font: inherit; padding: 0.6em; border: 1px solid var(--c-line); border-radius: 4px; }
+.beheer-lock { max-width: 520px; margin: 3em auto; background: #fff; border: 1px solid var(--c-line); padding: 1.5em; }
+.beheer-table { min-width: 720px; font-size: 0.86rem; }
+.beheer-table td.num, .doc-table td.num { text-align: right; white-space: nowrap; }
+.beheer-table td.small { font-size: 0.78rem; color: var(--c-ink-soft); max-width: 320px; }
+.beheer-table input, .beheer-table select { font: inherit; padding: 0.4em; min-height: 40px; border: 1px solid var(--c-line); border-radius: 4px; max-width: 140px; }
+.badge { display: inline-block; font-size: 0.74rem; padding: 0.15em 0.6em; border-radius: 999px; border: 1px solid var(--c-line); white-space: nowrap; }
+.badge-ok { border-color: var(--c-forest); color: var(--c-forest-deep); }
+.badge-warn { border-color: #b7791f; color: #8a5a10; background: #fff7e6; }
+.badge-block { border-color: var(--c-error); color: var(--c-error); background: #fdecea; }
+.beheer-totals { display: grid; grid-template-columns: auto 1fr; gap: 0.3em 1.2em; margin: 1em 0; }
+.beheer-totals dt { color: var(--c-ink-soft); }
+.beheer-totals dd { margin: 0; font-weight: 500; }
+.beheer-flags { padding-left: 1.2em; font-size: 0.9rem; }
+.beheer-flags .flag-block { color: var(--c-error); font-weight: 500; }
+.beheer-flags .flag-warn { color: #8a5a10; }
+.beheer-flags .flag-info { color: var(--c-ink-soft); }
+.beheer-manual { border-top: 1px solid var(--c-line); margin-top: 1em; padding-top: 0.6em; }
+.beheer-pipeline { font-size: 0.9rem; color: var(--c-ink-soft); }
+.beheer-danger { margin-top: 1.5em; color: var(--c-error); }
+.beheer .link-btn { background: none; border: none; text-decoration: underline; cursor: pointer; color: var(--c-error); font: inherit; font-size: 0.85rem; min-height: 44px; }
+
+/* Documenten (offerte / werkbon / factuurconcept) */
+#print-root { display: none; }
+.doc { font-family: Georgia, serif; color: #111; max-width: 780px; margin: 0 auto; }
+.doc-company { display: flex; gap: 1em; align-items: center; font-size: 0.85rem; margin-bottom: 1.5em; }
+.doc-customer { margin: 1em 0 1.5em; font-size: 0.95rem; }
+.doc-table { width: 100%; min-width: 0; font-size: 0.85rem; }
+.doc-note { font-size: 0.85rem; }
+.doc-watermark { border: 2px solid #b00; color: #b00; text-align: center; font-weight: bold; padding: 0.3em; }
+@media print {
+  body.printing > *:not(#print-root) { display: none !important; }
+  body.printing #print-root { display: block; }
+  body.printing { background: #fff; }
+}
