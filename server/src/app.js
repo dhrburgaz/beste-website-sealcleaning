@@ -12,6 +12,7 @@ import { loadSession } from "./auth.js";
 import { registerPublic } from "./routes/public.js";
 import { registerAuth } from "./routes/auth.js";
 import { registerAdmin } from "./routes/admin.js";
+import { registerShop } from "./routes/shop.js";
 import { registerPortal } from "./routes/portal.js";
 
 const SERVER_PUBLIC = fileURLToPath(new URL("../public/", import.meta.url));
@@ -24,6 +25,7 @@ export function createApp(overrides = {}) {
   registerPublic(router);
   registerAuth(router);
   registerAdmin(router);
+  registerShop(router);
   registerPortal(router);
 
   const handler = async (req, res) => {
@@ -42,7 +44,7 @@ export function createApp(overrides = {}) {
         }
         if (req.method === "OPTIONS") {
           if (!isPublic || !origin || !cfg.siteOrigins.includes(origin)) throw new HttpError(403, "Niet toegestaan.");
-          res.writeHead(204, { "Access-Control-Allow-Methods": "POST, GET", "Access-Control-Allow-Headers": "Content-Type", "Access-Control-Max-Age": "600" });
+          res.writeHead(204, { "Access-Control-Allow-Methods": "POST, GET", "Access-Control-Allow-Headers": "Content-Type, Idempotency-Key", "Access-Control-Max-Age": "600" });
           return res.end();
         }
         const m = router.match(req.method, url.pathname);

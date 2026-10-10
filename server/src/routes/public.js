@@ -6,6 +6,7 @@ import { HttpError, readMultipart, readJson, rateLimit } from "../http.js";
 import { now, newId, newRef, audit } from "../db.js";
 import { queueMail } from "../mail.js";
 import { saveAttachment, handleMollieWebhook } from "../services.js";
+import { handleOrderWebhook } from "./shop.js";
 import { decodeShare, sanitizeDesign } from "../../../js/configurator/design-io.js";
 import { readBody } from "../http.js";
 
@@ -63,7 +64,8 @@ export function registerPublic(r) {
     rateLimit(`mollie:${ctx.ipHash}`, 120, 60e3);
     const body = (await readBody(ctx.req, 4096)).toString("utf8");
     const id = new URLSearchParams(body).get("id");
-    await handleMollieWebhook(ctx.db, ctx.cfg, id);
+    if (ctx.cfg.mollieKey && /^tr_[A-Za-z0-9]+$/.test(id || "") && await handleOrderWebhook(ctx.db, ctx.cfg, id)) { ctx.res.writeHead(200); ctx.res.end("ok"); return; }
+    await handleMollieWebhook(ctx.db, ctx.cfg, id, ctx.cfg.fetchImpl || fetch);
     ctx.res.writeHead(200); ctx.res.end("ok");
   }, { webhook: true });
 }

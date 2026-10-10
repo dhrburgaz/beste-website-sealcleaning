@@ -87,7 +87,27 @@ const MIGRATIONS = [
      id TEXT PRIMARY KEY, kind TEXT NOT NULL, to_addr TEXT NOT NULL, subject TEXT NOT NULL, body_text TEXT NOT NULL,
      status TEXT NOT NULL DEFAULT 'queued', attempts INTEGER NOT NULL DEFAULT 0, last_error TEXT,
      created_at TEXT NOT NULL, sent_at TEXT);
-   CREATE TABLE counters (name TEXT PRIMARY KEY, value INTEGER NOT NULL);`
+   CREATE TABLE counters (name TEXT PRIMARY KEY, value INTEGER NOT NULL);`,
+  // 2: online materiaalverkoop (V7-09/V7-10) — alles achter feature flags, standaard uit.
+  `CREATE TABLE shop_products (
+     id TEXT PRIMARY KEY, catalog_id TEXT, title TEXT NOT NULL, unit TEXT NOT NULL, category TEXT,
+     price_excl INTEGER NOT NULL, vat_rate INTEGER NOT NULL, active INTEGER NOT NULL DEFAULT 0, max_per_order INTEGER,
+     created_at TEXT NOT NULL, updated_at TEXT NOT NULL);
+   CREATE TABLE shop_price_history (id INTEGER PRIMARY KEY AUTOINCREMENT, product_id TEXT NOT NULL REFERENCES shop_products(id) ON DELETE CASCADE, price_excl INTEGER NOT NULL, at TEXT NOT NULL);
+   CREATE TABLE promotions (
+     id TEXT PRIMARY KEY, code TEXT NOT NULL UNIQUE, type TEXT NOT NULL, value INTEGER NOT NULL, scope TEXT NOT NULL, scope_ids_json TEXT NOT NULL DEFAULT '[]',
+     starts_at TEXT, ends_at TEXT, active INTEGER NOT NULL DEFAULT 0, stackable INTEGER NOT NULL DEFAULT 0, min_subtotal INTEGER, max_discount INTEGER,
+     max_uses_total INTEGER, max_uses_per_customer INTEGER, note TEXT, created_at TEXT NOT NULL, created_by TEXT);
+   CREATE TABLE promotion_uses (
+     id TEXT PRIMARY KEY, promotion_id TEXT NOT NULL REFERENCES promotions(id), order_id TEXT NOT NULL, customer_hash TEXT NOT NULL,
+     amount INTEGER NOT NULL, status TEXT NOT NULL, created_at TEXT NOT NULL, updated_at TEXT NOT NULL);
+   CREATE INDEX promotion_uses_promo ON promotion_uses(promotion_id, status);
+   CREATE TABLE orders (
+     id TEXT PRIMARY KEY, ref TEXT NOT NULL UNIQUE, idempotency_key TEXT NOT NULL UNIQUE, status TEXT NOT NULL,
+     name TEXT NOT NULL, email TEXT NOT NULL, phone TEXT, address_json TEXT, delivery_method TEXT NOT NULL,
+     snapshot_json TEXT NOT NULL, total_incl INTEGER NOT NULL, terms_version TEXT NOT NULL, consents_json TEXT NOT NULL,
+     status_token_hash TEXT NOT NULL, ip_hash TEXT, provider_id TEXT UNIQUE, checkout_url TEXT,
+     created_at TEXT NOT NULL, updated_at TEXT NOT NULL, paid_at TEXT);`
 ];
 
 export function openDb(path) {
