@@ -2072,6 +2072,8 @@ export function initConfigurator(root) {
     lines.push(`Gewenste periode: ${project.schedule.preferredPeriod || "—"}`);
     const missing = missingInfo();
     if (missing.length) lines.push("", "Nog niet ingevuld: " + missing.map((x) => x[1]).join("; "));
+    const shareCode = encodeShare(project);
+    if (shareCode) lines.push("", `Ontwerp openen (tekening en keuzes, zonder persoonsgegevens): ${location.origin}${location.pathname}#ontwerp=${shareCode}`);
     lines.push("", "(Prijs wordt na controle van uw samenstelling berekend — zie website voor bekende materiaalindicaties.)");
     return lines.join("\n");
   }

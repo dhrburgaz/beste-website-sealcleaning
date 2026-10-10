@@ -11,6 +11,7 @@ import { calculate, markupToMarginPct, customerLines } from "../calc/engine.js";
 import { DEFAULT_SETTINGS, DEFAULT_NORMS, MATERIAL_LINKS } from "../../data/calc-defaults.js";
 import { decodeShare, sanitizeDesign } from "../configurator/design-io.js";
 import { withDefaults } from "../project-state.js";
+import { applyChoices } from "../configurator/variants.js";
 
 const app = document.querySelector("[data-app]");
 const tabsEl = document.querySelector("[data-tabs]");
@@ -214,7 +215,30 @@ function renderCalc() {
     totalsBlock(r, true),
     flagsList(r.flags)));
 
+  if (d.variants?.length) app.appendChild(variantScenarios(d));
   app.appendChild(saveQuoteBlock());
+}
+
+/** Scenario's: iedere configurator-variant op dezelfde geometrie doorgerekend (ch.39). */
+function variantScenarios(design) {
+  const purchase = Object.fromEntries(Object.entries(db.purchasePrices).map(([k, v]) => [k, { ...v }]));
+  const rows = design.variants.map((v) => {
+    const copy = JSON.parse(JSON.stringify(design));
+    applyChoices(copy, v.choices);
+    const r = calculate({ takeoffRows: takeoff(copy), settings: db.settings, priceSources, purchasePrices: purchase });
+    return { v, r };
+  });
+  const base = rows[0].r.totals.saleExclCents;
+  return h("div", { class: "beheer-card" }, h("h2", { text: "Scenario's (varianten uit de configurator)" }),
+    h("div", { class: "price-table-wrap" }, h("table", { class: "price-table beheer-table" },
+      h("thead", {}, h("tr", {}, ["Variant", "Verkoop excl.", "Verschil t.o.v. A", "Uren", "Ontbrekend", "Brutomarge", "Status"].map((t) => h("th", { scope: "col", text: t })))),
+      h("tbody", {}, rows.map(({ v, r }, i) => h("tr", {},
+        h("td", { text: `Variant ${v.label}` }), h("td", { class: "num", text: euro(r.totals.saleExclCents) }),
+        h("td", { class: "num", text: i === 0 ? "—" : (r.totals.missingLines || rows[0].r.totals.missingLines ? "niet vergelijkbaar (ontbrekende prijzen)" : euro(r.totals.saleExclCents - base)) }),
+        h("td", { class: "num", text: nl(r.totals.laborHours) }), h("td", { class: "num", text: String(r.totals.missingLines) }),
+        h("td", { text: r.totals.grossMarginPct == null ? "onbekend" : `${nl(r.totals.grossMarginPct, 1)}%` }),
+        h("td", {}, h("span", { class: "badge", text: r.readiness }))))))),
+    h("p", { class: "field-hint", text: "Verschillen zijn alleen betrouwbaar als beide varianten volledig geprijsd zijn." }));
 }
 
 function takeoffTable(rows) {
