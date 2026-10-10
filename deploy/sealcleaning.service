@@ -1,0 +1,20 @@
+# Alternatief zonder Docker (systemd). Installeer Node 22 LTS, kopieer de repo naar /opt/sealcleaning,
+# zet de configuratie in /etc/sealcleaning.env en zet een reverse proxy met HTTPS (Caddy/nginx) ervoor.
+[Unit]
+Description=Sealcleaning-backend
+After=network-online.target
+
+[Service]
+User=sealcleaning
+WorkingDirectory=/opt/sealcleaning
+EnvironmentFile=/etc/sealcleaning.env
+ExecStart=/usr/bin/node --disable-warning=ExperimentalWarning server/server.js
+Restart=on-failure
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/sealcleaning
+
+[Install]
+WantedBy=multi-user.target

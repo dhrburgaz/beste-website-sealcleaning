@@ -46,3 +46,23 @@ test("publieke configurator laadt geen beheergegevens", () => {
     assert.ok(!/calc\/engine|beheer\//.test(s), `${f} mag de interne motor niet laden`);
   }
 });
+
+test("server-UI zet geen data via innerHTML en laadt geen externe scripts", () => {
+  for (const f of ["server/public/admin/admin.js", "server/public/portaal/portaal.js", "server/public/shared/ui.js", "server/public/shared/docs.js"]) {
+    const s = readFileSync(ROOT + f, "utf8");
+    assert.ok(!/innerHTML|insertAdjacentHTML|outerHTML\s*=|document\.write/.test(s), `${f} gebruikt HTML-injectie`);
+    assert.ok(!/https?:\/\/[^"'`\s]*\.js/.test(s), `${f} laadt externe scripts`);
+  }
+});
+
+test("GitHub Pages publiceert geen backend, deploy- of databestanden", () => {
+  const wf = readFileSync(ROOT + ".github/workflows/deploy-pages.yml", "utf8");
+  for (const p of ["./server", "./deploy", "./docs", "./tests", "./Dockerfile", "./server-data"]) assert.ok(wf.includes(`--exclude='${p}'`), `workflow sluit ${p} niet uit`);
+});
+
+test("voorbeeldconfiguratie bevat geen geheimen", () => {
+  const env = readFileSync(ROOT + "server/.env.example", "utf8");
+  for (const k of ["IP_HASH_SECRET", "BACKUP_KEY", "SMTP_PASS", "MOLLIE_API_KEY"]) assert.match(env, new RegExp(`^${k}=$`, "m"), `${k} moet leeg zijn`);
+  const ig = readFileSync(ROOT + ".gitignore", "utf8");
+  for (const p of ["server-data", ".env"]) assert.ok(ig.includes(p), `.gitignore mist ${p}`);
+});

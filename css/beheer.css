@@ -53,3 +53,16 @@ body.beheer { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-se
 .beheer-invoice { border-top: 1px dashed var(--c-line); margin-top: 1em; padding-top: 0.6em; }
 .beheer-audit { font-size: 0.82rem; max-height: 320px; overflow: auto; }
 .doc-checklist { list-style: none; padding-left: 0; }
+.portal-steps { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.3em; margin: 1em 0; font-size: 0.8rem; }
+.portal-steps li { padding: 0.3em 0.7em; border: 1px solid var(--c-line); border-radius: 999px; color: var(--c-ink-soft); }
+.portal-steps li.done { background: var(--c-sand-deep); color: var(--c-ink); }
+.portal-steps li.current { background: var(--c-forest); border-color: var(--c-forest); color: #fff; font-weight: 600; }
+.portal-consent { display: flex; gap: 0.5em; align-items: flex-start; margin: 0.6em 0; font-size: 0.95rem; }
+.portal-consent input { width: 20px; height: 20px; flex-shrink: 0; margin-top: 0.15em; }
+.portal-accept { border-top: 2px solid var(--c-forest); margin-top: 1.2em; padding-top: 0.8em; }
+.portal-messages { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.5em; }
+.portal-messages li { padding: 0.6em 0.8em; border-radius: 8px; max-width: 85%; }
+.portal-messages li.me { background: var(--c-sand-deep); align-self: flex-end; }
+.portal-messages li.them { background: #fff; border: 1px solid var(--c-line); }
+.portal-messages p { margin: 0.2em 0 0; white-space: pre-wrap; }
+.action { display: inline-flex; flex-direction: column; gap: 0.2em; margin: 0.3em 0.4em 0.3em 0; }

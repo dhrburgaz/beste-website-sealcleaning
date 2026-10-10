@@ -65,7 +65,7 @@ export function createApp(overrides = {}) {
       if (req.method !== "GET" && req.method !== "HEAD") throw new HttpError(405, "Methode niet toegestaan.");
       const path = decodeURIComponent(url.pathname);
       if (path === "/" ) { res.writeHead(302, { Location: "/portaal/" }); return res.end(); }
-      if (path.startsWith("/admin") || path.startsWith("/portaal")) {
+      if (path.startsWith("/admin") || path.startsWith("/portaal") || path.startsWith("/shared/")) {
         res.setHeader("X-Robots-Tag", "noindex, nofollow");
         if (await serveStatic(res, SERVER_PUBLIC, path.replace(/^\//, ""))) return;
       }

@@ -148,6 +148,34 @@ authenticatie en server-side autorisatie per object (masterdossier
 ch. 42 / L01). Dat is **niet** gesimuleerd. De beheeromgeving is een
 echte, werkende interne tool, maar per apparaat en zonder synchronisatie.
 
+## Afgerond — SEAL-backend (10 oktober 2026)
+
+Een werkende bedrijfsbackend in `server/` (Node 22 + SQLite, zonder npm-afhankelijkheden). Architectuur, hosting en beheer staan in `docs/BACKEND.md`.
+
+- **Formulieren:** contact, zakelijk en werken-met-ons sturen naar `/api/public/leads` zodra `apiBase` is ingevuld. Inbegrepen: uploads met inhoudscontrole, honeypot, starttijd, verplichte privacybevestiging, ontwerp via deellink en een referentienummer. Bij een leeg `apiBase` blijft de huidige mailto-werking.
+- **Beheer `/admin/`:** login met verplichte 2FA. Onderdelen:
+  - aanvragen → project, klanten, projecten met calculatie (intern);
+  - offertes: versies, versturen, offline akkoord;
+  - facturen: uitgifte met doorlopende nummers, termijnen, creditnota's, betalingen;
+  - planning, berichten, uren, bestanden;
+  - instellingen: calculatie, inkoop, document, bewaartermijnen, agenda-URL, back-up;
+  - e-mailwachtrij, auditlog, gebruikers.
+- **Klantportaal `/portaal/`:** inloggen met een eenmalige link. Onderdelen:
+  - tijdlijn, offerte, digitaal akkoord en vroeg-starten-keuze;
+  - vragen, wijzigings-, service- en klachtverzoeken;
+  - planning met voorstel en ICS, facturen (bank of Mollie), bestanden;
+  - toestemmingen, gegevensexport.
+- **Tests:**
+  - `tests/server.test.mjs`: integratie, beveiliging, nummering, akkoord-hash, Mollie-webhook (gemockt), SMTP (lokale testserver), back-up/herstel en retentie.
+  - `tests/e2e/server-keten.mjs`: echte browser door de hele keten, van aanvraag tot betaalde factuur.
+- **Calculatie:** arbeid blijft op de klantofferte op het bevestigde tarief van € 60,00 excl. Toeslagen en afronding gaan in de overige regels.
+- **Deploy:**
+  - `Dockerfile`, `deploy/docker-compose.yml` (app + Caddy HTTPS), `deploy/sealcleaning.service` en `server/.env.example`.
+  - De server weigert in productie te starten met onveilige instellingen.
+  - GitHub Pages publiceert `server/` en `deploy/` niet.
+
+Niet operationeel zonder account (eerlijk gemarkeerd in het beheer): e-mailverzending (SMTP), online betalen (Mollie) en externe back-upopslag. Het Docker-image is niet in deze omgeving gebouwd (geen Docker-daemon).
+
 ## Nog niet gestart
 
 - **Tier 9 (documentarchitectuur):** offerte/werkbon/factuurconcept,
@@ -165,9 +193,9 @@ inkoopprijzen per artikel, geldigheid offerte, betaaltermijn, IBAN.
 
 Beslissingen/gegevens:
 - Juridische toets van voorwaarden en privacy (N01–N04) vóór bindend gebruik.
-- Formulierbackend/endpoint en werkende domeinmail (info@sealcleaning.nl).
-- Backend/hosting-keuze voor klantportaal, digitaal akkoord, synchronisatie
-  van de beheeromgeving tussen apparaten, betalingen en webshop.
+- Hosting voor de backend (advies: EU-VPS + Docker, zie docs/BACKEND.md) en
+  DNS-record `api.sealcleaning.nl`; daarna `apiBase` in `js/config.js`.
+- SMTP-account/domeinmail, Mollie-account, externe back-upopslag.
 - Boekhoudpakket voor koppeling (nu CSV-export).
 - Stijllabels per projectcase (A05), gecontroleerde plantdata (H01–H04,
   H09), voor/na-fotoparen (I04), geleverde SKU's en garantievoorwaarden
@@ -187,4 +215,5 @@ einde van een tier.
 Alle eisen die zonder externe toegang of eigenaarsgegevens kunnen, zijn
 gebouwd en getest. Volgende stappen hangen af van de BLOCKERS: na
 juridische toets en akkoord de PR mergen (live), daarna de backendkeuze
-voor portaal/akkoord/synchronisatie.
+voor portaal/akkoord/synchronisatie. De backend is gebouwd (zie hierboven);
+na hostingkeuze: installeren volgens docs/BACKEND.md.

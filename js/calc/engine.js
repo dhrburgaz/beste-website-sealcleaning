@@ -203,12 +203,20 @@ export function marginToMarkupPct(marginPct) {
 export function customerLines(result, manualLines = []) {
   const priced = result.lines.filter((l) => l.saleExclCents != null);
   const manual = manualLines.map((l) => ({ label: l.label, qty: l.qty, unit: l.unit, saleExclCents: Math.round(l.qty * l.unitSaleExclCents) }));
-  const base = priced.reduce((s, l) => s + l.saleExclCents, 0);
+  // Arbeid blijft op het gepubliceerde uurtarief; toeslagen en afronding gaan in de overige regels
+  // (alleen als er geen overige regels zijn, worden alle regels naar rato aangepast).
   const target = result.totals.saleExclCents;
-  const factor = base > 0 ? target / base : 1;
-  const out = priced.map((l) => ({ label: l.label, qty: l.qty, unit: l.unit, saleExclCents: Math.round(l.saleExclCents * factor) }));
+  const laborSum = priced.filter((l) => l.kind === "labor").reduce((s, l) => s + l.saleExclCents, 0);
+  const keepLabor = priced.some((x) => x.kind !== "labor") && target > laborSum;
+  const fixed = (l) => keepLabor && l.kind === "labor";
+  const fixedSum = keepLabor ? laborSum : 0;
+  const base = priced.filter((l) => !fixed(l)).reduce((s, l) => s + l.saleExclCents, 0);
+  const factor = base > 0 ? (target - fixedSum) / base : 1;
+  const out = priced.map((l) => ({ label: l.label, qty: l.qty, unit: l.unit, fixed: fixed(l), saleExclCents: fixed(l) ? l.saleExclCents : Math.round(l.saleExclCents * factor) }));
   const diff = target - out.reduce((s, l) => s + l.saleExclCents, 0);
-  if (out.length) out[out.length - 1].saleExclCents += diff;
+  const last = out.findLast((l) => !l.fixed) || out[out.length - 1];
+  if (last) last.saleExclCents += diff;
+  for (const l of out) delete l.fixed;
   const all = out.concat(manual).map((l) => ({ ...l, unitSaleExclCents: l.qty ? Math.round(l.saleExclCents / l.qty) : l.saleExclCents }));
   return { lines: all, totalExclCents: all.reduce((s, l) => s + l.saleExclCents, 0), onRequest: result.lines.filter((l) => l.saleExclCents == null).map((l) => l.label) };
 }

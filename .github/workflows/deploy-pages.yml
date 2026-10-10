@@ -33,8 +33,8 @@ jobs:
           tar --exclude='./.git' --exclude='./.github' --exclude='./.claude' \
               --exclude='./docs' --exclude='./tests' --exclude='./tools' \
               --exclude='./package.json' --exclude='./package-lock.json' --exclude='./node_modules' \
-              --exclude='./README.md' --exclude='./_site' -cf - . | tar -xf - -C _site
-          test -f _site/index.html && test -f _site/CNAME && test ! -e _site/docs
+              --exclude='./README.md' --exclude='./server' --exclude='./deploy' --exclude='./Dockerfile' --exclude='./.dockerignore' --exclude='./server-data' --exclude='./_site' -cf - . | tar -xf - -C _site
+          test -f _site/index.html && test -f _site/CNAME && test ! -e _site/docs && test ! -e _site/server && test ! -e _site/deploy
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

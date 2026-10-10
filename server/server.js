@@ -7,6 +7,15 @@ import { processOutbox } from "./src/mail.js";
 import { runRetention, createBackup } from "./src/services.js";
 
 const { server, db, cfg } = createApp();
+if (process.env.NODE_ENV === "production") {
+  const problems = [];
+  if (!cfg.cookieSecure) problems.push("COOKIE_SECURE moet true zijn");
+  if (!cfg.requireTotp) problems.push("REQUIRE_TOTP moet true zijn");
+  if ((cfg.ipHashSecret || "").length < 32) problems.push("IP_HASH_SECRET ontbreekt of is te kort");
+  if (!/^https:\/\//.test(cfg.publicBaseUrl)) problems.push("PUBLIC_BASE_URL moet https zijn");
+  if (problems.length) { console.error(`Productieconfiguratie onveilig: ${problems.join("; ")}.`); process.exit(1); }
+  if (!cfg.backupKey) console.warn("Waarschuwing: BACKUP_KEY ontbreekt — automatische back-ups staan uit.");
+}
 server.listen(cfg.port, cfg.host, () => console.log(`Sealcleaning-backend op http://${cfg.host}:${cfg.port} (data: ${cfg.dataDir})`));
 
 const safe = (name, fn) => async () => { try { await fn(); } catch (e) { console.error(new Date().toISOString(), name, e.message); } };

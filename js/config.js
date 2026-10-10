@@ -22,6 +22,9 @@
     hours: "Dagelijks bereikbaar van 10:00 tot 19:00 uur",
     primaryArea: "Dordrecht",
     region: "Drechtsteden en Rotterdam e.o.",
+    // Adres van de Sealcleaning-backend (bijv. "https://api.sealcleaning.nl"). Leeg = formulieren
+    // gebruiken het eigen mailprogramma van de bezoeker (huidige werking).
+    apiBase: "",
     defaultWhatsappMessage: "Hallo Sealcleaning, ik wil graag meer informatie over jullie diensten."
   };
 

@@ -149,7 +149,8 @@ in a browser this session.
 | J04 | gebouwd, getest | Aandachtspunten uit toegang (smalle doorgang, geen achterom, trappen, loopafstand); geen haalbaarheidsclaim |
 | J05 | extern geblokkeerd | Vereist bevestigde leverroutes en leverkosten |
 | J06 | gebouwd, getest | Parkeren/lossen + bekende beperkingen in dossier |
-| J07–J10 | extern geblokkeerd | Vereist planning-/agenda- en projectbackend |
+| J08–J10 | gebouwd, getest (server; operationeel na hosting) | Portaal: voorkeursmoment voorstellen (status "voorstel", geen toezegging), bevestigde afspraken met ICS, verzoek tot verplaatsen met project-ID als bericht; medewerker bevestigt/annuleert met notitie |
+| J07 | nog te bouwen | Dienstspecifieke klantchecklist met gereedmelding |
 
 ## K — Offerte en opdracht
 
@@ -160,16 +161,17 @@ in a browser this session.
 | K03 | gebouwd, getest | Offerte toont inbegrepen, niet inbegrepen, klantwerk, uitgangspunten en wat nog op aanvraag is |
 | K04 | gebouwd, getest | Versies: verstuurd/geaccepteerd wordt vastgelegd en niet overschreven; wijziging = nieuwe versie |
 | K05 | gebouwd | Offerte verwijst naar de voorwaarden op de site; versie-/PDF-archief van voorwaarden vereist backend (en juridische toets N02) |
-| K06 | extern geblokkeerd | Aantoonbaar digitaal akkoord (identiteit, versie, toestemming) vereist backend; nu handtekeningregel op papier/PDF |
-| K07 | extern geblokkeerd | Vragen per offerteonderdeel vereisen klantportaal |
+| K06 | gebouwd, getest (server; operationeel na hosting) | Digitaal akkoord: naam, e-mail, klant-ID, moment, IP-hash, user-agent, SHA-256 van exact getoonde offerte, voorwaardenversie, toestemmingen; offline akkoord apart vastgelegd met verklaring medewerker |
+| K07 | gebouwd, getest (server; operationeel na hosting) | Vraag per offerte (en onderdeel) als projectbericht; wijzigt de scope niet |
 | K08 | gebouwd, getest | Meerwerk als nieuwe offerteversie met handmatige regels en reden; akkoord vóór uitvoeren |
-| K09–K10 | wacht op goedkeuring / extern geblokkeerd | Bedenktijd/herroeping staan in voorwaarden art. 22 (juridische toets); digitale registratie vereist backend |
+| K09 | gebouwd, getest (server; operationeel na hosting) | Aparte, niet vooraf aangevinkte keuze "vroeg starten" + bevestiging bedenktijdinformatie, vastgelegd en per e-mail bevestigd; tekst wacht op juridische toets |
+| K10 | deels gebouwd | Herroepen/opzeggen via portaalbericht of e-mail/telefoon zonder motivatieplicht; formeel herroepingsformulier wacht op juridische toets |
 
 ## L — Klantdossier en uitvoering
 
 | ID | Status | Bewijs / opmerking |
 | --- | --- | --- |
-| L01–L07 | extern geblokkeerd | Klantportaal vereist authenticatie en server-side autorisatie per object (masterdossier: ontwerp-ID is geen toegangsbewijs) |
+| L01–L07 | gebouwd, getest (server; operationeel na hosting) | Klantportaal `/portaal/`: eenmalige inloglinks (geen voorspelbaar ID), server-side autorisatie per object, tijdlijn uit workflow, documenten (offertes/facturen/bestanden), planning, berichten, wijzigingsverzoek, uitvoeringsfoto's alleen als medewerker ze zichtbaar maakt |
 | L08 | gebouwd, getest | Werkbon uit beheer: taken, uren, materialen, situatie en te beschermen beplanting, zonder prijzen/kostprijs |
 | L09 | deels gebouwd | Gereedmelding via opleverdocument (papier/PDF) en projectstatus "Opgeleverd"; digitale melding door klant vereist portaal |
 | L10 | gebouwd, getest | Gelijkwaardige telefoon/e-mail-route bestaat voor iedereen (geen portaal-verplichting) |
@@ -181,7 +183,8 @@ in a browser this session.
 | M01 | gebouwd, getest | Opleverdocument met checklist uit de hoeveelhedenstaat |
 | M02 | gebouwd, getest | Restpunten met datum, expliciet zonder afstand van wettelijke rechten |
 | M03 | deels gebouwd | Opleverdocument met algemeen onderhoudsadvies; productspecifiek advies wacht op geleverde SKU's (M04) |
-| M06–M10 | extern geblokkeerd | Serviceverzoeken, herinneringen, reviewverzoeken en hergebruik vereisen backend/toestemmingsbeheer |
+| M06–M07 | gebouwd (server; operationeel na hosting) | Serviceverzoek en klacht als gelabeld portaalbericht met foto-upload en referentie (project-ID) |
+| M08–M10 | deels gebouwd | Toestemming onderhoudsherinnering vastgelegd in portaal; versturen/reviews/hergebruik nog niet geautomatiseerd |
 | M04–M05 | wacht op eigenaar | Vereist geleverde SKU's, fabrikantsgarantie en eventuele vastgestelde SEAL-garantie |
 
 ## N — Rechten, privacy en vertrouwen
@@ -193,8 +196,8 @@ in a browser this session.
 | N03 | wacht op goedkeuring | Type X: zakelijke voorwaarden vereisen juridische toets |
 | N04 | wacht op goedkeuring | `/privacy/` heeft nu de volledige verwerkingstabel (8 categorieën, doel + bewaartermijn/grondslag); vereist juridische toets |
 | N05 | gebouwd | Geen tracking/niet-noodzakelijke cookies op de site (gecontroleerd); privacy legt uit dat toestemming eerst komt als dat ooit verandert |
-| N06 | extern geblokkeerd | Type B: gescheiden toestemmingen opslaan vereist backend |
-| N07 | extern geblokkeerd | Type B: automatische bewaar-/verwijderregels vereisen backend |
+| N06 | gebouwd, getest (server; operationeel na hosting) | Gescheiden toestemmingen (vroeg starten, projectfoto-publicatie, nieuwsbrief, onderhoudsherinnering), nooit vooraf aangevinkt, intrekbaar, met tijdstip en tekstversie |
+| N07 | gebouwd, getest (server; operationeel na hosting) | Automatische verwijdering van aanvragen/sollicitaties na in te stellen termijn; facturen beschermd (7 jaar); AVG-verwijderen klant; termijnen wachten op eigenaar |
 | N08 | gebouwd, getest | Disclaimers bij elke prijsindicatie/visualisatie |
 | N09 | gebouwd | Genoemd in `kennisbank/schutting-opmeten/`, geen directe Omgevingsloket-link |
 | N10 | gebouwd, getest | Geautomatiseerde axe-core WCAG 2.2 AA-scan over alle 38 pagina's (0 bevindingen na fixes), mobiel 360/390px, toetsenbordbediening; een handmatige audit met hulptechnologie blijft aanbevolen |
@@ -222,8 +225,8 @@ in a browser this session.
 | P02 | gebouwd, getest | Urenregistratie per project/medewerker met signaal bij overschrijding; CSV-export |
 | P03 | deels gebouwd | Inkoop per artikel met leverancier, SKU, prijsdatum (>30 dagen gemarkeerd); formele goedkeuringsstap volgt de eigenaar |
 | P04 | gebouwd, getest | Offerte uit één dossier: momentopname, nummer, prijssoort, scope, bedragen, logo; geldigheid uit instellingen |
-| P05 | deels gebouwd | Geaccepteerde versie wordt vastgelegd (datum); duurzame opdrachtbevestiging per e-mail/archief vereist backend |
-| P06 | deels gebouwd | Doorlopende nummering per apparaat, prestatiedatum, btw, vastgelegd na verzending; wettelijke unieke reeks blijft de boekhouding (één apparaat gebruiken) |
+| P05 | gebouwd, getest (server; operationeel na hosting) | Geaccepteerde versie onwijzigbaar vastgelegd en als bevestiging per e-mail (wachtrij) + in portaal beschikbaar |
+| P06 | gebouwd, getest (server; operationeel na hosting) | Server-side unieke, doorlopende nummerreeks zonder gaten, toegekend bij uitgifte; btw en prestatiedatum; termijnfacturen en creditnota's |
 | P07 | gebouwd, getest | Betalingen vastleggen, openstaand bedrag, status betaald alleen na geregistreerde ontvangst door de eigenaar |
 | P08 | gebouwd, getest | Creditnota met verwijzing naar originele factuur, reden en bedrag; verstuurde factuur blijft ongewijzigd |
 | P09 | gebouwd, getest | CSV-export facturen/creditnota's en uren (formule-injectie geneutraliseerd); koppeling met een specifiek pakket vereist keuze eigenaar |
@@ -236,4 +239,6 @@ Stand 10 oktober 2026.
 - **Gebouwd en getest:** vrijwel alle frontend-eisen A–J; de interne calculatie en administratie (K01–K04, K08, L08, M01–M02, P01–P02, P04, P07–P10) als versleutelde, lokale beheeromgeving op `/beheer/`; toegankelijkheidsscan (N10).
 - **Deels gebouwd:** F01 (echte producten alleen 60×60-bestrating), C05, L09, M03, O05, P03, P05, P06.
 - **Wacht op eigenaar (gegevens/beslissing):** A05 stijllabels, H01–H04/H09 plantdata, I04 voor/na-foto's, M04–M05 product/garantie, inkoopprijzen, marges, normen en documentinstellingen (in de kluis), N01–N04 juridische toets, K09–K10.
-- **Extern geblokkeerd (backend/auth/agenda/betaling):** klantportaal (L01–L07, O10), digitaal akkoord (K06–K07), B05, C10, D10, F09, H10, I10, J05, J07–J10, M06–M10, N06/N07, O04, G10, webshop/checkout.
+- **Gebouwd in de server-backend (`server/`, zie docs/BACKEND.md), getest met integratie- en browsertests; operationeel zodra hosting is gekozen:** echte formulierverwerking, klantportaal (L01–L07), digitaal akkoord (K06–K07, K09), J08–J10, M06–M07, N06–N07, P05–P06, plus serverversies van K01–K04, K08 en P01–P10.
+- **Voorbereid maar niet operationeel zonder account:** e-mail (SMTP), online betalen (Mollie), externe back-upopslag. De agenda (ICS-feed) werkt zonder account.
+- **Nog extern geblokkeerd of nog te bouwen:** O10, B05, C10, D10, F09, H10, I10, J05, J07, K10 (formeel formulier), M08–M10, O04, G10, webshop/checkout.

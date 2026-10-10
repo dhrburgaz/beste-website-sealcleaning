@@ -106,12 +106,64 @@
         return;
       }
 
+      var apiBase = window.SEAL_CONFIG && window.SEAL_CONFIG.apiBase;
+      if (apiBase && window.fetch && window.FormData) {
+        submitToApi(apiBase, statusEl).catch(function () { showMailto(statusEl); });
+        return;
+      }
+      showMailto(statusEl);
+    });
+
+    /* Honeypot + starttijd tegen spam (alleen gebruikt als het API-adres is ingesteld). */
+    var startedAt = Date.now();
+    var hp = document.createElement("input");
+    hp.type = "text"; hp.name = "website"; hp.tabIndex = -1; hp.autocomplete = "off";
+    hp.setAttribute("aria-hidden", "true");
+    hp.style.cssText = "position:absolute;left:-9999px;width:1px;height:1px;opacity:0";
+    form.appendChild(hp);
+
+    function submitToApi(apiBase, statusEl) {
+      var fd = new FormData(form);
+      var kind = form.getAttribute("data-lead-kind") || (/from=configurator/.test(location.search) ? "configurator" : "contact");
+      fd.append("kind", kind);
+      fd.append("started_at", String(startedAt));
+      var text = (form.querySelector("[name=omschrijving]") || {}).value || "";
+      var m = /https?:\/\/\S+#ontwerp=[A-Za-z0-9_-]+/.exec(text);
+      if (m) fd.append("design", m[0]);
+      var submit = form.querySelector("[type=submit]");
+      if (submit) submit.disabled = true;
+      if (statusEl) { statusEl.textContent = "Bezig met versturen…"; statusEl.className = "form-status"; statusEl.hidden = false; }
+      return fetch(apiBase.replace(/\/$/, "") + "/api/public/leads", { method: "POST", body: fd, mode: "cors", credentials: "omit" })
+        .then(function (r) {
+          return r.json().catch(function () { return {}; }).then(function (data) {
+            if (submit) submit.disabled = false;
+            if (r.ok && data.ref) {
+              form.reset();
+              var label = document.querySelector("[data-file-count]");
+              if (label) label.textContent = "";
+              statusEl.textContent = "Bedankt, uw aanvraag is ontvangen (referentie " + data.ref + "). Bewaar dit nummer; wij nemen zo snel mogelijk contact met u op.";
+              statusEl.className = "form-status success";
+              statusEl.scrollIntoView({ behavior: "smooth", block: "center" });
+              return;
+            }
+            if (r.status >= 400 && r.status < 500 && data.error) {
+              statusEl.textContent = data.error;
+              statusEl.className = "form-status error";
+              statusEl.scrollIntoView({ behavior: "smooth", block: "center" });
+              return;
+            }
+            throw new Error("server");
+          });
+        }, function (err) { if (submit) submit.disabled = false; throw err; });
+    }
+
+    function showMailto(statusEl) {
       var subjectPrefix = form.getAttribute("data-subject-prefix") || "Offerteaanvraag via website";
       var nameField = form.querySelector("[name=naam]") || form.querySelector("[name=contactpersoon]");
       var subject = encodeURIComponent(subjectPrefix + (nameField ? " — " + nameField.value : ""));
       var lines = [];
       form.querySelectorAll("input, select, textarea").forEach(function (field) {
-        if (!field.name || field.type === "file") return;
+        if (!field.name || field.type === "file" || field.name === "website") return;
         if ((field.type === "radio" || field.type === "checkbox") && !field.checked) return;
         lines.push(field.previousElementSibling && field.previousElementSibling.tagName === "LABEL"
           ? field.previousElementSibling.textContent + ": " + field.value
@@ -139,7 +191,7 @@
         mailBtn.hidden = false;
         mailBtn.focus();
       }
-    });
+    }
   }
 
   /* File input label feedback */

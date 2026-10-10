@@ -96,6 +96,8 @@ test("klantregels: geen opslagregels, som = totaal exact", () => {
   assert.equal(c.totalExclCents, res.totals.saleExclCents + 8500);
   assert.ok(!c.lines.some((l) => /Algemene kosten|Risico|%/.test(l.label)));
   assert.ok(c.onRequest.includes("Straatzand (zandbed)"));
+  // arbeid blijft op het bevestigde tarief van € 60,00 excl.; toeslagen zitten in de overige regels
+  for (const l of c.lines.filter((x) => x.label.startsWith("Arbeid"))) assert.equal(l.unitSaleExclCents, 6000, l.label);
 });
 
 test("engine: schuttingscherm alleen gekoppeld bij houten systeem op 180 cm", () => {

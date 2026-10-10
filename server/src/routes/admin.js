@@ -12,7 +12,7 @@ import { decodeShare, sanitizeDesign } from "../../../js/configurator/design-io.
 import {
   PROJECT_STATUSES, PRICE_TYPES, DEFAULT_COMPANY, runCalculation, createQuote, updateQuote, sendQuote, setProjectStatus,
   createInvoiceFromQuote, createCredit, issueInvoice, registerPayment, invoicePaid, saveAttachment, deleteAttachmentsOf,
-  createBackup, runRetention
+  createBackup, runRetention, readCompanyPublic
 } from "../services.js";
 
 const str = (v, max = 200) => (v == null ? null : String(v).trim().slice(0, max) || null);
@@ -77,7 +77,8 @@ export function registerAdmin(r) {
       upcoming: d.all("SELECT a.*, p.title FROM appointments a JOIN projects p ON p.id = a.project_id WHERE a.starts_at >= ? AND a.status != 'geannuleerd' ORDER BY a.starts_at LIMIT 10", now()),
       unreadMessages: d.get("SELECT COUNT(*) n FROM messages WHERE author_type = 'customer' AND read_at IS NULL").n,
       integrations: integrationStatus(ctx.cfg),
-      statuses: PROJECT_STATUSES, priceTypes: PRICE_TYPES
+      statuses: PROJECT_STATUSES, priceTypes: PRICE_TYPES,
+      company: readCompanyPublic(ctx.cfg.siteRoot), iban: getSetting(d, "company", DEFAULT_COMPANY).iban || null
     });
   }));
 

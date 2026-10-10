@@ -8,7 +8,8 @@ import { now, newId, audit } from "../db.js";
 import { guards } from "../app.js";
 import { destroySession } from "../auth.js";
 import { queueMail } from "../mail.js";
-import { setProjectStatus, invoicePaid, createMolliePayment, saveAttachment } from "../services.js";
+import { setProjectStatus, invoicePaid, createMolliePayment, saveAttachment, readCompanyPublic, DEFAULT_COMPANY } from "../services.js";
+import { getSetting } from "../db.js";
 import { buildIcsFor, sendFile } from "./admin.js";
 
 const str = (v, max) => String(v ?? "").trim().slice(0, max);
@@ -56,14 +57,17 @@ export function registerPortal(r) {
     ctx.json(200, {
       id: p.id, ref: p.ref, title: p.title, status: p.status,
       timeline: d.all("SELECT at, kind, data_json FROM project_events WHERE project_id = ? AND customer_visible = 1 ORDER BY id", p.id).map((e) => ({ at: e.at, kind: e.kind, ...JSON.parse(e.data_json || "{}") })),
-      quotes: d.all("SELECT id, number, version, status, snapshot_json, sent_at, accepted_at FROM quotes WHERE project_id = ? AND status != 'concept' ORDER BY created_at DESC", p.id)
-        .map((q) => ({ id: q.id, number: q.number, version: q.version, status: q.status, sentAt: q.sent_at, acceptedAt: q.accepted_at, document: JSON.parse(q.snapshot_json) })),
+      quotes: d.all("SELECT id, number, version, status, snapshot_json, snapshot_hash, sent_at, accepted_at FROM quotes WHERE project_id = ? AND status != 'concept' ORDER BY created_at DESC", p.id)
+        .map((q) => ({ id: q.id, number: q.number, version: q.version, status: q.status, sentAt: q.sent_at, acceptedAt: q.accepted_at, hash: q.snapshot_hash, document: JSON.parse(q.snapshot_json) })),
       invoices: d.all("SELECT * FROM invoices WHERE project_id = ? AND number IS NOT NULL ORDER BY issued_at DESC", p.id)
         .map((i) => ({ id: i.id, kind: i.kind, number: i.number, issueDate: i.issue_date, deliveryDate: i.delivery_date, dueDate: i.due_date, status: i.status, lines: JSON.parse(i.lines_json), totalExcl: i.total_excl, vatRate: i.vat_rate, vat: i.vat, totalIncl: i.total_incl, paid: invoicePaid(d, i.id), reason: i.reason, poRef: i.po_ref })),
       appointments: d.all("SELECT id, kind, starts_at, ends_at, status, location, note, proposed_by FROM appointments WHERE project_id = ? AND status != 'geannuleerd' ORDER BY starts_at", p.id),
       messages: d.all("SELECT id, author_type, body, created_at FROM messages WHERE project_id = ? ORDER BY created_at", p.id),
       files: d.all("SELECT id, filename, size, created_at FROM attachments WHERE owner_type = 'project' AND owner_id = ? AND customer_visible = 1", p.id),
-      payOnline: !!ctx.cfg.mollieKey
+      payOnline: !!ctx.cfg.mollieKey,
+      company: readCompanyPublic(ctx.cfg.siteRoot),
+      iban: getSetting(ctx.db, "company", DEFAULT_COMPANY).iban || null,
+      customer: ctx.db.get("SELECT name, address, email FROM customers WHERE id = ?", p.customer_id)
     });
   });
 
@@ -113,7 +117,8 @@ export function registerPortal(r) {
     const b = await readJson(ctx.req);
     const body = str(b.body, 5000);
     if (!body) throw new HttpError(400, "Leeg bericht.");
-    const prefix = b.topic === "wijziging" ? "[Wijzigingsverzoek] " : b.quoteNumber ? `[Vraag over offerte ${str(b.quoteNumber, 30)}${b.part ? `, ${str(b.part, 120)}` : ""}] ` : "";
+    const TOPICS = { wijziging: "[Wijzigingsverzoek] ", service: "[Serviceverzoek] ", klacht: "[Klacht] ", verplaatsen: "[Verzoek afspraak verplaatsen] " };
+    const prefix = TOPICS[b.topic] ? TOPICS[b.topic] : b.quoteNumber ? `[Vraag over offerte ${str(b.quoteNumber, 30)}${b.part ? `, ${str(b.part, 120)}` : ""}] ` : "";
     ctx.db.run("INSERT INTO messages (id, project_id, author_type, author_id, body, created_at) VALUES (?,?,?,?,?,?)", newId("msg"), p.id, "customer", guards.customer(ctx), prefix + body, now());
     notifyStaff(ctx, `Nieuw bericht van klant (${p.ref})`, `Er is een nieuw bericht over project ${p.ref}.`);
     ctx.json(201, { ok: true });
