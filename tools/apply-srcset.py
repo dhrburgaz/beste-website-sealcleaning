@@ -10,7 +10,7 @@ for html in glob.glob("**/*.html", recursive=True):
         before = s[max(0, m.start() - 400):m.start()]
         hero = "hero-media" in before[-200:] or "page-hero" in before[-300:]
         files = {}
-        for w in (640, 960):
+        for w in (640, 800, 960):
             if os.path.exists(os.path.normpath(os.path.join(base, f"{path}{name}-{w}.webp"))): files[w] = f"{path}{name}-{w}.webp"
         if not files: return m.group(0)
         full = f"{path}{name}.webp"

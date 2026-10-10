@@ -27,9 +27,9 @@ test("webfonts zelf gehost met licentie; geen Google Fonts-verzoeken", () => {
 
 test("projectfoto's: responsive varianten bestaan en zijn kleiner dan het origineel", () => {
   const dir = join(ROOT, "images/projects");
-  const originals = readdirSync(dir).filter((f) => /^[a-z0-9-]+\.webp$/.test(f) && !/-(640|960)\.webp$/.test(f));
+  const originals = readdirSync(dir).filter((f) => /^[a-z0-9-]+\.webp$/.test(f) && !/-(640|800|960)\.webp$/.test(f));
   for (const f of originals) {
-    for (const w of [640, 960]) {
+    for (const w of [640, 800, 960]) {
       const v = join(dir, f.replace(".webp", `-${w}.webp`));
       assert.ok(existsSync(v), `${f}: ${w}-variant ontbreekt`);
       assert.ok(statSync(v).size <= statSync(join(dir, f)).size, `${f}: ${w}-variant is groter dan het origineel`);

@@ -3,8 +3,8 @@
 import { readdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
 const { chromium } = await import(process.env.PLAYWRIGHT || "playwright");
 const DIR = new URL("../images/projects/", import.meta.url).pathname;
-const WIDTHS = [640, 960];
-const files = readdirSync(DIR).filter((f) => /^[a-z0-9-]+\.webp$/.test(f) && !/-(640|960)\.webp$/.test(f));
+const WIDTHS = [640, 800, 960];
+const files = readdirSync(DIR).filter((f) => /^[a-z0-9-]+\.webp$/.test(f) && !/-(640|800|960).webp$/.test(f));
 const b = await chromium.launch({ executablePath: process.env.CHROMIUM || undefined });
 const pg = await b.newPage();
 await pg.goto("about:blank");
