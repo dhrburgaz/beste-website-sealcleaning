@@ -87,7 +87,7 @@ in a browser this session.
 
 | ID | Code | Test | Live | Status (V6-08) | Bewijs / opmerking |
 | --- | --- | --- | --- | --- | --- |
-| F01 | deels | deels | nee — PR #3 niet gemerged | deels gebouwd | `data/materials.js`: 3 echte, bron-gekoppelde bestratingsproducten (60×60) selecteerbaar in de configurator; schutting/overige categorieën nog generieke presets, geen inkoopprijzen |
+| F01 | deels | ja (unit) | nee — PR #3 niet gemerged | deels gebouwd | 3 geverifieerde bestratingstegels (60×60) selecteerbaar in de configurator; `/materialen/` toont daarnaast 45 items in 7 categorieën met eerlijke status (geverifieerd product / materiaaloptie / op aanvraag); overige producten wachten op leveranciersdata van de eigenaar |
 | F02 | ja | ja (browser/unit) | nee — PR #3 niet gemerged | gebouwd, getest | Materiaal-/kleurkeuze wijzigt 3D-weergave |
 | F03 | ja | ja (browser/unit) | nee — PR #3 niet gemerged | gebouwd, getest | Max. 3 varianten: onderhoud, opbouw, leverstatus, prijsbasis, bronnen |
 | F04 | ja | geen aparte test | nee — PR #3 niet gemerged | gebouwd | `kennisbank/hout-beton-vs-composiet/`, statisch, niet interactief |
@@ -111,7 +111,7 @@ in a browser this session.
 | G07 | ja | ja (browser/unit) | nee — PR #3 niet gemerged | gebouwd, getest | Verschil alleen bij twee bekende prijsregels; onbekende impact benoemd |
 | G08 | ja | ja (browser/unit) | nee — PR #3 niet gemerged | gebouwd, getest | Suggestie van formaat met onderzochte producten; wisselen alleen na klik |
 | G09 | ja | geen aparte test | nee — PR #3 niet gemerged | gebouwd | Kostdrivers-uitleg op `/prijzen/` |
-| G10 | nee | — | nee | extern geblokkeerd | Dossier/contact-handoff bestaat; echte serverontvangst ontbreekt |
+| G10 | deels | ja (server-integratie) | nee — server niet gehost | deels gebouwd (server) | Aanvraag, bestanden en ontwerplink worden server-side ontvangen met echt referentienummer; operationeel zodra hosting is gekozen (docs/BACKEND.md) |
 
 ## H — Groen en onderhoud
 
@@ -247,6 +247,10 @@ in a browser this session.
 | P08 | ja | ja (browser/unit) | nee — PR #3 niet gemerged | gebouwd, getest | Creditnota met verwijzing naar originele factuur, reden en bedrag; verstuurde factuur blijft ongewijzigd |
 | P09 | ja | ja (browser/unit) | nee — PR #3 niet gemerged | gebouwd, getest | CSV-export facturen/creditnota's en uren (formule-injectie geneutraliseerd); koppeling met een specifiek pakket vereist keuze eigenaar |
 | P10 | ja | ja (browser/unit) | nee — PR #3 niet gemerged | gebouwd, getest | Auditlog van belangrijke acties; versleutelde back-up met hersteltest; geen synchronisatie tussen apparaten |
+
+## Aanvulling v7.0
+
+De v7.0-eisen (174 regels, UX001–UX174) staan met status en bewijs in `docs/UX_REQUIREMENTS.md`. Nieuw sinds v6.0: designsysteem (`docs/DESIGN_SYSTEM.md`), materialencatalogus (`/materialen/`), server-side kortingsmotor, mandje en afrekenen (uitgeschakeld, `docs/COMMERCE_RULES.md`), mobiele kwaliteitsronde (`docs/MOBILE_QA.md`), UX-strategie (`docs/UX_STRATEGY.md`).
 
 ## Samenvatting
 

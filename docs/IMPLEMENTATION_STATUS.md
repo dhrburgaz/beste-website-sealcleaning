@@ -176,6 +176,24 @@ Een werkende bedrijfsbackend in `server/` (Node 22 + SQLite, zonder npm-afhankel
 
 Niet operationeel zonder account (eerlijk gemarkeerd in het beheer): e-mailverzending (SMTP), online betalen (Mollie) en externe back-upopslag. Het Docker-image is niet in deze omgeving gebouwd (geen Docker-daemon).
 
+## Afgerond — v7.0 premium ervaring en commerce (10 oktober 2026)
+
+Specificatieversie 7.0 (`docs/SEAL_MASTER_BRIEF.md`). Status per eis in `docs/UX_REQUIREMENTS.md` (174 regels: 64 gebouwd en getest, 60 gebouwd, 34 deels, 6 wachten op de eigenaar, 6 nog te bouwen, 1 extern geblokkeerd) en `docs/REQUIREMENTS_INDEX.md` (160 IDs, elk precies één keer, met kolommen Code/Test/Live).
+
+- **Design:** drie werkende concepten vergeleken op echte pagina's; richting A "Architectural Forest" doorgevoerd (bestaand merk, beter dan de alternatieven). Semantische kleurrollen, componentbibliotheek met toestanden, hero die op mobiel leesbaar is, navigatie met Tuin ontwerpen/Materialen/Prijzen, copy-systeem. Zelf gehoste fonts (geen Google-verzoeken). Zie `docs/DESIGN_SYSTEM.md` en `docs/DESIGN_AUDIT.md`.
+- **Catalogus:** `/materialen/` met 45 items, zoeken met synoniemen en tikfouttolerantie, filters, vergelijken tot 3, productdetail met bron en peildatum, hoeveelheidsrekenaar waar valide. Niets claimt voorraad, levertijd of SKU zonder bron.
+- **Commerce (uitgeschakeld):** server-side prijs- en kortingsmotor, orders met idempotentie en couponreservering, Mollie-adapter, mandje en afrekenen, orderstatus, beheer-tab Winkel. Alle feature flags staan uit; zonder Mollie-account, bezorgprijzen en voorwaarden is niets te bestellen. Zie `docs/COMMERCE_RULES.md`.
+- **Mobiel/prestaties:** tikdoelen < 44 px 929 → 4, overflow op 320 px opgelost, responsive foto's (LCP `/projecten/` 5,9 → 2,7 s in het lab), focusring overal, 3D-terugval. Zie `docs/MOBILE_QA.md`.
+- **Tests:** 66 unit- en integratietests; browsertests voor de volledige keten, de webwinkel (390/1440 px), configurator, beheer en site-crawl met axe.
+
+Niet gedaan of niet mogelijk in deze omgeving:
+
+- **Concurrentieaudit:** de netwerkpolicy blokkeert de sites (`docs/COMPETITOR_BENCHMARK.md`).
+- **Toesteltests:** iOS Safari en Android Chrome zijn niet getest.
+- **Schermlezer en gebruikerstests:** niet uitgevoerd.
+- **Echte bezoekersmeting:** geen analytics, bewust.
+- **Docker-image:** niet gebouwd (geen daemon).
+
 ## Nog niet gestart
 
 - **Tier 9 (documentarchitectuur):** offerte/werkbon/factuurconcept,
