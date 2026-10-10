@@ -118,7 +118,7 @@
     var startedAt = Date.now();
     var hp = document.createElement("input");
     hp.type = "text"; hp.name = "website"; hp.tabIndex = -1; hp.autocomplete = "off";
-    hp.setAttribute("aria-hidden", "true");
+    hp.setAttribute("aria-hidden", "true"); hp.setAttribute("aria-label", "Laat dit veld leeg");
     hp.style.cssText = "position:absolute;left:-9999px;width:1px;height:1px;opacity:0";
     form.appendChild(hp);
 

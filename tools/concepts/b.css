@@ -1,0 +1,17 @@
+/* Concept B — Modern Stone Studio: bijna-witte ondergrond, donkere grafische typografie (Inter strak),
+   gedempte aardetinten, portfolio als galerij; foto's als losse beeldvlakken, tekst ernaast/eronder. */
+:root { --c-sand:#f8f6f1; --c-sand-deep:#efebe3; --c-line:#dcd6ca; --c-line-soft:#e8e3d9; --c-ink:#171714; --c-ink-soft:#55534b; --c-clay:#6b5d4b; --c-forest:#23281f; --c-forest-mid:#3a4234; --font-display: "Inter", -apple-system, sans-serif; --sp-7:6.5rem; }
+h1, h2, h3, .brand-name, .service-row .name { font-weight: 600 !important; letter-spacing: -0.035em !important; }
+.eyebrow { color: var(--c-clay); letter-spacing: .12em; }
+.hero, .page-hero { display: grid; grid-template-columns: 1fr; min-height: 0; background: var(--c-sand); color: var(--c-ink); }
+.hero .hero-media, .page-hero .hero-media { position: relative; order: 2; height: clamp(260px, 52vh, 620px); margin: 0 clamp(1.25rem, 4vw, 3.5rem) clamp(1.25rem, 4vw, 3.5rem); }
+.hero-scrim, .page-hero .hero-scrim { display: none; }
+.hero-inner, .page-hero-inner { order: 1; padding-block: clamp(2rem, 5vw, 4.5rem) clamp(1.5rem, 3vw, 2.5rem); }
+.hero h1, .page-hero h1 { color: var(--c-ink); font-size: clamp(2.2rem, 4.2vw + .6rem, 4.6rem); max-width: 16ch; }
+.hero-lede, .page-hero .lede { color: var(--c-ink-soft); }
+.hero-copy .eyebrow, .page-hero .eyebrow { color: var(--c-clay); }
+.page-hero .breadcrumbs, .page-hero .breadcrumbs a { color: var(--c-ink-soft); }
+.hero .btn-ghost-light { color: var(--c-ink) !important; border-color: var(--c-ink) !important; }
+.hero .link-underline { color: var(--c-ink) !important; }
+.btn { border-radius: 999px; }
+.section-dark { background: #23281f; }

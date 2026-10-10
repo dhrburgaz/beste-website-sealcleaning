@@ -12,6 +12,7 @@ for (const w of widths) {
   const pg = await ctx.newPage();
   for (const p of pages) {
     await pg.goto(BASE + p, { waitUntil: "networkidle" }).catch(() => {});
+    for (const f of (process.env.CSS || "").split(",").filter(Boolean)) await pg.addStyleTag({ path: f });
     await pg.evaluate(() => document.querySelectorAll(".reveal").forEach((e) => e.classList.add("is-visible")));
     await pg.evaluate(async () => { document.querySelectorAll("img[loading=lazy]").forEach((i) => (i.loading = "eager")); for (let y = 0; y < document.body.scrollHeight; y += 600) { window.scrollTo(0, y); await new Promise((r) => setTimeout(r, 30)); } window.scrollTo(0, 0); });
     await pg.waitForLoadState("networkidle").catch(() => {});
