@@ -1776,6 +1776,9 @@ export function initConfigurator(root) {
     if (project.variants.length) {
       const holder = document.createElement("div");
       holder.className = "price-table-wrap variant-table-wrap";
+      holder.tabIndex = 0;
+      holder.setAttribute("role", "region");
+      holder.setAttribute("aria-label", "Vergelijking varianten (horizontaal scrollbaar)");
       holder.textContent = "Vergelijking wordt geladen…";
       fs.appendChild(holder);
       loadPriceSources().then((ps) => fillVariantTable(holder, ps));

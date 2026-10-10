@@ -91,6 +91,9 @@
 
       var tableWrap = document.createElement("div");
       tableWrap.className = "price-table-wrap";
+      tableWrap.tabIndex = 0;
+      tableWrap.setAttribute("role", "region");
+      tableWrap.setAttribute("aria-label", (GROUP_LABELS[groupId] || groupId) + " (tabel, horizontaal scrollbaar)");
       var table = document.createElement("table");
       table.className = "price-table";
       var thead = document.createElement("thead");

@@ -50,3 +50,6 @@ body.beheer { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-se
   body.printing #print-root { display: block; }
   body.printing { background: #fff; }
 }
+.beheer-invoice { border-top: 1px dashed var(--c-line); margin-top: 1em; padding-top: 0.6em; }
+.beheer-audit { font-size: 0.82rem; max-height: 320px; overflow: auto; }
+.doc-checklist { list-style: none; padding-left: 0; }

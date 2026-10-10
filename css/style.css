@@ -15,7 +15,7 @@
   --c-stone: #b9ab8e;           /* warm stone — accents on dark, quiet highlight */
   --c-sand: #f3ede1;            /* warm off-white — page background */
   --c-sand-deep: #e9dfc9;       /* deeper sand — section alternation */
-  --c-clay: #8a5a3b;            /* muted terracotta — sparing accent / focus */
+  --c-clay: #7a4e31;            /* muted terracotta — sparing accent / focus */
   --c-line: #ddd0b3;            /* hairline border on sand */
   --c-line-soft: #e5dac2;
   --c-line-dark: rgba(243, 237, 225, 0.16);   /* hairline on dark bg */
@@ -499,7 +499,7 @@ fieldset > legend { font-weight: 500; font-size: 0.82rem; letter-spacing: 0.04em
 .footer-grid a:hover { color: #fff; }
 .footer-brand .brand-name { color: #fff; font-size: 1.3rem; }
 .footer-brand p { color: rgba(243,237,225,0.55); max-width: 34ch; margin-top: var(--sp-2); }
-.footer-bottom { padding-block: var(--sp-3); font-size: 0.8rem; display: flex; flex-wrap: wrap; gap: var(--sp-2); justify-content: space-between; color: rgba(243,237,225,0.45); }
+.footer-bottom { padding-block: var(--sp-3); font-size: 0.8rem; display: flex; flex-wrap: wrap; gap: var(--sp-2); justify-content: space-between; color: rgba(243,237,225,0.66); }
 .footer-bottom a { color: rgba(243,237,225,0.65); text-decoration: none; }
 .footer-bottom a:hover { color: #fff; }
 
@@ -824,10 +824,11 @@ fieldset > legend { font-weight: 500; font-size: 0.82rem; letter-spacing: 0.04em
 .price-group { margin-bottom: var(--sp-5); }
 .price-group h3 { font-family: var(--font-display); font-size: 1.2rem; margin-bottom: var(--sp-2); }
 .price-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.price-table-wrap:focus-visible { outline: 2px solid var(--c-forest); outline-offset: 2px; }
 .price-table { font-size: 0.9rem; min-width: 640px; }
 .price-table th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--c-ink-soft); font-weight: 500; font-family: var(--font-body); }
 .price-table td { vertical-align: top; }
-.price-row-stale { opacity: 0.6; }
+.price-row-stale { color: var(--c-ink-soft); font-style: italic; }
 .price-badge-stale { display: inline-block; font-size: 0.74rem; color: var(--c-error); border: 1px solid var(--c-error); border-radius: 999px; padding: 0.15em 0.6em; margin-top: 0.3em; }
 .price-driver-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--sp-3); margin: var(--sp-4) 0; }
 .price-driver-grid > div { border-top: 2px solid var(--c-forest); padding-top: 0.8em; }

@@ -5,6 +5,7 @@
   "description": "Statische website Sealcleaning. Geen build-stap; package.json alleen voor tests en hulpscripts.",
   "scripts": {
     "test": "node --test tests/*.test.mjs",
-    "search-index": "node tools/build-search-index.mjs"
+    "search-index": "node tools/build-search-index.mjs",
+    "e2e": "node tests/e2e/beheer-kluis.mjs && node tests/e2e/beheer-facturatie.mjs && node tests/e2e/site-crawl.mjs"
   }
 }
