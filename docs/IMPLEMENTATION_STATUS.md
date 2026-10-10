@@ -2,14 +2,14 @@
 
 Lees dit bestand, `git status`, `docs/REQUIREMENTS_INDEX.md` (160 v4-IDs
 met status) en alleen de relevante hoofdstukken van
-`docs/SEAL_MASTER_BRIEF.md` (v6.0, leidend bij conflict) bij hervatten.
+`docs/SEAL_MASTER_BRIEF.md` (v7.0 met v6.0 integraal; v7.0 leidend bij conflict) bij hervatten.
 Begin niet opnieuw met onderzoek.
 
 **Branch:** `claude/sealcleaning-website-overhaul-gvgtfj`, gebaseerd op de
 huidige `main` (live op sealcleaning.nl). Nog niet gemerged — vraag de
 eigenaar wanneer een PR/merge gewenst is.
 
-**specVersion: 6.0** (zie checkpointsjabloon in `SEAL_MASTER_BRIEF.md` V6-09).
+**specVersion: 7.0** (zie checkpointsjabloon in `SEAL_MASTER_BRIEF.md` V6-09).
 
 ## Afgerond — v2.0 tier 1-8 (zie `docs/REQUIREMENTS_INDEX.md` voor detail per ID)
 

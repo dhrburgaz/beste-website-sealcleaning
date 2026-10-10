@@ -1,3 +1,436 @@
+# SEAL MASTERDOSSIER v7.0 — PREMIUM EXPERIENCE, HIGH-CONVERSION COMMERCE & DESIGN INTELLIGENCE
+
+**Opdrachtgever:** SEAL / Sealcleaning Groenonderhoud en Aanleg. **Bestemming:** Claude Code, bestaande repository `dhrburgaz/beste-website-sealcleaning`. **Datum:** 10 oktober 2026. **Karakter:** integraal uitvoeringsdossier (de volledige v6.0 staat onderaan). **Ambitie:** een uitstekend digitaal klant-, ontwerp- en bedrijfssysteem voor hoveniersdiensten, schuttingen, bestrating, materialen en onderhoud.
+
+> **START HIER — BELANGRIJK:** Dit document bevat nieuwe v7.0-ontwerp-, commercie-, mobiele en producteisen EN alle oorspronkelijke v6.0-/v5.0-/v4.0-/v3.0-/v2.0-eisen. v7.0 heeft bij conflict voorrang, maar verwijdert geen veiligheidsregels, eerder goedgekeurde functionaliteit of klantdata. Lees de v7.0-hoofdstukken en de actuele projectstatus, raadpleeg oudere specificaties gericht per taak. Werk daadwerkelijk in de bestaande code. Nieuwe ontwerpen zijn pas gereed na toepassing, browsercontrole, toegankelijkheidscontrole en gebruikersgerichte beoordeling. **Noem SEAL nooit 'de beste website' zonder aantoonbaar, representatief vergelijkingsonderzoek en echte gebruikersresultaten.**
+
+## V7-00. Ononderhandelbare strategische opdracht
+
+De opdrachtgever wil niet simpelweg 'een fraaie hovenierssite'. Ontwikkel een zorgvuldig samenhangend digitaal product op het kwaliteitsniveau van een goed creatief bureau, retailproductteam en professionele softwareorganisatie. Gebruik de gecombineerde beoordelingsperspectieven van creative director, art director, brand strategist, service designer, senior product designer, e-commerce UX-researcher, gedragsonderzoeker, conversiespecialist, typograaf, fotograaf, hoveniervakexpert, calculator, accessibility engineer, front-end architect, security engineer en kritische bedrijfsleider. Het gaat om toetsbare kwaliteit, niet om prestigieuze titels.
+
+**Nooit tevreden op basis van snelheid.** Een uur ontwikkelen is geen bewijs van topkwaliteit. De eerste werkende versie is slechts een prototype. Doe daarom meerdere volledige ontwerp- en kwaliteitsrondes: onderzoek → alternatieven → ontwerp → werkende implementatie → inspectie → verbeteren → met gebruikers toetsen → opnieuw verbeteren.
+
+**Werk vanuit gebruikerswaarde, niet vanuit feature-count.** Een goede site heeft veel zinvolle mogelijkheden zonder de klant te overspoelen. Alle benodigde keuzen zijn bereikbaar; de standaardroute blijft eenvoudig. Bij een klant met één schutting hoef je geen volledige tuinontwerpstudio af te dwingen.
+
+**Geen valse overtuigingstechnieken.** Verboden: nepreviews, fictieve voor/na-foto's, nep-schaarste, kunstmatige aftelklokken, verborgen toeslagen, misleidende 'van'-prijzen, vooraf aangevinkte betaalde opties, zonder toestemming volgen of automatisch akkoord afdwingen. Positieve psychologie betekent: minder onzekerheid, meer gemak, betere verbeelding, geloofwaardig bewijs en eerlijke prijsvergelijking. Gebruik privacy-by-design, AVG, ACM-regels en echte bewijsvoering.
+
+**Status realistisch houden.** 'Gebouwd' ≠ 'getest' ≠ 'productiegeschikt' ≠ 'live' ≠ 'bewezen succesvol'. Voor alle claims moeten bronnen, testresultaten, screenshots of meetgegevens beschikbaar zijn. Geen kunstmatige 10/10-beoordelingen.
+
+**Bestaande toestand bij aanvang:** PR #3 van `claude/sealcleaning-website-overhaul-gvgtfj` naar `main` was op 10 oktober 2026 nog open, niet gemerged. Een groot deel van frontend en backend is ontwikkeld, maar staat niet live. Het register `docs/REQUIREMENTS_INDEX.md` had bij die controle **138 van de 160** specifieke IDs; ontbrekend waren `H01–H04`, `H09`, `J08–J10`, `L01–L07`, `M04–M10` (22 IDs). Dit zijn historische meetpunten: **controleer actualiteit opnieuw**. Sommige ontbrekende registerregels vertegenwoordigen al gebouwde backendcode. Vul eerst de registratie aan; bouw niets dubbel.
+
+**Afhankelijkheden:** e-mail `info@`, backend-hosting, Mollie/andere betaalprovider, leveranciersafspraken, juridische goedkeuring en inhoudelijke eigen bedrijfsgegevens mogen later worden aangesloten. Bouw hun contracten/adapters en duidelijke lege of geblokkeerde toestanden nu, maar geef nooit een vals signaal dat ze werken. Geen ongeautoriseerde DNS-wijziging, live-merge, accountaanmaak, uitgave of betaaltransactie.
+
+## V7-01. Design thinking: hoe SEAL vertrouwen en verlangen tegelijk creëert
+
+**De centrale ontwerpvraag:** 'Welke ervaring helpt iemand die honderden tot tienduizenden euro's in zijn woning en tuin investeert, bij elke stap een veilige, geïnformeerde en plezierige keuze te maken?' Vertaal dit naar zes lagen:
+
+1. **Aantrekkingskracht:** smaak, rust, authenticiteit, passend aspiratieniveau, een eerste visueel beeld dat het resultaat voor de klant voelbaar maakt.
+2. **Begrip:** iemand weet binnen seconden wat SEAL doet, in welk gebied, voor welk type klus, en hoe hij contact kan opnemen.
+3. **Geloofwaardigheid:** eigen werk, echte mensen, heldere bedrijfsgegevens, juiste reviews/bron, hoe de uitvoering wordt aangepakt, wat er bij problemen gebeurt.
+4. **Controle:** ontwerp vergelijken, teruggaan, opslaan, de consequenties van keuzes begrijpen, reële verwachtingen rond prijs en planning.
+5. **Transactiezekerheid:** onderscheiden tussen vrijblijvende aanvraag, prijsindicatie, definitieve offerte, bindend akkoord, materiaalbestelling en betaling.
+6. **Vertrouwen ná verkoop:** planning, voortgang, wijzigingen, oplevering, onderhoud en toegankelijke klantenservice.
+
+Voor elk interactie-element noteer: klantvraag; onderliggende twijfel; informatie of bewijs; gewenst gedrag; alternatief zonder dwang; meetbare indicator; risico voor privacy/vertrouwen. Test aannames in plaats van ononderbouwde psychologische effecten te claimen.
+
+**Doelgroepen (geen stereotype aannames):** (a) kleine, snelle onderhoudsklus, (b) schutting/privacy, (c) bestrating/terras/oprit, (d) complete tuinrenovatie, (e) luxe tuinontwerp, (f) laag-onderhoud-georiënteerde klant, (g) prijsgevoelige vergelijking, (h) bestaande klant/nazorg, (i) aannemer/projectleider, (j) VvE/verhuurder, (k) zakelijke inkoper, (l) vakman die samenwerking zoekt. Maak voor elk een journey map met vragen, risico's, CTA, bewijs en frictiemomenten.
+
+**Cognitieve strategie (ethisch):** keuze-architectuur met beperkte hoofdopties, progressive disclosure, herkenning in plaats van onthouden, sociaal bewijs alléén indien echt, transparante ankers (inhoudelijke pakketten), endowment door eigen ontwerp, 'what happens next' zekerheid, uitleg bij ingewikkelde termen, verliespreventie door bewaren/undo, consistente feedback en voorspelbare foutafhandeling. Vermijd schuldgevoel, afleidingsmanoeuvres en manipulatie.
+
+## V7-02. Hoogwaardige merk- en visuele ontwerprichting
+
+Bestaande premium ankers uit de code: diep bosgroen `#1b2a1e`, warm zand `#f3ede1`, hout/steen, donker tekstcontrast, terracotta `#7a4e31`, Fraunces voor display, Inter voor UI, echte projectfotografie. **Beoordeel** de huidige richting; behoud indien deze na vergelijking sterker is. Geen redesign uitsluitend om redesign.
+
+**Ontwikkel eerst drie volwassen visuele concepten in dezelfde contentstructuur:**
+
+- **Concept A — Architectural Forest:** bosgroen, natuurlijke steentinten, editorial fotografie, rustige serif-koppen, nauwkeurige lijnen, veel ademruimte. Focus: premium maar toegankelijk.
+- **Concept B — Modern Stone Studio:** meer warme, bijna-witte ondergrond, donkere, grafische typografie, subtiele aardekleuren, projectportfolio als galerij. Focus: verfijnd en architectonisch.
+- **Concept C — Warm Craft & Nature:** natuurlijke warmte, aandacht voor ambacht, echte mensen/handen/materialen, toegankelijke informatieblokken. Focus: persoonlijkheid en betrouwbaarheid.
+
+Maak voor ieder concept concrete desktop- en mobiele prototypes van homepage, dienstpagina, projectcase, materialendetail, configurator, offerte en checkout. Presenteer geen statische mock-up als productiecode. Kies één consistente richting met gedocumenteerde onderbouwing, designelementen en risico's; eventueel de beste details combineren zonder stijlloze collage. Gebruik de echte SEAL-foto's en gegevens; ontbreken de assets, maak neutrale beeldvakken met duidelijk aangegeven vereiste bron, geen nepklussen.
+
+**Designsystem minimaal:**
+- Semantische kleurrollen (primary, accent, positive, attention, danger, focus, muted, surface, overlay); kleurcontrast in alle toestanden; kleur niet als enige statusdrager.
+- Typografische rollen en fluid scales voor H1/H2/H3/body/caption/numerieke tabellen; Nederlandse lange woorden en prijsregels testen; line-height en optimale regelbreedte.
+- Spacing/rhythm 4/8-px schaal of een consistente variant; containers, grid, fotoverhoudingen, radii, borders en schaduwen met een bewuste signatuur.
+- Componentbibliotheek voor knop, chip, kaart, tabs, accordion, keuze-tegel, input, validatie, status, vergelijkingstabel, sticky CTA, mobiele navigatie, dialog, toast, skeleton, progress-indicator, lightbox, galerij, besteloverzicht, prijstabel en foutscherm.
+- Status voor loading, empty, error, no-Wi-Fi/offline, success, pending, estimated, out-of-service-area, not-configured; onafhankelijk van alleen kleur.
+- Iconen met een consistente lijnstijl; geen decoratieve icon-wolk; geen onnodige gradients/glow/stockbeeld.
+- Motion-systeem: purposeful 100–300 ms overgang (indicatief, testen), natuurlijke easing, animatie alleen indien behulpzaam, `prefers-reduced-motion`, animaties mogen metingen, klikken, contrast of compositie niet ondermijnen.
+- Beeldregie: contact sheets van echte projecten; per foto onderwerp, locatie indien geverifieerd, doel, uitsnede, scherpstelpunt, kleurcorrectie zonder misleidend resultaat, geschikte webp/avif-versies en alt-tekst.
+- Luxe vertaalt zich in beheersing, details en helderheid — niet in enorme heroes, kleine teksten of trage video-achtergronden.
+
+**Designbeoordeling:** beoordeel elk concept met vaste criteria en bewijs: merkonderscheid, doelgroepmatch, geloofwaardigheid, typografie, fotografie, visuele hiërarchie, mobiel, toegankelijkheid, begrijpelijkheid van CTA, implementatiekosten en onderhoudbaarheid. Streef naar aantoonbare verbeteringen; verzin geen objectieve 'wereldbeste'-score.
+
+## V7-03. Representatieve benchmark: van Nederlandse hovenier tot wereldklasse-productteam
+
+Onderzoek live **minimaal 12 Nederlandse branchevoorbeelden** (directe hoveniersbedrijven, regionale concurrenten, tuinarchitecten, 3D-aanbieders, materiaalplatformen), aangevuld met **6 aangrenzende inspiratiecategorieën** (sterke retailers, interieurmerken, woningbouwers, online configuratoren, hospitality, B2B-dienstverleners). Geen belofte dat ze 'de beste' zijn: onderzoek juist uiteenlopende sterke en zwakke voorbeelden.
+
+**Verifieerbare startkandidaten voor onderzoek (site en inhoud opnieuw inspecteren):**
+- https://debiesboschgijsbersgroep.nl/tuinontwerp/voorbeelden/
+- https://www.degroothoveniers.nl/3d-ontwerpen/
+- https://www.dimhovenier.nl/tuinontwerp/3d-tuinontwerp
+- https://bos-hoveniers.nl/projecten/voorbeelden-3d-tuinontwerp/
+- https://www.verdahoveniers.nl/ontwerp-aanleg-renovatie-onderhoud.html
+- https://www.siebersgroep.nl/luxe-tuin/
+- https://burobuiten.nl/
+- https://www.martinveltkamp.nl/
+- https://www.tuinarchitect-rotterdam.nl/portfolio.html
+- https://gernellhoveniers.nl/portfolio
+- https://gratis-tuinontwerp.nl/
+- https://maiapro.nl/
+
+**Aangrenzende typen om te onderzoeken** (zoek actuele relevante pagina's, ga niet uit van onbewezen details): bol/Amazon voor filters en checkout; IKEA voor ruimte- en materiaalvoorstelling; Apple voor productpresentatie en typografie; Airbnb voor vertrouwen en beeld; premium architectuurportfolio's voor beeldregie. Benchmark geen merknaam, maar de concrete interactie.
+
+**Benchmarkmatrix:** datum, URL, doelgroep, eerste indruk, mobiele eerste scherm, navigatie, bewijs, contentdiepte, pagina-architectuur, beeldkwaliteit, drempels om contact op te nemen, prijsduidelijkheid, configuratie, filters, informatie per product, checkoutfrictie, foutafhandeling, toegankelijkheid, performance, unieke elementen, negatieve verrassingen. Bewaar bron en screenshot waar toegestaan; vat samen in eigen woorden. Geef per patroon het voorstel 'overnemen als principe / verbeteren / vermijden / niet toepasbaar' met reden. Zonder webtoegang: markeer audit als **niet uitgevoerd**, vul geen verzonnen score in.
+
+## V7-04. De complete klantreis: 16 routes in plaats van zeven oppervlakkige stappen
+
+Voor iedere route: storyboard, schermen, edge cases, touch-specifieke flow, semantische CTA, servercontract, succesbevestiging en end-to-end test.
+
+1. **Eerste bezoek mobiel → snelle bel/WhatsApp-actie:** meteen duidelijk werkgebied, diensten, bereikbaar kanaal en geen overbodige pop-ups.
+2. **Nieuwe bezoeker → vrijblijvende tuinaanvraag in < 2 minuten** (gebruikersdoel, geen beloofde meetwaarde): dienst, locatie, korte omschrijving, contact; alleen noodzakelijke velden.
+3. **Schuttingproject → meters/hoogte/hoek/poort → voorstel → aanvraag:** inclusief bestaande schutting, verwijdering en buurtafspraken.
+4. **Bestratingsproject → oppervlak/verband/ondergrond/afvoer → materiaalscenario's → aanvraag:** pakketten en snijverlies transparant.
+5. **Complete tuin → wensen → tekenen → bewaren → samen bespreken → aanvraag:** geen verplichte complete 3D voordat contact mogelijk is.
+6. **Inspiratie → case → bewaren → vergelijken → eigen plan:** alleen echte case claims en herleidbare foto's.
+7. **Materiaal ontdekken → zoeken/filteren → vergelijken → informatie/demonstratie → prijsstatus.**
+8. **Materiaal kopen (alleen wanneer daadwerkelijk aangeboden):** productdetail → configureerbare hoeveelheid → mandje → coupon → verzending/afhaaloptie → betaaldienst → bevestiging → nazorg/retourproces.
+9. **Alleen montage, klant levert materiaal:** duidelijke verantwoordelijkheid, aantallen, tolerantie, risico, levertijd en afspraak.
+10. **Onderhoudsklant → éénmalig vs seizoenscontract:** scope, frequentie, toegankelijkheid, afvoer, opzeg- en prijsvoorwaarden.
+11. **Budgetbewuste klant → varianten A/B/C:** eerlijke uitgangspunten en leverbaarheid; aanpassingen binnen hetzelfde ontwerp.
+12. **Zakelijke opdrachtgever/VvE → meerdere locaties/PO/BTW:** gestandaardiseerde projectaanvraag, documenten, rollen, facturatie.
+13. **Offerte ontvangen → vragen → wijzigen → akkoord:** exacte versie/voorwaarden vastleggen; niet verplicht eerst een account creëren om inhoud te zien.
+14. **Uitvoering → planning/meerwerk/oplevering:** transparante status en contactmomenten.
+15. **Probleem/klacht/herroeping:** frictiearme toegang, wettelijk proces, geen defensieve interface.
+16. **Bestaande klant → onderhoud → vervolgproject → aanbeveling:** opt-in opvolging en eenvoudig opnieuw aanvragen.
+
+Voor elke route ook de 'mislukte' scenario's testen: geen internet, verkeerd formaat, offerte verlopen, ontwerp te groot voor deellink, ontbrekend product, ongeldige korting, mislukte betaling, geen mailserver, verboden locatie, niet-beschikbare API, tablet gedraaid, sessie verlopen. Laat data niet onzichtbaar verdwijnen.
+
+## V7-05. Pagina-architectuur en voorbeeldindeling per template
+
+**Homepage — geen visuele rommel.** Boven de vouw: herkenbare merknaam, hoogwaardige echte projectfoto, heldere propositie, expliciet werkgebied, twee betekenisvolle paden ('Vraag een offerte aan' en 'Ontwerp uw tuin'; bellen als ondersteunende keuze); zinvolle microcopy wat er daarna gebeurt. Daarna: bewijs (echte projecten/team), 5–7 hoofdservices met logische verdere categorieën, ontwerpvoordeel, een echt projectverhaal, materiaalkeuze, transparante werkwijze, eerlijke vraag-en-antwoordsectie, zakelijke route en afsluitende CTA. Fotografie niet dupliceren louter om pagina te vullen.
+
+**Dienstpagina:** duidelijke probleemstelling en wat SEAL concreet doet; toepassingsfoto's; voor wie; keuzes (alleen montage, compleet, onderhoud); 'wat is inbegrepen' vs 'niet standaard inbegrepen'; materiaalaanpak; factoren die kosten beïnvloeden; eigen projectcases; praktische voorbereiding; vaktechnische aandachtspunten; FAQ; contextuele aanvraag. Geen automatisch gegenereerde lege lokale SEO-pagina's.
+
+**Projectcase:** 1 sterke foto, navigeerbare galerij, situatie/uitdaging/uitvoering/resultaat, verifieerbare locatie en maten wanneer aanwezig, gebruikte materialen als bekend, korte foto-captions, inspiratie opslaan, vergelijkbaar project starten, contact. Voor/na-sliders alleen bij echt identieke plekken.
+
+**Materialencategorie:** categorie-uitleg, filters die aansluiten bij vaktaal (materiaal, formaat, kleur, structuur, toepassing, onderhoud, prijsklasse, leverancier/bronstatus, levertijd indien bekend), sortering en reset; duidelijke actieve filters, resultaatcount, no-results, snelle vergelijking.
+
+**Productdetail:** duidelijke naam en variant, alle betrouwbare beelden/maattekeningen, technische specs, toepassing/ondergrond, onderhoud, eenheid, pakketinhoud, totale benodigde hoeveelheid, voorraadstatus indien gecontroleerd, eventuele sample-optie, levertijd indien bevestigd, reële BTW-/bezorginformatie, alternatief als product ontbreekt. Geen zelfbedachte SKU of 'direct leverbaar'.
+
+**Configurator:** keuze 'Snel project' en 'Zelf ontwerpen'; logisch paneel, consistent canvas, persistent maat-/prijsstatus, onzekerheidsbadge, undo/redo, tips contextueel, materialenbibliotheek, mobiele editmodus en apart volledig scherm. Ontwerp heropenen ook na per ongeluk sluiten binnen bewaarbeleid.
+
+**Prijzen:** gescheiden arbeidsverkooptarief, externe marktbenchmark, indicaties, pakketverschillen, bron/verversdatum, inclusies en uitsluitingen; geen magische totaalprijs. Uurtarief SEAL €60 excl. btw per medewerker (verkooptarief; controleer BTW-toepassing).
+
+**Offertepagina/portaal:** helder opdrachtresultaat, projecttekening, vigerende versie, werkregels, materiaal, toelichtingen, prijs incl. toepasselijke btw, onzekerheden en keuze om vragen te stellen, voorgestelde planning, voorwaarden en expliciet akkoord. Meerwerk altijd aparte wijziging.
+
+**Mandje/checkout:** alleen wanneer orders juridisch en technisch geactiveerd kunnen worden; zie V7-09 en V7-10. Materialen kopen is iets anders dan vrijblijvende offerteaanvraag.
+
+**Over ons:** echte mensen, werkprocessen, vakinhoud en verificatie, geen ongefundeerde '35 jaar ervaring' of verzonnen certificaten. **Zakelijk:** PO, locaties, veiligheids-/toegangsafspraken, scope, werkbonnen. **Contact:** keuzehulp en werkelijk werkende ontvangst; probleemloos bellen en berichten. **404/0-resultaten:** vriendelijk herstelpad, interne zoekfunctie, relevante diensten; nooit dood einde.
+
+## V7-06. Mobile-first premium, niet 'desktop verkleind'
+
+**Standaard: ontwerp eerst de 360/390 px iPhone-/Androidervaring en werk op.** Test fysiek waar mogelijk, niet alleen browseremulatie. Specifieke extra browsermaat: 320, 360, 375, 390, 430, 768, 1024 en 1440 px; iOS Safari en Android Chrome; portrait/landscape; zoom 200% en systeemfontgroottes.
+
+- **Bovenkant:** eerste 1–2 schermen moeten duidelijke dienst, vertrouwen en CTA bevatten; geen levensgrote hero die de inhoud wegdrukt.
+- **Navigatie:** met één hand bruikbaar; menu met semantische categorieën en grote tikvlakken; back-button werkt; menu sluit bij keuze; focus blijft correct.
+- **Tap targets:** minimaal WCAG 2.2 AA of voldoende ruimte (norm is 24px), maar streef voor eigen interactieve controls naar **44 × 44 CSS px** (verhoogde AAA-doelstelling en praktisch comfortabel), inclusief canvas-handgrepen en sluitknoppen.
+- **Sticky balk:** contextueel één primaire actie ('Vraag offerte aan', 'Ga verder', 'Bekijk totaal'); rekening houden met `env(safe-area-inset-bottom)` en iPhone Safari-toolbar; verbergt geen formuliervelden, betaal- of herroepingsinformatie; geen dubbele sticky balk.
+- **Formulieren:** correcte `autocomplete`, `inputmode`, persistente labels, expliciet optioneel/verplicht, passende toetsenborden, inline specifieke fouttekst, niet boven keyboard verborgen; focus/scrollpositie behouden.
+- **Fotografie:** prioriteit aan relevant beeld, volledig scherm mogelijk, pinch-to-zoom waar zinvol, lazyload onder de vouw, dimensies voorkomen CLS, geen dure autoplay-video op mobiel.
+- **2D/3D canvas:** bij scrollen geen onbedoeld slepen; eerste tik selecteert; tweevinger-pan/zoom of duidelijke alternatieve knoppen, schermlezer- en numerieke invoer alternatief, state nooit verliezen bij draaien.
+- **Compatibiliteit:** langzaam 4G/CPU-throttle, 3D zonder WebGL2 → nette 2D-fallback, slecht netwerk, offline herstel, geen horizontale overflow; volledige pagina inclusief koopflow.
+- **Typografie/contrast:** alles leesbaar zonder knijpen; actieve prijs/totaal/subtitel in juiste relatie; geen overcomplexe tabellen zonder mobiel toegankelijk alternatief.
+- **Interrupties:** geen storende inlog-, cookie-, korting- of chatpopups boven het werk; subtiele relevante hulp of opt-in.
+- **Polish:** geanimeerde statusovergangen alleen functioneel; pressed/focus/disabled/loading states; 'gelukt' en 'nog niet ontvangen' expliciet onderscheiden.
+
+**Performance-doelen** (voor echt verkeer op p75, afhankelijk van meetmethode): LCP ≤2,5 s, INP ≤200 ms, CLS ≤0,1; documenteer labmetingen apart van echte bezoekersgegevens. 3D-code on demand; statische landingspagina laadt niet de zware editor. Beeldformaten, caches, splitsing, budgetten en browsermeting zichtbaar documenteren. Geen beloften zonder werkelijke meting.
+
+## V7-07. De 2D/3D-editor als onderscheidende 'product experience'
+
+**Behoud en consolideer wat bestaat:** gedeelde geometrie tussen 2D, 3D, materiaalhoeveelheden, export, scenario's, dossier en calculatie. Test alle berekeningen op grensgevallen. Maak verbeteringen op bestaande modules, geen tweede editor.
+
+**Geavanceerde opties (faseren op echte waarde):**
+1. Rechthoek, L-vorm, vrije contour, verspringingen en meerdere ontwerpzones met schaal, area sanity checks en niet-zelfkruisende polygonen.
+2. Hoogteverschil als expliciete informatie of geverifieerde module, geen misleidende afwateringssimulatie.
+3. Bestaande omheining, delen, hoeken, poorten, deurzwaai, perceelsgrens met disclaimer, behouden/herstellen/verwijderen.
+4. Tegels, klinkers, halfverharding, grind, gras, borders, beplanting, vlonders, verlichting, plantenbakken, tuinmeubels als schematische objecten, waterafvoer.
+5. Producten zien in geloofwaardige relatieve schaal, materiaalmonsters/texture atlas alleen met juiste rechten en bekende productspecificaties.
+6. 3D camerastandpunten: boven, op ooghoogte, ingang, terras; reset, zoom, duidelijke hulpschermpjes.
+7. Zon/schaduw met illustratieve status; noordpijl alleen waar oriëntatie door gebruiker is ingevoerd; geen klimaatsimulatieclaim.
+8. Opslaan, versiegeschiedenis, undo/redo, kopiëren, dupliceren, vastzetten en A/B/C vergelijken.
+9. 'Wat verandert er als?' scenario's: minder bestrating, andere hoogte, duurzamer materiaal, minder onderhoud, andere poort; prijswijziging alleen bij geldige bron/norm.
+10. Zelfopmeten-hulp met fotovoorbeelden, toegang, scheefstand, obstakels, snijverlies, werkruimte en benodigde professional check.
+11. Downloads: heldere PNG, bruikbaar geversioneerd ontwerpbestand en een leesbaar projectdossier; zorg dat re-import betrouwbaar werkt.
+12. Delen met partner via veilige link zonder PII; ontwerpverwijdering en verlopen links waar serveropslag wordt gebruikt.
+13. Visualisaties mogen aantrekkelijk zijn maar kunnen nooit exact product, licht of uitkomst garanderen.
+14. Optionele AR en fotogebaseerde visualisatie zijn **R&D-kandidaten**; pas bouwen als assets, accuracy, apparaatcapaciteit, privacy en broninformatie betrouwbaar zijn.
+
+**Configuratorspecifieke microdetails:** maatlabels, eenheden mm/cm/m consequent, duidelijke min/max, hover/focus/uitleg op warnings, zoom die cursor/touch center volgt, auto-fit zonder onverwachte sprongen, preview bij materiaalwijziging, selectie zichtbaar bij hout- én lichte tegeltextures, weergave van onbekende waarden, pure functies voor geometrie/calculatie en tests voor negatieve coördinaten, nullen, randcontact, overlappende vlakken, poortconflict en 3D/2D-sync.
+
+## V7-08. Catalogue intelligence: méér mogelijkheden dan drie 60×60-tegels
+
+**Het project heeft momenteel drie geverifieerde bestratingsproducten van hetzelfde formaat. Dat is niet het beoogde volledige assortiment.** Ontwikkel een schaalbare gegevensstructuur en sterke UI voor de onderstaande categorieën, maar onderscheid zorgvuldig `geverifieerd-product`, `algemene materiaaloptie`, `op aanvraag`, `niet leverbaar`.
+
+**Categorieën:** schuttingdelen (grenen, douglas, hardhout waar mogelijk, composiet, hout-beton, beton), palen, onderplaten, poorten, beslag en fundering; bestrating (beton, keramiek, natuursteen, klinkers, waaltjes, groot/kleinformaten, 20/30/40/60 cm en andere echt beschikbare maten); opsluitbanden, voegmiddelen, zand, split, stabilisatie, grind, worteldoek; kunstgras, gazon, graszoden, bodemverbetering; haag, heesters, vaste planten, bomen, bodembedekkers, potten; verlichting, drainage, vlonders, pergola/overkapping **alleen binnen echt aangeboden scope**; onderhoud en afvoercategorieën.
+
+**Productdatamodel**: id, category, title, description, SKU, leverancier, afbeeldingen/licenties, maat-dimensies, kleur/afwerking, technische toepasbaarheid, eenheid, verpakking, minimum hoeveelheid, beschikbaarheid plus datum, bron-URL, prijs excl/incl BTW indien betrouwbaar, vereiste onderlaag, gewicht/transport, onderhoud, geschiktheid/risico, herkomststatus en teststatus. Alle onzekere velden null, nooit gokken.
+
+**Gebruikersfuncties:** productzoeker met synoniemen en verkeerd gespelde woorden, slimme facetfilters, vergelijk tot 3, favorieten/inspiratiebord, voorbeeldproject met product, geschiktheidscheck, eigen materiaal meebrengen, alternatieven bij niet-beschikbaarheid, automatische hoeveelheidberekening alleen waar wiskundig valide. 'Direct kopen' uitsluitend bij bevestigde assortiment- en fulfillment-afspraken. Voor samples eerst eigenaar/leverancierbeleid.
+
+## V7-09. Prijzen, korting en promoties: echte retailcapaciteit zonder misleiding
+
+**Duidelijke aparte commerciële modellen:** (A) vrijblijvende intake, (B) indicatieve calculator, (C) door SEAL beoordeelde offerte, (D) geaccepteerde opdracht, (E) werkelijk bestelbaar product met betaling. Gebruik niet één 'bestel nu'-CTA voor onzekere tuinwerkzaamheden.
+
+**Promotie-engine voor later in productie, bouw architectuur en tests nu:**
+
+- Kortingscode: code, interne id, type (`percentage`, `vast-bedrag`, `gratis-bezorging` waar passend, dienstkorting, bundelkorting), bereik (producten, categorieën, specifieke offertes of arbeid alleen als expliciet toegestaan), start/eind-datum met Europe/Amsterdam-verwerking, actieve status, stack-/combinatieregels, minimaal kwalificerend bedrag, maximum voordeel, maximaal gebruik totaal/per-klant/per-account, geautoriseerde klantgroep, eerste bestelling alleen wanneer werkelijk controleerbaar, klant-/kanaalrestricties en auditlog.
+- Validatie **altijd op de server**; frontend enkel invoer en begrijpelijke feedback. Geen geheimen in client JS, geen via de browser aanpasbare finale prijs, race conditions voorkomen met transactionele teller/reservering, idempotente toepassing, geen negatieve totalen, duidelijke geldafronding en herstel bij mislukte betaling.
+- Korting op basis van juiste BTW-grondslag en eventuele verzendkosten: contractueel/fiscaal laten valideren. Houd de historische prijs, koopprijs, korting, coupon en refund bij op de exacte ordermomentopname.
+- Heldere UI: couponveld subtiel vindbaar, optioneel; geen couponjacht die klanten de checkout uitstuurt; uitleg waarom code niet werkt; wel tonen op orderoverzicht wat bespaard is en waarom; geen 'deal' zonder werkelijk voordeel.
+- **Van/voor-korting**: handhaaf waar van toepassing de ACM-norm om te vergelijken met de relevante laagste eigen prijs uit de voorafgaande 30 dagen. Verplicht historische prijsdata; zonder data geen doorgestreepte prijs, geen procentuele nepbesparing. Controleer dienstspecifieke uitzonderingen en productregels juridisch.
+- **Promotietypen ter beoordeling, niet als fictief actief**: getrouwheidsvoordeel, buurtcombinatie, onderhoudscontract, winter-/seizoensactie, bundelkorting, sample-tegoed, terugkerende klant, B2B-volume, cadeaukaart, introductieactie met harde actuele voorwaarden, afgehaalde materialen, restpartij alleen bij aantoonbare voorraad. Bevestiging eigenaar vereist voor commerciële condities.
+- Geen kortingen die de eigen kostprijs/bodemprijs impliciet schenden zonder expliciet geautoriseerde uitzondering; marges alleen intern en server-side. Leg per promotie effect op marge vast, en voorkom stapelbare coupons die verlies veroorzaken.
+
+**Voorbeeld niet-actieve configuratie (documentatie/testfixture, geen zakelijke belofte):** `WELCOME10` — 10% van toegelaten materiaalregels, maximum €100, niet cumuleerbaar, minimum orderbedrag configureerbaar, inactief totdat eigenaar data/voorwaarden bevestigt. Toon deze voorbeeldcode nooit publiek als werkende actie.
+
+## V7-10. Bestelpagina, winkelmandje, offerte & checkout — twee aparte werelden
+
+**Serviceflow:** kies dienst → projectinformatie → optioneel 3D → prijsstatus → aanvraag → echte ontvangstbevestiging → interne beoordeling → offerte → versiebevestiging en akkoord → uitvoering. Niet doen alsof een vrijblijvende aanvraag meteen een bindende betaalde aankoop is.
+
+**Product-/webshopflow (pas live indien voorraad/levering/retouren/betaling en wettelijke teksten echt geregeld):** catalogus → productdetail → hoeveelheid/verpakking → winkelmandje → factuur-/leveringgegevens → levermethode en kosten → code → volledige prijs incl. juiste BTW → samenvatting → ondubbelzinnige betalingsverplichting → betaalprovider → bevestigde webhook → orderstatus → factuur → retour/herroepings-/serviceproces.
+
+**Checkout-ervaring:** prominent **zonder account doorgaan** waar mogelijk; duidelijk stappenoverzicht; voortgang en 'bewaar later'; staplabels en editlinks; benodigde vs optionele velden expliciet; klant kent alle kosten voor bevestigen; prijsoverzicht sticky op desktop waar nuttig maar mobiel niet verstikkend; passende leverstatus, datum alleen als echt beschikbaar; adres validatie zonder privacyinbreuk; telefoon alleen vragen als doel helder is; couponveld niet dominant; geen opgelegde nieuwsbrief; echte foutafhandeling bij API, korting, adres, bank, betaling en time-out; dubbel klikken leidt nooit tot dubbele bestelling; betaling als voltooid markeren alleen na serverbevestiging.
+
+**Juridisch:** vooraf juiste consumenteninformatie, BTW en bijkomende kosten, toepasselijk herroepingsrecht/uitzonderingen, overeenkomsten op afstand en eventuele bijzonderheden aan huis, expliciet akkoord bij vroeg starten waar nodig, begrijpelijke knoptekst met betalingsverplichting. Vanaf 25 juni 2026 noemt de ACM een wettelijke online ontbindings-/herroepingsfunctie in relevante contexten: laat dit juridisch beoordelen en voor toepasselijke flows implementeren vóór productie. Formele juridische teksten altijd laten controleren, geen schijnbare naleving.
+
+**Checkout-microinteracties:** automatisch opslaan van winkelmandje zonder onnodige persoonsgegevens; geen stateverlies na back-button; miniwagen alleen wanneer zinvol; één duidelijke grote CTA; zichtbaar totaal binnen bereik; aantal aanpassen met invoerveld én +/-; alternatieven als product niet leverbaar; bestand veilig uploaden bij maatwerk; 'aanvraag' mag geen 'besteld'-mail krijgen; order- en transactiestatus met referentie, nooit zelf gefabriceerde bevestiging.
+
+**Niet operationeel zonder externe toestemming/account:** betaling, voorraadreservering, fiscale orderverwerking en e-mail, retourafhandeling en definitieve commerciële voorwaarden. Bouw ze compleet voorbereid, zet provider-/config flags op uit en toon klantvriendelijke alternatieven waar toegestaan.
+
+## V7-11. Conversie en psychologische excellentie: 40 uitvoerbare mechanismen
+
+Gebruik elk mechanisme alleen wanneer het de beslissing eerlijk beter maakt. Voor elk mechanisme: bijbehorende journey, proof requirement, KPI, mogelijke negatieve effecten, test.
+
+### A. Vertrouwen en eerste indruk
+1. Fotografisch bewijs boven de vouw uit echte SEAL-klussen.
+2. Direct zichtbaar werkgebied, zodat bezoeker niet hoeft te twijfelen.
+3. Bereikbaarheid en verwachte contactroute duidelijk, geen onhaalbare beloftes.
+4. Echte vakmensen en uitvoeringsproces, geen stockteam.
+5. Geverifieerde reviews en herkomst, niet manipuleren of selectief fictief publiceren.
+6. Casegegevens: situatie, aanpak, resultaat en authentieke foto's.
+7. Duidelijke wat-wel/niet-inbegrepen informatie.
+8. Concrete uitleg over onzekerheid, risico en onverwachte kosten.
+
+### B. Keuze en begrip
+9. Persoonlijke doelselectie ('privacy', 'onderhoudsvriendelijk', 'renovatie').
+10. Snelle route zonder 3D en gevorderde route mét editor.
+11. Progressive disclosure van technisch ingewikkelde velden.
+12. Jargon in begrijpelijk Nederlands met contextuitleg.
+13. Snel filteren op materiaal, formaat, onderhoud, stijl en kostenbasis.
+14. Vergelijk maximaal drie hoofdopties per scherm, verdere keuzen uitklapbaar.
+15. Alternatieven met uitleg waarom ze mogelijk beter passen.
+16. 'Weet ik niet' als respectabele optie, niet afstraffen met error.
+
+### C. Verlangen en verbeelding
+17. Resultaatgericht schrijven (privacy/rust/gebruiksruimte), niet alleen werkzaamheden.
+18. Kwalitatieve 3D-scène met begrijpelijke materiaalweergave.
+19. Eerlijke kosten- en onderhoudsvergelijking over langere termijn.
+20. Inspiratiebord en opgeslagen ontwerpen om samen te bespreken.
+21. Relevante aanvullingen: bijvoorbeeld afvoer/ondergrond/poort bij schutting.
+22. Niet-dwingende stijlkiezer (modern/natuurlijk/tijdloos) met echt beeld.
+23. Locatie/passendheid alleen waar bron werkelijk geverifieerd.
+24. Persoonlijke offertesamenvatting met het eigen tuinontwerp.
+
+### D. Zekerheid in de transactie
+25. Vroegtijdige totaalprijsstatus incl. onbekende onderdelen.
+26. Geen onverwachte kosten op het laatst.
+27. Begrijpelijke offertestadia en reactieverwachting.
+28. Echt visueel verschil tussen 'prijsindicatie' en 'bindende opdracht'.
+29. Duidelijke voorwaarden, garantie alleen met echt beleid.
+30. Eenvoudig bestanden en ontwerpgegevens aanleveren.
+31. Geen verplichte accountaanmaak voor een simpele aanvraag.
+32. Bevestiging met referentie alleen na serveracceptatie.
+
+### E. Relatie, herhaalbezoek en vertrouwen na aankoop
+33. Projectportaal met tijdlijn, planning en verantwoordelijke acties.
+34. Transparante controle en toestemming bij meerwerk.
+35. Opleverchecklist en productspecifieke nazorg waar data bestaat.
+36. Passende seizoensadviezen opt-in, geen ongevraagde marketing.
+37. Eenvoudige klacht- en servicemelding.
+38. Burenproject samenstellen met daadwerkelijke gedeelde kostenefficiëntie.
+39. Vriendelijk terughalen van opgeslagen ontwerpen, zonder manipulatieve push.
+40. Echte aanbevelingen van tevreden klanten alleen vrijwillig en geverifieerd.
+
+## V7-12. 60 microdetails die het verschil maken
+
+**Visueel en navigatie:**
+01 voorspelbare button states; 02 focus altijd zichtbaar; 03 terugknop behoudt data; 04 tekst en getal netjes uitgelijnd; 05 consistente Nederlandse datum-/valutaformattering; 06 klikzones niet alleen op kleine iconen; 07 label/tooltip die uitleg geeft vóór de keuze; 08 projectfotografie met intelligente focal points; 09 leesbare chips en tags; 10 beelden met breedte/hoogte om layoutverschuiving te voorkomen.
+
+**Zoek/filter/categorie:**
+11 zoekresultaten bij synoniemen; 12 tikfouten tolerant; 13 actieve filters zichtbaar; 14 filter reset; 15 geen-resultaten met alternatief; 16 sorteren met uitleg; 17 merken/leveranciers niet suggereren die niet zijn aangesloten; 18 bron en datum bij prijzen; 19 productverschillen in gewone taal; 20 vergelijkingsweergave op mobiel zonder onbereikbare kolommen.
+
+**Projectontwerp:**
+21 undo/redo op mobiel; 22 annotaties en maatlabels schaalbaar; 23 bereikbare numeric editor als drag niet lukt; 24 tekenvenster blijft scherp na rotatie; 25 omrekenen m²/m/element per juiste eenheid; 26 ongeldige contour geeft visuele uitleg; 27 kopiëren van een vlak behoudt materiaalinformatie; 28 bescherming tegen per ongeluk verwijderen; 29 varianten consistent en synchroniseerbaar; 30 export bevat verwerkingsstatus en aannames.
+
+**Formulieren en service:**
+31 juiste toetsenbordtype; 32 auto-fill waar veilig; 33 veldfout direct bij veld; 34 eerdere velden bewaard bij teruggaan; 35 datum geen fictieve beschikbaarheid; 36 fotoformaat/limiet duidelijk; 37 success state niet te vroeg; 38 'ik weet het niet' waar zinvol; 39 contactvoorkeur; 40 WhatsApp-bericht met korte, niet-privacygevoelige context.
+
+**Commerce en korting:**
+41 promotiecode foutmelding vriendelijk; 42 uitgeputte code toont echt reden; 43 minimumwaarde eerlijk; 44 couponverwijdering herstelt totaal; 45 BTW na korting correct; 46 gebruikershoeveelheid begrensd; 47 nooit dubbele betaling door dubbele taps; 48 onbekende verzendkosten niet als €0; 49 uitstap uit checkout houdt mandje intact; 50 herroeping/retourregels bereikbaar.
+
+**Beveiliging en toegankelijkheid:**
+51 privacyvriendelijke meetopties; 52 server autoriseert prijs en order; 53 geen klant-PII in deellinks; 54 klant ziet nooit inkoop/marges; 55 sessieverloop begrijpelijk; 56 back-ups en herstel bewezen; 57 `prefers-reduced-motion`; 58 foutstatus schermlezer-aankondiging; 59 snelheid op zwakke telefoons; 60 duidelijke help/contactroute als iets faalt.
+
+## V7-13. Content, SEO, communicatie en informatie-architectuur
+
+Schrijf met vakinhoudelijke precisie en een warme, professionele Nederlandse toon. Vermijd generiek marketingjargon ('wij zijn de allerbeste') en niet-onderbouwde 'vanaf'-prijzen. Eén duidelijk onderwerp per pagina. Goede titels, meta, canonical, structured data alleen met echte feiten, interne links, echte plaatsnamen binnen het werkgebied, afbeeldingsalt en nuttige FAQ. Vermijd massaproductie van nagenoeg identieke lokale pagina's. Zoekintenties: onderhouden vs laten aanleggen, schutting vervangen/plaatsen, tuintegels kiezen, kosten bestrating, tuin opmeten, offertes begrijpen, alleen montage, afval/afvoer, onderhoudskalender en voorbereiding. SEO-prestatie meten met werkelijke Search Console-data wanneer gekoppeld; geen rankings garanderen.
+
+**Copy-systeem per CTA:** werkwoord + uitkomst + verwachting ('Bekijk mijn ontwerp', 'Vergelijk materialen', 'Vraag vrijblijvend een offerte aan', 'Bekijk wat is inbegrepen'); labels moeten overeenkomen met werkelijk gedrag. Microcopy bij gevoelige keuzes: 'Dit is een indicatie, geen definitieve offerte'; 'Foto's worden pas toegevoegd bij succesvolle verzending'; 'U kunt uw ontwerp zonder account bewaren'; 'Afspraak volgt na bevestiging door ons team'.
+
+**Huidige contactgegevens** uit `js/config.js`, KvK en BTW eerst met opdrachtgever controleren; huidige voorkeur `info@sealcleaning.nl` is nog niet als werkende mailbox geverifieerd. Bestaande telefoonlijn niet ongevraagd verwisselen met WhatsApp. Geen persoonsgegevens tonen in schema-markup als niet bevestigd.
+
+## V7-14. Bedrijfsvoering en verantwoordelijkheden
+
+**De klantketen:** aanvraag → klant/project → calculatie → offerteversie → overleg/akkoord → inkoop → uitvoering → werkbon → oplevering → factuur → ontvangst → nazorg. Bestaande backend hergebruiken.
+
+**Rollen en scheiding:** eigenaar/admin, medewerker, externe vakman waar expliciet geautoriseerd, zakelijke opdrachtgever, particulier; autorisatie per object server-side; geen interne kostprijzen of leveranciersmarges voor klanten; geen publieke onbeveiligde `/beheer/`-data, ook niet via HTML-bron, browseropslag of exports. Mogelijke B2B-functies: meerdere locaties, PO-nummer, deelofferte, fasering, werkuren, opleverrapport, speciale BTW-behandeling alleen na zakelijke/juridische bevestiging.
+
+**Leverscope:** niet automatisch beloven dat elk getoond product direct verkocht, geleverd of geplaatst kan worden. Gebruik feature flags `catalog_enabled`, `quotes_enabled`, `checkout_enabled`, `coupon_enabled`, `payments_enabled`, `appointments_enabled` (conceptnamen — aansluiten op bestaande config), en test per combinatie. Feature flags zijn geen beveiligingsgrens; server controleert bevoegdheid en zakelijke regels.
+
+## V7-15. Meten, echte gebruikers, hypotheses, iteraties
+
+**Doel-KPI's** en wat zij betekenen: bezoekers naar relevante service-route; kwalificerende aanvraagratio; start/afronding snelle intake; 3D-start versus succesvolle aanvragen; ontwerp-opslag/hervatting; vergelijking gebruikt; offerte bekeken/vragen/akkoord; checkout start/afbreken/vervolmaken bij actieve webshop; klanttevredenheid na oplevering; Core Web Vitals; toegankelijkheidsproblemen; fouten en uitval. Verzamel minimaal benodigde, geaggregeerde/consent-conforme data. Definieer geen 'hoge conversie' zonder baseline en de juiste noemer.
+
+**Onderzoeksrondes:** scenario-gebaseerde usability tests met mensen die de doelgroep vertegenwoordigen, ook minstens enkele onervaren bezoekers en mobiele gebruikers. Vooraf concrete taken: 'vind prijs voor schutting met poort', 'kies 60x60 tegel én alternatief', 'maak ontwerp later af', 'wat gebeurt er na aanvraag?', 'pas kortingscode toe', 'herroep een koop waar wettelijk van toepassing'. Observeer misverstanden, tijd, fouten, onzekerheid en belemmeringen. Kleine tests vinden frictie maar bewijzen geen brede conversieverbetering; noem dat eerlijk. Bewaar bevindingen en herhaal na verbeteringen.
+
+**Experimenteer gecontroleerd:** bij voldoende bezoekers eventueel A/B-testen van koppen, CTA-volgorde, materiaalpresentatie en lengte van intake; geen misleidende claims over statistische significantie. Hypothese + primaire metric + guardrail + minimumduur/volume + besluit. Marketingclaims uitsluitend bij gemeten feiten.
+
+## V7-16. Veiligheid, privacy, rechtszekerheid en performance-gates
+
+- **Vóór publicatie:** controleer algemene voorwaarden, privacyverklaring, offerte-/akkoordprocedure, consumentenwetgeving, herroepingsknop waar van toepassing, btw, factuurvereisten, kortingsregels, bedrijfscijfers, beeldrechten, cookies/analytics, bewaartermijnen en verwerkersovereenkomsten.
+- **Beveiliging:** geen client-side final-price trust; validatie server-side; CSRF, CORS/Origin, rate limits, uploadinspectie, auth/2FA, sessiebeleid, logredactie, autorisatie op ieder object, back-up/herstel, voor productie alleen HTTPS. Coupons en prijsmomentopname atomair opslaan.
+- **WCAG:** streef aantoonbaar naar WCAG 2.2 AA over alle kritieke pagina's en flows; voor maatwerk mobiele controls als kwaliteitskeuze 44px waar mogelijk; automatische audit alleen is geen formele toegankelijkheidsaudit. Test toetsenbord, schermlezer, kleurcontrast, reduced motion, zoom 200%, foutassistentie en focus na dialogs.
+- **Core Web Vitals:** meet p75 waar real-user data bestaat; synthetische labtests als aanvullend, geen vervanging. LCP 2,5s / INP 200ms / CLS 0,1 zijn aanbevolen 'goed'-drempels; trage 3D mag homepage niet vertragen.
+- **Productiefouten met P0:** klant kan ongeautoriseerde data zien, prijs/discount fout door client trust, dubbele betaling, echte aanvraag vals bevestigd, productie onveilig, wettelijke vereisten geblokkeerd, data verdwijnt. Geen merge totdat P0 is opgelost.
+- **P1:** kapotte belangrijkste route, mobiel onbruikbaar, ontoegankelijke belangrijke control, foutieve materiaalhoeveelheid/offerte; fix vóór publicatie van betreffende functie.
+- **P2:** belangrijke polish, niet-kritieke copy/layout. Prioriteit bepalen via impact/effort/risico.
+
+## V7-17. Uitvoeringsplan: geen eenmalig snelle make-over, maar kwaliteitscycli
+
+### Fase 0 — Behoud en waarheid
+
+Controleer Git-status/branch, PR #3, teststaten en v6.0-dossier. Maak de 160-eisenindex volledig; onderscheid code aanwezig vs gekoppelde test vs live. Geen herbouw van bestaande configurator, geen destructieve merges. Maak daarnaast een **v7.0 experience-register** met nieuwe eisen (UX001 e.v.) en concrete acceptatietests.
+
+### Fase 1 — Onafhankelijke designaudit
+
+Maak echte browser-screenshots van huidige ontwikkelversie, niet de ongewijzigde live `main`. Audit ten minste homepage, menu, projectcase, schutting, bestrating, catalogus, prijspagina, configurator 2D/3D, aanvraag, offerte en klantenportaal; desktop + mobiel. Benchmark echte concurrenten en best practices, met bronnen. Benoem harde zwakke punten en volgorde van impact.
+
+### Fase 2 — Ontwerpalternatieven
+
+Ontwikkel 3 samenhangende designrichtingen, minimaal 5 kernschermen per richting. Beoordeel niet alleen 'mooi' maar klantbehoeften, laadsnelheid, authenticiteit, differentiatie, vertrouwen en bruikbaarheid. Kies/bevestig één sterke richting of verbeter de bestaande. Toon concrete 'voor/na'-screenshots van eigen site; niet alleen woorden.
+
+### Fase 3 — Designsystem en premium pagina's
+
+Implementeer tokens, componenten, mobile header, fotografie, templates, microcopy, hero, services, projectcases en navigatie. Test iedere ingreep; behoud SEO-links en bestaande bruikbare stijl.
+
+### Fase 4 — Productervaring, configurator en materialen
+
+Verbeter keuzes, editor, productcatalogus, filters, vergelijkingen, scenariopresentatie en volledig heldere onzekerheid/prijs. Bouw ontbrekende zelfstandige eisen en laat onbevestigde leveranciersdata leeg; niet 'leverbaar' simuleren.
+
+### Fase 5 — Commerce flows en kortingsmotor
+
+Bouw cart/checkout/coupon/actie-adapters en tests, desnoods achter uitgeschakelde feature flags totdat zakelijke en externe voorwaarden bekend zijn. Betalen, levering, e-mail en orderbevestiging pas live bij echte provider en geteste webhook. Integreer bestaande backend; geen tweede los platform.
+
+### Fase 6 — Mobile polish en echte tests
+
+Doe alle journeys op 320/360/390/430/768/1024/1440 px; browser-toetsenbord- en touchflows; visuele beoordeling naast geautomatiseerde crawl. Repareer kleine kwaliteitsfouten met prioriteit voor mobiel, checkout en aanvraag. Test 3D fallback en langzame verbinding.
+
+### Fase 7 — Security, recht, performance, SEO, release
+
+End-to-end regresstests, onafhankelijk review, wettelijke blokkades, volledige stagingdeploy incl. Docker-test, rollbackplan, gecontroleerde merge pas na toestemming. E-mail/hosting/Mollie kunnen los na deze kwaliteitsrondes worden geactiveerd.
+
+**Doorgaan zonder onnodig te vragen:** werk autonoom aan onafhankelijke taken en commit/push na afgeronde geteste increments. Stop niet omdat een fase afgerond is zolang uitvoerbaar werk resteert; maar noem niet ongeteste zaken klaar. Bij echte tijd-/tool-/budgetgrens compact checkpoint en exact vervolgstap vastleggen. Geen onbeperkte achtergrondwerkclaims.
+
+## V7-18. Acceptatiecriteria: ontwerp, commerce en volledigheid
+
+Een 'afgeronde kwaliteitsronde' betekent minimaal het volgende:
+
+**Visuele kwaliteit:**
+- [ ] Hoogwaardige consistente huisstijl op 12+ essentiële schermtypen, met echte beelden.
+- [ ] Designkeuze met aantoonbare vergelijking van drie richtingen óf gedocumenteerd waarom de bestaande variant op alle relevante assen beter is.
+- [ ] Mobiele en desktopscreenshots per belangrijke klantreis, inclusief fouten en lege toestanden.
+- [ ] Consistente componentbibliotheek, kleurcontrast, typografie, beeldsnede, statefeedback en iconen.
+- [ ] Geen ongedocumenteerde inconsistenties, rommelige schermen of nutteloze motion.
+
+**Functionele waarde:**
+- [ ] Alle A01–P10 exact één keer in register; alle nieuwe v7-eisen in eigen aanvullende index.
+- [ ] Snel aanvragen én diep ontwerpen zijn beide werkend, zonder dat gegevens verdwijnen.
+- [ ] 2D/3D, hoeveelheden, materialen, varianten, export en calculatie consistent.
+- [ ] Materialenbrowser is uitbreidbaar naar veel producten, ook als echte SKU-data nog ontbreken.
+- [ ] Onbekende leveringen, prijzen, garanties en beschikbaarheid nooit als bevestigd gepresenteerd.
+- [ ] Offerteproces, versies en klantgegevens getest zonder lek van interne marge.
+
+**Bestel- en promotiekwaliteit:**
+- [ ] Service-aanvraag, offerte-akkoord en materiaalbestelling zijn semantisch en technisch verschillend.
+- [ ] Cart/coupon/checkout bieden juiste loading/error/empty/pending/success state; tests met goede, verlopen, gestapelde, verkeerd gescope, uitgeputte en race-condition-codes.
+- [ ] Korting, inclusief ACM-referentieprijs en toepasselijk BTW-beleid, juridisch en technisch getest vóór activering.
+- [ ] Zonder provider is geen nepbestelling of schijnbetaling mogelijk.
+- [ ] Bestelpagina werkt zonder verplichte login waar mogelijk; in mobiele checkout blijven prijzen/CTA zichtbaar.
+
+**Kwaliteit/gates:**
+- [ ] Geen bekende P0/P1-bugs in de vrij te geven scope.
+- [ ] WCAG 2.2 AA kernpunten getoetst; 44px mobiele controls nagestreefd; keyboard/zoom en reduced motion gecontroleerd.
+- [ ] Realistische netwerk-/CPU-condities en 3D fallback getest.
+- [ ] Pagina's op juiste branch getest; geen claim 'live' zonder check op productie-url.
+- [ ] Juridische en externe blokkades helder; PR review en akkoord vóór merge.
+- [ ] Bewijs: testlogs, screenshotlocaties, requirement IDs, meetdata, datum en commit SHA.
+
+## V7-19. Verplichte opleverdocumenten en opdrachtgevervriendelijke rapportage
+
+Werk bijgehouden bestanden bij (geen overlappende conflicterende projectbriefs):
+- `docs/SEAL_MASTER_BRIEF.md`: één canonieke master, v7.0 boven v6.0.
+- `docs/REQUIREMENTS_INDEX.md`: 160 IDs compleet, bewijs/test/deploystatus gescheiden.
+- `docs/UX_STRATEGY.md`: doelgroepen, journeys, menselijk vertrouwen, experimenten/hypothesen, prioriteit.
+- `docs/DESIGN_SYSTEM.md`: rationale, kleurrollen, fonts, tokens, componenten, beeldregels, alternatieven.
+- `docs/COMPETITOR_BENCHMARK.md`: concrete gecontroleerde bronnen, datum, screenshots, kansen, niet verzinnen.
+- `docs/COMMERCE_RULES.md`: service vs product, couponregels, tax/van-voor, voorraad, betaling en juridische gates.
+- `docs/MOBILE_QA.md`: apparaten, viewport, tests, bevindingen, fixresultaat.
+- `docs/IMPLEMENTATION_STATUS.md`: wat gebouwd/getest/deels/extern/wacht/live is met exact herstelpunt.
+
+Rapporteer naar opdrachtgever beknopt per cohort: (1) zichtbaar designverbetering met voor/na-bewijs, (2) functionele verbetering, (3) kwaliteitsmetingen, (4) open blokkades/goedkeuringen, (5) eerstvolgende autonome taak. De volledige technische details staan in repo-documentatie; vraag niet na iedere commit om akkoord.
+
+## V7-20. Exacte opdracht aan Claude Code
+
+> **Claude Code, werk in de bestaande SEAL-repository en ga uit van de nieuwste ontwikkelbranch/PR, niet alleen de oude live homepage. Je opdracht is geen snelle facelift en geen nieuw statisch mock-updesign. Bouw een premium, toegankelijk, opvallend bruikbaar klant- en bedrijfsplatform door een grondige design-, gedrags-, mobile-, conversie-, catalogus- en checkoutaanscherping. Je krijgt dit volledige v7.0-dossier met daaronder de volledige v6.0-specificatie.**
+>
+> **Kijk eerst naar de huidige code en test echt. Corrigeer de incomplete eisenindex van 138 naar alle 160 IDs. Onderzoek relevante Nederlandse concurrenten en sterke retail/architectuurvoorbeelden met gedocumenteerde bronnen. Ontwerp drie serieuze kwaliteitsvarianten op basis van onze authentieke beelden en eigen merk. Kies het best onderbouwde ontwerp en implementeer het. Breid vervolgens ontbrekende nuttige opties uit: dienstkeuze, mobiele bedienbaarheid, product-/materiaaldetails, filters, vergelijkingen, ontwerpbeleving, bestelstroom, promotie- en kortingscodesysteem (achter veilige feature flags tot volledige zakelijke activatie), offertebeleving, vertrouwen en nazorg.**
+>
+> **Werk met de hoogst beschikbare denk-/redeneerinspanning voor moeilijke strategische keuzes en een zuinige contextaanpak voor repetitieve implementatiestappen. Laat de prompt nooit vervallen tot alleen een analyse. Voer veranderingen in de code uit, test, inspecteer screenshots en iteratief verbeter. Publiceer niet zonder akkoord. Verzin geen juridische waarheid, kortingshistorie, voorraad, echte beoordelingen of kosten. Externe accounts regelen we later: bouw de veilige voorbereide architectuur en eerlijke fallback.**
+>
+> **Blijf doorwerken aan uitvoerbare verbeteringen, commit/push geteste mijlpalen en documenteer elke blocker met eigenaar en benodigde input. Oplevering pas wanneer de volledige scope geregistreerd en aantoonbaar onderzocht is, en de niet-geblokkeerde onderdelen professioneel gebouwd en getest zijn.**
+
+## V7-21. Onderzoeks- en regelgevingsreferenties (nieuwste bronpagina's vóór implementatie controleren)
+
+- Baymard: Checkout UX 2025 — https://baymard.com/research-articles/current-state-of-checkout-ux
+- Baymard: Mobile E-commerce — https://baymard.com/research/mcommerce-usability
+- Nielsen Norman Group: Trust & Credibility — https://www.nngroup.com/reports/ecommerce-ux-trust-and-credibility/
+- Nielsen Norman Group: Progressive Disclosure — https://www.nngroup.com/articles/progressive-disclosure/
+- ACM: Prijzen vermelden en van/voor-kortingen — https://www.acm.nl/nl/verkoop-aan-consumenten/consumenten-informeren/prijzen-vermelden
+- ACM: Leidraad prijsweergave en -vergelijkingen — https://www.acm.nl/nl/publicaties/leidraad-prijsweergave-en-vergelijkingen
+- ACM: Bedenktijd / online ontbindingsfunctie — https://www.acm.nl/nl/verkoop-aan-consumenten/klantenservice/bedenktijd
+- Business.gov.nl: consumer rights and distance selling — https://business.gov.nl/running-your-business/legal-matters/consumer-law-your-rights-and-obligations-as-a-seller/
+- W3C: WCAG 2.2 target size AA — https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum
+- W3C: WCAG 2.2 enhanced target AAA — https://www.w3.org/WAI/WCAG22/Understanding/target-size-enhanced
+- web.dev: Core Web Vitals — https://web.dev/articles/vitals
+
+**Einde v7.0-toevoeging. Hierna volgt het volledige oorspronkelijke masterdossier v6.0 integraal als onderliggende specificatie, niet als tweede actieve opdracht.**
+
+---
+
+# BIJLAGE: VOLLEDIGE SEAL MASTERPROMPT v6.0 — HISTORISCH EN FUNCTIONEEL GEÏNTEGREERD
+
 # SEAL MASTERPROMPT v6.0 — DEFINITIEF OVERDRACHTSDOSSIER VOOR CLAUDE CODE
 
 **Project:** SEAL / Sealcleaning Groenonderhoud en Aanleg — Dordrecht  
