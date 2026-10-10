@@ -2,6 +2,8 @@
 
 Status: **gebouwd en getest, uitgeschakeld.** Niets hier is live of operationeel. De feature flags staan standaard uit en er bestaat geen enkel product, geen enkele code en geen bezorgprijs totdat de eigenaar die invoert.
 
+> **Let op, beleidskeuze eigenaar:** de huidige werkwijze op de site (`/werkwijze/` en dienstpagina's) is dat de klant materialen **zelf bestelt na advies**. De webwinkel in dit document spreekt dat tegen zodra hij aan staat. Activeren vraagt dus eerst een bewuste beleidswijziging, bevestigde assortiment- en leverafspraken en bijgewerkte teksten. Tot die tijd blijft de winkel uit en is `/materialen/` een informatiebron met adviesroute.
+
 ## 1. Vijf commerciële modellen (V7-09)
 
 | Model | Wat de klant doet | Binding | Betaling |

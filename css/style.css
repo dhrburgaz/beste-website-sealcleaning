@@ -1257,3 +1257,9 @@ html body .shop-form input:focus-visible, html body .catalog-toolbar input:focus
 html body input:focus-visible, html body select:focus-visible, html body textarea:focus-visible {
   outline: 3px solid var(--role-focus); outline-offset: 2px; box-shadow: 0 0 0 5px rgba(255,255,255,.85);
 }
+.choice-grid { grid-template-columns: 1fr; gap: .75rem; }
+.choice-card { display: grid; grid-template-columns: minmax(150px, 220px) 1fr; gap: .25rem 1.25rem; align-items: baseline; }
+.choice-card h3, .choice-card p { margin: 0; }
+@media (max-width: 700px) { .choice-card { grid-template-columns: 1fr; } }
+.scope-note { margin-bottom: 2.5rem; }
+[data-v7-scope] + h2, .scope-note + h2 { margin-top: 2rem; }

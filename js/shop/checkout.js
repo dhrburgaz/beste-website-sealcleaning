@@ -49,9 +49,9 @@ async function reprice() {
 function closedView() {
   return h("div", { class: "shop-closed" },
     h("div", { class: "notice notice--not-configured" }, h("strong", { text: config.reasons?.[0] || "Online bestellen is nog niet geopend." }),
-      h("span", { text: "Materialen leveren wij nu als onderdeel van een project. U betaalt pas na een offerte die u zelf accepteert." })),
+      h("span", { text: "Bij ons werkt het nu zo: wij adviseren over materiaal en hoeveelheid, u bestelt het zelf en wij verzorgen de werkzaamheden volgens een offerte die u zelf accepteert." })),
     h("div", { class: "btn-row", style: "margin-top:1.5rem" },
-      h("a", { class: "btn btn-primary", href: "../contact/?materiaal=advies", text: "Vraag een offerte met materialen aan" }),
+      h("a", { class: "btn btn-primary", href: "../contact/?materiaal=advies", text: "Vraag advies en een offerte aan" }),
       h("a", { class: "btn btn-secondary", href: "../materialen/", text: "Bekijk materialen" })));
 }
 function emptyView() {

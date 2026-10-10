@@ -14,13 +14,13 @@ QUOTE_LISTS = ["Per onderdeel de hoeveelheid, het materiaal en de eenheid (m², 
                "Wat u zelf voorbereidt, zodat er achteraf geen verrassingen zijn"]
 
 APPROACH = {
- "schuttingen": [("Compleet geplaatst", "Wij verzorgen materiaal, palen, onderplaten, poort en plaatsing; desgewenst ook het verwijderen van de oude schutting."),
-                 ("Alleen montage", "U levert zelf het materiaal. Bespreekbaar na overleg: wij controleren vooraf aantallen en geschiktheid; gebreken of tekorten in aangeleverd materiaal vallen buiten onze verantwoordelijkheid."),
+ "schuttingen": [("Advies en plaatsing", "Wij adviseren over materiaal, hoogte en aantallen; u bestelt het gekozen materiaal zelf, zodat u precies weet wat u betaalt. Wij plaatsen de schutting en kunnen de oude schutting verwijderen."),
+                 ("Alleen plaatsing van eigen materiaal", "Heeft u het materiaal al gekozen of gekocht? Na overleg plaatsen wij dat. Wij controleren vooraf aantallen en geschiktheid; gebreken of tekorten in aangeleverd materiaal vallen buiten onze verantwoordelijkheid."),
                  ("Herstel of vervangen", "Losse palen, scheve schermen of een kapotte poort: we beoordelen eerst of herstel zinvol is voordat we vervanging adviseren.")],
- "bestrating": [("Compleet aangelegd", "Uitgraven, zandbed, bestraten, opsluiten en invegen, in het materiaal en verband van uw keuze."),
-                ("Alleen leggen", "U levert tegels of klinkers zelf. Bespreekbaar na overleg: snijverlies en reservemateriaal stemmen we vooraf af; tekorten of afwijkende partijen zijn voor uw rekening."),
+ "bestrating": [("Advies en aanleg", "Wij adviseren over tegel, verband en hoeveelheid; u bestelt het materiaal zelf. Wij verzorgen uitgraven, zandbed, bestraten, opsluiten en invegen."),
+                ("Alleen leggen van eigen materiaal", "Heeft u de tegels of klinkers al gekozen of gekocht? Na overleg leggen wij ze. Snijverlies en reservemateriaal stemmen we vooraf af; tekorten of afwijkende partijen zijn voor uw rekening."),
                 ("Herstel of ophogen", "Verzakte of losliggende delen herstellen, opnieuw leggen of ophogen, waar mogelijk met het bestaande materiaal.")],
- "tuinaanleg": [("Compleet aangelegd", "Van grondwerk tot beplanting, bestrating en afscheiding, in één planning en één offerte."),
+ "tuinaanleg": [("Complete aanleg in één planning", "Van grondwerk tot beplanting, bestrating en afscheiding, in één planning en één offerte voor het werk. Materialen bestelt u zelf na ons advies."),
                 ("In fasen", "Eerst de basis (grondwerk, bestrating, schutting), later beplanting of verlichting. De fasering staat in de offerte."),
                 ("Samen met uw eigen plan", "Heeft u al een ontwerp of een tekening van een tuinarchitect? Dan rekenen we daarop door.")],
  "tuinrenovatie": [("Volledige renovatie", "Oude bestrating, beplanting en afscheiding eruit, een nieuwe indeling erin."),
@@ -64,7 +64,7 @@ for svc, options in APPROACH.items():
             <ul class="checklist checklist--not">{"".join(li_not(x) for x in NOT_STANDARD)}</ul>
           </div>
         </div>
-        <p class="form-note">De offerte is leidend: daarin staat per onderdeel precies wat wel en niet is inbegrepen. Twijfelt u? Vraag het ons vóór u akkoord geeft.</p>
+        <p class="form-note scope-note">De offerte is leidend: daarin staat per onderdeel precies wat wel en niet is inbegrepen. Twijfelt u? Vraag het ons vóór u akkoord geeft.</p>
       </section><!-- /v7-scope -->
 '''
     s = s.replace("\n      <h2>Hoe verloopt een opdracht?</h2>", block + "\n      <h2>Hoe verloopt een opdracht?</h2>", 1)
