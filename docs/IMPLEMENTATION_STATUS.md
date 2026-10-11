@@ -220,6 +220,16 @@ Opdracht: `docs/v12/KERNCONTRACT_V12_KORT.md` (volledige masterprompt staat in h
 - Tests: 68 unit-tests, e2e `beginner.mjs` (11 scenario's), `pilots-v12.mjs`, site-crawl (44 pagina's, 0 problemen, 0 axe-meldingen). Echte gebruikers, toestellen en schermlezer: niet getest.
 - Open: ontwerpakkoord op de pilots; avondfoto en teamfoto's; beeldrechten voor productfoto's; juridische toetsing; hosting en betalingen. De overige pagina's zijn nog niet in de nieuwe stijl.
 
+## Herstel naar het goedgekeurde ontwerp (11 oktober 2026)
+
+Aanleiding: de eigenaar vond dat de site niet overeenkwam met het goedgekeurde ontwerp (`docs/design-ref/00`, `02`, `03`) en dat "Ontwerp je schutting" bij Stap 1 vrijwel leeg was.
+
+- **Lege Stap 1:** lokaal en op een strikte statische server (zonder mapindex, zoals de preview-host) werkt de pagina. De oorzaak in de preview-omgeving kon ik niet nabootsen. De pagina is nu robuust: statische vangnetinhoud, na 4 seconden een duidelijke melding met de technische oorzaak en een werkende route (offerte, volledige ontwerper, bellen), en een foutafhandeling in `render()`. Test: `tests/e2e/beginner.mjs` ("vangnet").
+- **Site-brede stijl:** `css/v12.css` en `tools/apply-v12.py` zetten alle publieke pagina's om (balk, fotohero's met leesbare koppen, kaarten, formulieren, FAQ, voet). `tools/apply-hero.py` geeft pagina's zonder fotohero een bandhero. Fout hersteld: koppen op fotohero's waren donker en onleesbaar.
+- **Ontwerper (`/schutting-ontwerpen/`, menu "Tuin ontwerpen"):** stappenbalk met vijf fasen (Situatie, Maten, Materialen, Extra's, Resultaat), grote 3D vanaf stap 1, 2D/3D-schakelaar, maatlabels als pillen, voorbeeldtuin (uit te zetten, nooit in de aanvraag), materiaalkeuze met foto-tabs en detail, "Uw tuinplan" met bewerken, delen, opslaan en afdrukken of pdf. De volledige editor blijft bereikbaar voor ervaren gebruikers.
+- Vergelijking pagina voor pagina: `docs/V12_PAGINAVERGELIJKING.md`.
+- Tests: 68 unit-tests; `beginner.mjs` 13 scenario's; `pilots-v12.mjs`; site-crawl met axe. Niet getest: echte toestellen, schermlezer, gebruikers, de preview-host zelf.
+
 ## Nog niet gestart
 
 - **Tier 9 (documentarchitectuur):** offerte/werkbon/factuurconcept,
