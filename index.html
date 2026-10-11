@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hovenier Dordrecht | Tuinonderhoud & Tuinaanleg — Sealcleaning</title>
-<meta name="description" content="Sealcleaning verzorgt tuinonderhoud, tuinaanleg, bestrating en schuttingen in Dordrecht, Drechtsteden en Rotterdam e.o. Gratis bezichtiging in Dordrecht, heldere offerte vooraf.">
+<title>Hovenier Dordrecht | Schuttingen, bestrating en tuinaanleg — Sealcleaning</title>
+<meta name="description" content="Sealcleaning in Dordrecht: schuttingen, bestrating, tuinaanleg en tuinonderhoud. Materiaal los of met montage. Bekijk je tuinidee in 3D en vraag vrijblijvend een offerte aan.">
 <link rel="canonical" href="https://sealcleaning.nl/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Sealcleaning — Groenonderhoud & Aanleg in Dordrecht">
-<meta property="og:description" content="Tuinonderhoud, tuinaanleg, bestrating en schuttingen in Dordrecht en de Drechtsteden. Gratis bezichtiging in Dordrecht.">
+<meta property="og:title" content="Sealcleaning: Jouw droomtuin, ons vakwerk">
+<meta property="og:description" content="Schuttingen, bestrating, tuinaanleg en tuinonderhoud in Dordrecht en de Drechtsteden. Materiaal los of met montage.">
 <meta property="og:url" content="https://sealcleaning.nl/">
 <meta property="og:image" content="https://sealcleaning.nl/images/projects/waterzijde-tuin-terras-hortensia.jpg">
 <meta property="og:locale" content="nl_NL">
-<meta name="theme-color" content="#1b2a1e">
+<meta name="theme-color" content="#102E27">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="images/branding/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="images/branding/apple-touch-icon.png">
@@ -20,6 +20,7 @@
 <link rel="preload" href="vendor/fonts/fraunces-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="vendor/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/v12.css">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -41,8 +42,16 @@
   "priceRange": "$$"
 }
 </script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three/three.module.js",
+    "three/addons/": "./vendor/three/examples/jsm/"
+  }
+}
+</script>
 </head>
-<body>
+<body class="v12">
 <a href="#main" class="skip-link">Direct naar inhoud</a>
 
 <header class="site-header">
@@ -104,405 +113,160 @@
 
 <main id="main">
 
-  <!-- HERO — cinematic, campaign-style -->
-  <section class="hero">
-    <div class="hero-media">
-      <picture><source srcset="images/projects/waterzijde-tuin-terras-hortensia-640.webp 640w, images/projects/waterzijde-tuin-terras-hortensia-800.webp 800w, images/projects/waterzijde-tuin-terras-hortensia-960.webp 960w, images/projects/waterzijde-tuin-terras-hortensia.webp 1600w" sizes="100vw" type="image/webp"><img src="images/projects/waterzijde-tuin-terras-hortensia.jpg" alt="Aangelegde tuin aan het water met terras, siergrassen en border" fetchpriority="high" decoding="async" width="1600" height="757"></picture>
-    </div>
-    <div class="hero-scrim"></div>
-    <div class="container hero-inner">
-      <div class="hero-copy">
-        <p class="eyebrow">Hovenier in Dordrecht &amp; de Drechtsteden</p>
-        <h1>Tuinen die rust uitstralen, tot in het kleinste detail.</h1>
-        <p class="hero-lede">Onderhoud, aanleg, bestrating en schuttingen in Dordrecht, de Drechtsteden en Rotterdam e.o. Met een heldere offerte vooraf en vaste aanspreekpunten.</p>
-        <div class="btn-row">
-          <a href="contact/" class="btn btn-primary btn-lg">Vraag vrijblijvend een offerte aan</a>
-          <a href="project-samenstellen/" class="btn btn-ghost-light btn-lg">Ontwerp uw tuin in 2D/3D</a>
-        </div>
-        <ul class="hero-trust">
-          <li>Gratis bezichtiging in Dordrecht</li>
-          <li>Offerte met wat wel en niet is inbegrepen</li>
-          <li>Eigen werk, echte projectfoto's</li>
-        </ul>
-        <p class="hero-next">Na uw aanvraag nemen wij persoonlijk contact op. Een afspraak staat pas vast na onze bevestiging; u zit nergens aan vast.</p>
+  <section class="v-hero" aria-labelledby="hero-titel">
+    <div class="v-hero-media"><picture><source srcset="images/projects/waterzijde-tuin-terras-hortensia-640.webp 640w, images/projects/waterzijde-tuin-terras-hortensia-800.webp 800w, images/projects/waterzijde-tuin-terras-hortensia-960.webp 960w, images/projects/waterzijde-tuin-terras-hortensia.webp 1600w" sizes="100vw" type="image/webp"><img src="images/projects/waterzijde-tuin-terras-hortensia.jpg" alt="Terras met border aan het water, een tuin die Sealcleaning heeft aangelegd" width="1600" height="757" fetchpriority="high" decoding="async"></picture></div>
+    <div class="v-hero-scrim"></div>
+    <div class="container v-hero-inner">
+      <p class="v-eyebrow" style="color:#E4D3AE">Hovenier in Dordrecht en de Drechtsteden</p>
+      <h1 id="hero-titel">Jouw droomtuin, ons vakwerk</h1>
+      <p>Schuttingen, bestrating, aanleg en onderhoud. Materialen los of met montage.</p>
+      <div class="btn-row">
+        <a href="materialen/" class="btn btn-primary btn-lg">Bekijk de mogelijkheden</a>
+        <a href="contact/" class="btn btn-light btn-lg">Vraag een offerte aan</a>
       </div>
     </div>
   </section>
 
-  <!-- DIENSTEN — featured split + editorial index -->
-  <section class="section" id="diensten">
+  <section class="v-section v-3d" id="ontwerp3d" aria-labelledby="titel-3d">
     <div class="container">
-      <div class="feature-split reveal">
-        <div class="feature-media reveal-img">
-          <picture><source srcset="images/projects/terras-houtlook-kunstgras-pad-1-640.webp 640w, images/projects/terras-houtlook-kunstgras-pad-1-800.webp 800w, images/projects/terras-houtlook-kunstgras-pad-1-960.webp 960w, images/projects/terras-houtlook-kunstgras-pad-1.webp 1169w" sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 440px" type="image/webp"><img src="images/projects/terras-houtlook-kunstgras-pad-1.jpg" alt="Aangelegde achtertuin met terras, kunstgras en houtlook tegelpad" loading="lazy" decoding="async" width="1169" height="1540"></picture>
-        </div>
-        <div class="feature-copy">
-          <p class="eyebrow">Diensten</p>
-          <h2>Van een enkele beurt tot een volledig nieuwe tuin</h2>
-          <p class="lede">Of het nu gaat om regelmatig onderhoud, een complete aanleg of het herstellen van een verwaarloosde tuin — wij denken mee, adviseren eerlijk en werken volgens een heldere aanpak, van eerste gesprek tot oplevering.</p>
-          <a href="werkwijze/" class="link-underline">
-            Bekijk onze werkwijze
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <div class="service-index" style="margin-top: var(--sp-7)">
-        <a href="tuinonderhoud/" class="service-row reveal">
-          <span class="num">01</span>
-          <span class="name">Tuinonderhoud</span>
-          <span class="desc">Regelmatige verzorging van gazon, borders en snoeiwerk zodat uw tuin het hele jaar verzorgd blijft.</span>
-          <span class="arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </a>
-        <a href="tuinaanleg/" class="service-row reveal">
-          <span class="num">02</span>
-          <span class="name">Tuinaanleg</span>
-          <span class="desc">Complete aanleg van uw tuin: beplanting, gras, bestrating en schuttingen, in overleg opgebouwd.</span>
-          <span class="arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </a>
-        <a href="tuinrenovatie/" class="service-row reveal">
-          <span class="num">03</span>
-          <span class="name">Tuinrenovatie</span>
-          <span class="desc">Een verouderde of verwaarloosde tuin stap voor stap teruggebracht naar een verzorgd geheel.</span>
-          <span class="arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </a>
-        <a href="bestrating/" class="service-row reveal">
-          <span class="num">04</span>
-          <span class="name">Bestrating</span>
-          <span class="desc">Terrassen, tuinpaden en opritten strak en waterpas aangelegd, in het materiaal van uw keuze.</span>
-          <span class="arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </a>
-        <a href="schuttingen/" class="service-row reveal">
-          <span class="num">05</span>
-          <span class="name">Schuttingen</span>
-          <span class="desc">Plaatsen en vervangen van schuttingen voor privacy en een verzorgde erfafscheiding.</span>
-          <span class="arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </a>
-        <a href="snoeiwerk/" class="service-row reveal">
-          <span class="num">06</span>
-          <span class="name">Snoeiwerk</span>
-          <span class="desc">Vakkundig snoeien van hagen, heggen, struiken en bomen — afvoer van groenafval kan in overleg worden meegenomen.</span>
-          <span class="arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </a>
-        <a href="periodiek-tuinonderhoud/" class="service-row reveal">
-          <span class="num">07</span>
-          <span class="name">Periodiek onderhoud</span>
-          <span class="desc">Een vast onderhoudsritme, afgestemd op uw tuin — ook voor verhuurders, VvE's en bedrijven.</span>
-          <span class="arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- PROJECTCASE — diptych -->
-  <section class="section section-sand-deep">
-    <div class="container">
-      <div class="section-head">
-        <p class="eyebrow">Uit de praktijk</p>
-        <h2>Recent project: schutting en border in Dordrecht</h2>
-      </div>
-      <div class="case-diptych reveal">
-        <div class="media-frame reveal-img">
-          <picture><source srcset="images/projects/schutting-grenen-zwarte-voet-1-640.webp 640w, images/projects/schutting-grenen-zwarte-voet-1-800.webp 800w, images/projects/schutting-grenen-zwarte-voet-1-960.webp 960w, images/projects/schutting-grenen-zwarte-voet-1.webp 1170w" sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 440px" type="image/webp"><img src="images/projects/schutting-grenen-zwarte-voet-1.jpg" alt="Nieuwe schutting in grenenhout op een zwarte onderplaat, met border" loading="lazy" decoding="async" width="1170" height="1516"></picture>
-        </div>
-        <div class="case-copy">
-          <div class="case-meta">
-            <span class="tag">Schutting</span>
-            <span class="tag">Dordrecht</span>
+      <div class="v-3d-grid">
+        <div>
+          <p class="v-eyebrow">Jouw tuin, jouw keuze</p>
+          <h2 class="v-h2" id="titel-3d">Bekijk jouw tuinidee in 3D</h2>
+          <p class="v-lede">Geen ervaring met ontwerpen of meten nodig. Je kiest wat je mooi vindt, wij laten zien hoe het eruit kan zien.</p>
+          <div class="v-3d-stage" data-home-3d style="margin-top:1.2rem">
+            <div class="v-3d-poster" aria-hidden="true"><span>Voorbeeldtuin laden…</span></div>
+            <div data-home-3d-canvas></div>
+            <svg data-home-3d-flat hidden role="img" aria-label="Voorbeeldtuin in 2D, bovenaanzicht"></svg>
           </div>
-          <div class="case-block">
-            <h4>Situatie</h4>
-            <p>De achtertuin had een verouderde erfafscheiding en een border die opnieuw ingericht moest worden.</p>
+          <div class="v-3d-tools">
+            <button type="button" class="v-chip" data-3d-iso>Schuin van boven</button>
+            <button type="button" class="v-chip" data-3d-top>Van boven</button>
+            <button type="button" class="v-chip" data-3d-reset>Terug naar begin</button>
           </div>
-          <div class="case-block">
-            <h4>Aanpak</h4>
-            <p>Oude erfafscheiding verwijderd, nieuwe schutting gesteld en verankerd, border uitgegraven en voorzien van verse tuinaarde en beplanting.</p>
-          </div>
-          <div class="case-block">
-            <h4>Resultaat</h4>
-            <p>Een privacyafscheiding die de tuin direct een verzorgde uitstraling geeft, met ruimte voor de border om verder te groeien.</p>
-          </div>
-          <a href="projecten/" class="link-underline">
-            Bekijk alle projecten
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
+          <p class="v-3d-status" data-home-3d-status role="status">Voorbeeld in 3D, geen echt project.</p>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- RECENT WERK — highlight grid -->
-  <section class="section">
-    <div class="container">
-      <div class="section-head center">
-        <p class="eyebrow">Ons werk</p>
-        <h2>Recent werk uit Dordrecht en omgeving</h2>
-      </div>
-      <div class="project-grid">
-        <a href="projecten/" class="project-tile span-full reveal">
-          <div class="media-frame ratio-wide"><picture><source srcset="images/projects/voorpad-bestrating-verlichting-640.webp 640w, images/projects/voorpad-bestrating-verlichting-800.webp 800w, images/projects/voorpad-bestrating-verlichting-960.webp 960w, images/projects/voorpad-bestrating-verlichting.webp 1170w" sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 440px" type="image/webp"><img src="images/projects/voorpad-bestrating-verlichting.jpg" alt="Bestraat voorpad met sfeerverlichting" loading="lazy" decoding="async" width="1170" height="845"></picture></div>
-          <h3>Voorpad met sfeerverlichting</h3>
-          <p class="meta">Dordrecht · Bestrating</p>
-        </a>
-        <a href="projecten/" class="project-tile span-third reveal">
-          <div class="media-frame"><picture><source srcset="images/projects/terras-kunstgras-opgeleverd-640.webp 640w, images/projects/terras-kunstgras-opgeleverd-800.webp 800w, images/projects/terras-kunstgras-opgeleverd-960.webp 960w, images/projects/terras-kunstgras-opgeleverd.webp 1170w" sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 440px" type="image/webp"><img src="images/projects/terras-kunstgras-opgeleverd.jpg" alt="Aangelegde achtertuin met kunstgras en terras" loading="lazy" decoding="async" width="1170" height="1537"></picture></div>
-          <h3>Kunstgras aangelegd achter nieuwe schutting</h3>
-          <p class="meta">Dordrecht · Tuinaanleg</p>
-        </a>
-        <a href="projecten/" class="project-tile span-third reveal">
-          <div class="media-frame"><picture><source srcset="images/projects/voortuin-haag-gesnoeid-640.webp 640w, images/projects/voortuin-haag-gesnoeid-800.webp 800w, images/projects/voortuin-haag-gesnoeid-960.webp 960w, images/projects/voortuin-haag-gesnoeid.webp 1500w" sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 440px" type="image/webp"><img src="images/projects/voortuin-haag-gesnoeid.jpg" alt="Voortuin met strak gesnoeide haag" loading="lazy" decoding="async" width="1500" height="1125"></picture></div>
-          <h3>Hagen strak in vorm geknipt</h3>
-          <p class="meta">Dordrecht e.o. · Tuinonderhoud</p>
-        </a>
-        <a href="projecten/" class="project-tile span-third reveal">
-          <div class="media-frame"><picture><source srcset="images/projects/schutting-kastanje-paaltjes-dordrecht-1-640.webp 640w, images/projects/schutting-kastanje-paaltjes-dordrecht-1-800.webp 800w, images/projects/schutting-kastanje-paaltjes-dordrecht-1-960.webp 960w, images/projects/schutting-kastanje-paaltjes-dordrecht-1.webp 1137w" sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 440px" type="image/webp"><img src="images/projects/schutting-kastanje-paaltjes-dordrecht-1.jpg" alt="Nieuwe kastanjehouten paaltjesschutting" loading="lazy" decoding="async" width="1137" height="1527"></picture></div>
-          <h3>Kastanjehouten paaltjesschutting</h3>
-          <p class="meta">Dordrecht · Schutting</p>
-        </a>
-      </div>
-      <p class="text-center" style="margin-top: var(--sp-5)"><a href="projecten/" class="btn btn-secondary btn-lg">Bekijk alle projecten</a></p>
-    </div>
-  </section>
-
-  <!-- BRAND STORY -->
-  <section class="section">
-    <div class="container">
-      <div class="feature-split reverse reveal">
-        <div class="feature-media reveal-img">
-          <picture><source srcset="images/projects/achtertuin-terras-loungeset-640.webp 640w, images/projects/achtertuin-terras-loungeset-800.webp 800w, images/projects/achtertuin-terras-loungeset-960.webp 960w, images/projects/achtertuin-terras-loungeset.webp 1600w" sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 440px" type="image/webp"><img src="images/projects/achtertuin-terras-loungeset.jpg" alt="Verzorgde achtertuin met terras en loungeset" loading="lazy" decoding="async" width="1600" height="757"></picture>
-        </div>
-        <div class="feature-copy">
-          <p class="eyebrow">Waarom Sealcleaning</p>
-          <h2>Persoonlijk contact, vakwerk en duidelijke afspraken</h2>
-          <ul class="checklist">
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span>Een jong en gedreven hoveniersbedrijf uit Dordrecht, ondersteund door vakmensen met jarenlange praktijkervaring.</span></li>
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span>Korte lijnen: u spreekt rechtstreeks met wie het werk uitvoert.</span></li>
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span>Transparante materiaalkosten: u weet precies wat wordt aangeschaft en waarvoor u betaalt.</span></li>
+        <div>
+          <h3 style="font-size:1.15rem;margin-bottom:.8rem">Wat wil je toevoegen?</h3>
+          <ul class="v-choices">
+<li><a class="v-choice" href="schutting-ontwerpen/"><picture><source srcset="images/projects/schutting-grenen-zwarte-voet-3-640.webp 640w, images/projects/schutting-grenen-zwarte-voet-3-800.webp 800w, images/projects/schutting-grenen-zwarte-voet-3-960.webp 960w, images/projects/schutting-grenen-zwarte-voet-3.webp 1170w" sizes="76px" type="image/webp"><img src="images/projects/schutting-grenen-zwarte-voet-3.jpg" alt="Houten schutting op een betonnen onderplaat, eigen werk" width="1170" height="1537" loading="lazy" decoding="async"></picture><span><strong>Schutting</strong><span class="v-sub">Meer privacy en een mooie uitstraling</span></span><svg class="v-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+<li><a class="v-choice" href="project-samenstellen/?service=bestrating"><picture><source srcset="images/projects/terras-kunstgras-opgeleverd-640.webp 640w, images/projects/terras-kunstgras-opgeleverd-800.webp 800w, images/projects/terras-kunstgras-opgeleverd-960.webp 960w, images/projects/terras-kunstgras-opgeleverd.webp 1170w" sizes="76px" type="image/webp"><img src="images/projects/terras-kunstgras-opgeleverd.jpg" alt="Terras met tegels en kunstgras, eigen werk" width="1170" height="1537" loading="lazy" decoding="async"></picture><span><strong>Terras</strong><span class="v-sub">Een fijne plek om te ontspannen</span></span><svg class="v-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+<li><a class="v-choice" href="project-samenstellen/?service=tuinaanleg"><picture><source srcset="images/projects/terras-zwarte-plantenbakken-640.webp 640w, images/projects/terras-zwarte-plantenbakken-800.webp 800w, images/projects/terras-zwarte-plantenbakken-960.webp 960w, images/projects/terras-zwarte-plantenbakken.webp 1132w" sizes="76px" type="image/webp"><img src="images/projects/terras-zwarte-plantenbakken.jpg" alt="Zwarte plantenbakken op een terras, eigen werk" width="1132" height="835" loading="lazy" decoding="async"></picture><span><strong>Plantenbakken en tuin</strong><span class="v-sub">Groen, sfeer en kleur</span></span><svg class="v-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
           </ul>
-          <a href="over-ons/" class="link-underline" style="margin-top: var(--sp-2)">
-            Meer over ons
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <a class="v-help-link" href="schutting-ontwerpen/#meten">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+            Ik weet niet hoe ik moet meten
           </a>
+          <a href="schutting-ontwerpen/" class="btn btn-primary btn-lg">Start mijn ontwerp</a>
+          <p class="v-muted" style="font-size:.88rem;margin-top:.7rem">Je kunt ook meteen <a class="v-link" href="contact/">hulp of een offerte</a> vragen. Een ontwerp is nooit verplicht.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- WERKWIJZE -->
-  <section class="section section-sand-deep">
+  <section class="v-section" style="padding-block:1.6rem;border-block:1px solid var(--seal-stroke);background:var(--seal-surface)" aria-label="Waar je op kunt rekenen">
     <div class="container">
-      <div class="section-head center">
-        <p class="eyebrow">Werkwijze</p>
-        <h2>Van eerste contact tot een nette oplevering</h2>
-      </div>
-      <div class="steps">
-        <div class="step reveal">
-          <h3>Aanvraag &amp; bezichtiging</h3>
-          <p>U vraagt een bezichtiging aan. In Dordrecht komen we gratis langs om de situatie te bekijken.</p>
-        </div>
-        <div class="step reveal">
-          <h3>Advies &amp; offerte</h3>
-          <p>We bespreken de mogelijkheden, denken mee over materialen en stellen een heldere offerte op.</p>
-        </div>
-        <div class="step reveal">
-          <h3>Uitvoering &amp; oplevering</h3>
-          <p>Na akkoord plannen we de werkzaamheden in en leveren we de tuin netjes en opgeruimd op.</p>
-        </div>
-      </div>
-      <p class="text-center" style="margin-top: var(--sp-5)"><a href="werkwijze/" class="link-underline">Bekijk de volledige werkwijze <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></p>
-    </div>
-  </section>
-
-  <!-- TUINPROJECT-CONFIGURATOR -->
-  <section class="section" id="tuinproject">
-    <div class="container">
-      <div class="section-head center">
-        <p class="eyebrow">Stel uw tuinproject samen</p>
-        <h2>Wat wilt u laten doen?</h2>
-        <p class="lede" style="margin-inline:auto">Beantwoord een paar korte vragen over uw tuin. We nemen uw keuzes direct mee in het contactformulier, zodat u niet twee keer hetzelfde hoeft te vertellen.</p>
-      </div>
-
-      <div class="wizard reveal" data-wizard>
-        <div class="wizard-progress" aria-hidden="true"><span class="wizard-progress-bar" data-wizard-progress style="width:25%"></span></div>
-
-        <div class="wizard-step" data-wizard-step="1">
-          <p class="wizard-eyebrow">Stap 1 van 4</p>
-          <h3>Wat wilt u laten doen?</h3>
-          <div class="wizard-tiles" data-wizard-tiles role="group" aria-label="Kies het type werkzaamheden">
-            <button type="button" class="wizard-tile" data-service="tuinonderhoud" aria-pressed="false">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M7 8c0 3 2 5 5 5s5-2 5-5M6 15c0 2.5 2.5 4.5 6 4.5s6-2 6-4.5"/></svg>
-              <span>Tuinonderhoud</span>
-            </button>
-            <button type="button" class="wizard-tile" data-service="tuinaanleg" aria-pressed="false">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22v-9M12 13c-4 0-7-3-7-7 4 0 7 2 7 6 0-4 3-6 7-6 0 4-3 7-7 7Z"/></svg>
-              <span>Tuinaanleg</span>
-            </button>
-            <button type="button" class="wizard-tile" data-service="tuinrenovatie" aria-pressed="false">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12a9 9 0 1 1-3-6.7M21 3v5h-5"/></svg>
-              <span>Tuinrenovatie</span>
-            </button>
-            <button type="button" class="wizard-tile" data-service="bestrating" aria-pressed="false">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-              <span>Bestrating</span>
-            </button>
-            <button type="button" class="wizard-tile" data-service="schutting" aria-pressed="false">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21V9l3-3 3 3v12M11 21V9l3-3 3 3v12M4 15h6M11 15h6"/></svg>
-              <span>Schutting</span>
-            </button>
-            <button type="button" class="wizard-tile" data-service="snoeiwerk" aria-pressed="false">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.5 15.5M14.5 14.5 20 20M8.5 8.5 12 12"/></svg>
-              <span>Snoeiwerk</span>
-            </button>
-            <button type="button" class="wizard-tile" data-service="bomen" aria-pressed="false">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 6 11h3l-4 6h5v5h4v-5h5l-4-6h3z"/></svg>
-              <span>Bomen</span>
-            </button>
-            <button type="button" class="wizard-tile" data-service="gras" aria-pressed="false">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21v-6c0-2 1-4 2-6M9 21v-8c0-2.5 1.2-4.5 2.2-6.2M14 21v-7c0-3 1.5-5.5 3-7.5M19 21v-5c0-2 .8-3.6 1.5-5"/></svg>
-              <span>Gras/gazon</span>
-            </button>
-            <button type="button" class="wizard-tile" data-service="periodiek" aria-pressed="false">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="17" rx="1"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
-              <span>Periodiek onderhoud</span>
-            </button>
-            <button type="button" class="wizard-tile" data-service="anders" aria-pressed="false">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>
-              <span>Anders</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="wizard-step" data-wizard-step="2" hidden>
-          <p class="wizard-eyebrow">Stap 2 van 4</p>
-          <h3 data-wizard-size-title>Hoe groot is de tuin ongeveer?</h3>
-          <div class="wizard-tiles" data-wizard-size-tiles role="group"></div>
-          <div data-wizard-extra hidden>
-            <p class="wizard-sub-label" data-wizard-extra-title></p>
-            <div class="wizard-tiles" data-wizard-extra-tiles role="group"></div>
-          </div>
-          <div class="wizard-actions">
-            <button type="button" class="btn btn-secondary" data-wizard-back="1">Terug</button>
-          </div>
-        </div>
-
-        <div class="wizard-step" data-wizard-step="3" hidden>
-          <p class="wizard-eyebrow">Stap 3 van 4</p>
-          <h3>Waar en wanneer?</h3>
-          <div class="wizard-field">
-            <label for="wizard-plaats">Plaats</label>
-            <input type="text" id="wizard-plaats" data-wizard-plaats autocomplete="address-level2" placeholder="Bijv. Dordrecht">
-          </div>
-          <p class="wizard-sub-label">Gewenste uitvoerperiode</p>
-          <div class="wizard-tiles" data-wizard-period role="group" aria-label="Kies de gewenste periode">
-            <button type="button" class="wizard-tile wizard-tile-sm" data-period="Zo snel mogelijk" aria-pressed="false"><span>Zo snel mogelijk</span></button>
-            <button type="button" class="wizard-tile wizard-tile-sm" data-period="Binnen 1-3 maanden" aria-pressed="false"><span>Binnen 1–3 maanden</span></button>
-            <button type="button" class="wizard-tile wizard-tile-sm" data-period="Nog geen haast" aria-pressed="false"><span>Nog geen haast</span></button>
-          </div>
-          <div class="wizard-actions">
-            <button type="button" class="btn btn-secondary" data-wizard-back="2">Terug</button>
-            <button type="button" class="btn btn-primary" data-wizard-next="4">Bekijk samenvatting</button>
-          </div>
-        </div>
-
-        <div class="wizard-step" data-wizard-step="4" hidden>
-          <p class="wizard-eyebrow">Stap 4 van 4</p>
-          <h3>Uw aanvraag</h3>
-          <ul class="wizard-summary-list" data-wizard-summary></ul>
-          <p class="wizard-note">In de volgende stap kunt u desgewenst foto's van uw tuin toevoegen. Op basis van uw invoer maken wij na beoordeling een passende offerte.</p>
-          <div class="wizard-actions">
-            <button type="button" class="btn btn-secondary" data-wizard-back="3">Terug</button>
-            <a href="contact/" class="btn btn-primary" data-wizard-submit>Ga naar het aanvraagformulier</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PERIODIEK ONDERHOUD -->
-  <section class="section">
-    <div class="container two-col reverse">
-      <div class="col-media media-frame ratio-square reveal-img">
-        <picture><source srcset="images/projects/voortuin-grindpad-bankje-640.webp 640w, images/projects/voortuin-grindpad-bankje.webp 757w" sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 440px" type="image/webp"><img src="images/projects/voortuin-grindpad-bankje.jpg" alt="Verzorgde voortuin met grindpad en bankje" loading="lazy" decoding="async" width="757" height="1600"></picture>
-      </div>
-      <div>
-        <p class="eyebrow">Voor wie het onderhoud liever uitbesteedt</p>
-        <h2>Periodiek tuinonderhoud, afgestemd op uw tuin</h2>
-        <p>Geen tijd of zin om zelf bij te houden? We stellen een onderhoudsritme voor dat past bij uw tuin — bijvoorbeeld eens per twee maanden of per seizoen. Denk aan snoeien, onkruid verwijderen, gazononderhoud en het opruimen van groenafval.</p>
-        <p>Ook voor verhuurders, VvE's en bedrijven verzorgen we vaste onderhoudsafspraken, met een maatwerkvoorstel op basis van de situatie.</p>
-        <a href="periodiek-tuinonderhoud/" class="link-underline">Meer over periodiek onderhoud <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-      </div>
-    </div>
-  </section>
-
-  <!-- WERKGEBIED -->
-  <section class="section section-dark">
-    <div class="container">
-      <div class="section-head center">
-        <p class="eyebrow">Werkgebied</p>
-        <h2>Actief in Dordrecht, de Drechtsteden en Rotterdam e.o.</h2>
-        <p class="lede" style="margin-inline:auto">In Dordrecht bieden we een gratis bezichtiging. Werkt u verder weg, dan bespreken we eventuele voorrijkosten altijd vooraf — geen verrassingen achteraf.</p>
-      </div>
-      <ul class="area-grid" style="color:#fff">
-        <li>Dordrecht</li><li>Zwijndrecht</li><li>Papendrecht</li>
-        <li>Sliedrecht</li><li>Hendrik-Ido-Ambacht</li><li>Alblasserdam</li>
-        <li>Nieuw-Lekkerland</li><li>Ridderkerk</li><li>Barendrecht</li>
-        <li>Rotterdam</li>
+      <ul class="v-facts">
+        <li><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Gratis bezichtiging in Dordrecht</strong><br><span class="v-muted">Buiten Dordrecht bespreken we vooraf of er voorrijkosten gelden.</span></span></li>
+        <li><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Offerte met wat wel en niet inbegrepen is</strong><br><span class="v-muted">Materiaal en werk staan apart, zodat je ziet waarvoor je betaalt.</span></span></li>
+        <li><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Eigen werk, echte foto's</strong><br><span class="v-muted">Alle projectfoto's op deze site komen uit ons eigen werk.</span></span></li>
       </ul>
-      <p class="text-center" style="margin-top: var(--sp-5)"><a href="werkgebied/" class="link-underline" style="color:#fff">Bekijk het volledige werkgebied <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></p>
     </div>
   </section>
 
-  <!-- FAQ -->
-  <section class="section">
-    <div class="container-narrow">
-      <div class="section-head center">
-        <p class="eyebrow">Veelgestelde vragen</p>
-        <h2>Wat klanten ons vaak vragen</h2>
+  <section class="v-section" id="diensten" aria-labelledby="titel-help">
+    <div class="container">
+      <div class="v-section-head">
+        <h2 class="v-h2" id="titel-help">Waar kunnen we je mee helpen?</h2>
+        <p class="v-lede">Kies wat het beste past. Twijfel je? Dan denken we graag met je mee.</p>
       </div>
-      <div class="faq-list">
-        <details class="faq-item">
-          <summary>Is een bezichtiging echt gratis?<span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span></summary>
-          <p>In Dordrecht is de bezichtiging gratis en vrijblijvend. Werkt u buiten Dordrecht, dan bespreken we vooraf of er voorrijkosten gelden.</p>
-        </details>
-        <details class="faq-item">
-          <summary>Wat kost tuinonderhoud?<span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span></summary>
-          <p>Dat hangt af van de omvang van de tuin en de gewenste werkzaamheden. Na een bezichtiging ontvangt u een heldere offerte of indicatieve prijs.</p>
-        </details>
-        <details class="faq-item">
-          <summary>Wie bestelt de materialen voor een project?<span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span></summary>
-          <p>Wij adviseren over materialen, hoeveelheden en geschikte producten. Materiaal kan in onze offerte worden opgenomen, los of samen met de montage. Of u kiest zelf uw materiaal en laat alleen de montage doen. Prijs en levering staan altijd eerst in de offerte.</p>
-        </details>
-        <details class="faq-item">
-          <summary>Werken jullie ook buiten Dordrecht?<span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span></summary>
-          <p>Ja, we zijn actief in de hele Drechtsteden en Rotterdam e.o. Bij grotere afstand bespreken we vooraf eventuele voorrijkosten.</p>
-        </details>
-        <details class="faq-item">
-          <summary>Kan ik foto's van mijn tuin meesturen?<span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span></summary>
-          <p>Ja, dat helpt ons om uw aanvraag sneller te beoordelen. Dit kan via het contactformulier, e-mail of WhatsApp.</p>
-        </details>
-        <details class="faq-item">
-          <summary>Doen jullie ook periodiek onderhoud?<span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span></summary>
-          <p>Ja, we stellen een onderhoudsritme voor dat past bij uw tuin, bijvoorbeeld eens per twee maanden of per seizoen.</p>
-        </details>
+      <ul class="v-cards">
+<li><a class="v-card" href="schuttingen/"><span class="v-card-img"><picture><source srcset="images/projects/schutting-grenen-zwarte-voet-2-640.webp 640w, images/projects/schutting-grenen-zwarte-voet-2-800.webp 800w, images/projects/schutting-grenen-zwarte-voet-2-960.webp 960w, images/projects/schutting-grenen-zwarte-voet-2.webp 1170w" sizes="(max-width: 480px) 92vw, (max-width: 860px) 46vw, 380px" type="image/webp"><img src="images/projects/schutting-grenen-zwarte-voet-2.jpg" alt="Houten schutting op een betonnen onderplaat, eigen werk" width="1170" height="1533" loading="lazy" decoding="async"></picture></span><span class="v-card-body"><strong>Schuttingen</strong><span>Privacy, stijl en een stevige afscheiding</span><span class="v-more">Bekijk</span></span></a></li>
+<li><a class="v-card" href="bestrating/"><span class="v-card-img"><picture><source srcset="images/projects/terras-houtlook-kunstgras-pad-1-640.webp 640w, images/projects/terras-houtlook-kunstgras-pad-1-800.webp 800w, images/projects/terras-houtlook-kunstgras-pad-1-960.webp 960w, images/projects/terras-houtlook-kunstgras-pad-1.webp 1169w" sizes="(max-width: 480px) 92vw, (max-width: 860px) 46vw, 380px" type="image/webp"><img src="images/projects/terras-houtlook-kunstgras-pad-1.jpg" alt="Houtlook tegelpad tussen kunstgras, eigen werk" width="1169" height="1540" loading="lazy" decoding="async"></picture></span><span class="v-card-body"><strong>Bestrating</strong><span>Een terras of pad dat jarenlang mooi blijft</span><span class="v-more">Bekijk</span></span></a></li>
+<li><a class="v-card" href="tuinaanleg/"><span class="v-card-img"><picture><source srcset="images/projects/tuin-hangstoel-border-640.webp 640w, images/projects/tuin-hangstoel-border-800.webp 800w, images/projects/tuin-hangstoel-border-960.webp 960w, images/projects/tuin-hangstoel-border.webp 1600w" sizes="(max-width: 480px) 92vw, (max-width: 860px) 46vw, 380px" type="image/webp"><img src="images/projects/tuin-hangstoel-border.jpg" alt="Terras met border en hangstoel, eigen werk" width="1600" height="757" loading="lazy" decoding="async"></picture></span><span class="v-card-body"><strong>Tuinaanleg en renovatie</strong><span>Van ontwerp tot een tuin die klaar is</span><span class="v-more">Bekijk</span></span></a></li>
+<li><a class="v-card" href="tuinonderhoud/"><span class="v-card-img"><picture><source srcset="images/projects/voortuin-haag-gesnoeid-640.webp 640w, images/projects/voortuin-haag-gesnoeid-800.webp 800w, images/projects/voortuin-haag-gesnoeid-960.webp 960w, images/projects/voortuin-haag-gesnoeid.webp 1500w" sizes="(max-width: 480px) 92vw, (max-width: 860px) 46vw, 380px" type="image/webp"><img src="images/projects/voortuin-haag-gesnoeid.jpg" alt="Voortuin met gesnoeide haag, eigen werk" width="1500" height="1125" loading="lazy" decoding="async"></picture></span><span class="v-card-body"><strong>Tuinonderhoud</strong><span>Een verzorgde tuin, het hele jaar</span><span class="v-more">Bekijk</span></span></a></li>
+<li><a class="v-card" href="materialen/"><span class="v-card-img"><picture><source srcset="images/projects/materiaal-levering-tuinaarde-zand-640.webp 640w, images/projects/materiaal-levering-tuinaarde-zand-800.webp 800w, images/projects/materiaal-levering-tuinaarde-zand-960.webp 960w, images/projects/materiaal-levering-tuinaarde-zand.webp 739w" sizes="(max-width: 480px) 92vw, (max-width: 860px) 46vw, 380px" type="image/webp"><img src="images/projects/materiaal-levering-tuinaarde-zand.jpg" alt="Plantenbak met zand en zakken materiaal, eigen werk" width="739" height="1600" loading="lazy" decoding="async"></picture></span><span class="v-card-body"><strong>Materialen</strong><span>Schuttingen, tegels en meer, los of met montage</span><span class="v-more">Bekijk</span></span></a></li>
+<li><a class="v-card" href="contact/"><span class="v-card-img"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#12513A" stroke-width="1.4" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.6 2.2c-.7.4-1.1.9-1.1 1.8M12 17h.01"/></svg></span><span class="v-card-body"><strong>Hulp bij kiezen</strong><span>Weet je het nog niet? We denken met je mee</span><span class="v-more">Bekijk</span></span></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="v-section v-sand" aria-labelledby="titel-projecten">
+    <div class="container">
+      <div class="v-section-head">
+        <h2 class="v-h2" id="titel-projecten">Echte tuinen. Echte resultaten.</h2>
+        <p class="v-lede">Een greep uit ons eigen werk in Dordrecht en de Drechtsteden.</p>
       </div>
-      <p class="text-center" style="margin-top: var(--sp-5)"><a href="contact/#faq" class="link-underline">Meer vragen? Bekijk de volledige FAQ <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></p>
+      <div class="v-projects">
+<a class="v-project" href="projecten/tuin-aan-het-water-compleet/"><figure style="margin:0;height:100%"><picture><source srcset="images/projects/waterzijde-tuin-terras-hortensia-640.webp 640w, images/projects/waterzijde-tuin-terras-hortensia-800.webp 800w, images/projects/waterzijde-tuin-terras-hortensia-960.webp 960w, images/projects/waterzijde-tuin-terras-hortensia.webp 1600w" sizes="(max-width: 860px) 46vw, 280px" type="image/webp"><img src="images/projects/waterzijde-tuin-terras-hortensia.jpg" alt="Tuin aan het water met terras en border" width="1600" height="757" loading="lazy" decoding="async"></picture><figcaption><strong>Tuin aan het water, compleet ingericht</strong>Regio Drechtsteden · Tuinaanleg</figcaption></figure></a>
+<a class="v-project" href="projecten/grenen-schutting-zwarte-onderplaat/"><figure style="margin:0;height:100%"><picture><source srcset="images/projects/schutting-grenen-zwarte-voet-1-640.webp 640w, images/projects/schutting-grenen-zwarte-voet-1-800.webp 800w, images/projects/schutting-grenen-zwarte-voet-1-960.webp 960w, images/projects/schutting-grenen-zwarte-voet-1.webp 1170w" sizes="(max-width: 860px) 46vw, 280px" type="image/webp"><img src="images/projects/schutting-grenen-zwarte-voet-1.jpg" alt="Nieuwe schutting in grenenhout op een zwarte onderplaat" width="1170" height="1516" loading="lazy" decoding="async"></picture><figcaption><strong>Grenen schutting op zwarte onderplaat</strong>Dordrecht · Schutting</figcaption></figure></a>
+<a class="v-project" href="projecten/terras-houtlook-tegelpad/"><figure style="margin:0;height:100%"><picture><source srcset="images/projects/terras-houtlook-kunstgras-pad-1-640.webp 640w, images/projects/terras-houtlook-kunstgras-pad-1-800.webp 800w, images/projects/terras-houtlook-kunstgras-pad-1-960.webp 960w, images/projects/terras-houtlook-kunstgras-pad-1.webp 1169w" sizes="(max-width: 860px) 46vw, 280px" type="image/webp"><img src="images/projects/terras-houtlook-kunstgras-pad-1.jpg" alt="Terras met houtlook tegelpad tussen kunstgras" width="1169" height="1540" loading="lazy" decoding="async"></picture><figcaption><strong>Terras met houtlook tegelpad</strong>Regio Drechtsteden · Bestrating</figcaption></figure></a>
+<a class="v-project" href="projecten/hagen-strak-geknipt/"><figure style="margin:0;height:100%"><picture><source srcset="images/projects/voortuin-haag-gesnoeid-640.webp 640w, images/projects/voortuin-haag-gesnoeid-800.webp 800w, images/projects/voortuin-haag-gesnoeid-960.webp 960w, images/projects/voortuin-haag-gesnoeid.webp 1500w" sizes="(max-width: 860px) 46vw, 280px" type="image/webp"><img src="images/projects/voortuin-haag-gesnoeid.jpg" alt="Voortuin met strak gesnoeide haag" width="1500" height="1125" loading="lazy" decoding="async"></picture><figcaption><strong>Hagen strak in vorm geknipt</strong>Dordrecht e.o. · Tuinonderhoud</figcaption></figure></a>
+      </div>
+      <p style="margin-top:1.2rem"><a class="v-link" href="projecten/">Bekijk alle projecten</a></p>
+    </div>
+  </section>
+
+  <section class="v-section" aria-labelledby="titel-routes">
+    <div class="container">
+      <div class="v-section-head">
+        <h2 class="v-h2" id="titel-routes">Alleen materiaal bestellen of ook laten plaatsen?</h2>
+        <p class="v-lede">Beide kan. Je ziet altijd eerst wat het kost en wat je krijgt, voordat je ergens aan vastzit.</p>
+      </div>
+      <div class="v-routes">
+        <div class="v-route">
+          <h3>Alleen materiaal</h3>
+          <ul><li>Schuttingen, tegels, plantenbakken en meer</li><li>Wij helpen je de juiste maat en hoeveelheid te kiezen</li><li>Prijs en levering staan in je offerte</li></ul>
+          <a href="materialen/" class="btn btn-secondary">Bekijk materialen</a>
+        </div>
+        <div class="v-route">
+          <h3>Materiaal met montage</h3>
+          <ul><li>Wij leveren en plaatsen, jij hoeft niets te regelen</li><li>Oude schutting of tegels weghalen kan er optioneel bij</li><li>Eén offerte: materiaal en werk apart zichtbaar</li></ul>
+          <a href="schutting-ontwerpen/" class="btn btn-primary">Ontwerp je schutting met montage</a>
+        </div>
+      </div>
+      <p class="v-notice"><strong>Online bestellen is nog niet geopend.</strong> Je vraagt nu een offerte aan. Wij bevestigen vooraf de prijs, de levering en wat er wel en niet bij zit.</p>
+    </div>
+  </section>
+
+  <section class="v-section v-sand" aria-labelledby="titel-werkt">
+    <div class="container">
+      <div class="v-section-head"><h2 class="v-h2" id="titel-werkt">Zo werkt het</h2></div>
+      <ol class="v-steps">
+        <li><strong>Kies wat je zoekt</strong><span>Schutting, terras, plantenbakken of onderhoud.</span></li>
+        <li><strong>Bekijk voorbeelden</strong><span>Zie in 3D hoe jouw idee eruit kan zien.</span></li>
+        <li><strong>Geef je maten door</strong><span>Precies, ongeveer of met een foto. Wij controleren.</span></li>
+        <li><strong>Ontvang je offerte</strong><span>Duidelijk wat inbegrepen is, wat optioneel is en wat nog moet worden gecontroleerd.</span></li>
+        <li><strong>Levering en plaatsing</strong><span>Na jouw akkoord plannen we het samen in.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="v-section" id="faq" aria-labelledby="titel-faq">
+    <div class="container">
+      <div class="v-section-head"><h2 class="v-h2" id="titel-faq">Veelgestelde vragen</h2></div>
+      <div class="v-faq">
+        <details><summary>Ik weet niet hoe ik moet meten. Kan ik toch een offerte aanvragen?</summary><p>Ja. Geef een schatting, stuur een foto of beschrijf de plek. Wij controleren de maten voordat een prijs definitief wordt. In de ontwerphulp staat per maat uitgelegd wat je moet opmeten.</p></details>
+        <details><summary>Kan ik alleen materiaal laten opnemen in een offerte?</summary><p>Ja. Je kunt materiaal los vragen of samen met montage. Online bestellen is nog niet geopend; wij bevestigen prijs en levering in de offerte.</p></details>
+        <details><summary>Wat kost een schutting?</summary><p>Dat hangt af van het materiaal, de hoogte, de lengte, de ondergrond en of oude schutting of tegels moeten worden weggehaald. Daarom geven we geen vaste lijstprijs. In de offerte staat per onderdeel wat het kost.</p></details>
+        <details><summary>Wat is het verschil tussen hout, hout-beton en composiet?</summary><p>Hout heeft een natuurlijke uitstraling en vraagt periodiek onderhoud. Bij hout-beton staat het houten scherm op een betonnen onderplaat en betonnen palen. Composiet vraagt meestal minder onderhoud. Het verschil per product vermelden we in de offerte.</p></details>
+        <details><summary>Werken jullie ook bij mij in de buurt?</summary><p>Wij werken in Dordrecht, de Drechtsteden en Rotterdam e.o. Bekijk het <a class="v-link" href="werkgebied/">werkgebied</a> of vraag het ons.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="v-cta" aria-labelledby="titel-cta">
+    <div class="container">
+      <h2 id="titel-cta">Vertel ons je tuinidee</h2>
+      <p>Plan een gratis, vrijblijvende kennismaking in Dordrecht, of stuur ons een bericht via WhatsApp.</p>
+      <div class="btn-row">
+        <a href="contact/" class="btn btn-light btn-lg">Vraag een offerte aan</a>
+        <a href="#" class="btn btn-line-light btn-lg" data-whatsapp data-whatsapp-msg="Hallo Sealcleaning, ik wil graag informatie over een schutting of tuin.">Stuur een WhatsApp-bericht</a>
+      </div>
     </div>
   </section>
 
 </main>
-
-<!-- PREMIUM CLOSING CTA -->
-<section class="footer-cta">
-  <div class="container-narrow reveal">
-    <p class="eyebrow">Aan de slag</p>
-    <h2>Laten we uw tuin bespreken.</h2>
-    <p>Plan een gratis, vrijblijvende kennismaking in Dordrecht — of stuur ons een bericht via WhatsApp voor een snel, persoonlijk antwoord.</p>
-    <div class="btn-row" style="justify-content:center">
-      <a href="contact/" class="btn btn-ghost-light btn-lg" style="background:#fff;color:var(--c-forest);border-color:#fff">Plan mijn kennismaking</a>
-      <a href="#" class="btn btn-ghost-light btn-lg" data-whatsapp data-whatsapp-msg="Hallo Sealcleaning, ik wil graag informatie over jullie diensten.">Stuur een WhatsApp-bericht</a>
-    </div>
-  </div>
-</section>
 
 <footer class="site-footer">
   <div class="container footer-grid">
@@ -555,6 +319,6 @@
 
 <script src="js/config.js"></script>
 <script src="js/main.js"></script>
-<script src="js/wizard.js"></script>
+<script type="module" src="js/v12/home3d.js"></script>
 </body>
 </html>
