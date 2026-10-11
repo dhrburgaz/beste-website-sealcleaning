@@ -8,9 +8,10 @@ const b = await chromium.launch({ executablePath: process.env.CHROMIUM || undefi
 const pg = await (await b.newContext({ viewport: { width: +vw, height: 900 } })).newPage();
 if (process.env.LS) { const [k, v] = process.env.LS.split(/=(.*)/s); await pg.addInitScript(([k, v]) => localStorage.setItem(k, v), [k, v]); }
 await pg.goto(url); await pg.waitForTimeout(800);
-await pg.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += 400) { scrollTo(0, y); await new Promise((r) => setTimeout(r, 70)); } scrollTo(0, 0); });
+await pg.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += 400) { scrollTo(0, y); await new Promise((r) => setTimeout(r, 200)); } scrollTo(0, 0); document.querySelectorAll("img[loading=lazy]").forEach((i) => { i.loading = "eager"; }); });
+await pg.waitForFunction(() => [...document.images].every((i) => i.complete), null, { timeout: 15000 }).catch(() => {});
 await pg.waitForTimeout(1500);
-const ours = await pg.screenshot({ fullPage: true }); writeFileSync(`${outDir}/${name}-${vw}-ours.png`, ours);
+const full = await pg.evaluate(() => document.documentElement.scrollHeight); const ours = await pg.screenshot({ fullPage: true, clip: { x: 0, y: 0, width: +vw, height: Math.min(full, +(process.env.CLIPH || 99999)) } }); writeFileSync(`${outDir}/${name}-${vw}-ours.png`, ours);
 const W = 560, ref = readFileSync(refPath).toString("base64"), o = ours.toString("base64");
 const out = await pg.evaluate(async ({ ref, o, cx, cy, cw, ch, W }) => {
   const load = (s) => new Promise((r) => { const i = new Image(); i.onload = () => r(i); i.src = "data:image/png;base64," + s; });

@@ -1,5 +1,9 @@
 # V13 oplevering: pilotpagina's (wacht op ontwerpgoedkeuring)
 
+> **Ronde 2 (na beoordeling eigenaar):** pilot niet goedgekeurd. Correcties: materialen, productpagina's en winkelmand hersteld uit de bestaande code (SEAL verkoopt los én met montage; checkout/betalingen staan uit, catalogus toont 'offerte aanvragen'); 3D-sectie direct onder de hero en groot (posterbeeld uit de echte scène, materiaalknoppen); realistischere 3D (planken/lamellen met naden en nerf, zwart composiet, betonpalen bij hout-beton, paalkappen, gazon met strepen); snelle invoerbalk (type, lengte, hoogte) onder de 3D met informatieknoppen en uitleg bij begrippen; compactere kop zodat de 3D boven de vouw staat; schuttingenpagina met uitlegblokken in accordeons. Nieuw: `tests/e2e/ontwerper-sync.mjs` (3D verandert + aanvraagtekst volgt). Beelden: `docs/v13/compare/PILOT-1/2/3-*.png` (referentie | desktop | mobiel).
+
+*(Tekst hieronder is van ronde 1; de webshop-verwijdering daarin is ingetrokken.)*
+
 Herstelpunt vóór V13: commit `596d242` (branch `claude/sealcleaning-website-overhaul-gvgtfj`). Terugdraaien: `git revert` van de V13-commits of een nieuwe branch vanaf 596d242. Productie (sealcleaning.nl), DNS, hosting en betalingen zijn niet aangeraakt.
 
 ## Referentiebesluit
