@@ -80,8 +80,10 @@
   }
 
   /* Contact form: client-side validation, then hand off to the visitor's own mail client */
+  function initContactForm() {
   var form = document.querySelector("[data-contact-form]");
-  if (form) {
+  if (form && !form.__sealBound) {
+    form.__sealBound = true;
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var valid = true;
@@ -193,19 +195,26 @@
       }
     }
   }
+  }
+  initContactForm();
+  window.__sealBindContactForm = function () { initContactForm(); bindFileInput(); };
 
   /* File input label feedback */
-  var fileInput = document.querySelector("[data-file-input]");
-  if (fileInput) {
-    fileInput.addEventListener("change", function () {
-      var label = document.querySelector("[data-file-count]");
-      if (label) {
-        label.textContent = fileInput.files.length
-          ? fileInput.files.length + " bestand(en) geselecteerd"
-          : "";
-      }
-    });
+  function bindFileInput() {
+    var fileInput = document.querySelector("[data-file-input]");
+    if (fileInput && !fileInput.__sealBound) {
+      fileInput.__sealBound = true;
+      fileInput.addEventListener("change", function () {
+        var label = document.querySelector("[data-file-count]");
+        if (label) {
+          label.textContent = fileInput.files.length
+            ? fileInput.files.length + " bestand(en) geselecteerd"
+            : "";
+        }
+      });
+    }
   }
+  bindFileInput();
 
   /* Inspiratiebord (I06/I07): eigen cases en materialen bewaren zonder account,
      alleen in deze browser. Geen klantfoto's, geen server. */

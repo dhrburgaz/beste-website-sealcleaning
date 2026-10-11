@@ -54,8 +54,8 @@ export function createThreeScene(host, project, opts = {}) {
   controls.maxPolarAngle = Math.PI * 0.49; // niet onder de grond kunnen kijken
   controls.target.set(0, 0, 0);
 
-  scene.add(new THREE.AmbientLight(0xffffff, scenic ? 0.45 : 0.65));
-  if (scenic) scene.add(new THREE.HemisphereLight(0xdfeeff, 0x8a7a5a, 0.55));
+  scene.add(new THREE.AmbientLight(0xffffff, scenic ? 0.75 : 0.65));
+  if (scenic) scene.add(new THREE.HemisphereLight(0xdfeeff, 0x9a8a6a, 0.8));
 
   // ---- Scenic: procedurele texturen en vaste pseudo-willekeur (geen externe bestanden) ----
   let seed = 7;
@@ -121,6 +121,7 @@ export function createThreeScene(host, project, opts = {}) {
     return obj;
   }
 
+  const frameListeners = new Set();
   let frameRequested = false;
   let idleTimer = null;
   let running = false;
@@ -136,6 +137,7 @@ export function createThreeScene(host, project, opts = {}) {
       }
     }
     renderer.render(scene, camera);
+    frameListeners.forEach((fn) => fn());
   }
 
   function loop() {
@@ -407,6 +409,19 @@ export function createThreeScene(host, project, opts = {}) {
     buildPaving(project.paving);
     buildObjects(project.existingObjects || []);
     buildGateLeaves(project.fence);
+    if (opts.figure && project.fence && project.fence.sections.length) {
+      // Neutrale, schematische schaalfiguur van 1,75 m naast het begin van de schutting.
+      const s0 = project.fence.sections[0];
+      const rad = (s0.directionDeg * Math.PI) / 180;
+      const fx = (s0.start.xMm + Math.cos(rad) * 1200 - Math.sin(rad) * 900) * MM;
+      const fz = (s0.start.zMm + Math.sin(rad) * 1200 + Math.cos(rad) * 900) * MM;
+      const fm = track(new THREE.MeshStandardMaterial({ color: 0x7e8b99, roughness: 0.8 }));
+      const body = new THREE.Mesh(track(new THREE.CylinderGeometry(0.17, 0.2, 1.4, 14)), fm);
+      body.position.set(fx, 0.7, fz);
+      const head = new THREE.Mesh(track(new THREE.SphereGeometry(0.13, 14, 12)), fm);
+      head.position.set(fx, 1.62, fz);
+      dynamicGroup.add(body, head);
+    }
 
     gardenCenter = { x: cx, z: cz, span: Math.max(widthM, depthM) };
     placeSun();
@@ -450,6 +465,14 @@ export function createThreeScene(host, project, opts = {}) {
     controls.update();
     scheduleFrame();
   }
+
+  /** Schermpositie (px, relatief aan de host) van een wereldpunt in meters, voor maatlabels in HTML. */
+  function projectPoint(xM, yM, zM) {
+    const v = new THREE.Vector3(xM, yM, zM).project(camera);
+    const r = host.getBoundingClientRect();
+    return { x: (v.x * 0.5 + 0.5) * r.width, y: (-v.y * 0.5 + 0.5) * r.height, visible: v.z < 1 };
+  }
+  function onFrame(fn) { frameListeners.add(fn); scheduleFrame(); return () => frameListeners.delete(fn); }
 
   function resetCamera() {
     update(project);
@@ -512,5 +535,5 @@ export function createThreeScene(host, project, opts = {}) {
   update(project);
   setView("3d");
 
-  return { update, setView, resetCamera, exportPng, dispose, setSun };
+  return { update, setView, resetCamera, exportPng, dispose, setSun, projectPoint, onFrame };
 }

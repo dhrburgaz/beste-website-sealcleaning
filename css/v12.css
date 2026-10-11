@@ -171,3 +171,109 @@
 .v12 .mobile-cta-bar { background: var(--seal-header); border-top: 1px solid rgba(255, 255, 255, .12); }
 .v12 .mobile-cta-bar a { color: #fff; }
 .v12 .mobile-cta-bar .cta-primary { background: var(--seal-green-hi); color: #fff; }
+
+/* ==========================================================================
+   Beginnersroute schutting (/schutting-ontwerpen/)
+   ========================================================================== */
+.b-wrap { display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 1fr); max-width: 860px; margin-inline: auto; }
+.b-wrap.has-preview { max-width: none; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(1.25rem, 3vw, 2.5rem); align-items: start; }
+.b-wrap:not(.has-preview) .b-preview { display: none; }
+.b-wrap.has-preview .b-preview { position: sticky; top: 92px; }
+@media (max-width: 860px) {
+  .b-wrap.has-preview { grid-template-columns: minmax(0, 1fr); }
+  .b-wrap.has-preview .b-preview { position: static; order: -1; }
+}
+.b-top { max-width: 860px; margin-inline: auto; margin-bottom: 1.2rem; }
+.b-wrap.has-preview ~ * {}
+.b-progress { font-size: .92rem; color: var(--seal-muted); margin-bottom: .5rem; font-weight: 500; }
+.b-barwrap { height: 6px; background: var(--seal-stroke); border-radius: 99px; overflow: hidden; }
+.b-bar { height: 100%; background: var(--seal-green); transition: width .25s; }
+.b-title { font-size: clamp(1.7rem, 1.4vw + 1.2rem, 2.4rem); margin: 0 0 .5rem; outline: none; }
+.b-sub { color: var(--seal-muted); margin: 0 0 1rem; font-size: 1.05rem; max-width: 56ch; }
+.b-note { font-size: .92rem; color: var(--seal-muted); background: var(--seal-sand); border-radius: var(--v-radius-s); padding: .7rem .9rem; margin: .9rem 0; }
+.b-muted { color: var(--seal-muted); font-size: .9rem; }
+.b-label { display: block; font-weight: 600; margin: .9rem 0 .35rem; }
+.b-input { width: 100%; font: inherit; padding: .7rem .8rem; border: 1px solid #b9b7a8; border-radius: var(--v-radius-s); background: #fff; color: var(--seal-ink); min-height: 48px; }
+.b-input:focus { border-color: var(--seal-green); }
+.b-illus { background: #fff; border: 1px solid var(--seal-stroke); border-radius: var(--v-radius); padding: .6rem; margin: .5rem 0 1rem; max-width: 460px; }
+.b-illus svg { width: 100%; height: auto; max-height: 230px; display: block; }
+.b-info { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; padding: 0 .9rem; border: 1px solid var(--seal-green); color: var(--seal-green); background: #fff; border-radius: 999px; font: inherit; font-weight: 500; cursor: pointer; margin-bottom: .6rem; }
+.b-info::before { content: "i"; display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--seal-green); color: #fff; font-weight: 700; font-style: italic; font-size: .85rem; }
+.b-help { background: #fff; border: 1px solid var(--seal-stroke); border-left: 4px solid var(--seal-green); border-radius: var(--v-radius-s); padding: .9rem 1.1rem; margin-bottom: 1rem; font-size: .96rem; }
+.b-help h3 { font-size: 1.1rem; margin: 0 0 .3rem; font-family: var(--font-display); }
+.b-help h4 { font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--seal-green); margin: .8rem 0 .2rem; }
+.b-help p, .b-help ol { margin: 0; }
+.b-help ol { padding-left: 1.2rem; }
+/* keuzekaarten (echte radio's) */
+.b-cards { display: grid; gap: .8rem; }
+.b-cards-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.b-cards-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 560px) { .b-cards-3, .b-cards-2 { grid-template-columns: minmax(0, 1fr); } .b-cards-icons { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.b-card-wrap { position: relative; min-width: 0; }
+.b-card-wrap input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.b-card { display: grid; align-content: start; height: 100%; background: #fff; border: 2px solid var(--seal-stroke); border-radius: var(--v-radius); overflow: hidden; cursor: pointer; transition: border-color .15s, box-shadow .15s; }
+.b-card img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; }
+.b-card .b-icon { padding: .6rem .6rem 0; display: block; }
+.b-card .b-icon svg { width: 100%; height: auto; max-height: 90px; }
+.b-card-body { padding: .75rem .9rem .9rem; display: grid; gap: .2rem; }
+.b-card-body strong { font-family: var(--font-display); font-weight: 500; font-size: 1.15rem; }
+.b-card-body span { color: var(--seal-muted); font-size: .9rem; line-height: 1.4; }
+.b-cards-plain .b-card { min-height: 64px; align-content: center; }
+.b-card-wrap input:hover + .b-card { border-color: var(--seal-green-hi); }
+.b-card-wrap input:checked + .b-card { border-color: var(--seal-green); box-shadow: 0 0 0 3px rgba(18, 81, 58, .18); background: #F3F8F4; }
+.b-card-wrap input:checked + .b-card::after { content: "✓ Gekozen"; justify-self: end; margin: 0 .8rem .7rem; font-size: .82rem; font-weight: 600; color: var(--seal-green); }
+.b-card-wrap input:focus-visible + .b-card { outline: 3px solid var(--seal-gold); outline-offset: 3px; }
+/* routes, chips, velden */
+.b-routes { display: grid; gap: .5rem; margin: .5rem 0 1rem; }
+.b-route, .b-chipwrap, .b-check { position: relative; }
+.b-route input, .b-chipwrap input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.b-route label, .b-chipwrap label { display: flex; align-items: center; min-height: 48px; padding: .4rem 1rem; border: 2px solid var(--seal-stroke); border-radius: var(--v-radius-s); background: #fff; cursor: pointer; font-weight: 500; }
+.b-route input:checked + label, .b-chipwrap input:checked + label { border-color: var(--seal-green); background: #F3F8F4; color: var(--seal-green-deep); }
+.b-route input:focus-visible + label, .b-chipwrap input:focus-visible + label { outline: 3px solid var(--seal-gold); outline-offset: 2px; }
+.b-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin: .5rem 0 1rem; }
+.b-chipwrap label { min-width: 84px; justify-content: center; }
+.b-check { display: flex; gap: .6rem; align-items: center; min-height: 44px; }
+.b-check input { width: 22px; height: 22px; accent-color: var(--seal-green); flex: 0 0 22px; }
+.b-checks { border: 0; padding: 0; margin: 0; }
+.b-field { margin: 1rem 0; }
+.b-unit { display: flex; align-items: center; gap: .6rem; max-width: 280px; }
+.b-input-num { font-size: 1.4rem; font-weight: 600; max-width: 180px; }
+.b-echo { min-height: 1.4em; margin: .4rem 0 0; color: var(--seal-green-deep); font-weight: 500; }
+.b-echo.is-error { color: #9c3b23; }
+.b-nav { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-top: 1.4rem; flex-wrap: wrap; }
+.b-nav .btn:disabled { opacity: .45; cursor: not-allowed; }
+.link-btn { background: none; border: 0; color: var(--seal-green); text-decoration: underline; font: inherit; cursor: pointer; min-height: 44px; padding: 0 .4rem; }
+/* voorbeeldvenster */
+.b-preview-stage { position: relative; border-radius: var(--v-radius); background: linear-gradient(180deg, #EFEBDD, #E3DECB); box-shadow: var(--v-shadow); overflow: hidden; aspect-ratio: 4 / 3; width: 100%; }
+.b-preview-stage [data-b-3d], .b-preview-stage [data-b-3d] canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.b-flat { position: absolute; inset: 0; width: 100%; height: 100%; background: #f4f1e6; }
+.b-overlay { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.b-dim-halo { stroke: #fff; stroke-width: 5; paint-order: stroke; font: 700 13px var(--font-body); stroke-linejoin: round; }
+.b-dim-text { font: 700 13px var(--font-body); }
+.b-dim-halo-line { stroke: rgba(255, 255, 255, .9); stroke-width: 7; stroke-linecap: round; }
+.b-tools { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .7rem; }
+.b-tools button { min-height: 44px; padding: 0 .9rem; border: 1px solid var(--seal-stroke); background: #fff; border-radius: 999px; font: inherit; font-size: .9rem; cursor: pointer; color: var(--seal-ink); }
+.b-tools button:hover, .b-tools button[aria-pressed="true"] { border-color: var(--seal-green); }
+.b-status { font-size: .86rem; color: var(--seal-muted); margin: .6rem 0 0; min-height: 1.3em; }
+.b-facts { list-style: none; margin: .7rem 0 0; padding: .8rem 1rem; background: #fff; border: 1px solid var(--seal-stroke); border-radius: var(--v-radius); display: grid; gap: .25rem; font-size: .95rem; }
+.b-measure-status { font-weight: 600; color: var(--seal-green-deep); }
+/* bekijk-stap */
+.b-compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; margin-bottom: 1rem; }
+@media (max-width: 560px) { .b-compare { grid-template-columns: minmax(0, 1fr); } }
+.b-fig { margin: 0; background: #fff; border: 1px solid var(--seal-stroke); border-radius: var(--v-radius); overflow: hidden; display: grid; align-content: start; }
+.b-fig img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; }
+.b-fig figcaption, .b-fig-3d { padding: .7rem .9rem; display: grid; gap: .25rem; font-size: .88rem; color: var(--seal-muted); }
+.b-fig strong { color: var(--seal-ink); font-family: var(--font-display); font-weight: 500; font-size: 1.05rem; }
+.b-card-info, .b-plan { background: #fff; border: 1px solid var(--seal-stroke); border-radius: var(--v-radius); padding: 1rem 1.1rem; margin-bottom: 1rem; }
+.b-card-info h3, .b-plan h3 { font-size: 1.2rem; margin: 0 0 .3rem; }
+.b-costs { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: .35rem .9rem; margin: .5rem 0; font-size: .95rem; }
+.b-costs dt { font-weight: 600; } .b-costs dd { margin: 0; color: var(--seal-muted); }
+.b-plan-list { margin: .4rem 0 .8rem; padding-left: 1.1rem; display: grid; gap: .2rem; }
+.b-form .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .9rem; }
+@media (max-width: 560px) { .b-form .form-grid { grid-template-columns: minmax(0, 1fr); } }
+.b-form .field { display: grid; gap: .3rem; margin-bottom: .6rem; }
+.b-form .field label { font-weight: 600; }
+.b-form .field .error-msg { display: none; color: #9c3b23; font-size: .88rem; }
+.b-form .field.error .error-msg { display: block; }
+.b-form .field.error .b-input { border-color: #9c3b23; }
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schutting ontwerpen in 3D | Sealcleaning Dordrecht</title>
+<meta name="description" content="Ontwerp stap voor stap je schutting in 3D, ook als je niet weet hoe je moet meten. Kies hout, hout met beton of composiet, geef je maten door en vraag een vrijblijvend voorstel aan.">
+<link rel="canonical" href="https://sealcleaning.nl/schutting-ontwerpen/">
+<meta name="theme-color" content="#102E27">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../images/branding/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../images/branding/apple-touch-icon.png">
+<link rel="manifest" href="../site.webmanifest">
+<link rel="preload" href="../vendor/fonts/fraunces-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../vendor/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/v12.css">
+<script type="importmap">
+{"imports": {"three": "../vendor/three/three.module.js", "three/addons/": "../vendor/three/examples/jsm/"}}
+</script>
+</head>
+<body class="v12">
+<a href="#main" class="skip-link">Direct naar inhoud</a>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="../" class="brand">
+      <picture><source srcset="../images/branding/logo-120.webp" type="image/webp"><img class="brand-mark" src="../images/branding/logo.jpg" width="40" height="40" alt="Logo Sealcleaning" decoding="async"></picture>
+      <span class="brand-text">
+        <span class="brand-name">Sealcleaning</span>
+        <span class="brand-sub">Groenonderhoud &amp; Aanleg</span>
+      </span>
+    </a>
+
+    <button class="nav-toggle" aria-label="Menu openen" aria-expanded="false" aria-controls="main-nav">
+      <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+
+    <nav class="main-nav" id="main-nav" aria-label="Hoofdnavigatie">
+      <ul class="nav-list">
+        <li class="nav-home"><a href="../">Home</a></li>
+        <li class="has-submenu">
+          <a href="../#diensten" data-section-current="true">Diensten</a>
+          <ul class="submenu">
+            <li><a href="../tuinonderhoud/">Tuinonderhoud</a></li>
+            <li><a href="../tuinaanleg/">Tuinaanleg</a></li>
+            <li><a href="../tuinrenovatie/">Tuinrenovatie</a></li>
+            <li><a href="../bestrating/">Bestrating</a></li>
+            <li><a href="../schuttingen/" aria-current="page">Schuttingen</a></li>
+            <li><a href="../snoeiwerk/">Snoeiwerk</a></li>
+            <li><a href="../periodiek-tuinonderhoud/">Periodiek onderhoud</a></li>
+          </ul>
+        </li>
+        <li><a href="../projecten/">Projecten</a></li>
+        <li><a href="../project-samenstellen/">Tuin ontwerpen</a></li>
+        <li><a href="../materialen/">Materialen</a></li>
+        <li><a href="../prijzen/">Prijzen</a></li>
+        <li class="has-submenu">
+          <a href="../over-ons/">Over ons</a>
+          <ul class="submenu">
+            <li><a href="../over-ons/">Over Sealcleaning</a></li>
+            <li><a href="../werkwijze/">Werkwijze</a></li>
+            <li><a href="../werkgebied/">Werkgebied</a></li>
+            <li><a href="../kennisbank/">Kennisbank</a></li>
+            <li><a href="../voor-aannemers/">Voor aannemers en VvE's</a></li>
+            <li><a href="../werken-met-ons/">Werken met ons</a></li>
+          </ul>
+        </li>
+        <li><a href="../contact/">Contact</a></li>
+      </ul>
+      <div class="header-cta">
+        <a href="#" class="icon-btn" data-tel aria-label="Bel Sealcleaning">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </a>
+        <a href="../contact/" class="btn btn-primary btn-sm">Offerte aanvragen</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="v-section" aria-labelledby="b-kop">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Kruimelpad" style="margin-bottom:1rem"><a href="../">Home</a> / <a href="../schuttingen/">Schuttingen</a> / Schutting ontwerpen</nav>
+      <div class="b-top">
+        <h1 id="b-kop" class="v-h2" style="font-size:clamp(1.9rem,1.6vw + 1.3rem,2.8rem);margin-bottom:.4rem">Ontwerp je schutting</h1>
+        <p class="v-lede">Je hoeft niets van meten of ontwerpen te weten. We vragen één ding per keer. Je kunt altijd terug.</p>
+        <p class="b-progress" data-b-progress aria-live="polite">Stap 1</p>
+        <div class="b-barwrap" aria-hidden="true"><div class="b-bar" data-b-bar style="width:10%"></div></div>
+      </div>
+
+      <noscript><p class="v-notice">Voor dit ontwerphulpje is JavaScript nodig. Je kunt ook <a href="../contact/">direct een offerte aanvragen</a> of bellen.</p></noscript>
+
+      <div class="b-wrap" data-beginner>
+        <div class="b-stage" data-b-stage aria-live="off"></div>
+        <aside class="b-preview" aria-label="Voorbeeld van je schutting">
+          <div class="b-preview-stage">
+            <div data-b-3d></div>
+            <svg class="b-overlay" data-b-overlay aria-hidden="true" focusable="false"></svg>
+          </div>
+          <div class="b-tools">
+            <button type="button" data-b-dims aria-pressed="true">Maten verbergen</button>
+            <button type="button" data-b-view-iso>Schuin van boven</button>
+            <button type="button" data-b-view-front>Van voren</button>
+            <button type="button" data-b-view-top>Van boven</button>
+            <button type="button" data-b-view-reset>Terug naar begin</button>
+          </div>
+          <p class="b-status" data-b-status role="status">Voorbeeld in 3D. Sleep om rond te kijken, of gebruik de knoppen.</p>
+          <ul class="b-facts" data-b-facts aria-label="Je maten in woorden"></ul>
+        </aside>
+      </div>
+      <p style="margin-top:1.4rem;max-width:860px;margin-inline:auto" class="b-muted">Liever hulp? <a class="v-link" href="../contact/">Neem contact met ons op</a>. Je ontwerp is nooit verplicht en je zit nergens aan vast. <button type="button" class="link-btn" data-b-reset>Opnieuw beginnen</button></p>
+    </div>
+  </section>
+</main>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <marker id="b-arr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#12513A"/></marker>
+  <marker id="b-arr-a" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#B26A00"/></marker>
+</defs></svg>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <span class="brand-name">Sealcleaning</span>
+      <p>Groenonderhoud en aanleg voor Dordrecht, de Drechtsteden en Rotterdam e.o. Vakwerk voor een eerlijke prijs, met duidelijke afspraken vooraf.</p>
+    </div>
+    <div><h4>Diensten</h4><ul>
+      <li><a href="../tuinonderhoud/">Tuinonderhoud</a></li>
+      <li><a href="../tuinaanleg/">Tuinaanleg</a></li>
+      <li><a href="../tuinrenovatie/">Tuinrenovatie</a></li>
+      <li><a href="../bestrating/">Bestrating</a></li>
+      <li><a href="../schuttingen/">Schuttingen</a></li>
+      <li><a href="../snoeiwerk/">Snoeiwerk</a></li>
+    </ul></div>
+    <div><h4>Bedrijf</h4><ul>
+      <li><a href="../projecten/">Projecten</a></li>
+      <li><a href="../project-samenstellen/">Project samenstellen</a></li>
+      <li><a href="../prijzen/">Prijzen</a></li>
+      <li><a href="../werkwijze/">Werkwijze</a></li>
+      <li><a href="../over-ons/">Over ons</a></li>
+      <li><a href="../werkgebied/">Werkgebied</a></li>
+      <li><a href="../voor-aannemers/">Voor aannemers</a></li>
+      <li><a href="../werken-met-ons/">Werken met ons</a></li>
+      <li><a href="../contact/">Contact</a></li>
+      <li><a href="../zoeken/">Zoeken</a></li>
+      <li><a href="../inspiratie/">Inspiratiebord</a></li>
+    </ul></div>
+    <div><h4>Contact</h4><ul>
+      <li data-address>Romboutslaan 582<br>3312 KP Dordrecht</li>
+      <li><a href="#" data-tel data-tel-text>078 204 95 17</a></li>
+      <li><a href="#" data-whatsapp>WhatsApp</a></li>
+      <li><a href="#" data-email data-email-text>sealcleaningaanleg@gmail.com</a></li>
+      <li data-hours>Dagelijks bereikbaar van 10:00 tot 19:00 uur</li>
+    </ul></div>
+  </div>
+  <div class="container footer-bottom">
+    <span>&copy; <span data-year>2026</span> Sealcleaning Groenonderhoud en Aanleg — KvK <span data-kvk>83078665</span></span>
+    <span><a href="../privacy/">Privacy</a> · <a href="../voorwaarden/">Algemene voorwaarden</a></span>
+  </div>
+</footer>
+
+<div class="mobile-cta-bar">
+  <div class="mobile-cta-inner">
+    <a href="#" data-tel><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Bellen</a>
+    <a href="#" data-whatsapp data-whatsapp-msg="Hallo Sealcleaning, ik wil graag informatie over jullie diensten."><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20z"/></svg>WhatsApp</a>
+    <a href="../contact/" class="cta-primary">Offerte</a>
+  </div>
+</div>
+
+<script src="../js/config.js"></script>
+<script src="../js/main.js"></script>
+<script type="module" src="../js/v12/beginner/app.js"></script>
+</body>
+</html>
