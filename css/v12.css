@@ -308,3 +308,9 @@
 .p-result[data-level="advies"] { border-left-color: var(--seal-gold); }
 .p-result ul { margin: .4rem 0; padding-left: 1.1rem; }
 .p-repair { margin-top: 1.2rem; padding: .9rem 1.1rem; background: #fff; border: 1px solid var(--seal-stroke); border-radius: var(--v-radius-s); font-size: .95rem; }
+
+/* Ruimte reserveren tot het script de stap tekent (voorkomt verspringen) */
+.b-wrap { min-height: 720px; }
+.b-progress { min-height: 1.5em; }
+.b-top .v-lede { min-height: 3.2em; }
+@media (max-width: 700px) { .b-wrap { min-height: 640px; } }
