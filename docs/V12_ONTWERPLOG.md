@@ -13,3 +13,7 @@ Toepassing: `css/v12.css`, alleen actief met `<body class="v12">` (home, beginne
 - Navigatie houdt de bestaande items; geen zoekicoon.
 - De 3D is een procedurele maquette (hout met textuur, hagen, planten, terras, schaalfiguur). Dat is duidelijk rijker dan voorheen, maar nog niet het fotorealistische niveau van `02_3D_REFERENTIE_GROOT.png` (geen echte planten- of meubelmodellen, geen realistische stoeptegels). Dit blijft een open verschil.
 - Alle tekst is opnieuw in correct Nederlands geschreven en niet uit de AI-afbeelding overgenomen.
+
+## Aanvullende referentie (11 oktober 2026): `docs/design-ref/03_PAGINAREEKS_12_SCHERMEN.png`
+Twaalf schermen: homepage, 3D-configurator in vijf stappen, materiaal kiezen, winkelmandje en offerte, productdetail, meten en uitleg, projecten met "Gebruikte materialen", tuinplan, dienstpagina, kennisbank, contact, mobiel. Dit is een stijlreferentie, geen bron van feiten. **Niet overnemen:** "4,9/5", "100+ tevreden klanten", "10+ jaar garantie", beoordelingen "4,8/5 (120+)", alle bedragen (€ 89,00, € 445,00, € 1.892,00), "snelle levering", "duurzame materialen" en het kaartadres. Niets daarvan is bewezen of bevestigd.
+Nog te beoordelen door de eigenaar of dit scherm 00 vervangt of aanvult.
