@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc"><title id="title">Plantenbak lengte breedte hoogte</title><desc id="desc">Isometrische schets plantenbak met maatpijlen langs voorkant, van voor naar achter en verticaal vanaf onder tot boven.</desc><style>
+ .bg{fill:#faf9f5}.title{font:700 38px Arial, sans-serif;fill:#152c25}.body{font:24px Arial,sans-serif;fill:#273e35}.label{font:700 25px Arial,sans-serif;fill:#164e3b}.measure{stroke:#178053;stroke-width:8;fill:none;stroke-linecap:round}.outline{stroke:#31443c;stroke-width:3}.wood{fill:#b68d5b}.woodalt{fill:#c9a77d}.stone{fill:#a7a7a1}.card{fill:#fff;stroke:#e0ded6;stroke-width:3}
+</style><rect class="bg" width="1280" height="720"/><defs><marker id="ar" markerWidth="9" markerHeight="9" refX="4" refY="4" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z" fill="#178053"/></marker></defs>
+<text class="title" x="60" y="70">Welke maat plantenbak past op jouw plek?</text>
+<text class="body" x="60" y="114">Lengte is de voorkant. Breedte is van voor naar achter. Hoogte is van beneden naar boven.</text>
+<rect class="card" x="55" y="154" width="1170" height="500" rx="22"/>
+<polygon points="320,315 805,315 970,235 475,235" fill="#725a44" class="outline"/>
+<polygon points="320,315 805,315 805,520 320,520" fill="#b68d5b" class="outline"/>
+<polygon points="805,315 970,235 970,435 805,520" fill="#956f45" class="outline"/>
+<g stroke="#7d5c38" stroke-width="4"><path d="M390 315V520 M460 315V520 M530 315V520 M600 315V520 M670 315V520 M740 315V520"/></g>
+<ellipse cx="595" cy="282" rx="100" ry="26" fill="#375b39"/><ellipse cx="715" cy="277" rx="90" ry="25" fill="#446e3f"/>
+<line class="measure" x1="338" y1="577" x2="784" y2="577" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="label" x="485" y="618">LENGTE</text>
+<line class="measure" x1="839" y1="550" x2="984" y2="478" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="label" x="987" y="508">BREEDTE</text>
+<line class="measure" x1="257" y1="330" x2="257" y2="502" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="label" x="111" y="421">HOOGTE</text>
+</svg>

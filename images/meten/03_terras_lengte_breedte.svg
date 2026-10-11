@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc"><title id="title">Terras lengte en breedte</title><desc id="desc">Bovenaanzicht van rechthoekig terras, groene pijlen langs lengte van 4 meter en breedte van 3 meter.</desc><style>
+ .bg{fill:#faf9f5}.title{font:700 38px Arial, sans-serif;fill:#152c25}.body{font:24px Arial,sans-serif;fill:#273e35}.label{font:700 25px Arial,sans-serif;fill:#164e3b}.measure{stroke:#178053;stroke-width:8;fill:none;stroke-linecap:round}.outline{stroke:#31443c;stroke-width:3}.wood{fill:#b68d5b}.woodalt{fill:#c9a77d}.stone{fill:#a7a7a1}.card{fill:#fff;stroke:#e0ded6;stroke-width:3}
+</style><rect class="bg" width="1280" height="720"/><defs><marker id="ar" markerWidth="9" markerHeight="9" refX="4" refY="4" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z" fill="#178053"/></marker></defs>
+<text class="title" x="60" y="70">Hoe groot wordt jouw terras ongeveer?</text>
+<text class="body" x="60" y="114">Lengte × breedte = oppervlakte. Bijvoorbeeld 4 × 3 = 12 vierkante meter.</text>
+<rect class="card" x="55" y="150" width="1170" height="505" rx="22"/>
+<rect x="275" y="240" width="710" height="270" fill="#c5c6bb" class="outline"/>
+<g stroke="#f5f5ed" stroke-width="5"><path d="M275 330H985 M275 420H985 M395 240V510 M515 240V510 M635 240V510 M755 240V510 M875 240V510"/></g>
+<line class="measure" x1="290" y1="565" x2="970" y2="565" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="label" x="514" y="608">LENGTE 4 meter</text>
+<line class="measure" x1="197" y1="255" x2="197" y2="495" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="label" x="66" y="360">BREEDTE</text><text class="body" x="84" y="397">3 meter</text>
+</svg>

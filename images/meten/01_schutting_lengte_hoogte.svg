@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc"><title id="title">Schuttinglengte en schuttinghoogte</title><desc id="desc">Groene horizontale maatpijl langs de hele schutting: zes meter. Groene verticale maatpijl vanaf de grond tot bovenkant: 180 centimeter.</desc><style>
+ .bg{fill:#faf9f5}.title{font:700 38px Arial, sans-serif;fill:#152c25}.body{font:24px Arial,sans-serif;fill:#273e35}.label{font:700 25px Arial,sans-serif;fill:#164e3b}.measure{stroke:#178053;stroke-width:8;fill:none;stroke-linecap:round}.outline{stroke:#31443c;stroke-width:3}.wood{fill:#b68d5b}.woodalt{fill:#c9a77d}.stone{fill:#a7a7a1}.card{fill:#fff;stroke:#e0ded6;stroke-width:3}
+</style><rect class="bg" width="1280" height="720"/><defs><marker id="ar" markerWidth="9" markerHeight="9" refX="4" refY="4" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z" fill="#178053"/></marker></defs>
+<text class="title" x="60" y="70">Hoe lang en hoe hoog wordt jouw schutting?</text>
+<text class="body" x="60" y="112">Lengte = van het begin tot het einde. Hoogte = van de grond tot de bovenkant.</text>
+<rect class="card" x="55" y="147" rx="22" width="1170" height="490"/>
+<rect x="216" y="223" width="810" height="262" class="wood outline"/>
+<g stroke="#845e38" stroke-width="5"> <line x1="322" y1="224" x2="322" y2="487"/><line x1="430" y1="224" x2="430" y2="487"/><line x1="538" y1="224" x2="538" y2="487"/><line x1="646" y1="224" x2="646" y2="487"/><line x1="754" y1="224" x2="754" y2="487"/><line x1="862" y1="224" x2="862" y2="487"/></g>
+<path d="M216 515 H1026" stroke="#68685d" stroke-width="6"/>
+<line class="measure" x1="232" y1="570" x2="1010" y2="570" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="label" x="520" y="610">LENGTE — bijvoorbeeld 6 meter</text>
+<line class="measure" x1="1090" y1="240" x2="1090" y2="480" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="label" x="1110" y="355">HOOGTE</text><text class="body" x="1110" y="392">180 cm</text>
+</svg>

@@ -1,0 +1,244 @@
+{
+  "description": "v11 en v12 voorbereide acceptatiescenario’s, geen van deze scenario’s in dit pakket uitgevoerd",
+  "status": "NOT_RUN",
+  "scenarios": [
+    {
+      "id": "UX001",
+      "type": "Schutting",
+      "scenario": "Rechte houten schutting 6 meter en 180 centimeter",
+      "expected": "Klant voert 6 m en 180 cm in, maten staan zichtbaar op correcte pijlen; 2D, 3D en aanvraag matchen",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX002",
+      "type": "Schutting",
+      "scenario": "Onbekende maten bij schutting",
+      "expected": "Aanvraag is mogelijk via foto/omschrijving, matenstatus onbekend, geen definitieve prijs/hoeveelheid",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX003",
+      "type": "Schutting",
+      "scenario": "L-vorm met twee verschillende zijden",
+      "expected": "Klant ziet aparte achter-/zijmaat in bovenaanzicht; geen X/Z-coördinaten in beginnersroute",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX004",
+      "type": "Schutting",
+      "scenario": "Poort in de schutting",
+      "expected": "Doorgangsbreedte, juiste locatie en fysiek correcte poort in 3D, invalid placement herstelbaar",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX005",
+      "type": "Terras",
+      "scenario": "Terras 4 bij 3 meter",
+      "expected": "Juiste horizontale/verticale pijlen, 12 m², onzekerheidslabel voor materiaalindicatie",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX006",
+      "type": "Plantenbak",
+      "scenario": "Plantenbakmaat",
+      "expected": "Lengte/breedte/hoogte op correcte zijden, match met werkelijke SKU en foto",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX007",
+      "type": "3D",
+      "scenario": "Hout vs composiet vs beton",
+      "expected": "Foto, variant, 3D-materiaal en aanvraag consistent, verkeerde combinatie geblokkeerd",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX008",
+      "type": "3D",
+      "scenario": "Geen WebGL/3D",
+      "expected": "Werkende 2D-fallback met alle keuzes en aanvraag",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX009",
+      "type": "Uitleg",
+      "scenario": "Ieder technisch begrip",
+      "expected": "Uitlegblad begrijpelijk, voorbeelden en maatpijlen, klikbaar en toetsbaar op mobiel",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX010",
+      "type": "Uitleg",
+      "scenario": "Ik snap dit niet",
+      "expected": "Vanaf elke route verder zonder blocker; hulpaanvraag met gekozen context",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX011",
+      "type": "Formulier",
+      "scenario": "Netwerkfout bij verzenden",
+      "expected": "Klantgegevens behouden, herstelroute en geen onterechte succestekst",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX012",
+      "type": "Mobiel",
+      "scenario": "320/390px en 200% zoom",
+      "expected": "Geen horizontale overflow of onbereikbare bediening; touchdoelen en focus",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX013",
+      "type": "Shop",
+      "scenario": "Materiaal los, checkout uit",
+      "expected": "Geen afrekenmogelijkheid, eerlijke aanvraagroute, geen montagekosten",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX014",
+      "type": "Shop",
+      "scenario": "Materiaal plus montage",
+      "expected": "Offerteflow, arbeid apart, afvoer optioneel, geen prijsclaim op onbekende maten",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX015",
+      "type": "Foto",
+      "scenario": "Leveranciersfoto vergunning en SKU",
+      "expected": "Foto bij precies juiste materiaal/variant; bron en rechten gecontroleerd",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX016",
+      "type": "Prijs",
+      "scenario": "Consumentenprijscontrole",
+      "expected": "Live verkoop pas bij correcte incl-btw prijs, extra kosten, levering en rechten",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX017",
+      "type": "SEO",
+      "scenario": "Alle gepubliceerde URLs",
+      "expected": "Unieke titel/H1/canonical, sitemap, schema waarheid, technische crawl",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX018",
+      "type": "SEO",
+      "scenario": "Indexeerbaarheid",
+      "expected": "Geen admin, checkout, preview en zoekresultaten in index; content zichtbaar",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX019",
+      "type": "Beveiliging",
+      "scenario": "Foto upload",
+      "expected": "Bestandvalidatie, privacy, misbruikbeperking, geen openbare upload-URL",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX020",
+      "type": "Gebruikerstest",
+      "scenario": "Minimaal drie beginners zonder coaching",
+      "expected": "Observeer begrip en fouten; claim alleen getest als echte deelnemers aanwezig",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX021",
+      "type": "Visueel",
+      "scenario": "Referentie op desktop en mobiel",
+      "expected": "Side-by-side designvergelijking; afwijkingen gedocumenteerd en goedgekeurd",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX022",
+      "type": "Herstel",
+      "scenario": "Verkeerde maat invoeren",
+      "expected": "NL-decimaal, verkeerde 0/negatief, duidelijke foutmelding, correctie zonder dataverlies",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX023",
+      "type": "Portfolio",
+      "scenario": "Echte SEAL projecten",
+      "expected": "Geen AI/mockup als eigen project, herkomst geverifieerd",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "UX024",
+      "type": "Backend",
+      "scenario": "Bestaande tests blijven slagen",
+      "expected": "Nieuwe functies veroorzaken geen regressie in geometry, commerce of server",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "V12-01",
+      "type": "v12 aanvulling",
+      "scenario": "Repareren of vervangen",
+      "expected": "Klant met één losse plank kan herstel/inspectie vragen zonder volledige schuttingbestelling",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "V12-02",
+      "type": "v12 aanvulling",
+      "scenario": "Van project naar echte materialen",
+      "expected": "SEAL-project toont passend geverifieerd materiaaltype; onbekende SKU niet verzonnen",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "V12-03",
+      "type": "v12 aanvulling",
+      "scenario": "Productfotoreeks",
+      "expected": "Vooraanzicht, achterzijde en detail komen van exact dezelfde variant of worden eerlijk niet getoond",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "V12-04",
+      "type": "v12 aanvulling",
+      "scenario": "Schuttinghoogte op schaal",
+      "expected": "Maatpijl en neutrale schaal maken 180 cm duidelijk, ook zonder WebGL",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "V12-05",
+      "type": "v12 aanvulling",
+      "scenario": "Geschiktheidscheck",
+      "expected": "Onzekere ondergrond veroorzaakt advies/controle, geen onterechte garantie en geen blokkade",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "V12-06",
+      "type": "v12 aanvulling",
+      "scenario": "Echte foto versus 3D",
+      "expected": "Echte productfoto en render delen ID, constructie en kleur of tonen duidelijke indicatieve melding",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "V12-07",
+      "type": "v12 aanvulling",
+      "scenario": "Mijn tuinplan",
+      "expected": "Inspiratie, materiaal, maten en montagewens komen zonder herhaling in één consistente aanvraag",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "V12-08",
+      "type": "v12 aanvulling",
+      "scenario": "Kostenkaart",
+      "expected": "Alleen bevestigde bedragen incl. geldige btw; onbekend zichtbaar; duidelijk vrijblijvende offerte vs koop",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "V12-09",
+      "type": "v12 aanvulling",
+      "scenario": "Contextuele FAQ",
+      "expected": "Klant krijgt juiste beknopte uitleg bij keuze; content geen verzonnen SEO-data",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "V12-10",
+      "type": "v12 aanvulling",
+      "scenario": "Privacy eventmeting",
+      "expected": "Geen PII/events zonder geldige instelling/consent; alleen geautoriseerde non-PII hooks",
+      "status": "NOT_RUN"
+    }
+  ]
+}

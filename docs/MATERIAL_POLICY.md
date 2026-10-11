@@ -1,30 +1,27 @@
-# MATERIAL_POLICY: twee routes voor materiaal, bewust gescheiden
+# MATERIAL_POLICY: SEAL verkoopt materiaal, los of met montage
 
-Status: **beleidsspanning vastgelegd, keuze ligt bij de eigenaar.** Niets in dit document wijzigt de live site.
+Status: **beleid besloten door de eigenaar (v12, 11 oktober 2026).** Dit vervangt het eerdere uitgangspunt "de klant bestelt het materiaal zelf". Online bestellen en betalen blijven **uit** tot de voorwaarden hieronder zijn afgerond.
 
-## De spanning
+## Besluit
 
-| | Route 1: nu uitvoerbaar | Route 2: toekomstige verkoop door SEAL |
-|---|---|---|
-| Wat de site vandaag zegt | Wij adviseren en monteren. De klant bestelt het materiaal zelf na advies (`/werkwijze/`, dienstpagina's). | Niet gepubliceerd. |
-| Opties voor de klant | Montage met materiaal van de klant; advies over wat te bestellen | Alleen materiaal, alleen montage, of compleet |
-| Wie levert | Klant bij zijn eigen winkel of leverancier | SEAL koopt in en verkoopt door met marge |
-| Wat er al gebouwd is | Adviescatalogus `/materialen/` met marktreferenties (bron + peildatum), hoeveelheidsrekenaar, aanpakkeuze | Prijs- en kortingsmotor, mandje, bestelling, Mollie-adapter: alles gebouwd, getest, **uit** (`docs/COMMERCE_RULES.md`) |
-| Wat ontbreekt | niets blokkerends | leverancier, inkoopvoorwaarden, leverkosten en -tijd, voorraadregels, retourproces, btw-/factuurafspraken, juridisch getoetste voorwaarden, Mollie-account |
+SEAL koopt tuinmaterialen in bij leveranciers en verkoopt ze met eigen marge, op twee manieren:
 
-## Regels zolang route 2 niet is ingericht
+1. **Alleen materiaal** (los).
+2. **Materiaal met montage** (één offerte, materiaal en arbeid gescheiden zichtbaar).
 
-1. Geen tekst of knop belooft levering, voorraad, levertijd of een "alles-in-één-prijs" voor materiaal.
-2. Marktprijzen op `/materialen/` blijven *referenties*: bron, peildatum, geen Sealcleaning-aanbod. Verouderde prijs (> 30 dagen) toont geen bedrag.
-3. Dienstpagina's en configurator spreken van "montage" en "advies", nooit van "wij leveren". Een offerte voor montage vermeldt expliciet dat materiaal door de klant wordt aangeleverd, met verantwoordelijkheid voor hoeveelheid en tolerantie (UX009).
-4. De webwinkelcode blijft aanwezig maar uit: `checkout_enabled`, `payments_enabled` en `coupon_enabled` blijven `false`. De server weigert bestellen ook zonder `MOLLIE_API_KEY` en zonder vastgestelde bezorgprijs.
-5. Inkoopprijzen en marge blijven in het beheer en nooit in de publieke bestanden, de browserbundel of een URL.
-6. Er komen geen verzonnen leverancierstarieven, kortingen of marges.
+Daarnaast blijft bestaan: **alleen montage van eigen materiaal** van de klant (voorwaarden art. 12).
 
-## Wat de eigenaar moet beslissen (één keuze, daarna volgt de rest)
+## Wat de site nu doet
 
-- **Optie A, aanbevolen: route 1 houden.** Niets verandert. Live gaan kan zodra juridische toetsing en hosting klaar zijn.
-- **Optie B: route 2 activeren.** Eerst nodig: leveranciersafspraken en tarieven, leverroutes en -kosten, retour- en klachtenproces, getoetste voorwaarden met herroeping, Mollie, btw/factuurafspraken. Daarna: teksten op `/werkwijze/` en de dienstpagina's herschrijven, producten invoeren in het beheer, flags aanzetten, testbestelling doen.
-- **Optie C: beide.** Klant kiest per project: materiaal zelf (route 1) of via SEAL (route 2). Vraagt dezelfde voorbereiding als B plus duidelijke keuzetaal per offerte.
+- Alle teksten gaan uit van de offerteroute: materiaal kan in de offerte worden opgenomen, prijs en levering bevestigen wij daarin.
+- Geen levertijd, voorraad, vaste prijs of garantie wordt beloofd. Marktprijzen blijven referenties met bron en peildatum.
+- De webwinkelcode (prijs- en kortingsmotor, mandje, bestelling, Mollie-adapter) bestaat, is getest en blijft uit (`checkout_enabled`, `payments_enabled`, `coupon_enabled` = `false`).
+- Inkoopprijzen en marge staan alleen in het beheer, nooit in publieke bestanden of de browser.
 
-Zolang er geen keuze is, geldt optie A.
+## Poorten vóór `checkout_enabled` en `payments_enabled`
+
+Leveranciersafspraken en inkoopprijzen met datum · beeldrechten per product · btw per product en dienst · bezorg- en afhaalregels met vastgestelde kosten · retour-, klacht- en herroepingsproces · getoetste voorwaarden en privacyverklaring · Mollie-account met geteste webhook · hosting en e-mail · boekhoudafspraken. Zie `docs/COMMERCE_RULES.md`.
+
+## Marge en kostprijs
+
+Marge wordt berekend op de totale kostprijs (inkoop, transport, handling, uitval, opslag), niet als standaardopslag op de leveranciersprijs. Het arbeidstarief is €60 per uur per medewerker excl. btw (€72,60 incl.) zolang de eigenaar dit bevestigt. Geen marges of inkoopprijzen worden verzonnen: onbekend blijft onbekend.

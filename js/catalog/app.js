@@ -66,7 +66,7 @@ function priceLine(item) {
       h("a", { href: p.sourceUrl, rel: "noopener nofollow", target: "_blank", text: p.domain }), `, ${dateNl(p.observedAt)}`);
   }
   if (p.status === "stale") return h("p", { class: "catalog-price" }, h("span", { class: "badge badge--estimated", text: "Referentie verlopen" }), " controle nodig; wij adviseren over de actuele prijs");
-  return h("p", { class: "catalog-price muted", text: "Geen vaste prijs: wij adviseren, u bestelt zelf" });
+  return h("p", { class: "catalog-price muted", text: "Geen vaste prijs: prijs volgt in uw offerte" });
 }
 
 function media(item, size = "card") {
@@ -246,7 +246,7 @@ function openCompare(items) {
       h("div", { class: "compare-grid", style: `--n:${items.length}` },
         h("div", { class: "compare-row compare-row--head" }, h("span", { class: "compare-attr", "aria-hidden": "true" }), ...items.map((i) => h("strong", { class: "compare-cell", text: i.title }))),
         ...rows.map(([label, fn]) => h("div", { class: "compare-row" }, h("span", { class: "compare-attr", text: label }), ...items.map((i) => h("span", { class: "compare-cell", "data-item": i.title, text: fn(i) }))))),
-      h("p", { class: "field-hint", text: "Prijsreferenties zijn openbare prijzen van andere partijen en geen Sealcleaning-prijs. Wij adviseren; u bestelt het materiaal zelf." })));
+      h("p", { class: "field-hint", text: "Prijsreferenties zijn openbare prijzen van andere partijen en geen Sealcleaning-prijs. Materiaal kan in een offerte worden opgenomen; online bestellen is nog niet geopend." })));
   dlg.addEventListener("close", () => dlg.remove());
   document.body.append(dlg);
   if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open", "");
@@ -293,7 +293,7 @@ function renderProduct(item) {
         p.status === "reference"
           ? h("div", { class: "notice" }, h("strong", {}, `Marktreferentie: ${euro(p.amountCents)} ${UNIT[p.unit] || ""} ${p.vatIncluded === true ? "incl. btw" : p.vatIncluded === false ? "excl. btw" : "(btw-basis onbekend)"}`),
             h("span", {}, `Openbare prijs bij `, h("a", { href: p.sourceUrl, rel: "noopener nofollow", target: "_blank", text: p.domain }), `, peildatum ${dateNl(p.observedAt)}. Exclusief ${p.scopeExcluded.join(", ") || "levering en montage"}. Geen Sealcleaning-prijs.`))
-          : h("div", { class: "notice" }, h("strong", { text: p.status === "stale" ? "Referentie verlopen" : "Prijs na advies" }), h("span", { text: "U bestelt het materiaal zelf na ons advies. De prijs hangt af van het exacte product, de hoeveelheid en de aanbieder." })),
+          : h("div", { class: "notice" }, h("strong", { text: p.status === "stale" ? "Referentie verlopen" : "Prijs na advies" }), h("span", { text: "Het materiaal kan in een offerte worden opgenomen. De prijs hangt af van het exacte product, de hoeveelheid en de leverancier; die bevestigen wij daarin." })),
         qty,
         item.risks ? h("div", { class: "notice notice--attention" }, h("strong", { text: "Let op" }), h("span", { text: item.risks })) : null,
         project ? h("p", {}, h("a", { class: "link-underline", href: `../projecten/${project}/`, text: "Bekijk het project waarin dit is toegepast →" })) : null,
