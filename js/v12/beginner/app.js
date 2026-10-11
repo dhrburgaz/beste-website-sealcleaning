@@ -58,13 +58,22 @@ const sideNames = () => SIDES[st.vorm === "onbekend" ? "recht" : st.vorm] || SID
 function steps() {
   if (st.doel === "herstel") return ["doel", "herstel", "aanvraag"];
   if (st.doel === "weet-niet") return ["doel", "hulp", "aanvraag"];
-  const s = ["doel", "materiaal", "vorm"];
+  const s = ["doel", "vorm"];
   sideNames().forEach((_, i) => s.push(`lengte:${i}`));
-  s.push("hoogte", "poort");
+  s.push("hoogte", "materiaal", "poort");
   if (st.poort === "ja") s.push("poortdetails");
   s.push("werk", "bekijk", "aanvraag");
   return s;
 }
+const PHASES = [
+  { label: "Situatie", title: "Vertel over je situatie", steps: ["doel", "herstel", "hulp", "vorm"] },
+  { label: "Maten", title: "Voer de maten in", steps: ["lengte", "hoogte"] },
+  { label: "Materialen", title: "Kies je materiaal", steps: ["materiaal"] },
+  { label: "Extra's", title: "Kies je extra's", steps: ["poort", "poortdetails", "werk"] },
+  { label: "Resultaat", title: "Bekijk je idee en vraag een voorstel aan", steps: ["bekijk", "aanvraag"] }
+];
+const baseId = (id) => id.split(":")[0];
+function activePhases(list) { return PHASES.filter((p) => list.some((id) => p.steps.includes(baseId(id)))); }
 const STEP_TITLE = { doel: "Wat wil je doen?", herstel: "Wat is er stuk?", hulp: "Wij denken met je mee", materiaal: "Welke schutting vind je mooi?", vorm: "Hoe loopt de schutting?", hoogte: "Hoe hoog wil je de schutting?", poort: "Wil je ook een poort?", poortdetails: "Hoe breed en waar komt de poort?", werk: "Wie regelt het werk?", bekijk: "Bekijk jouw idee", aanvraag: "Vraag een voorstel aan" };
 const titleOf = (id) => (id.startsWith("lengte:") ? `Hoe lang is de ${sideNames()[+id.split(":")[1]].toLowerCase()}?` : STEP_TITLE[id]);
 const shortOf = (id) => (id.startsWith("lengte:") ? `Lengte ${sideNames()[+id.split(":")[1]].toLowerCase()}` : STEP_TITLE[id]);
@@ -145,7 +154,8 @@ function summaryLines() {
 }
 
 /* ---------------- preview (3D met 2D-terugval) ---------------- */
-const preview = { scene: null, host: null, overlay: null, tried: false, fallback: false, showDims: true };
+const preview = { scene: null, host: null, overlay: null, tried: false, fallback: false, showDims: true, mode: "3d", flat: null };
+const stageEl = () => root.querySelector(".b-preview-stage");
 async function ensureScene() {
   if (preview.scene || preview.tried) return;
   preview.tried = true;
@@ -154,22 +164,31 @@ async function ensureScene() {
     if (!mod.isWebGL2Supported()) throw new Error("webgl");
     preview.scene = mod.createThreeScene(preview.host, buildProject(), { scenic: true, figure: true });
     preview.scene.onFrame(drawDims);
-    root.dataset.view = "3d";
     updatePreview();
   } catch (e) {
-    preview.fallback = true; root.dataset.view = "2d";
-    const { renderScene } = await import("../../configurator/svg-scene.js");
-    preview.flat = h("svg", { class: "b-flat", role: "img", "aria-label": "Je schutting in 2D, bovenaanzicht" });
-    preview.host.append(preview.flat);
-    renderScene(preview.flat, buildProject(), {});
+    preview.fallback = true;
+    document.querySelectorAll("[data-b-mode='3d']").forEach((b) => { b.disabled = true; b.title = "3D werkt op dit apparaat niet"; });
+    setMode("2d");
     setStatus("Het 3D-voorbeeld werkt op dit apparaat niet. Je ziet een tekening van boven. Alle keuzes en maten werken gewoon.");
   }
 }
+async function renderFlat() {
+  if (!preview.flat) { preview.flat = h("svg", { class: "b-flat", role: "img", "aria-label": "Je schutting in 2D, bovenaanzicht" }); stageEl().append(preview.flat); }
+  const { renderScene } = await import("../../configurator/svg-scene.js");
+  renderScene(preview.flat, buildProject(), {});
+}
+function setMode(m) {
+  preview.mode = m; root.dataset.view = m; const se = stageEl(); if (se) se.dataset.mode = m;
+  document.querySelectorAll("[data-b-mode]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.bMode === m)));
+  if (m === "2d") renderFlat(); else if (preview.scene) { preview.scene.update(buildProject()); }
+}
 function updatePreview() {
   const p = buildProject();
-  if (preview.scene) { preview.scene.update(p); }
-  else if (preview.fallback && preview.flat) { import("../../configurator/svg-scene.js").then(({ renderScene }) => renderScene(preview.flat, p, {})); }
+  if (preview.scene && preview.mode === "3d") preview.scene.update(p);
+  if (preview.mode === "2d") renderFlat();
   renderFacts();
+  const any = sideNames().some((_, i) => sideMeasure(i).mode);
+  if (!any && !preview.fallback) setStatus("Dit is een voorbeeld van 5 meter. Zodra je maten invult, past de tekening zich aan.");
 }
 function drawDims() {
   const o = preview.overlay; if (!o || !preview.scene) return;
@@ -178,7 +197,11 @@ function drawDims() {
   const ns = "http://www.w3.org/2000/svg";
   const add = (tag, a, txt) => { const e = document.createElementNS(ns, tag); for (const k in a) e.setAttribute(k, a[k]); if (txt) e.textContent = txt; o.append(e); return e; };
   const cx = secs.reduce((s, x) => s + x.start.xMm, 0) / secs.length / 1000, cz = secs.reduce((s, x) => s + x.start.zMm, 0) / secs.length / 1000;
-  const label = (x, y, text, color) => { add("text", { x, y, "text-anchor": "middle", class: "b-dim-halo", fill: "none" }, text); add("text", { x, y, "text-anchor": "middle", class: "b-dim-text", fill: color }, text); };
+  const label = (x, y, text, color) => {
+    const w = Math.max(60, text.length * 7.4 + 18), hgt = 26;
+    add("rect", { x: x - w / 2, y: y - hgt / 2 - 4, width: w, height: hgt, rx: 13, class: "b-pill", stroke: color });
+    add("text", { x, y: y + 1, "text-anchor": "middle", class: "b-dim-text", fill: color }, text);
+  };
   secs.forEach((s, i) => {
     const r = (s.directionDeg * Math.PI) / 180, dx = Math.cos(r), dz = Math.sin(r);
     const a = { x: s.start.xMm / 1000, z: s.start.zMm / 1000 }, b = { x: a.x + dx * s.lengthMm / 1000, z: a.z + dz * s.lengthMm / 1000 };
@@ -188,7 +211,7 @@ function drawDims() {
     if (!A.visible || !B.visible) return;
     add("line", { x1: A.x, y1: A.y, x2: B.x, y2: B.y, class: "b-dim-halo-line" });
     add("line", { x1: A.x, y1: A.y, x2: B.x, y2: B.y, stroke: "#12513A", "stroke-width": 3, "marker-start": "url(#b-arr)", "marker-end": "url(#b-arr)" });
-    label(M.x, M.y - 8, `${secs.length > 1 ? sideNames()[i] + ": " : "Lengte: "}${mShort(s.lengthMm)}${sideMeasure(i).mode === "ongeveer" || sideMeasure(i).mode === "onbekend" ? " (geschat)" : ""}`, "#12513A");
+    label(M.x, M.y - 18, `${secs.length > 1 ? sideNames()[i] + ": " : "Lengte: "}${mShort(s.lengthMm)}${sideMeasure(i).mode === "ongeveer" || sideMeasure(i).mode === "onbekend" ? " (geschat)" : ""}`, "#12513A");
   });
   const s0 = secs[0], r0 = (s0.directionDeg * Math.PI) / 180;
   const hx = s0.start.xMm / 1000 - Math.cos(r0) * 0.6, hz = s0.start.zMm / 1000 - Math.sin(r0) * 0.6, hh = st.hoogteCm / 100;
@@ -196,14 +219,13 @@ function drawDims() {
   if (H0.visible && H1.visible) {
     add("line", { x1: H0.x, y1: H0.y, x2: H1.x, y2: H1.y, class: "b-dim-halo-line" });
     add("line", { x1: H0.x, y1: H0.y, x2: H1.x, y2: H1.y, stroke: "#B26A00", "stroke-width": 3, "marker-start": "url(#b-arr-a)", "marker-end": "url(#b-arr-a)" });
-    const hl = Math.max(70, H1.x); label(hl + 52, (H0.y + H1.y) / 2, `Hoogte: ${st.hoogteCm} cm`, "#8a5200");
+    const hl = Math.max(80, H1.x); label(hl + 62, (H0.y + H1.y) / 2, `Hoogte: ${st.hoogteCm} cm`, "#8a5200");
   }
 }
 function setStatus(t) { const el = root.querySelector("[data-b-status]"); if (el) el.textContent = t; }
 function renderFacts() {
   const el = root.querySelector("[data-b-facts]"); if (!el) return;
   el.textContent = "";
-  if (!st.materiaal) { el.append(h("li", { text: "Kies eerst een schutting. Dan zie je hier je maten." })); return; }
   const p = buildProject(), ind = indication(p);
   sideNames().forEach((n, i) => { const m = sideMeasure(i), mm = sideMm(i); el.append(h("li", { text: `${n}: ${m.mode === "onbekend" || !mm ? "nog onbekend" : mShort(mm)}${m.mode && m.mode !== "precies" ? ` (${m.mode === "ongeveer" ? "geschat" : "voorbeeldmaat"})` : ""}` })); });
   el.append(h("li", { text: `Hoogte: ${st.hoogteCm} cm (${(st.hoogteCm / 100).toLocaleString("nl-NL")} meter)` }));
@@ -255,19 +277,38 @@ function nav(id, list, canNext) {
 
 function go(id) { st.step = id; save(); render(true); }
 
+const stepperEl = document.querySelector("[data-b-stepper]");
+const phaseTitle = document.querySelector("[data-b-phase-title]");
+function renderStepper(list, id) {
+  const phases = activePhases(list), cur = phases.findIndex((p) => p.steps.includes(baseId(id)));
+  if (stepperEl) {
+    stepperEl.textContent = "";
+    phases.forEach((p, i) => {
+      const first = list.find((x) => p.steps.includes(baseId(x)));
+      const done = i < cur, active = i === cur;
+      const li = h("li", { class: active ? "is-active" : done ? "is-done" : "" },
+        h("button", { type: "button", "aria-current": active ? "step" : null, disabled: !done && !active, onclick: () => go(first) },
+          h("span", { class: "b-dot", "aria-hidden": "true", text: done ? "✓" : String(i + 1) }), h("span", { class: "b-dot-label", text: p.label }), done ? h("span", { class: "visually-hidden", text: " (klaar)" }) : null));
+      stepperEl.append(li);
+    });
+  }
+  if (phaseTitle) phaseTitle.textContent = `Stap ${cur + 1}. ${phases[cur].title}`;
+}
+
 function render(focus) {
   const list = steps();
   if (!list.includes(st.step)) st.step = list[0];
   const id = st.step, idx = list.indexOf(id);
-  progress.textContent = `Stap ${idx + 1} van ${list.length}: ${shortOf(id)}`;
+  progress.textContent = `Vraag ${idx + 1} van ${list.length}: ${shortOf(id)}`;
   bar.style.width = `${((idx + 1) / list.length) * 100}%`;
+  renderStepper(list, id);
   root.dataset.step = id.split(":")[0];
   stage.textContent = "";
   const heading = h("h2", { class: "b-title", tabindex: "-1", text: titleOf(id) });
   stage.append(heading);
   const body = STEPS[id.split(":")[0]](id, list);
   stage.append(body);
-  const showPreview = !["doel", "herstel", "hulp", "materiaal"].includes(id.split(":")[0]) && st.doel === "nieuw";
+  const showPreview = st.doel !== "herstel" && st.doel !== "weet-niet";
   root.classList.toggle("has-preview", showPreview);
   if (showPreview) { ensureScene().then(updatePreview); updatePreview(); if (id === "bekijk") emit("design_preview_seen", { material: st.materiaal || undefined }); }
   if (id.startsWith("lengte") || id === "hoogte" || id === "poortdetails") emit("quote_started", {});
@@ -306,8 +347,19 @@ const STEPS = {
   },
   materiaal(id, list) {
     const body = h("div", {});
-    body.append(h("p", { class: "b-sub", text: "Dit zijn voorbeelden uit ons eigen werk. Je kunt later nog wisselen." }), helpBlock("materiaal") || "");
-    body.append(choiceCards("materiaal", MATERIALS.map((m) => ({ id: m.id, label: m.label, sub: m.care, media: photoPic(m.photo.name, m.photo.alt) })), st.materiaal, (v) => { st.materiaal = v; save(); emit("material_selected", { material: v }); render(); }, { label: "Kies een schutting", cls: "b-cards-2" }));
+    body.append(h("p", { class: "b-sub", text: "Dit zijn voorbeelden uit ons eigen werk. Je ziet direct wat je kiest in de 3D. Je kunt later nog wisselen." }), helpBlock("materiaal") || "");
+    body.append(choiceCards("materiaal", MATERIALS.map((m) => ({ id: m.id, label: m.label, media: photoPic(m.photo.name, m.photo.alt) })), st.materiaal, (v) => { st.materiaal = v; save(); emit("material_selected", { material: v }); render(); }, { label: "Kies een schutting", cls: "b-swatches" }));
+    const cur = material();
+    if (cur) {
+      const sys = getFenceSystem(cur.system);
+      body.append(h("div", { class: "b-detail" },
+        h("figure", { class: "b-detail-fig" }, photoPic(cur.photo.name, cur.photo.alt), h("figcaption", { text: cur.photo.note })),
+        h("div", { class: "b-detail-body" }, h("h3", { text: cur.label }), h("p", { text: cur.care }),
+          h("details", {}, h("summary", { text: "Wat is dit precies?" }), h("p", { text: sys ? sys.buildUp : "" })),
+          h("details", {}, h("summary", { text: "Onderhoud" }), h("p", { text: sys ? sys.maintenance : "" })),
+          h("details", {}, h("summary", { text: "Welke hoogte past bij mij?" }), h("p", { text: "Dat hangt af van hoeveel privacy je wilt en wat in jouw gemeente is toegestaan. In de eerdere stap zie je wat 180 cm is. Wij denken graag mee." })),
+          h("details", {}, h("summary", { text: "Is dit geschikt voor mijn tuin?" }), h("p", { text: "Dat hangt af van de ondergrond, de plek en de wind. Wij controleren dat voordat een prijs vaststaat. Je kunt altijd een ander materiaal kiezen." })))));
+    } else body.append(h("p", { class: "b-note", text: "Kies een schutting om meer te lezen." }));
     body.append(nav(id, list, !!st.materiaal));
     return body;
   },
@@ -420,9 +472,24 @@ const STEPS = {
       h("p", { class: "b-muted", text: `Indicatie van onderdelen: ongeveer ${ind.panels + ind.fit} schuttingdelen en ${ind.posts} palen.` }),
       helpBlock("maten") || ""));
     const enc = encodeShare(p);
-    body.append(h("div", { class: "b-plan" }, h("h3", { text: "Mijn tuinplan" }), h("ul", { class: "b-plan-list" }, summaryLines().map((l) => h("li", { text: l }))),
-      h("p", { class: "b-muted", text: "Je keuzes zijn bewaard op dit apparaat. Ze worden niet naar andere apparaten gestuurd." }),
-      enc ? h("a", { class: "v-link", href: new URL("project-samenstellen/", BASE).href + `#ontwerp=${enc}`, text: "Nauwkeurig tekenen (voor ervaren gebruikers)" }) : null));
+    const shareUrl = enc ? new URL("project-samenstellen/", BASE).href + `#ontwerp=${enc}` : "";
+    const msg = h("p", { class: "b-muted", role: "status", "aria-live": "polite", text: "Je keuzes zijn bewaard op dit apparaat. Ze worden niet naar andere apparaten gestuurd." });
+    const sides = sideNames().map((n, i) => { const m = sideMeasure(i), mm = sideMm(i); return `${n.toLowerCase()} ${m.mode === "onbekend" || !mm ? "onbekend" : mShort(mm)}`; }).join(", ");
+    const row = (thumb, title, sub, stepId) => h("li", { class: "b-plan-row" }, thumb, h("span", { class: "b-plan-text" }, h("strong", { text: title }), h("span", { text: sub })), h("button", { type: "button", class: "btn btn-secondary btn-sm", onclick: () => go(stepId), "aria-label": `${title} bewerken` }, "Bewerken"));
+    const icon = (path) => h("span", { class: "b-plan-icon", html: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="${path}"/></svg>` });
+    const rows = [row(photoPic(mat.photo.name, mat.photo.alt, "b-plan-thumb"), `${mat.label} schutting`, `${sides} · ${st.hoogteCm} cm hoog · maten: ${overallMeasure()}`, "lengte:0")];
+    if (st.poort === "ja") rows.push(row(icon("M4 20V6l8-3 8 3v14M9 20v-7h6v7"), "Poort", `${st.poortBreedteCm} cm doorgang, plek: ${st.poortPlek === "seal" ? "SEAL bepaalt" : st.poortPlek}`, "poortdetails"));
+    rows.push(row(icon("M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5"), WERK[st.werk] || "Nog geen keuze", st.oudWeg ? "Oude schutting weghalen" + (st.afvoer ? " en afvoeren" : "") : "Geen extra werk gekozen", "werk"));
+    body.append(h("div", { class: "b-plan b-tuinplan", id: "tuinplan" }, h("h3", { text: "Uw tuinplan" }),
+      h("p", { class: "b-muted", text: "Dit is een overzicht van je keuzes. Er staan geen prijzen: die volgen in je offerte, na controle van maten en product." }),
+      h("ul", { class: "b-plan-rows" }, rows),
+      h("div", { class: "b-plan-total" }, h("strong", { text: "Prijs" }), h("span", { text: "Volgt in je offerte" })),
+      h("div", { class: "b-plan-actions" },
+        h("button", { type: "button", class: "btn btn-secondary btn-sm", onclick: async () => { if (!shareUrl) { msg.textContent = "Dit ontwerp is te groot voor een link."; return; } try { await navigator.clipboard.writeText(shareUrl); msg.textContent = "Link gekopieerd. Wie de link opent, ziet dit ontwerp."; } catch (e) { msg.textContent = "Kopiëren lukte niet. Gebruik de link onderaan."; } } }, "Delen"),
+        h("button", { type: "button", class: "btn btn-secondary btn-sm", onclick: () => { save(); msg.textContent = "Opgeslagen op dit apparaat."; } }, "Opslaan"),
+        h("button", { type: "button", class: "btn btn-secondary btn-sm", onclick: () => { document.body.classList.add("print-plan"); window.print(); setTimeout(() => document.body.classList.remove("print-plan"), 500); } }, "Afdrukken of pdf")),
+      msg,
+      shareUrl ? h("a", { class: "v-link", href: shareUrl, text: "Nauwkeurig tekenen (voor ervaren gebruikers)" }) : null));
     body.append(nav(id, list, true));
     return body;
   },
@@ -462,6 +529,14 @@ const STEPS = {
 
 function lengteIllus() { return lengthIllustration(); }
 
+function showFailure(e) {
+  stage.textContent = "";
+  stage.append(h("h2", { class: "b-title", text: "Er ging iets mis" }), h("p", { class: "b-sub", text: "De ontwerphulp kon deze stap niet laten zien. Je keuzes zijn niet verloren. Je kunt ook zonder ontwerp een offerte aanvragen." }),
+    h("div", { class: "b-fallback-links" }, h("a", { class: "btn btn-primary btn-lg", href: new URL("contact/", BASE).href, text: "Vraag een offerte aan" }), h("button", { type: "button", class: "btn btn-secondary btn-lg", onclick: () => location.reload(), text: "Probeer opnieuw" })),
+    h("details", {}, h("summary", { text: "Technische melding" }), h("pre", { text: String(e && e.stack || e).slice(0, 600) })));
+}
+window.addEventListener("error", (ev) => { if (!root.dataset.failed && ev.error && stage && !stage.children.length) { root.dataset.failed = "1"; showFailure(ev.error); } });
+
 function reset() { st = fresh(); preview.showDims = true; save(); render(true); }
 
 /* ---------------- preview-bediening ---------------- */
@@ -472,7 +547,8 @@ root.querySelector("[data-b-view-reset]")?.addEventListener("click", () => previ
 const dimBtn = root.querySelector("[data-b-dims]");
 dimBtn?.addEventListener("click", () => { preview.showDims = !preview.showDims; dimBtn.setAttribute("aria-pressed", String(preview.showDims)); dimBtn.textContent = preview.showDims ? "Maten verbergen" : "Toon maten"; drawDims(); });
 root.querySelector("[data-b-reset]")?.addEventListener("click", reset);
+document.querySelectorAll("[data-b-mode]").forEach((b) => b.addEventListener("click", () => { if (!b.disabled) setMode(b.dataset.bMode); }));
 
 if (loadedFromStore) setStatus("Je eerdere keuzes zijn terug. Ze zijn bewaard op dit apparaat.");
-render(false);
+try { render(false); } catch (e) { showFailure(e); }
 root.dataset.ready = "1";

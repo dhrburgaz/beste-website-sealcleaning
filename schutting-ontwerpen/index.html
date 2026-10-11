@@ -85,15 +85,37 @@
       <nav class="breadcrumbs" aria-label="Kruimelpad" style="margin-bottom:1rem"><a href="../">Home</a> / <a href="../schuttingen/">Schuttingen</a> / Schutting ontwerpen</nav>
       <div class="b-top">
         <h1 id="b-kop" class="v-h2" style="font-size:clamp(1.9rem,1.6vw + 1.3rem,2.8rem);margin-bottom:.4rem">Ontwerp je schutting</h1>
-        <p class="v-lede">Je hoeft niets van meten of ontwerpen te weten. We vragen één ding per keer. Je kunt altijd terug.</p>
-        <p class="b-progress" data-b-progress aria-live="polite">Stap 1</p>
-        <div class="b-barwrap" aria-hidden="true"><div class="b-bar" data-b-bar style="width:10%"></div></div>
+        <p class="v-lede">Geen ervaring met ontwerpen of meten nodig. We vragen één ding per keer en je ziet direct wat je kiest.</p>
+        <ol class="b-stepper" data-b-stepper aria-label="Voortgang"></ol>
+        <div class="b-phase">
+          <div>
+            <p class="b-phase-title" data-b-phase-title>Stap 1.</p>
+            <p class="b-progress" data-b-progress aria-live="polite">Vraag 1</p>
+          </div>
+          <div class="b-viewtoggle" role="group" aria-label="Weergave">
+            <button type="button" data-b-mode="2d" aria-pressed="false">2D</button>
+            <button type="button" data-b-mode="3d" aria-pressed="true">3D</button>
+          </div>
+        </div>
+        <div class="b-barwrap" aria-hidden="true" hidden><div class="b-bar" data-b-bar style="width:10%"></div></div>
       </div>
 
       <noscript><p class="v-notice">Voor dit ontwerphulpje is JavaScript nodig. Je kunt ook <a href="../contact/">direct een offerte aanvragen</a> of bellen.</p></noscript>
 
       <div class="b-wrap" data-beginner>
-        <div class="b-stage" data-b-stage aria-live="off"></div>
+        <div class="b-stage" data-b-stage aria-live="off">
+          <div class="b-fallback" data-b-fallback>
+            <h2 class="b-title">Wat wil je doen?</h2>
+            <p class="b-sub b-loading">De ontwerphulp wordt geladen…</p>
+            <p class="b-sub b-failed">De ontwerphulp kon niet starten. Dat is niet jouw schuld. Je kunt gewoon verder zonder ontwerp:</p>
+            <div class="b-fallback-links">
+              <a class="btn btn-primary btn-lg" href="../contact/">Vraag een offerte aan</a>
+              <a class="btn btn-secondary btn-lg" href="../project-samenstellen/">Open de volledige ontwerper</a>
+              <a class="btn btn-secondary btn-lg" href="#" data-tel>Bel ons</a>
+            </div>
+            <details class="b-failed" data-b-error hidden><summary>Technische melding (voor de beheerder)</summary><pre></pre></details>
+          </div>
+        </div>
         <aside class="b-preview" aria-label="Voorbeeld van je schutting">
           <div class="b-preview-stage">
             <div data-b-3d></div>
@@ -171,6 +193,7 @@
 
 <script src="../js/config.js"></script>
 <script src="../js/main.js"></script>
+<script src="../js/v12/guard.js"></script>
 <script type="module" src="../js/v12/beginner/app.js"></script>
 </body>
 </html>

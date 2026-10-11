@@ -23,40 +23,62 @@ async function open(opts = {}) {
 }
 const pick = async (pg, text) => { const l = pg.locator("label", { hasText: text }).first(); await l.evaluate((e) => e.scrollIntoView({ block: "center", behavior: "instant" })); await l.click({ force: true }); };
 const next = (pg) => pg.locator(".b-nav .btn-primary").click();
+
+/* Doorloop de route in de volgorde van het goedgekeurde ontwerp: situatie, maten, materiaal, extra's, resultaat. */
+async function flow(pg, o) {
+  const stopAt = o.until || "aanvraag";
+  await pick(pg, "Een nieuwe schutting"); await next(pg);
+  await pick(pg, o.vorm || "Recht"); await next(pg);
+  const sides = o.sides || [["Ik weet de maten", "6"]];
+  for (let i = 0; i < sides.length; i++) {
+    await pick(pg, sides[i][0]); if (sides[i][1] !== undefined) await pg.fill(`#len-${i}`, sides[i][1]);
+    if (stopAt === `len${i}`) return; await next(pg);
+  }
+  if (stopAt === "hoogte") return;
+  await pick(pg, o.hoogte || "180 cm"); await next(pg);
+  if (stopAt === "materiaal") return;
+  await pick(pg, o.materiaal || "Hout"); await next(pg);
+  await pick(pg, o.poort || "Nee"); await next(pg);
+  if (o.poort === "Ja") { await pick(pg, o.poortBreedte || "100 cm"); if (stopAt === "poortdetails") return; await next(pg); }
+  await pick(pg, o.werk || "Materialen én plaatsing"); await next(pg);
+  if (stopAt === "bekijk") return; await next(pg);
+}
 const title = (pg) => pg.locator(".b-title").innerText();
 const bodyText = (pg) => pg.locator("[data-beginner]").innerText();
 
 /* UX001: rechte houten schutting 6 m, 180 cm */
 {
   const { ctx, pg, errs } = await open();
-  await pick(pg, "Een nieuwe schutting"); await next(pg);
-  await pick(pg, "Hout"); await next(pg);
-  await pick(pg, "Recht"); await next(pg);
-  assert.match(await title(pg), /Hoe lang is de achterkant/i);
-  await pick(pg, "Ik weet de maten"); await pg.fill("#len-0", "6");
-  assert.match(await pg.locator(".b-echo").innerText(), /6 meter\./);
-  await next(pg);
-  assert.match(await title(pg), /Hoe hoog/);
-  await pick(pg, "180 cm"); await next(pg);
-  await pick(pg, "Nee"); await next(pg);
-  await pick(pg, "Materialen én plaatsing"); await next(pg);
+  await flow(pg, { until: "bekijk" });
   assert.match(await title(pg), /Bekijk jouw idee/);
   const txt = await bodyText(pg);
   assert.match(txt, /6 m/); assert.match(txt, /180 cm/); assert.match(txt, /precies/);
   assert.ok(await pg.locator("[data-b-overlay] text").count() >= 2, "maatlabels in de 3D-weergave");
   assert.match(await pg.locator("[data-b-overlay]").innerHTML(), /Lengte: 6 m/);
-  assert.match(txt, /Wordt berekend na controle/); assert.doesNotMatch(txt, /€\s?\d/, "geen verzonnen bedragen");
-  assert.match(txt, /Echt voorbeeld/); assert.match(txt, /Voorbeeld in 3D/);
-  assert.deepEqual(errs, []); await ctx.close(); ok("UX001 rechte schutting 6 m / 180 cm, maten in 3D, geen bedragen");
+  assert.match(txt, /Volgt in je offerte/); assert.doesNotMatch(txt, /€\s?\d/, "geen verzonnen bedragen");
+  assert.match(txt, /Echt voorbeeld/); assert.match(txt, /Voorbeeld in 3D/); assert.match(txt, /Uw tuinplan/);
+  assert.deepEqual(errs, []); await ctx.close(); ok("UX001 rechte schutting 6 m / 180 cm, maten in 3D, tuinplan, geen bedragen");
+}
+
+/* Stappenbalk en grote 3D vanaf stap 1 */
+{
+  const { ctx, pg } = await open();
+  assert.equal(await pg.locator("[data-b-stepper] li").count(), 5);
+  assert.match(await pg.locator("[data-b-phase-title]").innerText(), /Stap 1\. Vertel over je situatie/);
+  await pg.waitForSelector("[data-b-3d] canvas", { timeout: 15000 });
+  const box = await pg.locator(".b-preview-stage").boundingBox(); assert.ok(box.width >= 600, `3D breed genoeg: ${box.width}`);
+  await pick(pg, "Een nieuwe schutting"); await next(pg); await pick(pg, "Recht"); await next(pg);
+  assert.match(await pg.locator("[data-b-phase-title]").innerText(), /Stap 2\. Voer de maten in/);
+  assert.equal(await pg.locator("[data-b-stepper] .is-done").count(), 1);
+  await pg.locator("[data-b-mode='2d']").click(); await pg.waitForSelector(".b-flat", { state: "visible" });
+  await pg.locator("[data-b-mode='3d']").click(); assert.equal(await pg.locator("[data-b-mode='3d']").getAttribute("aria-pressed"), "true");
+  await ctx.close(); ok("stappenbalk met 5 fasen, grote 3D vanaf stap 1, 2D/3D-schakelaar");
 }
 
 /* UX002: onbekende maten kunnen toch een aanvraag doen */
 {
   const { ctx, pg } = await open();
-  await pick(pg, "Een nieuwe schutting"); await next(pg); await pick(pg, "Composiet"); await next(pg); await pick(pg, "Weet ik niet"); await next(pg);
-  await pick(pg, "Ik kan niet meten");
-  assert.match(await bodyText(pg), /Geen probleem/);
-  await next(pg); await next(pg); await pick(pg, "Weet ik nog niet"); await next(pg); await pick(pg, "Alleen de materialen"); await next(pg);
+  await flow(pg, { vorm: "Weet ik niet", sides: [["Ik kan niet meten"]], materiaal: "Composiet", poort: "Weet ik nog niet", werk: "Alleen de materialen", until: "bekijk" });
   const t = await bodyText(pg); assert.match(t, /onbekend/); assert.doesNotMatch(t, /€\s?\d/);
   await next(pg);
   const om = await pg.locator("#omschrijving").inputValue();
@@ -68,7 +90,7 @@ const bodyText = (pg) => pg.locator("[data-beginner]").innerText();
 /* UX003: L-vorm, twee zijden, geen X/Z in de beginnersroute */
 {
   const { ctx, pg } = await open();
-  await pick(pg, "Een nieuwe schutting"); await next(pg); await pick(pg, "Hout met beton"); await next(pg); await pick(pg, "Met een hoek"); await next(pg);
+  await pick(pg, "Een nieuwe schutting"); await next(pg); await pick(pg, "Met een hoek"); await next(pg);
   assert.match(await title(pg), /achterkant/i); await pick(pg, "Ik weet de maten"); await pg.fill("#len-0", "8"); await next(pg);
   assert.match(await title(pg), /zijkant/i); await pick(pg, "Ik weet het ongeveer"); await pg.fill("#len-1", "4,5"); await next(pg);
   const all = await pg.locator("main").innerText();
@@ -77,16 +99,15 @@ const bodyText = (pg) => pg.locator("[data-beginner]").innerText();
   await ctx.close(); ok("UX003 L-vorm: twee zijden, geen X/Z of vaktermen");
 }
 
-/* Foute invoer (UX009 uit register): duidelijke melding, ruimte om te herstellen */
+/* Foute invoer (UX022): duidelijke melding, ruimte om te herstellen */
 {
   const { ctx, pg } = await open();
-  await pick(pg, "Een nieuwe schutting"); await next(pg); await pick(pg, "Hout"); await next(pg); await pick(pg, "Recht"); await next(pg);
+  await pick(pg, "Een nieuwe schutting"); await next(pg); await pick(pg, "Recht"); await next(pg);
   await pick(pg, "Ik weet de maten");
   for (const bad of ["abc", "0", "-3", "100", ""]) {
     await pg.fill("#len-0", bad);
-    const disabled = await pg.locator(".b-nav .btn-primary").isDisabled();
-    assert.ok(disabled, `volgende uit bij "${bad}"`);
-    if (bad && bad !== "") assert.ok((await pg.locator(".b-echo").innerText()).length > 10, `melding bij "${bad}"`);
+    assert.ok(await pg.locator(".b-nav .btn-primary").isDisabled(), `volgende uit bij "${bad}"`);
+    if (bad) assert.ok((await pg.locator(".b-echo").innerText()).length > 10, `melding bij "${bad}"`);
   }
   for (const good of ["6,5", "6.5"]) { await pg.fill("#len-0", good); assert.match(await pg.locator(".b-echo").innerText(), /6 meter en 50 centimeter/); assert.ok(await pg.locator(".b-nav .btn-primary").isEnabled()); }
   await ctx.close(); ok("foute invoer 'abc/0/-3/100/leeg' geblokkeerd met melding; 6,5 en 6.5 gelijk");
@@ -95,9 +116,7 @@ const bodyText = (pg) => pg.locator("[data-beginner]").innerText();
 /* UX004: poort, te breed op korte zijde */
 {
   const { ctx, pg } = await open();
-  await pick(pg, "Een nieuwe schutting"); await next(pg); await pick(pg, "Hout"); await next(pg); await pick(pg, "Recht"); await next(pg);
-  await pick(pg, "Ik weet de maten"); await pg.fill("#len-0", "1"); await next(pg); await next(pg);
-  await pick(pg, "Ja"); await next(pg); await pick(pg, "120 cm");
+  await flow(pg, { sides: [["Ik weet de maten", "1"]], poort: "Ja", poortBreedte: "120 cm", until: "poortdetails" });
   assert.match(await pg.locator(".b-echo.is-error").innerText(), /poort te breed/i);
   assert.ok(await pg.locator(".b-nav .btn-primary").isDisabled());
   await pick(pg, "80 cm");
@@ -122,11 +141,10 @@ const bodyText = (pg) => pg.locator("[data-beginner]").innerText();
 /* UX008: geen WebGL -> 2D-terugval met dezelfde keuzes */
 {
   const { ctx, pg, errs } = await open({ noWebGL: true });
-  await pick(pg, "Een nieuwe schutting"); await next(pg); await pick(pg, "Hout"); await next(pg); await pick(pg, "Recht"); await next(pg);
-  await pick(pg, "Ik weet de maten"); await pg.fill("#len-0", "6"); await next(pg);
-  await pg.waitForSelector(".b-flat", { timeout: 8000 });
+  await pg.waitForSelector(".b-flat", { state: "visible", timeout: 8000 });
   assert.match(await pg.locator("[data-b-status]").innerText(), /werkt op dit apparaat niet/);
-  await next(pg); await pick(pg, "Nee"); await next(pg); await pick(pg, "Alleen de materialen"); await next(pg); await next(pg);
+  assert.ok(await pg.locator("[data-b-mode='3d']").isDisabled());
+  await flow(pg, { sides: [["Ik weet de maten", "6"]] });
   assert.match(await title(pg), /Vraag een voorstel/);
   assert.deepEqual(errs, []); await ctx.close(); ok("UX008 zonder WebGL: 2D-tekening en volledige route");
 }
@@ -134,7 +152,7 @@ const bodyText = (pg) => pg.locator("[data-beginner]").innerText();
 /* Persistentie + uitleg + toetsenbord */
 {
   const { ctx, pg } = await open();
-  await pick(pg, "Een nieuwe schutting"); await next(pg);
+  await flow(pg, { until: "materiaal" });
   await pg.locator("#materiaal-composiet").focus(); await pg.keyboard.press("Space");
   assert.ok(await pg.locator("#materiaal-composiet").isChecked(), "keuze met toetsenbord");
   await pg.locator(".b-info").click();
@@ -158,9 +176,7 @@ const bodyText = (pg) => pg.locator("[data-beginner]").innerText();
     posted = req.postData() || "";
     return route.fulfill({ status: 201, headers: { "access-control-allow-origin": "*" }, contentType: "application/json", body: JSON.stringify({ ref: "A-TEST-0001" }) });
   });
-  await pick(pg, "Een nieuwe schutting"); await next(pg); await pick(pg, "Hout met beton"); await next(pg); await pick(pg, "Recht"); await next(pg);
-  await pick(pg, "Ik weet het ongeveer"); await pg.fill("#len-0", "7"); await next(pg); await next(pg); await pick(pg, "Nee"); await next(pg);
-  await pick(pg, "Materialen én plaatsing"); await next(pg); await next(pg);
+  await flow(pg, { sides: [["Ik weet het ongeveer", "7"]], materiaal: "Hout met beton" });
   await pg.fill("#naam", "Test Persoon"); await pg.fill("#telefoon", "0612345678"); await pg.fill("#email", "t@example.test"); await pg.fill("#postcode", "3312 KP"); await pg.fill("#woonplaats", "Dordrecht");
   await pg.selectOption("#contactvoorkeur", "WhatsApp"); await pg.locator("#privacy").check();
   await pg.locator("form.b-form button[type=submit]").click();
@@ -188,13 +204,24 @@ const bodyText = (pg) => pg.locator("[data-beginner]").innerText();
 {
   const { ctx, pg } = await open({ w: 320, h: 700 });
   const over = async (n) => { const d = await pg.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth); assert.ok(d <= 1, `overflow ${d}px bij ${n}`); };
-  await over("doel"); await pick(pg, "Een nieuwe schutting"); await next(pg); await over("materiaal");
-  await pick(pg, "Hout"); await next(pg); await over("vorm"); await pick(pg, "Langs drie kanten"); await next(pg);
+  await over("doel"); await pick(pg, "Een nieuwe schutting"); await next(pg); await over("vorm"); await pick(pg, "Langs drie kanten"); await next(pg);
   for (let i = 0; i < 3; i++) { await over("lengte" + i); await pick(pg, "Ik weet het ongeveer"); await pg.fill(`#len-${i}`, "5"); await next(pg); }
-  await over("hoogte"); await next(pg); await over("poort"); await pick(pg, "Ja"); await next(pg); await over("poortdetails"); await next(pg);
+  await over("hoogte"); await next(pg); await over("materiaal"); await pick(pg, "Composiet"); await over("materiaal-detail"); await next(pg);
+  await over("poort"); await pick(pg, "Ja"); await next(pg); await over("poortdetails"); await next(pg);
   await over("werk"); await pick(pg, "Materialen én plaatsing"); await pick(pg, "weghalen"); await over("werk-extra"); await next(pg);
   await over("bekijk"); await next(pg); await over("aanvraag");
   await ctx.close(); ok("UX012 320 px: geen horizontale scroll bij alle stappen");
+}
+
+/* Vangnet: als het script niet laadt, is de pagina niet leeg */
+{
+  const ctx = await browser.newContext(); const pg = await ctx.newPage();
+  await pg.route("**/js/v12/beginner/app.js", (r) => r.abort());
+  await pg.goto(URL_);
+  assert.ok(await pg.locator("[data-b-fallback]").isVisible(), "vangnet zichtbaar");
+  await pg.waitForSelector("[data-b-fallback].is-failed", { timeout: 8000 });
+  assert.match(await pg.locator("[data-b-fallback]").innerText(), /kon niet starten/); assert.ok(await pg.locator("[data-b-fallback] a[href*='contact']").isVisible());
+  await ctx.close(); ok("vangnet: bij een scriptfout toont de pagina een melding en een werkende alternatieve route");
 }
 
 await browser.close();

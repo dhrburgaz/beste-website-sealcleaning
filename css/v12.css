@@ -314,3 +314,169 @@
 .b-progress { min-height: 1.5em; }
 .b-top .v-lede { min-height: 3.2em; }
 @media (max-width: 700px) { .b-wrap { min-height: 640px; } }
+
+/* Vangnet ontwerphulp */
+.b-fallback .b-failed { display: none; }
+.b-fallback.is-failed .b-failed { display: block; }
+.b-fallback.is-failed .b-loading { display: none; }
+.b-fallback-links { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .8rem; }
+.b-fallback pre, .b-stage pre { white-space: pre-wrap; font-size: .8rem; background: #fff; border: 1px solid var(--seal-stroke); padding: .6rem; border-radius: 6px; }
+
+/* ==========================================================================
+   Site-brede v12-skin voor bestaande pagina's (diensten, werkwijze, over ons, enz.)
+   Doel: dezelfde uitstraling als de goedgekeurde referentie, zonder inhoud of functie te wijzigen.
+   ========================================================================== */
+.v12 { --role-accent: var(--seal-green); --role-accent-on-dark: #E4D3AE; }
+.v12 .container { max-width: 1240px; }
+.v12 .section { padding-block: clamp(2.5rem, 5vw, 4.5rem); background: var(--seal-paper); }
+.v12 .section-sand-deep, .v12 .section.section-sand { background: var(--seal-sand); }
+.v12 .section-dark { background: var(--seal-green-deep); color: rgba(255, 255, 255, .88); }
+.v12 .section-dark h1, .v12 .section-dark h2, .v12 .section-dark h3, .v12 .page-hero h1, .v12 .hero h1, .v12 .footer-cta h2, .v12 .cta-banner h2 { color: #fff; }
+.v12 .eyebrow { color: var(--seal-green); letter-spacing: .16em; font-weight: 600; }
+.v12 .section-dark .eyebrow, .v12 .page-hero .eyebrow, .v12 .hero .eyebrow, .v12 .footer-cta .eyebrow { color: #E4D3AE; }
+.v12 .lede { color: var(--seal-muted); }
+.v12 .path-divider { display: none; }
+.v12 .container-narrow { max-width: 980px; }
+.v12 .container-narrow > h2, .v12 .container-narrow > h3 { margin-top: 2.2rem; }
+.v12 .container-narrow > h2:first-child { margin-top: 0; }
+
+/* Foto-hero van dienst- en inhoudspagina's */
+.v12 .page-hero { min-height: clamp(380px, 52vh, 560px); background: var(--seal-green-deep); }
+.v12 .page-hero .hero-scrim { background: linear-gradient(90deg, rgba(10, 36, 30, .9) 0%, rgba(10, 36, 30, .65) 48%, rgba(10, 36, 30, .15) 100%), linear-gradient(0deg, rgba(10, 36, 30, .5), rgba(10, 36, 30, 0) 45%); }
+.v12 .page-hero h1 { font-size: clamp(2.3rem, 3vw + 1.2rem, 4rem); line-height: 1.05; max-width: 16ch; }
+.v12 .page-hero .lede, .v12 .page-hero p { color: rgba(255, 255, 255, .92); }
+.v12 .page-hero .breadcrumbs, .v12 .page-hero .breadcrumbs a { color: rgba(255, 255, 255, .85); }
+.v12 .btn-ghost-light { background: rgba(255, 255, 255, .08); color: #fff; border-color: rgba(255, 255, 255, .7); border-radius: var(--v-radius-s); }
+.v12 .btn-ghost-light:hover { background: #fff; color: var(--seal-green-deep); }
+.v12 .link-underline { color: inherit; }
+.v12 .hero { background: var(--seal-green-deep); }
+@media (max-width: 700px) { .v12 .page-hero .hero-scrim { background: linear-gradient(0deg, rgba(10, 36, 30, .93) 0%, rgba(10, 36, 30, .6) 55%, rgba(10, 36, 30, .2) 100%); } }
+
+/* Compacte vertrouwensrij onder de hero (alleen bevestigde punten) */
+.v-usp { background: #fff; border-bottom: 1px solid var(--seal-stroke); }
+.v-usp ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; list-style: none; margin: 0; padding: 1.1rem 0; }
+.v-usp li { display: flex; gap: .7rem; align-items: center; font-size: .92rem; font-weight: 500; }
+.v-usp svg { flex: 0 0 26px; color: var(--seal-green); }
+@media (max-width: 860px) { .v-usp ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .v-usp ul { grid-template-columns: minmax(0, 1fr); } }
+
+/* Checklijsten als kaarten */
+.v12 .checklist { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; margin: 1rem 0 1.6rem; }
+.v12 .checklist li { background: #fff; border: 1px solid var(--seal-stroke); border-radius: var(--v-radius-s); padding: .8rem 1rem; align-items: center; }
+.v12 .checklist li:first-child { padding-top: .8rem; border: 1px solid var(--seal-stroke); }
+.v12 .checklist svg { color: var(--seal-green); margin-top: 0; }
+.v12 .checklist--not svg { color: #9c3b23; }
+@media (max-width: 700px) { .v12 .checklist { grid-template-columns: minmax(0, 1fr); } }
+
+/* Keuzekaarten, stappen, inbegrepen */
+.v12 .choice-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.v12 .card, .v12 .choice-card { background: #fff; border: 1px solid var(--seal-stroke); border-radius: var(--v-radius); box-shadow: none; }
+.v12 .choice-card { display: block; padding: 1.2rem; }
+.v12 .choice-card h3 { font-size: 1.2rem; margin-bottom: .4rem; }
+.v12 .card-link:hover { border-color: var(--seal-green); box-shadow: var(--v-shadow); }
+@media (max-width: 860px) { .v12 .choice-grid { grid-template-columns: minmax(0, 1fr); } }
+.v12 .steps { gap: 1rem; }
+.v12 .step { background: #fff; border: 1px solid var(--seal-stroke); border-radius: var(--v-radius); padding: 3.2rem 1.2rem 1.2rem; }
+.v12 .step::before { color: #fff; background: var(--seal-green); width: 2.2rem; height: 2.2rem; border-radius: 50%; display: grid; place-items: center; position: absolute; top: 1rem; left: 1.2rem; font-size: 1rem; }
+.v12 .incl-grid > div { background: #fff; border: 1px solid var(--seal-stroke); border-radius: var(--v-radius); padding: 1.2rem; }
+.v12 .incl-grid .checklist { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 760px) { .v12 .incl-grid { grid-template-columns: minmax(0, 1fr); } }
+.v12 .callout { border-left: 4px solid var(--seal-gold); background: #fff; padding: 1rem 1.2rem; border-radius: 0 var(--v-radius-s) var(--v-radius-s) 0; font-style: normal; font-family: var(--font-body); color: var(--seal-ink); }
+.v12 .form-note { background: #FFF6E2; border: 1px solid #E9D49C; color: #5B4310; border-radius: var(--v-radius-s); padding: .8rem 1rem; }
+
+/* Veelgestelde vragen */
+.v12 .faq-list { display: grid; gap: .6rem; max-width: 880px; }
+.v12 .faq-item { background: #fff; border: 1px solid var(--seal-stroke); border-radius: var(--v-radius-s); }
+.v12 .faq-item summary { padding: 1rem 1.1rem; min-height: 48px; }
+.v12 .faq-item p { padding: 0 1.1rem 1.1rem; }
+
+/* Foto + tekst, banners, voet */
+.v12 .feature-split { background: #fff; border: 1px solid var(--seal-stroke); border-radius: var(--v-radius); overflow: hidden; gap: 0; align-items: stretch; }
+.v12 .feature-copy { padding: clamp(1.2rem, 3vw, 2.5rem); }
+.v12 .feature-media { aspect-ratio: auto; min-height: 280px; }
+.v12 .cta-banner, .v12 .footer-cta { background: var(--seal-green-deep); }
+.v12 .site-footer { background: var(--seal-header); }
+
+/* Formulieren */
+.v12 input[type="text"], .v12 input[type="tel"], .v12 input[type="email"], .v12 input[type="number"], .v12 select, .v12 textarea { border-radius: var(--v-radius-s); border: 1px solid #b9b7a8; background: #fff; }
+.v12 .field label, .v12 fieldset legend { color: var(--seal-ink); }
+.v12 .pill-choice span { border-radius: 999px; }
+.v12 .form-status.success { background: #EAF4EE; border: 1px solid #A8CDB6; color: #0F3D2B; }
+.v12 .form-status.error { background: #FBEDE9; border: 1px solid #E3B2A5; color: #7a2d1a; }
+
+/* ==========================================================================
+   Ontwerper volgens goedgekeurde referentie (scherm 2, 3, 4 en 8 van de pagina-reeks)
+   ========================================================================== */
+.b-top { max-width: none; }
+.b-stepper { display: flex; gap: .4rem; list-style: none; margin: 1rem 0 1.2rem; padding: 0; counter-reset: none; }
+.b-stepper li { flex: 1 1 0; min-width: 0; position: relative; text-align: center; }
+.b-stepper li::before { content: ""; position: absolute; top: 18px; left: -50%; right: 50%; height: 3px; background: var(--seal-stroke); z-index: 0; }
+.b-stepper li:first-child::before { display: none; }
+.b-stepper li.is-done::before, .b-stepper li.is-active::before { background: var(--seal-green); }
+.b-stepper button { position: relative; z-index: 1; display: grid; justify-items: center; gap: .3rem; background: none; border: 0; font: inherit; color: var(--seal-muted); cursor: pointer; width: 100%; min-height: 44px; padding: 0; }
+.b-stepper button:disabled { cursor: default; }
+.b-dot { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: #fff; border: 2px solid var(--seal-stroke); font-weight: 700; color: var(--seal-muted); }
+.b-stepper .is-active .b-dot { background: var(--seal-green); border-color: var(--seal-green); color: #fff; }
+.b-stepper .is-done .b-dot { background: var(--seal-green-hi); border-color: var(--seal-green-hi); color: #fff; }
+.b-stepper .is-active .b-dot-label, .b-stepper .is-done .b-dot-label { color: var(--seal-ink); font-weight: 600; }
+.b-dot-label { font-size: .86rem; line-height: 1.2; overflow-wrap: anywhere; }
+@media (max-width: 560px) { .b-dot-label { font-size: .7rem; } .b-dot { width: 30px; height: 30px; } .b-stepper li::before { top: 15px; } }
+.b-phase { display: flex; justify-content: space-between; align-items: end; gap: 1rem; margin-bottom: 1rem; }
+.b-phase-title { font-family: var(--font-display); font-size: clamp(1.7rem, 1.4vw + 1.2rem, 2.5rem); line-height: 1.1; margin: 0; color: var(--seal-ink); }
+.b-phase .b-progress { margin: .3rem 0 0; }
+.b-viewtoggle { display: inline-flex; border: 1px solid var(--seal-stroke); border-radius: 8px; overflow: hidden; background: #fff; flex: 0 0 auto; }
+.b-viewtoggle button { min-width: 64px; min-height: 44px; border: 0; background: #fff; font: inherit; font-weight: 600; cursor: pointer; color: var(--seal-ink); }
+.b-viewtoggle button[aria-pressed="true"] { background: var(--seal-green); color: #fff; }
+.b-viewtoggle button:disabled { opacity: .45; cursor: not-allowed; }
+.b-wrap.has-preview { grid-template-columns: minmax(0, 5fr) minmax(0, 8fr); }
+.b-wrap { max-width: none; }
+.b-wrap:not(.has-preview) { max-width: 860px; margin-inline: 0; }
+.b-stage { background: #fff; border: 1px solid var(--seal-stroke); border-radius: var(--v-radius); padding: clamp(1rem, 2vw, 1.5rem); box-shadow: var(--v-shadow); }
+.b-stage > .b-title { font-size: clamp(1.4rem, 1vw + 1.1rem, 1.9rem); }
+.b-preview-stage { aspect-ratio: 16 / 11; background: linear-gradient(180deg, #F3F0E6, #E6E1CF); border: 1px solid var(--seal-stroke); }
+.b-preview-stage[data-mode="2d"] [data-b-3d], .b-preview-stage[data-mode="2d"] [data-b-overlay] { visibility: hidden; }
+.b-flat { display: none; }
+.b-preview-stage[data-mode="2d"] .b-flat { display: block; }
+.b-pill { fill: #fff; stroke-width: 2; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .18)); }
+.b-dim-text { font: 700 13px var(--font-body); }
+@media (max-width: 860px) { .b-phase { align-items: center; } .b-preview-stage { aspect-ratio: 4 / 3; } }
+/* materiaalkeuze met staal-tabs en detail */
+.b-swatches { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; }
+.b-swatches .b-card img { aspect-ratio: 1 / 1; }
+.b-swatches .b-card-body { padding: .5rem .5rem .6rem; text-align: center; }
+.b-swatches .b-card-body strong { font-size: .95rem; }
+.b-swatches .b-card-wrap input:checked + .b-card::after { margin: 0 .5rem .5rem; font-size: .75rem; }
+@media (max-width: 480px) { .b-swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.b-detail { margin-top: 1rem; display: grid; gap: .8rem; }
+.b-detail-fig { margin: 0; border-radius: var(--v-radius-s); overflow: hidden; border: 1px solid var(--seal-stroke); }
+.b-detail-fig img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
+.b-detail-fig figcaption { padding: .5rem .7rem; font-size: .85rem; color: var(--seal-muted); }
+.b-detail-body h3 { font-size: 1.3rem; margin: 0 0 .2rem; }
+.b-detail-body details { border-top: 1px solid var(--seal-stroke); }
+.b-detail-body summary { cursor: pointer; padding: .7rem 0; min-height: 44px; display: flex; align-items: center; font-weight: 500; }
+.b-detail-body details p { margin: 0 0 .8rem; color: var(--seal-muted); font-size: .94rem; }
+/* tuinplan */
+.b-plan-rows { list-style: none; margin: .8rem 0; padding: 0; display: grid; gap: .6rem; }
+.b-plan-row { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: .8rem; align-items: center; padding: .5rem; border: 1px solid var(--seal-stroke); border-radius: var(--v-radius-s); background: #fff; }
+.b-plan-thumb, .b-plan-icon { width: 64px; height: 52px; border-radius: 6px; object-fit: cover; display: grid; place-items: center; background: var(--seal-sand); color: var(--seal-green); }
+.b-plan-text { display: grid; gap: .1rem; min-width: 0; font-size: .92rem; }
+.b-plan-text span { color: var(--seal-muted); }
+.b-plan-total { display: flex; justify-content: space-between; padding: .8rem 1rem; background: var(--seal-sand); border-radius: var(--v-radius-s); font-size: 1.05rem; }
+.b-plan-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin: .8rem 0; }
+@media (max-width: 480px) { .b-plan-row { grid-template-columns: 52px minmax(0, 1fr); } .b-plan-row .btn { grid-column: 2; justify-self: start; } }
+@media print {
+  body.print-plan > *:not(main) { display: none !important; }
+  body.print-plan main > *:not(.v-section), body.print-plan .b-top, body.print-plan .b-preview, body.print-plan .b-nav, body.print-plan .b-plan-actions, body.print-plan .b-stage > *:not(.b-tuinplan):not(.b-title) { display: none !important; }
+  body.print-plan { background: #fff; }
+}
+
+/* keuzekaarten in de smalle vraagkolom: onder elkaar, met foto of icoon links */
+.b-wrap.has-preview .b-cards-3, .b-wrap.has-preview .b-cards-2 { grid-template-columns: minmax(0, 1fr); }
+.b-wrap.has-preview .b-cards-2.b-cards-icons { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.b-wrap.has-preview .b-cards-plain .b-card { min-height: 56px; }
+.b-wrap.has-preview .b-cards-3:not(.b-cards-plain) .b-card, .b-wrap.has-preview .b-cards-2:not(.b-cards-plain):not(.b-cards-icons) .b-card { grid-template-columns: 110px minmax(0, 1fr); align-items: center; }
+.b-wrap.has-preview .b-cards-3 .b-card-body strong { font-size: 1.05rem; }
+.b-card-body strong { overflow-wrap: anywhere; }
+.b-plan-text, .b-plan-text strong, .b-plan-text span, .b-plan-row, .b-detail-body, .b-plan-total { min-width: 0; overflow-wrap: anywhere; }
+.b-check label { min-width: 0; overflow-wrap: anywhere; }
+.b-check { align-items: flex-start; padding-block: .4rem; }
