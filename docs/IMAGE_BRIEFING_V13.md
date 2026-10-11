@@ -1,0 +1,4 @@
+# Beeldbriefing V13 (ontbrekende voorbeeldbeelden)
+Beeldgeneratie is in deze omgeving niet gebruikt (geen betaalde/externe accounts). Aangeleverd en geplaatst: 14 impressiebeelden (`images/inspiratie/`). Nog nodig voor een volledige serie, consistent in stijl (tuin- en architectuurfotografie, natuurlijk licht, realistische textuur, schuttingdetail en aansluiting plausibel, géén tekst/logo):
+1. Douglas-schutting (horizontaal), 2. Lamellenschutting met open ritme, 3. Zwarte composiet in dagzicht (close-up van paal en plank), 4. Hout-beton in dagzicht met zichtbare betonnen onderplaat, 5. Moderne privacyafscheiding (hoog, gesloten), 6. Houten en betonnen plantenbak, 7. Schutting met geïntegreerde poort in composiet.
+Alle beelden: alleen als inspiratie/impressie labelen ("Impressiebeeld, geen opgeleverd project"), nooit als eigen werk of leveranciersproduct. Echt eigen werk blijft apart (`images/projects/`).
