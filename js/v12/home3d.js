@@ -36,6 +36,10 @@ if (host) {
         document.querySelectorAll("[data-3d-mat]").forEach((o) => o.setAttribute("aria-pressed", String(o === b)));
         note(`Voorbeeld in 3D met ${b.textContent.toLowerCase()}, geen echt project.`);
       }));
+      document.querySelectorAll("[data-3d-mood]").forEach((b) => b.addEventListener("click", () => {
+        scene.setMood(b.dataset["3dMood"]); document.querySelectorAll("[data-3d-mood]").forEach((o) => o.setAttribute("aria-pressed", String(o === b)));
+        note(b.dataset["3dMood"] === "evening" ? "Avondsfeer met tuinverlichting, geen echt project." : "Voorbeeld in 3D, geen echt project. Sleep om rond te kijken.");
+      }));
       btn("[data-3d-top]", () => scene.setView("top"));
       btn("[data-3d-iso]", () => scene.setView("iso"));
       btn("[data-3d-reset]", () => scene.resetCamera());

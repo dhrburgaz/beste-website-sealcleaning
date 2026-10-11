@@ -213,6 +213,7 @@ async function ensureScene() {
     if (!mod.isWebGL2Supported()) throw new Error("webgl");
     preview.scene = mod.createThreeScene(preview.host, buildProject(preview.decor), { scenic: true, figure: true });
     preview.scene.onFrame(drawDims);
+    if (preview.mood === "evening") preview.scene.setMood("evening");
     updatePreview();
   } catch (e) {
     preview.fallback = true;
@@ -597,6 +598,7 @@ function reset() { st = fresh(); preview.showDims = true; save(); render(true); 
 
 /* ---------------- preview-bediening ---------------- */
 root.querySelector("[data-b-view-top]")?.addEventListener("click", () => preview.scene && preview.scene.setView("top"));
+root.querySelector("[data-b-mood]")?.addEventListener("click", (e) => { preview.mood = preview.mood === "evening" ? "day" : "evening"; e.currentTarget.setAttribute("aria-pressed", String(preview.mood === "evening")); if (preview.scene) preview.scene.setMood(preview.mood); });
 root.querySelector("[data-b-view-iso]")?.addEventListener("click", () => preview.scene && preview.scene.setView("iso"));
 root.querySelector("[data-b-view-front]")?.addEventListener("click", () => preview.scene && preview.scene.setView("front"));
 root.querySelector("[data-b-view-reset]")?.addEventListener("click", () => preview.scene && preview.scene.resetCamera());

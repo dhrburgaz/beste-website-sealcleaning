@@ -46,9 +46,6 @@ export function createThreeScene(host, project, opts = {}) {
 
   const scene = new THREE.Scene();
   if (scenic) {
-    const sky = document.createElement("canvas"); sky.width = 4; sky.height = 256; const sg = sky.getContext("2d"), grad = sg.createLinearGradient(0, 0, 0, 256);
-    grad.addColorStop(0, "#7fa9d2"); grad.addColorStop(0.55, "#cfe0ee"); grad.addColorStop(1, "#eef2ee"); sg.fillStyle = grad; sg.fillRect(0, 0, 4, 256);
-    const skyTex = new THREE.CanvasTexture(sky); skyTex.colorSpace = THREE.SRGBColorSpace; scene.background = skyTex;
     scene.fog = new THREE.Fog(0xe4ece8, 30, 95);
   }
   const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 500);
@@ -61,8 +58,8 @@ export function createThreeScene(host, project, opts = {}) {
   controls.maxPolarAngle = Math.PI * 0.49; // niet onder de grond kunnen kijken
   controls.target.set(0, 0, 0);
 
-  scene.add(new THREE.AmbientLight(0xffffff, scenic ? 0.75 : 0.65));
-  if (scenic) scene.add(new THREE.HemisphereLight(0xdfeeff, 0x9a8a6a, 0.8));
+  const ambient = new THREE.AmbientLight(0xffffff, scenic ? 0.75 : 0.65); scene.add(ambient);
+  const hemi = scenic ? new THREE.HemisphereLight(0xdfeeff, 0x9a8a6a, 0.8) : null; if (hemi) scene.add(hemi);
 
   // ---- Scenic: procedurele texturen en vaste pseudo-willekeur (geen externe bestanden) ----
   let seed = 7;
@@ -118,7 +115,7 @@ export function createThreeScene(host, project, opts = {}) {
     const t = plankTexture(hex, horizontal, dark).clone(); t.needsUpdate = true;
     const plank = 0.14 * 6; // 6 planken per tegel
     if (horizontal) t.repeat.set(lengthM / 1.8, heightM / plank); else t.repeat.set(lengthM / plank, heightM / 1.8);
-    const m = track(new THREE.MeshStandardMaterial({ map: t, roughness: dark ? 0.55 : 0.82, metalness: dark ? 0.05 : 0 }));
+    const m = track(new THREE.MeshStandardMaterial({ map: t, bumpMap: t, bumpScale: 1.6, roughness: dark ? 0.55 : 0.82, metalness: dark ? 0.05 : 0 }));
     panelMatCache.set(key, m); return m;
   }
   /** Scenic: bladtextuur en geïnstantieerde beplanting (weinig draw calls, geschikt voor mobiel). */
@@ -126,9 +123,9 @@ export function createThreeScene(host, project, opts = {}) {
   function leafTexture() {
     if (leafTex) return leafTex;
     const c = document.createElement("canvas"); c.width = c.height = 256; const g = c.getContext("2d");
-    g.fillStyle = "#2f5a30"; g.fillRect(0, 0, 256, 256);
+    g.fillStyle = "#3f7340"; g.fillRect(0, 0, 256, 256);
     let sd = 3; const r = () => { sd = (sd * 16807) % 2147483647; return (sd - 1) / 2147483646; };
-    const cols = ["#3d7a3d", "#4f8f45", "#2a5128", "#63a050", "#36703a", "#1f4222"];
+    const cols = ["#58a04f", "#6fb55a", "#3c7a3c", "#84c767", "#4c9246", "#2f6532"];
     for (let i = 0; i < 1500; i++) { g.fillStyle = cols[Math.floor(r() * cols.length)]; g.beginPath(); g.ellipse(r() * 256, r() * 256, 2 + r() * 5, 1.5 + r() * 3, r() * 3.14, 0, 6.28); g.fill(); }
     leafTex = new THREE.CanvasTexture(c); leafTex.colorSpace = THREE.SRGBColorSpace; leafTex.wrapS = leafTex.wrapT = THREE.RepeatWrapping; return leafTex;
   }
@@ -147,11 +144,20 @@ export function createThreeScene(host, project, opts = {}) {
     const group = [];
     const nShrub = Math.max(3, Math.min(34, Math.round(lenM * widM * 6 * density))), nGrass = Math.max(4, Math.min(48, Math.round(lenM * widM * 9 * density))), nBloom = Math.max(2, Math.min(16, Math.round(lenM * widM * 2.2 * density)));
     const rx = () => cx + (rnd() - 0.5) * lenM * 0.9, rz = () => cz + (rnd() - 0.5) * widM * 0.8;
-    const GR = [0x2f5d34, 0x3e7a3f, 0x4f8a45, 0x24492b, 0x5f9a50];
+    const GR = [0x7fb86c, 0x92c97a, 0x6aa85a, 0x5a9a4e, 0xa4d886];
     group.push(instancedSet(new THREE.IcosahedronGeometry(1, 1), foliageMaterial(1, 1), nShrub, () => { const r = 0.2 + rnd() * 0.22; return { x: rx(), y: baseY + r * 0.8, z: rz(), sx: r, sy: r * (0.8 + rnd() * 0.3), sz: r, color: GR[Math.floor(rnd() * GR.length)] }; }));
     group.push(instancedSet(new THREE.ConeGeometry(0.07, 0.8, 5, 1, true), track(new THREE.MeshStandardMaterial({ roughness: 0.9, side: THREE.DoubleSide })), nGrass * 4, () => { const h = 0.5 + rnd() * 0.5; const tan = rnd() > 0.78; return { x: rx(), y: baseY + h * 0.35, z: rz(), sx: 0.6 + rnd() * 0.6, sy: h, sz: 0.6 + rnd() * 0.6, ry: rnd() * 3, color: tan ? 0xb8a56e : 0x5f8a3c }; }));
     group.push(instancedSet(new THREE.IcosahedronGeometry(1, 1), track(new THREE.MeshStandardMaterial({ roughness: 0.8 })), nBloom, () => { const r = 0.15 + rnd() * 0.1; const k = rnd(); return { x: rx(), y: baseY + 0.3 + rnd() * 0.12, z: rz(), sx: r * 1.3, sy: r * 0.7, sz: r * 1.3, color: k < 0.6 ? 0xdfe6c8 : k < 0.85 ? 0xcfdcae : 0x9a86c8 }; }));
     return group;
+  }
+  const tileTex = new Map();
+  function tileTexture(color) {
+    const k = color.getHexString(); if (tileTex.has(k)) return tileTex.get(k);
+    const c = document.createElement("canvas"); c.width = c.height = 128; const g = c.getContext("2d"); g.fillStyle = "#" + k; g.fillRect(0, 0, 128, 128);
+    let sd = 9; const r = () => { sd = (sd * 16807) % 2147483647; return (sd - 1) / 2147483646; };
+    for (let i = 0; i < 700; i++) { g.fillStyle = r() > 0.5 ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)"; g.fillRect(r() * 128, r() * 128, 1 + r() * 2, 1 + r() * 2); }
+    g.strokeStyle = "rgba(0,0,0,0.12)"; g.lineWidth = 2; g.strokeRect(0, 0, 128, 128);
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; tileTex.set(k, t); return t;
   }
   function lawnTexture(widthM, depthM) {
     const c = document.createElement("canvas"); c.width = 256; c.height = 256; const g = c.getContext("2d");
@@ -196,6 +202,30 @@ export function createThreeScene(host, project, opts = {}) {
     placeSun();
     scheduleFrame();
   }
+
+  // ---- Scenic: dag/avond-sfeer (verlichting aan, warme zon laag, donkerdere lucht) ----
+  const glowMats = [], lampLights = []; let mood = "day";
+  const MOODS = {
+    day: { amb: [0xffffff, 0.75], hemi: [0xdfeeff, 0x9a8a6a, 0.8], sun: [0xffffff, 0.9, 135, 40], sky: ["#7fa9d2", "#cfe0ee", "#eef2ee"], fog: 0xe4ece8, exposure: 1.0, glow: 0.12, lamp: 0 },
+    evening: { amb: [0x8a96c8, 0.85], hemi: [0x6a80b0, 0x3a3a2a, 1.0], sun: [0xffa860, 0.95, 250, 16], sky: ["#1d2d52", "#7a6a8a", "#f0b27a"], fog: 0x6a6a82, exposure: 1.4, glow: 2.6, lamp: 2.4 }
+  };
+  function paintSky(stops) {
+    const c = document.createElement("canvas"); c.width = 4; c.height = 256; const g = c.getContext("2d"), gr = g.createLinearGradient(0, 0, 0, 256);
+    gr.addColorStop(0, stops[0]); gr.addColorStop(0.55, stops[1]); gr.addColorStop(1, stops[2]); g.fillStyle = gr; g.fillRect(0, 0, 4, 256);
+    if (scene.background && scene.background.dispose) scene.background.dispose();
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; scene.background = t;
+  }
+  function applyMood() {
+    if (!scenic) return; const m = MOODS[mood];
+    ambient.color.set(m.amb[0]); ambient.intensity = m.amb[1]; hemi.color.set(m.hemi[0]); hemi.groundColor.set(m.hemi[1]); hemi.intensity = m.hemi[2];
+    sun.color.set(m.sun[0]); sun.intensity = m.sun[1]; sunState.azimuthDeg = m.sun[2]; sunState.elevationDeg = m.sun[3]; placeSun();
+    paintSky(m.sky); if (scene.fog) scene.fog.color.set(m.fog); renderer.toneMappingExposure = m.exposure;
+    glowMats.forEach((g) => { g.emissiveIntensity = g.userData.window ? (mood === "evening" ? 1.6 : 0.05) : m.glow; });
+    lampLights.forEach((l) => { l.intensity = m.lamp; });
+    scheduleFrame();
+  }
+  function setMood(name) { if (!MOODS[name]) return; mood = name; applyMood(); }
+  if (scenic) paintSky(MOODS.day.sky);
 
   const dynamicGroup = new THREE.Group();
   scene.add(dynamicGroup);
@@ -313,7 +343,8 @@ export function createThreeScene(host, project, opts = {}) {
       mesh.position.set(post.xMm * MM, (heightM + baseM) / 2, post.zMm * MM);
       dynamicGroup.add(mesh);
       if (scenic) {
-        const cap = new THREE.Mesh(track(new THREE.BoxGeometry(postSize + 0.04, 0.035, postSize + 0.04)), postMaterial);
+        const capMat = track(new THREE.MeshStandardMaterial({ color: 0xf0e6cc, emissive: 0xffc77a, emissiveIntensity: MOODS[mood].glow, roughness: 0.6 })); glowMats.push(capMat);
+        const cap = new THREE.Mesh(track(new THREE.BoxGeometry(postSize + 0.04, 0.05, postSize + 0.04)), capMat);
         cap.position.set(post.xMm * MM, heightM + baseM + 0.15 + 0.0175, post.zMm * MM);
         dynamicGroup.add(cap);
       }
@@ -340,7 +371,7 @@ export function createThreeScene(host, project, opts = {}) {
     if (!paving || !Array.isArray(paving.areas) || paving.areas.length === 0) return;
     const preset = getPavingColorPreset(paving.colorPresetId);
     const color = preset ? new THREE.Color(preset.colorHex) : new THREE.Color(0xc7c6c0);
-    const material = track(new THREE.MeshStandardMaterial({ color, roughness: 0.9 }));
+    const material = track(new THREE.MeshStandardMaterial({ color: scenic ? 0xffffff : color, map: scenic ? tileTexture(color) : null, bumpMap: scenic ? tileTexture(color) : null, bumpScale: 0.6, roughness: 0.85 }));
     const thicknessM = 0.04;
 
     let allTiles = [];
@@ -404,6 +435,15 @@ export function createThreeScene(host, project, opts = {}) {
       const around = new THREE.Mesh(track(new THREE.PlaneGeometry(200, 200)), track(new THREE.MeshStandardMaterial({ color: 0x5f8350, roughness: 1 })));
       around.rotation.x = -Math.PI / 2; around.position.set(cx, -0.43, cz); around.userData.isGround = true;
       dynamicGroup.add(around);
+      // Omgeving: boomgrens en buurhuis geven diepte (alleen visueel)
+      const R = Math.max(widthM, depthM) * 2.6 + 26, GRN = [0x2f5d34, 0x3e7a3f, 0x24492b, 0x4f8a45];
+      dynamicGroup.add(instancedSet(new THREE.IcosahedronGeometry(1, 1), foliageMaterial(2, 2), 34, (i) => { const a = (i / 34) * 6.283 + rnd() * 0.15, r = R + rnd() * 6, s2 = 2.6 + rnd() * 3; return { x: cx + Math.cos(a) * r, y: s2 * 0.9, z: cz + Math.sin(a) * r, sx: s2, sy: s2 * (0.9 + rnd() * 0.5), sz: s2, color: GRN[i % GRN.length] }; }));
+      const hx = cx - R * 0.35, hz = cz - R * 0.78, wallM = track(new THREE.MeshStandardMaterial({ color: 0xe6e1d4, roughness: 0.95 }));
+      const house = new THREE.Mesh(track(new THREE.BoxGeometry(11, 6.5, 7)), wallM); house.position.set(hx, 3.25, hz);
+      const roof = new THREE.Mesh(track(new THREE.CylinderGeometry(4.6, 4.6, 11.6, 3)), track(new THREE.MeshStandardMaterial({ color: 0x3b3f45, roughness: 0.8 }))); roof.rotation.z = Math.PI / 2; roof.rotation.y = Math.PI / 2; roof.position.set(hx, 7.6, hz); roof.scale.set(1, 1, 0.55);
+      dynamicGroup.add(house, roof);
+      for (let i = 0; i < 4; i++) { const wm = track(new THREE.MeshStandardMaterial({ color: 0x9fb4c4, emissive: 0xffc47a, emissiveIntensity: mood === "evening" ? 1.6 : 0.05, roughness: 0.3 })); wm.userData.window = true; glowMats.push(wm); const w = new THREE.Mesh(track(new THREE.PlaneGeometry(1.6, 1.8)), wm); w.position.set(hx - 3.6 + i * 2.4, 2.8, hz + 3.52); dynamicGroup.add(w); }
+
     } else {
       const grid = track(new THREE.GridHelper(Math.max(widthM, depthM) * 1.4, Math.round(Math.max(widthM, depthM))));
       grid.position.set(cx, 0, cz);
@@ -471,9 +511,11 @@ export function createThreeScene(host, project, opts = {}) {
       if (o.type === "lamp") {
         const pole = new THREE.Mesh(track(new THREE.CylinderGeometry(0.04, 0.05, 0.6, 10)), mat);
         pole.position.set(cx, 0.3, cz);
-        const glow = new THREE.Mesh(track(new THREE.SphereGeometry(0.07, 10, 8)), track(new THREE.MeshStandardMaterial({ color: 0xfff1c4, emissive: 0xffd77a, emissiveIntensity: 0.8 })));
+        const gm = track(new THREE.MeshStandardMaterial({ color: 0xfff1c4, emissive: 0xffd77a, emissiveIntensity: 0.8 }));
+        const glow = new THREE.Mesh(track(new THREE.SphereGeometry(0.07, 10, 8)), gm);
         glow.position.set(cx, 0.64, cz);
         dynamicGroup.add(pole, glow);
+        if (scenic && lampLights.length < 4) { gm.userData.lamp = true; glowMats.push(gm); const pl = new THREE.PointLight(0xffc27a, MOODS[mood].lamp, 7, 2); pl.position.set(cx, 0.8, cz); dynamicGroup.add(pl); lampLights.push(pl); }
         continue;
       }
       if (scenic && !remove && o.type === "hedge") {
@@ -508,6 +550,7 @@ export function createThreeScene(host, project, opts = {}) {
     }
     disposables.clear();
     clearGroup(dynamicGroup);
+    glowMats.length = 0; lampLights.length = 0;
 
     const { widthM, depthM, cx, cz } = buildGardenGround(project.garden);
     buildFence(project.fence);
@@ -640,5 +683,5 @@ export function createThreeScene(host, project, opts = {}) {
   update(project);
   setView("3d");
 
-  return { update, setView, resetCamera, exportPng, dispose, setSun, projectPoint, onFrame };
+  return { update, setView, resetCamera, exportPng, dispose, setSun, setMood, projectPoint, onFrame };
 }

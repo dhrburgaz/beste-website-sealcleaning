@@ -84,6 +84,10 @@ def home_main():
           <button type="button" class="v-chip" data-3d-mat="composiet" aria-pressed="false">Composiet</button>
           <button type="button" class="v-chip" data-3d-mat="lamellen" aria-pressed="false">Horizontale planken</button>
         </div>
+        <div class="v-3d-tools" role="group" aria-label="Sfeer">
+          <button type="button" class="v-chip" data-3d-mood="day" aria-pressed="true">Dag</button>
+          <button type="button" class="v-chip" data-3d-mood="evening" aria-pressed="false">Avond met verlichting</button>
+        </div>
         <div class="v-3d-tools" role="group" aria-label="Camera">
           <button type="button" class="v-chip" data-3d-iso>Schuin van boven</button>
           <button type="button" class="v-chip" data-3d-top>Van boven</button>
@@ -174,6 +178,18 @@ def schuttingen_main():
             while body.count("</div>") > body.count("<div"): body = body[:body.rfind("</div>")] + body[body.rfind("</div>") + 6:]
             items.append(f'<details class="v-acc-item"{" open" if n == 0 else ""}><summary>{title.strip()}</summary><div class="v-acc-body">{body.strip()}</div></details>')
         tail = '<!--v13-acc--><section class="v-section v-sand" aria-labelledby="titel-info"><div class="container"><div class="v-section-head"><p class="v-eyebrow">Goed om te weten</p><h2 class="v-h2" id="titel-info">Alles over schuttingen plaatsen</h2></div><div class="v-acc">' + "".join(items) + '</div></div></section>\n\n  ' + rest
+    if "<!--v13-proj-->" not in tail:
+        a = tail.index("<h2>Waarom Sealcleaning?</h2>"); a = tail.rfind("<section", 0, a)
+        b = tail.index("<h2>Vragen over schuttingen</h2>"); b = tail.rfind("<section", 0, b)
+        PJ = [("projecten/grenen-schutting-zwarte-onderplaat/", "schutting-grenen-zwarte-voet-1", "Grenen schutting op zwarte onderplaat", "Hout op onderplaat, Dordrecht"),
+              ("projecten/kastanjehouten-paaltjesschutting/", "schutting-kastanje-paaltjes-dordrecht-1", "Kastanjehouten paaltjesschutting", "Rustiek en open, Dordrecht"),
+              ("projecten/kunstgras-achter-nieuwe-schutting/", "terras-kunstgras-opgeleverd", "Kunstgras achter nieuwe schutting", "Schutting en gazon, Dordrecht")]
+        cards = "".join(f'<a class="v-project" href="../{h}"><figure style="margin:0;height:100%">{rpic("../", n, t + ", eigen werk van Sealcleaning", "(max-width: 700px) 92vw, 360px")}<figcaption><strong>{t}</strong>{d}</figcaption></figure></a>' for h, n, t, d in PJ)
+        proj = ('<!--v13-proj--><section class="v-section" aria-labelledby="titel-praktijk"><div class="container"><div class="v-section-head v-row"><div><p class="v-eyebrow">Uit de praktijk</p><h2 class="v-h2" id="titel-praktijk">Schuttingen die we plaatsten</h2>'
+                '<p class="v-lede">Sealcleaning is een jong en gedreven hoveniersbedrijf uit Dordrecht, ondersteund door vakmensen met jarenlange praktijkervaring. U spreekt rechtstreeks met wie het werk uitvoert. <a class="v-link" href="../over-ons/">Meer over ons</a></p></div>'
+                f'<a class="btn btn-secondary" href="../projecten/">Bekijk alle projecten</a></div><div class="v-projects v-projects-3">{cards}</div></div></section>\n\n  ')
+        tail = tail[:a] + proj + tail[b:]
+    tail = re.sub(r'\s*<section class="section">\s*<div class="container">\s*<div class="cta-banner reveal">.*?</section>', "", tail, flags=re.S)  # dubbele slot-CTA (advies + footer-CTA volstaan)
     r = "../"
     top = f"""
   {hero_block(r, "schutting-hout-wandverlichting-avond", "Schuttingen", "Schuttingen", "Meer privacy en een mooie uitstraling, netjes geplaatst door Sealcleaning in Dordrecht en omgeving.",

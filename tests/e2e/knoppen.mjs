@@ -60,6 +60,7 @@ await p.goto(BASE + IDX); await p.locator("#titel-3d").scrollIntoViewIfNeeded();
 await p.locator("[data-3d-top]").click(); await p.locator("[data-3d-iso]").click(); await p.locator("[data-3d-reset]").click();
 assert.ok(await p.locator("[data-home-3d] canvas, [data-home-3d-flat]:not([hidden])").count(), "homepage 3D toont niets");
 await p.locator('[data-3d-mat="composiet"]').click(); assert.match(await p.locator("[data-home-3d-status]").innerText(), /composiet/i); assert.equal(await p.locator('[data-3d-mat="composiet"]').getAttribute("aria-pressed"), "true");
+await p.locator('[data-3d-mood="evening"]').click(); assert.match(await p.locator("[data-home-3d-status]").innerText(), /avond/i); await p.locator('[data-3d-mood="day"]').click();
 ok("homepage: 3D-startknop en de drie 3D-knoppen werken; 3D of 2D-terugval zichtbaar");
 await p.goto(BASE + IDX); await clickGo(p, p.locator(".v-cta .btn-light"), "contact/"); ok("homepage: afsluitende offerteknop");
 await p.goto(BASE + IDX);
