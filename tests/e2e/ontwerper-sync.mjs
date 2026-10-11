@@ -8,7 +8,7 @@ const b = await chromium.launch({ executablePath: process.env.CHROMIUM || undefi
 const pg = await (await b.newContext({ viewport: { width: 1440, height: 900 } })).newPage(); const errs = [];
 pg.on("pageerror", (e) => errs.push(e.message));
 await pg.addInitScript(() => { if (!localStorage.getItem("sealBeginnerSchuttingV12")) localStorage.setItem("sealBeginnerSchuttingV12", JSON.stringify({ doel: "nieuw", step: "lengte:0", vorm: "recht", lengtes: { 0: { mode: "precies", text: "6" } }, materiaal: "hout", hoogteCm: 180 })); });
-await pg.goto(BASE + "schutting-ontwerpen/"); await pg.waitForSelector("#q-type"); await pg.waitForTimeout(2500);
+await pg.goto(BASE + "schutting-ontwerpen/" + (process.env.FLAT === "1" ? "index.html" : "")); await pg.waitForSelector("#q-type"); await pg.waitForTimeout(2500);
 const shot = async () => { await pg.waitForTimeout(900); return createHash("sha1").update(await pg.locator(".b-preview-stage").screenshot()).digest("hex"); };
 const labels = () => pg.locator("[data-b-overlay]").innerText().catch(() => "");
 const h0 = await shot();
