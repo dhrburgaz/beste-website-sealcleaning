@@ -98,3 +98,14 @@ export const STIJLEN = [
   { id: "sfeer", label: "Hout met sfeerverlichting", materiaal: "hout", photo: "schutting-hout-wandverlichting-avond", alt: "Houten schutting met lichtpunten op de zwarte palen, in de schemering" }
 ];
 export const STIJL_NOTE = "Laat je inspireren door verschillende stijlen en afwerkingen. Wij bespreken samen de mogelijkheden en stemmen de definitieve materialen vooraf met je af.";
+
+/** Uitleg bij begrippen (informatieknoppen). Gewone taal; geen productclaims. */
+export const GLOSS = {
+  lengte: { t: "Lengte", d: "Hoe ver de schutting loopt, van het begin tot het einde. Leg een rolmaat langs de plek en meet het hele stuk. Een poort telt mee als je erdoor wilt lopen." },
+  hoogte: { t: "Hoogte", d: "Gemeten van de grond tot de bovenkant. 180 cm is 1 meter en 80 centimeter, hoger dan een gemiddeld persoon. In sommige gemeenten gelden regels voor de maximale hoogte. Wij denken met je mee." },
+  type: { t: "Type schutting", d: "Het materiaal en de stijl van de schutting. Je kunt het later nog wisselen. Het exacte product en de houtsoort bevestigen wij vooraf met je." },
+  composiet: { t: "Wat is composiet?", d: "Een mengsel van houtvezels en kunststof dat eruitziet als hout. De kleur blijft meestal gelijkmatiger dan hout. Het onderhoud hangt af van het gekozen product." },
+  "hout-beton": { t: "Wat is hout met beton?", d: "Een houten schutting die op een betonnen onderplaat en tussen betonpalen staat. Zo staat het hout niet in de grond." },
+  lamellen: { t: "Wat zijn horizontale planken?", d: "Een schutting waarbij de planken horizontaal liggen. Dat geeft een moderne, rustige uitstraling. Met open ruimte tussen de planken heb je minder privacy." },
+  doorgang: { t: "Wat is de doorgang?", d: "De vrije opening van een poort tussen de palen. Voor een fiets is meestal 100 cm genoeg." }
+};

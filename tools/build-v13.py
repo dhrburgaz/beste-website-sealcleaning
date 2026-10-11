@@ -39,6 +39,7 @@ def home_main():
      ("bestrating/", "Bestrating", "Terras, oprit en tuinpad", ipic("tuinpad-stapplaten-avond", ALT["tuinpad-stapplaten-avond"], r, SIZES), True),
      ("tuinaanleg/", "Tuinaanleg", "Complete tuin, in overleg opgebouwd", rpic(r, "waterzijde-tuin-terras-hortensia", "Terras met border aan het water, een tuin die Sealcleaning heeft aangelegd", SIZES), False),
      ("tuinrenovatie/", "Tuinrenovatie", "Een tuin die weer bij u past", ipic("tuin-gazon-terras-dag", ALT["tuin-gazon-terras-dag"], r, SIZES), True),
+     ("materialen/", "Materialen", "Schuttingen en meer, los of met montage", ipic("schutting-grenen-betonpalen-dag", ALT["schutting-grenen-betonpalen-dag"], r, SIZES), True),
      ("plantenbakken/", "Plantenbakken", "Groen in elke tuin", ipic("plantenbakken-cortenstaal-avond", ALT["plantenbakken-cortenstaal-avond"], r, SIZES), True),
      ("tuinonderhoud/", "Tuinonderhoud", "Altijd een verzorgde tuin", rpic(r, "voortuin-haag-gesnoeid", "Strak gesnoeide haag in een voortuin, onderhoud door Sealcleaning", SIZES), False),
      ("snoeiwerk/", "Snoeiwerk", "Bomen, hagen en heesters", rpic(r, "boom-gesnoeid-voortuin", "Gesnoeide boom in een voortuin, werk van Sealcleaning", SIZES), False),
@@ -64,6 +65,35 @@ def home_main():
     <p class="i-caption">Impressiebeeld, geen opgeleverd project</p>
   </section>
 
+  <section class="v-section v-3d-wrap" id="ontwerp3d" aria-labelledby="titel-3d">
+    <div class="container">
+      <div class="v-3d-head">
+        <div><p class="v-eyebrow v-eyebrow--light">Ontwerp zelf, zonder technische kennis</p><h2 id="titel-3d">Bekijk uw tuinidee in 3D</h2>
+          <p>Kies uw stijl, materiaal en maten en zie direct hoe uw schutting eruit kan zien. Weet u niet hoe u moet meten? Dan helpen we u stap voor stap.</p></div>
+        <div class="v-3d-cta"><a href="schutting-ontwerpen/" class="btn btn-light btn-lg">Start 3D-ontwerp {ARROW}</a><a href="contact/" class="btn btn-line-light btn-lg">Liever advies? Vraag een offerte</a></div>
+      </div>
+      <div class="v-3d-stage v-3d-stage--big" data-home-3d>
+        <div class="v-3d-poster"><img src="images/home-3d-poster.jpg" alt="Voorbeeldtuin in 3D: houten schutting op betonnen onderplaat, terras en borders" width="1600" height="800" decoding="async"><span>3D-voorbeeld wordt geladen…</span></div>
+        <div data-home-3d-canvas></div>
+        <svg data-home-3d-flat hidden role="img" aria-label="Voorbeeldtuin in 2D, bovenaanzicht"></svg>
+      </div>
+      <div class="v-3d-bar">
+        <div class="v-3d-tools" role="group" aria-label="Kies een schutting in het voorbeeld">
+          <button type="button" class="v-chip" data-3d-mat="hout" aria-pressed="false">Hout</button>
+          <button type="button" class="v-chip" data-3d-mat="hout-beton" aria-pressed="true">Hout met beton</button>
+          <button type="button" class="v-chip" data-3d-mat="composiet" aria-pressed="false">Composiet</button>
+          <button type="button" class="v-chip" data-3d-mat="lamellen" aria-pressed="false">Horizontale planken</button>
+        </div>
+        <div class="v-3d-tools" role="group" aria-label="Camera">
+          <button type="button" class="v-chip" data-3d-iso>Schuin van boven</button>
+          <button type="button" class="v-chip" data-3d-top>Van boven</button>
+          <button type="button" class="v-chip" data-3d-reset>Terug naar begin</button>
+        </div>
+      </div>
+      <p class="v-3d-status" data-home-3d-status role="status">Voorbeeld in 3D, geen echt project.</p>
+    </div>
+  </section>
+
   {usp([("advies","Gratis bezichtiging in Dordrecht"),("plaatsing","Professionele plaatsing"),("materiaal","Materiaalkeuze op maat"),("offerte","Duidelijke offerte"),("bezoek","Persoonlijk advies")])}
 
   <section class="v-section" id="diensten" aria-labelledby="titel-help">
@@ -71,29 +101,6 @@ def home_main():
       <div class="v-section-head"><h2 class="v-h2" id="titel-help">Waar kunnen we u mee helpen?</h2><p class="v-lede">Kies wat het beste past. Twijfelt u? Dan denken we graag met u mee.</p></div>
       <ul class="v-cards v-cards-4">{"".join(service_card(r, *c) for c in cards)}</ul>
       <p class="i-disclaimer">Beelden met &lsquo;Impressie&rsquo; zijn voorbeelden van mogelijke uitvoeringen, geen opgeleverde projecten van Sealcleaning.</p>
-    </div>
-  </section>
-
-  <section class="v-section v-3d-wrap" aria-labelledby="titel-3d">
-    <div class="container">
-      <div class="v-3d-panel">
-        <div class="v-3d-copy">
-          <h2 id="titel-3d">Bekijk uw tuinidee in 3D</h2>
-          <p>Kies eenvoudig uw stijl, materiaal en indeling. Geen technische kennis nodig. Ook als u niet precies weet hoe u moet meten, helpen we u verder.</p>
-          <p><a href="schutting-ontwerpen/" class="btn btn-light btn-lg">Start 3D-ontwerp {ARROW}</a></p>
-          <div class="v-3d-tools">
-            <button type="button" class="v-chip" data-3d-iso>Schuin van boven</button>
-            <button type="button" class="v-chip" data-3d-top>Van boven</button>
-            <button type="button" class="v-chip" data-3d-reset>Terug naar begin</button>
-          </div>
-          <p class="v-3d-status" data-home-3d-status role="status">Voorbeeld in 3D, geen echt project.</p>
-        </div>
-        <div class="v-3d-stage" data-home-3d>
-          <div class="v-3d-poster" aria-hidden="true"><span>Voorbeeldtuin laden…</span></div>
-          <div data-home-3d-canvas></div>
-          <svg data-home-3d-flat hidden role="img" aria-label="Voorbeeldtuin in 2D, bovenaanzicht"></svg>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -155,6 +162,17 @@ def schuttingen_main():
         tail = re.sub(r'\s*<section class="v-section" aria-labelledby="titel-advies">.*?</section>', "", tail, flags=re.S)
     else:
         i = body.index('<section class="section section-sand-deep">'); tail = body[i:]
+    if "<!--v13-acc-->" not in tail:
+        cut = tail.index('<section class="section section-sand-deep">', 100)  # begin "Waarom Sealcleaning?"
+        inner, rest = tail[:cut], tail[cut:]
+        chunks = re.split(r"<h2[^>]*>", inner)[1:]
+        items = []
+        for n, ch in enumerate(chunks):
+            title, body = ch.split("</h2>", 1)
+            body = re.sub(r"<section[^>]*>|</section>|<div class=\"container-narrow\">|<div class=\"path-divider\">.*?</div>|<!--.*?-->", "", body, flags=re.S)
+            while body.count("</div>") > body.count("<div"): body = body[:body.rfind("</div>")] + body[body.rfind("</div>") + 6:]
+            items.append(f'<details class="v-acc-item"{" open" if n == 0 else ""}><summary>{title.strip()}</summary><div class="v-acc-body">{body.strip()}</div></details>')
+        tail = '<!--v13-acc--><section class="v-section v-sand" aria-labelledby="titel-info"><div class="container"><div class="v-section-head"><p class="v-eyebrow">Goed om te weten</p><h2 class="v-h2" id="titel-info">Alles over schuttingen plaatsen</h2></div><div class="v-acc">' + "".join(items) + '</div></div></section>\n\n  ' + rest
     r = "../"
     top = f"""
   {hero_block(r, "schutting-hout-wandverlichting-avond", "Schuttingen", "Schuttingen", "Meer privacy en een mooie uitstraling, netjes geplaatst door Sealcleaning in Dordrecht en omgeving.",

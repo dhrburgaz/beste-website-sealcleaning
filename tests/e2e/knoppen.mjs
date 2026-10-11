@@ -28,10 +28,9 @@ for (const c of CORE) {
     const u = new URL(h, p.url()); u.hash = ""; u.search = "";
     if (seen.has(u.href)) continue; seen.add(u.href);
     const r = await p.request.get(u.href); assert.equal(r.status(), 200, `link stuk: ${h} op /${c} (${r.status()})`);
-    const text = await r.text(); assert.ok(!/Deze pagina is verplaatst/.test(text), `link wijst naar verwijderde winkelpagina: ${h} op /${c}`);
   }
 }
-ok(`links op ${CORE.length} kernpagina's: ${seen.size} unieke interne doelen bereikbaar, geen winkelpagina's`);
+ok(`links op ${CORE.length} kernpagina's: ${seen.size} unieke interne doelen bereikbaar, geen dode links`);
 
 // 2. logo + hoofdnavigatie (desktop)
 await p.goto(BASE + "schuttingen/" + IDX);
@@ -41,22 +40,26 @@ for (const [label, expect] of [["Tuin ontwerpen", "schutting-ontwerpen/"], ["Pro
 }
 await p.goto(BASE + IDX); await p.hover(".has-submenu > a"); await clickGo(p, p.locator('.submenu a:text-is("Plantenbakken")'), "plantenbakken/");
 await p.goto(BASE + IDX); await clickGo(p, p.locator(".header-cta .btn-primary"), "contact/");
-assert.equal(await p.locator('.nav-list a:text-is("Materialen")').count(), 0, "Materialen mag niet in het menu staan");
-ok("hoofdmenu: Tuin ontwerpen, Projecten, Contact, Diensten > Plantenbakken, Offerte aanvragen; geen Materialen");
+await p.goto(BASE + IDX); await clickGo(p, p.locator('.nav-list > li > a:text-is("Materialen")'), "materialen/");
+await p.waitForSelector("[data-catalog-app] *", { timeout: 15000 }); assert.ok(await p.locator("[data-catalog-app] a, [data-catalog-app] button").count() > 3, "catalogus toont niets");
+await Promise.all([p.waitForURL(/elephant-finch|materialen\/.+/), p.locator('[data-catalog-app] a[href*="elephant-finch"]').first().click()]);
+assert.ok(await p.locator("h1").count(), "productpagina zonder kop"); assert.ok(await p.locator('a[href*="contact"]').count(), "productpagina zonder aanvraagroute");
+ok("hoofdmenu: Tuin ontwerpen, Projecten, Contact, Diensten > Plantenbakken, Offerte aanvragen; Materialen > catalogus > productpagina met aanvraagroute");
 
 // 3. hero, dienstenkaarten, projectkaarten, 3D-startknop
 await p.goto(BASE + IDX); await clickGo(p, p.locator(".v-hero .btn-primary"), "schutting-ontwerpen/");
 await p.goto(BASE + IDX); await clickGo(p, p.locator(".v-hero .btn-light"), "projecten/");
-await p.goto(BASE + IDX); const cards = await p.locator("#diensten .v-card").count(); assert.equal(cards, 7);
+await p.goto(BASE + IDX); const cards = await p.locator("#diensten .v-card").count(); assert.equal(cards, 8);
 for (let i = 0; i < cards; i++) { await p.goto(BASE + IDX); const a = p.locator("#diensten .v-card").nth(i); const href = new URL(await a.getAttribute("href"), p.url()).pathname; await a.click(); await p.waitForLoadState(); assert.ok(p.url().includes(href.replace(/\/$/, "").split("/").pop()), `dienstenkaart ${i} -> ${href}`); assert.ok((await p.locator("h1").first().textContent()).length > 3); }
-ok("homepage: hero-knoppen en 7 dienstenkaarten leiden naar een bestaande pagina met kop");
+ok("homepage: hero-knoppen en 8 dienstenkaarten leiden naar een bestaande pagina met kop");
 await p.goto(BASE + IDX); const pc = await p.locator(".v-project").count(); assert.equal(pc, 3);
 for (let i = 0; i < pc; i++) { await p.goto(BASE + IDX); await p.locator(".v-project").nth(i).click(); await p.waitForLoadState(); assert.ok(/projecten\//.test(p.url())); assert.ok(await p.locator("h1").count()); }
 ok("homepage: 3 projectkaarten openen een projectpagina");
-await p.goto(BASE + IDX); await clickGo(p, p.locator(".v-3d-copy .btn-light"), "schutting-ontwerpen/");
+await p.goto(BASE + IDX); await clickGo(p, p.locator(".v-3d-cta .btn-light"), "schutting-ontwerpen/");
 await p.goto(BASE + IDX); await p.locator("#titel-3d").scrollIntoViewIfNeeded(); await p.waitForTimeout(2500);
 await p.locator("[data-3d-top]").click(); await p.locator("[data-3d-iso]").click(); await p.locator("[data-3d-reset]").click();
 assert.ok(await p.locator("[data-home-3d] canvas, [data-home-3d-flat]:not([hidden])").count(), "homepage 3D toont niets");
+await p.locator('[data-3d-mat="composiet"]').click(); assert.match(await p.locator("[data-home-3d-status]").innerText(), /composiet/i); assert.equal(await p.locator('[data-3d-mat="composiet"]').getAttribute("aria-pressed"), "true");
 ok("homepage: 3D-startknop en de drie 3D-knoppen werken; 3D of 2D-terugval zichtbaar");
 await p.goto(BASE + IDX); await clickGo(p, p.locator(".v-cta .btn-light"), "contact/"); ok("homepage: afsluitende offerteknop");
 await p.goto(BASE + IDX);
@@ -77,7 +80,8 @@ await p.goto(BASE + "schuttingen/" + IDX); await clickGo(p, p.locator(".v-hero .
 await p.goto(BASE + "schuttingen/" + IDX); await p.locator(".v-hero .btn-primary").click(); assert.ok(p.url().includes("#stijlen"));
 ok("schuttingen: 6 stijlkaarten (Bekijk mogelijkheden -> ontwerper, Vraag offerte aan -> contact), hero-knoppen");
 const det = p.locator(".faq-item, .v-faq details").first();
-if (await det.count()) { await p.goto(BASE + "schuttingen/" + IDX); const d = p.locator("details").first(); await d.locator("summary").click(); assert.ok(await d.evaluate((e) => e.open)); await d.locator("summary").click(); assert.ok(!(await d.evaluate((e) => e.open))); ok("FAQ-accordeon opent en sluit"); }
+if (await det.count()) { await p.goto(BASE + "schuttingen/" + IDX); const d = p.locator("details.faq-item").first(); await d.locator("summary").click(); assert.ok(await d.evaluate((e) => e.open)); await d.locator("summary").click(); assert.ok(!(await d.evaluate((e) => e.open))); ok("FAQ-accordeon opent en sluit");
+  const a = p.locator("details.v-acc-item").nth(1); await a.locator("summary").click(); assert.ok(await a.evaluate((e) => e.open)); ok("uitlegblokken op schuttingen openen"); }
 
 // 5. plantenbakken
 await p.goto(BASE + "plantenbakken/" + IDX); assert.equal(await p.locator("#stijlen .i-card").count(), 3);

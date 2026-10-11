@@ -33,7 +33,7 @@ export function isWebGL2Supported() {
  * @returns {{update:Function, setView:Function, resetCamera:Function, exportPng:Function, dispose:Function}}
  */
 export function createThreeScene(host, project, opts = {}) {
-  const scenic = !!opts.scenic; // rijkere weergave voor voorbeelden (homepage, beginnersroute); de gewone editor blijft ongewijzigd
+  const scenic = !!opts.scenic; const zoomK = opts.zoom || 1; // <1 = dichterbij (brede weergave op de homepage) // rijkere weergave voor voorbeelden (homepage, beginnersroute); de gewone editor blijft ongewijzigd
   const canvas = document.createElement("canvas");
   canvas.setAttribute("aria-hidden", "true"); // de scene-svg blijft de toegankelijke beschrijving (ch.27)
   host.appendChild(canvas);
@@ -76,6 +76,51 @@ export function createThreeScene(host, project, opts = {}) {
     g.strokeStyle = "rgba(60,38,16,0.22)"; g.lineWidth = 1;
     for (let i = 0; i < 70; i++) { g.beginPath(); const x = (i * 53) % 256, y = (i * 29) % 256; if (horizontal) { g.moveTo(x, y); g.lineTo(x + 70, y + 1); } else { g.moveTo(x, y); g.lineTo(x + 1, y + 70); } g.stroke(); }
     const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; return t;
+  }
+  /** Scenic: planken met zichtbare naden en nerf; per paneel één herhaling zodat planken ±14 cm breed zijn. */
+  const plankCache = new Map();
+  function plankTexture(hex, horizontal, dark) {
+    const key = hex + horizontal + dark;
+    if (plankCache.has(key)) return plankCache.get(key);
+    const size = 512, n = 6, c = document.createElement("canvas"); c.width = c.height = size;
+    const g = c.getContext("2d"), base = new THREE.Color(hex);
+    let sd = 11; const r = () => { sd = (sd * 16807) % 2147483647; return (sd - 1) / 2147483646; };
+    for (let i = 0; i < n; i++) {
+      const k = dark ? 0.9 + r() * 0.2 : 0.82 + r() * 0.32, y0 = i * size / n, th = size / n;
+      const col = base.clone().multiplyScalar(k);
+      g.fillStyle = "#" + col.getHexString();
+      if (horizontal) g.fillRect(0, y0, size, th); else g.fillRect(y0, 0, th, size);
+      g.strokeStyle = dark ? "rgba(255,255,255,0.045)" : "rgba(70,40,15,0.2)"; g.lineWidth = 1;
+      for (let j = 0; j < (dark ? 14 : 22); j++) {
+        const o = y0 + 3 + r() * (th - 6), a = r() * size, len = 60 + r() * 220;
+        g.beginPath(); if (horizontal) { g.moveTo(a, o); g.bezierCurveTo(a + len / 3, o + r() * 3 - 1.5, a + len * 2 / 3, o + r() * 3 - 1.5, a + len, o); } else { g.moveTo(o, a); g.bezierCurveTo(o + r() * 3 - 1.5, a + len / 3, o + r() * 3 - 1.5, a + len * 2 / 3, o, a + len); }
+        g.stroke();
+      }
+      g.fillStyle = dark ? "rgba(0,0,0,0.75)" : "rgba(30,16,4,0.6)";
+      if (horizontal) g.fillRect(0, y0, size, 3); else g.fillRect(y0, 0, 3, size);
+      g.fillStyle = dark ? "rgba(255,255,255,0.07)" : "rgba(255,235,200,0.18)";
+      if (horizontal) g.fillRect(0, y0 + 3, size, 1.5); else g.fillRect(y0 + 3, 0, 1.5, size);
+    }
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 4;
+    plankCache.set(key, t); return t;
+  }
+  const panelMatCache = new Map();
+  function scenicPanelMaterial(hex, horizontal, dark, lengthM, heightM) {
+    const key = [hex, horizontal, dark, lengthM.toFixed(2), heightM.toFixed(2)].join("|");
+    if (panelMatCache.has(key)) return panelMatCache.get(key);
+    const t = plankTexture(hex, horizontal, dark).clone(); t.needsUpdate = true;
+    const plank = 0.14 * 6; // 6 planken per tegel
+    if (horizontal) t.repeat.set(lengthM / 1.8, heightM / plank); else t.repeat.set(lengthM / plank, heightM / 1.8);
+    const m = track(new THREE.MeshStandardMaterial({ map: t, roughness: dark ? 0.55 : 0.82, metalness: dark ? 0.05 : 0 }));
+    panelMatCache.set(key, m); return m;
+  }
+  function lawnTexture(widthM, depthM) {
+    const c = document.createElement("canvas"); c.width = 256; c.height = 256; const g = c.getContext("2d");
+    for (let i = 0; i < 8; i++) { g.fillStyle = i % 2 ? "#86a864" : "#7aa05a"; g.fillRect(0, i * 32, 256, 32); }
+    let sd = 5; const r = () => { sd = (sd * 16807) % 2147483647; return (sd - 1) / 2147483646; };
+    for (let i = 0; i < 2600; i++) { g.fillStyle = r() > 0.5 ? "rgba(255,255,255,0.05)" : "rgba(20,50,10,0.07)"; g.fillRect(r() * 256, r() * 256, 1 + r() * 2, 1 + r() * 3); }
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping;
+    t.repeat.set(0.25, 0.25); return t; // ShapeGeometry-UV = meters
   }
   function leafMaterial(hex) { return track(new THREE.MeshStandardMaterial({ color: hex, roughness: 0.95 })); }
   const GREENS = [0x2f5d34, 0x3e7a3f, 0x4f8a45, 0x5f9a50, 0x7aa85a, 0x24492b];
@@ -189,6 +234,8 @@ export function createThreeScene(host, project, opts = {}) {
     const baseM = system.hasBasePlate ? (system.basePlateHeightMm || 0) * MM : 0;
     const panelColor = preset ? new THREE.Color(preset.colorHex) : new THREE.Color(0xc9a876);
     const woodLike = scenic && /wood|lamel/i.test(fence.systemId || "") ;
+    const sid = fence.systemId || "", isDark = /composite/i.test(sid), horizontalPlanks = !/^generic-wood$/.test(sid);
+    const panelHex = "#" + panelColor.getHexString();
     const panelMaterial = track(
       new THREE.MeshStandardMaterial({
         color: woodLike ? 0xffffff : panelColor,
@@ -199,7 +246,8 @@ export function createThreeScene(host, project, opts = {}) {
       })
     );
     const fitMaterial = track(new THREE.MeshStandardMaterial({ color: 0x8a5a3b, roughness: 0.85 }));
-    const postMaterial = track(new THREE.MeshStandardMaterial({ color: scenic ? 0x2e3030 : 0x3a2f22, roughness: 0.9 }));
+    const concretePosts = scenic && !!system.hasBasePlate;
+    const postMaterial = track(new THREE.MeshStandardMaterial({ color: scenic ? (concretePosts ? 0x9b9b95 : 0x26292a) : 0x3a2f22, roughness: scenic ? (concretePosts ? 0.95 : 0.5) : 0.9, metalness: scenic && !concretePosts ? 0.15 : 0 }));
 
     const layout = computeFenceLayout(fence, system);
     const panelThicknessM = 0.07;
@@ -209,7 +257,7 @@ export function createThreeScene(host, project, opts = {}) {
         if (seg.kind === "gate") continue; // opening blijft open; geen vast paneel
         const lengthM = seg.lengthMm * MM;
         const geom = track(new THREE.BoxGeometry(lengthM, heightM, panelThicknessM));
-        const mesh = new THREE.Mesh(geom, seg.kind === "fit" && !scenic ? fitMaterial : panelMaterial);
+        const mesh = new THREE.Mesh(geom, scenic ? scenicPanelMaterial(panelHex, horizontalPlanks, isDark, lengthM, heightM) : seg.kind === "fit" ? fitMaterial : panelMaterial);
         const midX = ((seg.start.xMm + seg.end.xMm) / 2) * MM;
         const midZ = ((seg.start.zMm + seg.end.zMm) / 2) * MM;
         mesh.position.set(midX, baseM + heightM / 2, midZ);
@@ -224,6 +272,11 @@ export function createThreeScene(host, project, opts = {}) {
       const mesh = new THREE.Mesh(geom, postMaterial);
       mesh.position.set(post.xMm * MM, (heightM + baseM) / 2, post.zMm * MM);
       dynamicGroup.add(mesh);
+      if (scenic) {
+        const cap = new THREE.Mesh(track(new THREE.BoxGeometry(postSize + 0.04, 0.035, postSize + 0.04)), postMaterial);
+        cap.position.set(post.xMm * MM, heightM + baseM + 0.15 + 0.0175, post.zMm * MM);
+        dynamicGroup.add(cap);
+      }
     }
 
     if (baseM > 0) {
@@ -285,7 +338,7 @@ export function createThreeScene(host, project, opts = {}) {
     const depthM = (b.maxZ - b.minZ) * MM;
     const shape = new THREE.Shape(polygon.map((p) => new THREE.Vector2(p.xMm * MM, -p.zMm * MM)));
     const geom = track(new THREE.ShapeGeometry(shape));
-    const material = track(new THREE.MeshStandardMaterial({ color: scenic ? 0x86a864 : 0x9fb088, roughness: 1, side: THREE.DoubleSide }));
+    const material = track(new THREE.MeshStandardMaterial({ color: scenic ? 0xffffff : 0x9fb088, map: scenic ? lawnTexture(widthM, depthM) : null, roughness: 1, side: THREE.DoubleSide }));
     const ground = new THREE.Mesh(geom, material);
     ground.rotation.x = -Math.PI / 2; // (x, -z) in vormvlak → (x, 0, z) in de wereld
     ground.position.y = -0.01;
@@ -298,6 +351,9 @@ export function createThreeScene(host, project, opts = {}) {
       const slab = new THREE.Mesh(track(new THREE.BoxGeometry(widthM + 0.3, 0.4, depthM + 0.3)), track(new THREE.MeshStandardMaterial({ color: 0x6d5642, roughness: 1 })));
       slab.position.set(cx, -0.22, cz); slab.userData.isGround = true;
       dynamicGroup.add(slab);
+      const around = new THREE.Mesh(track(new THREE.PlaneGeometry(200, 200)), track(new THREE.MeshStandardMaterial({ color: 0x5f8350, roughness: 1 })));
+      around.rotation.x = -Math.PI / 2; around.position.set(cx, -0.43, cz); around.userData.isGround = true;
+      dynamicGroup.add(around);
     } else {
       const grid = track(new THREE.GridHelper(Math.max(widthM, depthM) * 1.4, Math.round(Math.max(widthM, depthM))));
       grid.position.set(cx, 0, cz);
@@ -431,8 +487,8 @@ export function createThreeScene(host, project, opts = {}) {
       camera.fov = 32; camera.updateProjectionMatrix();
       const span = Math.max(widthM, depthM);
       controls.target.set(cx, 0.2, cz);
-      const d = span * 1.85;
-      camera.position.set(cx - d * 0.38, d * 0.5, cz + d * 0.8);
+      const d = span * 1.85 * zoomK;
+      camera.position.set(cx - d * 0.38, d * 0.44, cz + d * 0.8);
     } else if (!controls.target.lengthSq() && widthM && depthM) {
       controls.target.set(cx, 0.3, cz);
       camera.position.set(cx + widthM * 0.7, Math.max(widthM, depthM) * 0.6, cz + depthM * 0.9);
@@ -457,7 +513,7 @@ export function createThreeScene(host, project, opts = {}) {
     } else if (viewName === "front") {
       camera.position.set(target.x, target.y + dist * 0.25, target.z + dist * 1.1);
     } else if (scenic) {
-      const d = Math.max(dist, (gardenCenter.span || 8) * 1.75);
+      const d = Math.max(dist, (gardenCenter.span || 8) * 1.75 * zoomK);
       camera.position.set(target.x - d * 0.38, d * 0.5, target.z + d * 0.8);
     } else {
       camera.position.set(target.x + dist * 0.7, dist * 0.55, target.z + dist * 0.9);

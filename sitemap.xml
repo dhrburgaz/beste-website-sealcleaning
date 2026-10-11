@@ -37,4 +37,6 @@
   <url><loc>https://sealcleaning.nl/privacy/</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>
   <url><loc>https://sealcleaning.nl/voorwaarden/</loc><changefreq>yearly</changefreq><priority>0.2</priority></url>
   <url><loc>https://sealcleaning.nl/plantenbakken/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sealcleaning.nl/materialen/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sealcleaning.nl/materialen/elephant-finch-grenen-scherm/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>

@@ -8,7 +8,7 @@ import { computeFenceLayout } from "../../configurator/geometry.js";
 import { getFenceSystem } from "../../../data/fence-systems.js";
 import { encodeShare } from "../../configurator/design-io.js";
 import { emit } from "../events.js";
-import { STIJLEN, STIJL_NOTE, MATERIALS, HEIGHTS_CM, GATE_WIDTHS_CM, HELP, lengthIllustration, heightIllustration, shapeIcon, sideIllustration, gateIllustration } from "./content.js";
+import { GLOSS, STIJLEN, STIJL_NOTE, MATERIALS, HEIGHTS_CM, GATE_WIDTHS_CM, HELP, lengthIllustration, heightIllustration, shapeIcon, sideIllustration, gateIllustration } from "./content.js";
 
 const root = document.querySelector("[data-beginner]");
 if (!root) throw new Error("beginner root ontbreekt");
@@ -172,6 +172,34 @@ function summaryLines() {
 
 /* ---------------- preview (3D met 2D-terugval) ---------------- */
 const preview = { scene: null, host: null, overlay: null, tried: false, fallback: false, showDims: true, mode: "3d", flat: null, decor: true };
+
+/** Informatieknop met uitklapbare uitleg (toetsenbordbaar, aria-expanded). */
+let infoSeq = 0;
+function infoBtn(key, split) {
+  const g = GLOSS[key]; if (!g) return document.createDocumentFragment();
+  const pid = `info-${key}-${++infoSeq}`;
+  const panel = h("p", { class: "b-i-panel", id: pid, hidden: true, text: g.d });
+  const btn = h("button", { type: "button", class: "b-i", "aria-expanded": "false", "aria-controls": pid, "aria-label": `Uitleg: ${g.t}`, onclick: () => { const o = btn.getAttribute("aria-expanded") === "true"; btn.setAttribute("aria-expanded", String(!o)); panel.hidden = o; emit("measurement_help_opened", { topic: key }); } }, "i");
+  if (split) return [btn, panel];
+  const frag = document.createDocumentFragment(); frag.append(btn, panel); return frag;
+}
+const quickEl = () => root.querySelector("[data-b-quick]");
+function renderQuick() {
+  const q = quickEl(); if (!q) return;
+  q.textContent = "";
+  if (st.doel !== "nieuw") { q.hidden = true; return; }
+  q.hidden = false;
+  const names = sideNames();
+  const sel = (id, label, key, opts, val, onch) => { const [ib, ip] = infoBtn(key, true); return h("div", { class: "b-q-field" }, h("div", { class: "b-q-label" }, h("label", { for: id }, label), ib), ip, h("select", { id, class: "b-input", onchange: (e) => onch(e.target.value) }, opts.map(([v, t]) => h("option", { value: v, selected: String(val) === String(v) }, t)))); };
+  q.append(h("p", { class: "b-q-title", text: "Snel aanpassen" }), h("div", { class: "b-q-row" },
+    sel("q-type", "Type schutting", "type", [["", "Kies een type"], ...MATERIALS.map((m) => [m.id, m.label])], st.materiaal || "", (v) => { st.materiaal = v || null; st.stijl = null; save(); emit("material_selected", { material: v }); render(); }),
+    ...names.map((n, i) => { const m = sideMeasure(i); const fid = `q-len-${i}`;
+      const [ib, ip] = i === 0 ? infoBtn("lengte", true) : [null, null];
+      return h("div", { class: "b-q-field" }, h("div", { class: "b-q-label" }, h("label", { for: fid }, names.length > 1 ? `Lengte ${n.toLowerCase()} (m)` : "Lengte (meter)"), ib), ip,
+        h("input", { id: fid, class: "b-input", inputmode: "decimal", autocomplete: "off", placeholder: "bijv. 6,5", value: m.text || "", onchange: (e) => { const t = e.target.value.trim(); const mm = parseMetersToMm(t); if (t && (mm === null || mm < 500 || mm > 60000)) { e.target.setAttribute("aria-invalid", "true"); e.target.title = "Vul een lengte tussen 0,5 en 60 meter in, bijvoorbeeld 6,5"; e.target.value = ""; return; } e.target.removeAttribute("aria-invalid"); st.lengtes[i] = t ? { mode: m.mode === "ongeveer" ? "ongeveer" : "precies", text: t } : { mode: null, text: "" }; save(); render(); } }));
+    }),
+    sel("q-hoogte", "Hoogte", "hoogte", HEIGHTS_CM.map((c) => [c, `${c} cm`]), st.hoogteCm, (v) => { st.hoogteCm = +v; save(); render(); })));
+}
 const stageEl = () => root.querySelector(".b-preview-stage");
 async function ensureScene() {
   if (preview.scene || preview.tried) return;
@@ -327,6 +355,7 @@ function render(focus) {
   stage.append(body);
   const showPreview = st.doel !== "herstel" && st.doel !== "weet-niet";
   root.classList.toggle("has-preview", showPreview);
+  renderQuick();
   if (showPreview) { ensureScene().then(updatePreview); updatePreview(); if (id === "bekijk") emit("design_preview_seen", { material: st.materiaal || undefined }); }
   if (id.startsWith("lengte") || id === "hoogte" || id === "poortdetails") emit("quote_started", {});
   if (focus) { heading.focus({ preventScroll: true }); if (matchMedia("(max-width: 860px)").matches) heading.scrollIntoView({ block: "start", behavior: "smooth" }); }
@@ -371,6 +400,7 @@ const STEPS = {
       h("p", { class: "b-note", text: "Dit zijn inspiratiebeelden van mogelijke uitvoeringen, geen opgeleverde projecten van SEAL en geen exacte producten." })));
     body.append(h("p", { class: "b-sub", text: "Of kies direct het materiaal. Dit zijn voorbeelden uit ons eigen werk. Je ziet direct wat je kiest in de 3D. Je kunt later nog wisselen." }), helpBlock("materiaal") || "");
     body.append(choiceCards("materiaal", MATERIALS.map((m) => ({ id: m.id, label: m.label, media: photoPic(m.photo.name, m.photo.alt) })), st.materiaal, (v) => { st.materiaal = v; save(); emit("material_selected", { material: v }); render(); }, { label: "Kies een schutting", cls: "b-swatches" }));
+    body.append(h("div", { class: "b-gloss" }, h("span", { class: "b-gloss-t", text: "Onbekende woorden?" }), ["composiet", "hout-beton", "lamellen"].map((k) => h("span", { class: "b-gloss-i" }, GLOSS[k].t.replace(/^Wat (is|zijn) /, "").replace(/\?$/, ""), infoBtn(k)))));
     const cur = material();
     if (cur) {
       const sys = getFenceSystem(cur.system);
@@ -451,7 +481,7 @@ const STEPS = {
   },
   poort(id, list) {
     const body = h("div", {});
-    body.append(h("p", { class: "b-sub", text: "Een poort is een deur in je schutting, zodat je erdoor kunt lopen." }), h("div", { class: "b-illus", html: gateIllustration() }), h("figure", { class: "b-gate-photo" }, inspPic("poort-hout-pad-dag", "Houten tuinpoort met horizontale planken en een pad van natuursteentegels"), h("figcaption", { text: "Inspiratiebeeld van een poort in dezelfde stijl als de schutting, geen opgeleverd project." })), helpBlock("poort") || "");
+    body.append(h("p", { class: "b-sub", text: "Een poort is een deur in je schutting, zodat je erdoor kunt lopen." }), h("div", { class: "b-illus", html: gateIllustration() }), h("p", { class: "b-gloss" }, h("span", { class: "b-gloss-t", text: "Doorgang uitgelegd" }), infoBtn("doorgang")), h("figure", { class: "b-gate-photo" }, inspPic("poort-hout-pad-dag", "Houten tuinpoort met horizontale planken en een pad van natuursteentegels"), h("figcaption", { text: "Inspiratiebeeld van een poort in dezelfde stijl als de schutting, geen opgeleverd project." })), helpBlock("poort") || "");
     body.append(choiceCards("poort", [{ id: "ja", label: "Ja" }, { id: "nee", label: "Nee" }, { id: "later", label: "Weet ik nog niet" }], st.poort, (v) => { st.poort = v; save(); render(); }, { label: "Wil je een poort?", cls: "b-cards-3 b-cards-plain" }));
     body.append(nav(id, list, !!st.poort));
     return body;
