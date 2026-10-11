@@ -80,8 +80,10 @@
   }
 
   /* Contact form: client-side validation, then hand off to the visitor's own mail client */
+  function initContactForm() {
   var form = document.querySelector("[data-contact-form]");
-  if (form) {
+  if (form && !form.__sealBound) {
+    form.__sealBound = true;
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var valid = true;
@@ -106,10 +108,64 @@
         return;
       }
 
-      var subject = encodeURIComponent("Offerteaanvraag via website — " + (form.querySelector("[name=naam]") ? form.querySelector("[name=naam]").value : ""));
+      var apiBase = window.SEAL_CONFIG && window.SEAL_CONFIG.apiBase;
+      if (apiBase && window.fetch && window.FormData) {
+        submitToApi(apiBase, statusEl).catch(function () { showMailto(statusEl); });
+        return;
+      }
+      showMailto(statusEl);
+    });
+
+    /* Honeypot + starttijd tegen spam (alleen gebruikt als het API-adres is ingesteld). */
+    var startedAt = Date.now();
+    var hp = document.createElement("input");
+    hp.type = "text"; hp.name = "website"; hp.tabIndex = -1; hp.autocomplete = "off";
+    hp.setAttribute("aria-hidden", "true"); hp.setAttribute("aria-label", "Laat dit veld leeg");
+    hp.style.cssText = "position:absolute;left:-9999px;width:1px;height:1px;opacity:0";
+    form.appendChild(hp);
+
+    function submitToApi(apiBase, statusEl) {
+      var fd = new FormData(form);
+      var kind = form.getAttribute("data-lead-kind") || (/from=configurator/.test(location.search) ? "configurator" : "contact");
+      fd.append("kind", kind);
+      fd.append("started_at", String(startedAt));
+      var text = (form.querySelector("[name=omschrijving]") || {}).value || "";
+      var m = /https?:\/\/\S+#ontwerp=[A-Za-z0-9_-]+/.exec(text);
+      if (m) fd.append("design", m[0]);
+      var submit = form.querySelector("[type=submit]");
+      if (submit) submit.disabled = true;
+      if (statusEl) { statusEl.textContent = "Bezig met versturen…"; statusEl.className = "form-status"; statusEl.hidden = false; }
+      return fetch(apiBase.replace(/\/$/, "") + "/api/public/leads", { method: "POST", body: fd, mode: "cors", credentials: "omit" })
+        .then(function (r) {
+          return r.json().catch(function () { return {}; }).then(function (data) {
+            if (submit) submit.disabled = false;
+            if (r.ok && data.ref) {
+              form.reset();
+              var label = document.querySelector("[data-file-count]");
+              if (label) label.textContent = "";
+              statusEl.textContent = "Bedankt, uw aanvraag is ontvangen (referentie " + data.ref + "). Bewaar dit nummer; wij nemen zo snel mogelijk contact met u op.";
+              statusEl.className = "form-status success";
+              statusEl.scrollIntoView({ behavior: "smooth", block: "center" });
+              return;
+            }
+            if (r.status >= 400 && r.status < 500 && data.error) {
+              statusEl.textContent = data.error;
+              statusEl.className = "form-status error";
+              statusEl.scrollIntoView({ behavior: "smooth", block: "center" });
+              return;
+            }
+            throw new Error("server");
+          });
+        }, function (err) { if (submit) submit.disabled = false; throw err; });
+    }
+
+    function showMailto(statusEl) {
+      var subjectPrefix = form.getAttribute("data-subject-prefix") || "Offerteaanvraag via website";
+      var nameField = form.querySelector("[name=naam]") || form.querySelector("[name=contactpersoon]");
+      var subject = encodeURIComponent(subjectPrefix + (nameField ? " — " + nameField.value : ""));
       var lines = [];
       form.querySelectorAll("input, select, textarea").forEach(function (field) {
-        if (!field.name || field.type === "file") return;
+        if (!field.name || field.type === "file" || field.name === "website") return;
         if ((field.type === "radio" || field.type === "checkbox") && !field.checked) return;
         lines.push(field.previousElementSibling && field.previousElementSibling.tagName === "LABEL"
           ? field.previousElementSibling.textContent + ": " + field.value
@@ -118,8 +174,15 @@
       var body = encodeURIComponent(lines.join("\n"));
       var mailto = "mailto:" + (window.SEAL_CONFIG ? window.SEAL_CONFIG.email : "") + "?subject=" + subject + "&body=" + body;
 
+      var fileField = form.querySelector("[data-file-input]");
+      var hasPhotos = fileField && fileField.files && fileField.files.length > 0;
+      var attachmentNoun = form.getAttribute("data-attachment-noun") || "foto's";
+      var attachmentAltChannel = form.getAttribute("data-attachment-alt-channel");
+
       if (statusEl) {
-        statusEl.innerHTML = "Bijna klaar — klik hieronder om uw aanvraag via e-mail naar ons te versturen. Uw ingevulde gegevens worden automatisch meegenomen.";
+        statusEl.innerHTML = hasPhotos
+          ? "Bijna klaar — klik hieronder om uw aanvraag via e-mail naar ons te versturen. Uw ingevulde gegevens worden automatisch meegenomen. <strong>Let op: uw geselecteerde " + attachmentNoun + " worden niet automatisch bijgevoegd</strong> — voeg ze in uw mailprogramma zelf als bijlage toe voordat u verstuurt" + (attachmentAltChannel ? ", of stuur ze apart via " + attachmentAltChannel + "." : ".")
+          : "Bijna klaar — klik hieronder om uw aanvraag via e-mail naar ons te versturen. Uw ingevulde gegevens worden automatisch meegenomen.";
         statusEl.className = "form-status success";
         statusEl.hidden = false;
         statusEl.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -130,19 +193,94 @@
         mailBtn.hidden = false;
         mailBtn.focus();
       }
-    });
+    }
   }
+  }
+  initContactForm();
+  window.__sealBindContactForm = function () { initContactForm(); bindFileInput(); };
 
   /* File input label feedback */
-  var fileInput = document.querySelector("[data-file-input]");
-  if (fileInput) {
-    fileInput.addEventListener("change", function () {
-      var label = document.querySelector("[data-file-count]");
-      if (label) {
-        label.textContent = fileInput.files.length
-          ? fileInput.files.length + " bestand(en) geselecteerd"
-          : "";
+  function bindFileInput() {
+    var fileInput = document.querySelector("[data-file-input]");
+    if (fileInput && !fileInput.__sealBound) {
+      fileInput.__sealBound = true;
+      fileInput.addEventListener("change", function () {
+        var label = document.querySelector("[data-file-count]");
+        if (label) {
+          label.textContent = fileInput.files.length
+            ? fileInput.files.length + " bestand(en) geselecteerd"
+            : "";
+        }
+      });
+    }
+  }
+  bindFileInput();
+
+  /* Inspiratiebord (I06/I07): eigen cases en materialen bewaren zonder account,
+     alleen in deze browser. Geen klantfoto's, geen server. */
+  var INSP_KEY = "sealInspiration";
+  var INSP_MAX = 24;
+  function inspRead() {
+    try {
+      var raw = JSON.parse(window.localStorage.getItem(INSP_KEY) || "null");
+      return raw && Array.isArray(raw.items) ? raw.items : [];
+    } catch (e) { return []; }
+  }
+  function inspWrite(items) {
+    try {
+      window.localStorage.setItem(INSP_KEY, JSON.stringify({ savedAt: new Date().toISOString(), items: items.slice(0, INSP_MAX) }));
+      return true;
+    } catch (e) { return false; }
+  }
+  window.SealInspiration = {
+    list: inspRead,
+    has: function (kind, id) { return inspRead().some(function (i) { return i.kind === kind && i.id === id; }); },
+    add: function (item) {
+      var items = inspRead().filter(function (i) { return !(i.kind === item.kind && i.id === item.id); });
+      items.unshift(item);
+      return inspWrite(items);
+    },
+    remove: function (kind, id) {
+      return inspWrite(inspRead().filter(function (i) { return !(i.kind === kind && i.id === id); }));
+    },
+    clear: function () { try { window.localStorage.removeItem(INSP_KEY); } catch (e) {} }
+  };
+
+  /* Bewaarknop op projectdetailpagina's (/projecten/<slug>/) */
+  var caseMatch = /\/projecten\/([a-z0-9-]+)\/?$/.exec(window.location.pathname);
+  var caseMeta = document.querySelector(".case-meta");
+  if (caseMatch && caseMeta) {
+    var slug = caseMatch[1];
+    var h1 = document.querySelector("h1");
+    var heroImg = document.querySelector(".hero-media img");
+    var tag = caseMeta.querySelector(".tag");
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "btn btn-secondary btn-sm inspiration-save";
+    var sync = function () {
+      var saved = window.SealInspiration.has("case", slug);
+      btn.setAttribute("aria-pressed", saved ? "true" : "false");
+      btn.textContent = saved ? "Bewaard op inspiratiebord ✓" : "Bewaar op inspiratiebord";
+    };
+    btn.addEventListener("click", function () {
+      if (window.SealInspiration.has("case", slug)) {
+        window.SealInspiration.remove("case", slug);
+      } else {
+        window.SealInspiration.add({
+          kind: "case", id: slug,
+          title: h1 ? h1.textContent.trim() : slug,
+          image: heroImg ? heroImg.getAttribute("src").replace(/^(\.\.\/)+/, "") : null,
+          service: tag ? tag.textContent.trim() : null
+        });
       }
+      sync();
     });
+    sync();
+    caseMeta.appendChild(btn);
+    var link = document.createElement("a");
+    link.href = "../../inspiratie/";
+    link.className = "inspiration-link";
+    link.textContent = "Bekijk inspiratiebord";
+    caseMeta.appendChild(link);
   }
 })();

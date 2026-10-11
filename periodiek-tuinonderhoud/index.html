@@ -12,33 +12,33 @@
 <meta property="og:url" content="https://sealcleaning.nl/periodiek-tuinonderhoud/">
 <meta property="og:image" content="https://sealcleaning.nl/images/projects/voortuin-luifel-rozen.jpg">
 <meta property="og:locale" content="nl_NL">
-<meta name="theme-color" content="#1b2a1e">
+<meta name="theme-color" content="#102E27">
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <link rel="icon" href="../images/branding/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="../images/branding/apple-touch-icon.png">
 <link rel="manifest" href="../site.webmanifest">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" href="../vendor/fonts/fraunces-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../vendor/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/v12.css">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Service",
   "serviceType": "Periodiek tuinonderhoud",
-  "provider": { "@type": "LocalBusiness", "name": "Sealcleaning Groenonderhoud en Aanleg", "telephone": "+31615710965" },
+  "provider": { "@type": "LocalBusiness", "name": "Sealcleaning Groenonderhoud en Aanleg", "telephone": "+31782049517" },
   "areaServed": ["Dordrecht", "Drechtsteden", "Rotterdam"],
   "url": "https://sealcleaning.nl/periodiek-tuinonderhoud/"
 }
 </script>
 </head>
-<body>
+<body class="v12">
 <a href="#main" class="skip-link">Direct naar inhoud</a>
 
 <header class="site-header">
   <div class="container header-inner">
     <a href="../" class="brand">
-      <picture><source srcset="../images/branding/logo.webp" type="image/webp"><img class="brand-mark" src="../images/branding/logo.jpg" width="40" height="40" alt="Logo Sealcleaning" decoding="async"></picture>
+      <picture><source srcset="../images/branding/logo-120.webp" type="image/webp"><img class="brand-mark" src="../images/branding/logo.jpg" width="40" height="40" alt="Logo Sealcleaning" decoding="async"></picture>
       <span class="brand-text">
         <span class="brand-name">Sealcleaning</span>
         <span class="brand-sub">Groenonderhoud &amp; Aanleg</span>
@@ -52,30 +52,40 @@
 
     <nav class="main-nav" id="main-nav" aria-label="Hoofdnavigatie">
       <ul class="nav-list">
-        <li><a href="../">Home</a></li>
+        <li class="nav-home"><a href="../">Home</a></li>
         <li class="has-submenu">
-          <a href="../projecten/">Diensten</a>
+          <a href="../#diensten" data-section-current="true">Diensten</a>
           <ul class="submenu">
             <li><a href="../tuinonderhoud/">Tuinonderhoud</a></li>
             <li><a href="../tuinaanleg/">Tuinaanleg</a></li>
             <li><a href="../tuinrenovatie/">Tuinrenovatie</a></li>
             <li><a href="../bestrating/">Bestrating</a></li>
             <li><a href="../schuttingen/">Schuttingen</a></li>
+            <li><a href="../plantenbakken/">Plantenbakken</a></li>
             <li><a href="../snoeiwerk/">Snoeiwerk</a></li>
-            <li><a href="../periodiek-tuinonderhoud/">Periodiek onderhoud</a></li>
+            <li><a href="../periodiek-tuinonderhoud/" aria-current="page">Periodiek onderhoud</a></li>
           </ul>
         </li>
+        <li><a href="../schutting-ontwerpen/">Tuin ontwerpen</a></li>
         <li><a href="../projecten/">Projecten</a></li>
-        <li><a href="../werkwijze/">Werkwijze</a></li>
-        <li><a href="../over-ons/">Over ons</a></li>
-        <li><a href="../werkgebied/">Werkgebied</a></li>
+        <li class="has-submenu">
+          <a href="../over-ons/">Over ons</a>
+          <ul class="submenu">
+            <li><a href="../over-ons/">Over Sealcleaning</a></li>
+            <li><a href="../werkwijze/">Werkwijze</a></li>
+            <li><a href="../werkgebied/">Werkgebied</a></li>
+            <li><a href="../kennisbank/">Kennisbank</a></li>
+            <li><a href="../voor-aannemers/">Voor aannemers en VvE's</a></li>
+            <li><a href="../werken-met-ons/">Werken met ons</a></li>
+          </ul>
+        </li>
         <li><a href="../contact/">Contact</a></li>
       </ul>
       <div class="header-cta">
         <a href="#" class="icon-btn" data-tel aria-label="Bel Sealcleaning">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
         </a>
-        <a href="../contact/" class="btn btn-primary btn-sm">Plan een kennismaking</a>
+        <a href="../contact/" class="btn btn-primary btn-sm">Offerte aanvragen</a>
       </div>
     </nav>
   </div>
@@ -84,18 +94,18 @@
 <main id="main">
   <section class="page-hero">
     <div class="hero-media">
-      <picture><source srcset="../images/projects/voortuin-luifel-rozen.webp" type="image/webp"><img src="../images/projects/voortuin-luifel-rozen.jpg" alt="Verzorgde voortuin met rozen en luifel" fetchpriority="high" decoding="async"></picture>
+      <picture><source srcset="../images/projects/voortuin-luifel-rozen-640.webp 640w, ../images/projects/voortuin-luifel-rozen-800.webp 800w, ../images/projects/voortuin-luifel-rozen-960.webp 960w, ../images/projects/voortuin-luifel-rozen.webp 1600w" sizes="100vw" type="image/webp"><img src="../images/projects/voortuin-luifel-rozen.jpg" alt="Verzorgde voortuin met rozen en luifel" fetchpriority="high" decoding="async" width="1600" height="1200"></picture>
     </div>
     <div class="hero-scrim"></div>
     <div class="container page-hero-inner">
       <div class="breadcrumbs">
-        <ol><li><a href="../">Home</a></li><li><a href="../projecten/">Diensten</a></li><li>Periodiek onderhoud</li></ol>
+        <ol><li><a href="../">Home</a></li><li><a href="../#diensten">Diensten</a></li><li>Periodiek onderhoud</li></ol>
       </div>
       <p class="eyebrow">Periodiek onderhoud</p>
       <h1>Vast tuinonderhoud, afgestemd op uw tuin</h1>
       <p class="lede">Geen omkijken meer naar uw tuin: wij stellen een onderhoudsritme voor dat past bij uw situatie, bijvoorbeeld eens per twee maanden of per seizoen.</p>
       <div class="btn-row">
-        <a href="../contact/" class="btn btn-primary btn-lg">Plan een kennismaking</a>
+        <a href="../contact/" class="btn btn-primary btn-lg">Vraag een onderhoudsvoorstel aan</a>
         <a href="#" class="link-underline" style="color:#fff" data-whatsapp data-whatsapp-msg="Hallo Sealcleaning, ik wil graag informatie over periodiek tuinonderhoud.">
           WhatsApp over periodiek onderhoud
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -103,6 +113,8 @@
       </div>
     </div>
   </section>
+
+  <div class="v-usp" aria-label="Waar je op kunt rekenen"><div class="container"><ul><li><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3z M9 12l2 2 4-4"/></svg>Gratis bezichtiging in Dordrecht</li><li><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 4h14v16H5z M8 9h8 M8 13h8 M8 17h5"/></svg>Offerte met wat wel en niet inbegrepen is</li><li><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 8l9-5 9 5v8l-9 5-9-5z M3 8l9 5 9-5 M12 13v8"/></svg>Materiaal los of met montage</li><li><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 6h16v12H4z M4 15l5-4 4 3 3-2 4 3"/></svg>Eigen werk, echte foto's</li></ul></div></div>
 
   <section class="section section-sand-deep">
     <div class="container-narrow">
@@ -130,6 +142,27 @@
         <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg><span>Opruimen en afvoeren van groenafval</span></li>
         <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg><span>Algemene verzorging van de tuin per beurt</span></li>
       </ul>
+
+      <section data-v7-scope>
+        <h2>Kies uw aanpak</h2>
+        <div class="choice-grid">
+          <div class="card choice-card"><h3>Per seizoen</h3><p>Vier vaste beurten per jaar, afgestemd op voorjaar, zomer, najaar en winter.</p></div>
+          <div class="card choice-card"><h3>Vaste frequentie</h3><p>Bijvoorbeeld eens per twee maanden of maandelijks; dit spreken we per tuin af.</p></div>
+          <div class="card choice-card"><h3>Zakelijk of VvE</h3><p>Meerdere locaties, vaste werkbonnen en facturatie per object of per periode.</p></div>
+        </div>
+        <h2>Wat staat er in uw offerte — en wat niet standaard?</h2>
+        <div class="incl-grid">
+          <div>
+            <h3>Altijd benoemd in de offerte</h3>
+            <ul class="checklist"><li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Per onderdeel de hoeveelheid, het materiaal en de eenheid (m², m¹, stuks)</span></li><li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Arbeid in uren, tegen het vaste uurtarief van € 60,00 excl. btw per medewerker</span></li><li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Of afvoer, voorbereiding en grondwerk wel of niet zijn inbegrepen</span></li><li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Welke posten nog een stelpost of 'op aanvraag' zijn, en waarom</span></li><li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Wat u zelf voorbereidt, zodat er achteraf geen verrassingen zijn</span></li></ul>
+          </div>
+          <div>
+            <h3>Niet standaard inbegrepen</h3>
+            <ul class="checklist checklist--not"><li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span>Vergunningen en leges (waar nodig regelt u die, of spreken we dit vooraf apart af)</span></li><li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span>Elektra-aansluitingen: die laat u door een erkend installateur maken</span></li><li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span>Verwijderen van onvoorziene obstakels in de grond (puin, oude funderingen, wortels)</span></li><li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span>Werk aan kabels en leidingen, en herstel van schade door verborgen gebreken</span></li><li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span>Afvoer van grond of groenafval als dat niet uitdrukkelijk in de offerte staat</span></li></ul>
+          </div>
+        </div>
+        <p class="form-note scope-note">De offerte is leidend: daarin staat per onderdeel precies wat wel en niet is inbegrepen. Twijfelt u? Vraag het ons vóór u akkoord geeft.</p>
+      </section><!-- /v7-scope -->
 
       <h2>Hoe verloopt een opdracht?</h2>
       <div class="steps">
@@ -166,7 +199,7 @@
       </div>
       <div class="feature-split reveal">
         <div class="feature-media reveal-img">
-          <picture><source srcset="../images/projects/achtertuin-terras-loungeset.webp" type="image/webp"><img src="../images/projects/achtertuin-terras-loungeset.jpg" alt="Verzorgde achtertuin met terras en loungeset" loading="lazy" decoding="async"></picture>
+          <picture><source srcset="../images/projects/achtertuin-terras-loungeset-640.webp 640w, ../images/projects/achtertuin-terras-loungeset-800.webp 800w, ../images/projects/achtertuin-terras-loungeset-960.webp 960w, ../images/projects/achtertuin-terras-loungeset.webp 1600w" sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 440px" type="image/webp"><img src="../images/projects/achtertuin-terras-loungeset.jpg" alt="Verzorgde achtertuin met terras en loungeset" loading="lazy" decoding="async" width="1600" height="757"></picture>
         </div>
         <div class="feature-copy">
           <h3 style="font-size: var(--fs-h2)">Vast onderhoud tuin, Dordrecht</h3>
@@ -240,19 +273,26 @@
       <li><a href="../tuinrenovatie/">Tuinrenovatie</a></li>
       <li><a href="../bestrating/">Bestrating</a></li>
       <li><a href="../schuttingen/">Schuttingen</a></li>
+      <li><a href="../plantenbakken/">Plantenbakken</a></li>
       <li><a href="../snoeiwerk/">Snoeiwerk</a></li>
     </ul></div>
     <div><h4>Bedrijf</h4><ul>
       <li><a href="../projecten/">Projecten</a></li>
+      <li><a href="../project-samenstellen/">Project samenstellen</a></li>
+      <li><a href="../prijzen/">Prijzen</a></li>
       <li><a href="../werkwijze/">Werkwijze</a></li>
       <li><a href="../over-ons/">Over ons</a></li>
       <li><a href="../werkgebied/">Werkgebied</a></li>
+      <li><a href="../voor-aannemers/">Voor aannemers</a></li>
+      <li><a href="../werken-met-ons/">Werken met ons</a></li>
       <li><a href="../contact/">Contact</a></li>
+      <li><a href="../zoeken/">Zoeken</a></li>
+      <li><a href="../inspiratie/">Inspiratie</a></li>
     </ul></div>
     <div><h4>Contact</h4><ul>
       <li data-address>Romboutslaan 582<br>3312 KP Dordrecht</li>
-      <li><a href="#" data-tel data-tel-text>06 15 71 09 65</a></li>
-      <li><a href="#" data-whatsapp data-whatsapp-text>06 48 87 19 86</a></li>
+      <li><a href="#" data-tel data-tel-text>078 204 95 17</a></li>
+      <li><a href="#" data-whatsapp>WhatsApp</a></li>
       <li><a href="#" data-email data-email-text>sealcleaningaanleg@gmail.com</a></li>
       <li data-hours>Dagelijks bereikbaar van 10:00 tot 19:00 uur</li>
     </ul></div>
@@ -267,7 +307,7 @@
   <div class="mobile-cta-inner">
     <a href="#" data-tel><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Bellen</a>
     <a href="#" data-whatsapp data-whatsapp-msg="Hallo Sealcleaning, ik wil graag informatie over jullie diensten."><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20z"/></svg>WhatsApp</a>
-    <a href="../contact/" class="cta-primary">Kennismaking</a>
+    <a href="../contact/" class="cta-primary">Offerte</a>
   </div>
 </div>
 

@@ -12,23 +12,23 @@
 <meta property="og:url" content="https://sealcleaning.nl/privacy/">
 <meta property="og:image" content="https://sealcleaning.nl/images/projects/terras-houtlook-kunstgras-pad-1.jpg">
 <meta property="og:locale" content="nl_NL">
-<meta name="theme-color" content="#1b2a1e">
+<meta name="theme-color" content="#102E27">
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <link rel="icon" href="../images/branding/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="../images/branding/apple-touch-icon.png">
 <link rel="manifest" href="../site.webmanifest">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" href="../vendor/fonts/fraunces-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../vendor/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/v12.css">
 
 </head>
-<body>
+<body class="v12">
 <a href="#main" class="skip-link">Direct naar inhoud</a>
 <header class="site-header">
   <div class="container header-inner">
     <a href="../" class="brand">
-      <picture><source srcset="../images/branding/logo.webp" type="image/webp"><img class="brand-mark" src="../images/branding/logo.jpg" width="40" height="40" alt="Logo Sealcleaning" decoding="async"></picture>
+      <picture><source srcset="../images/branding/logo-120.webp" type="image/webp"><img class="brand-mark" src="../images/branding/logo.jpg" width="40" height="40" alt="Logo Sealcleaning" decoding="async"></picture>
       <span class="brand-text">
         <span class="brand-name">Sealcleaning</span>
         <span class="brand-sub">Groenonderhoud &amp; Aanleg</span>
@@ -42,30 +42,40 @@
 
     <nav class="main-nav" id="main-nav" aria-label="Hoofdnavigatie">
       <ul class="nav-list">
-        <li><a href="../">Home</a></li>
+        <li class="nav-home"><a href="../">Home</a></li>
         <li class="has-submenu">
-          <a href="../projecten/">Diensten</a>
+          <a href="../#diensten">Diensten</a>
           <ul class="submenu">
             <li><a href="../tuinonderhoud/">Tuinonderhoud</a></li>
             <li><a href="../tuinaanleg/">Tuinaanleg</a></li>
             <li><a href="../tuinrenovatie/">Tuinrenovatie</a></li>
             <li><a href="../bestrating/">Bestrating</a></li>
             <li><a href="../schuttingen/">Schuttingen</a></li>
+            <li><a href="../plantenbakken/">Plantenbakken</a></li>
             <li><a href="../snoeiwerk/">Snoeiwerk</a></li>
             <li><a href="../periodiek-tuinonderhoud/">Periodiek onderhoud</a></li>
           </ul>
         </li>
+        <li><a href="../schutting-ontwerpen/">Tuin ontwerpen</a></li>
         <li><a href="../projecten/">Projecten</a></li>
-        <li><a href="../werkwijze/">Werkwijze</a></li>
-        <li><a href="../over-ons/">Over ons</a></li>
-        <li><a href="../werkgebied/">Werkgebied</a></li>
+        <li class="has-submenu">
+          <a href="../over-ons/">Over ons</a>
+          <ul class="submenu">
+            <li><a href="../over-ons/">Over Sealcleaning</a></li>
+            <li><a href="../werkwijze/">Werkwijze</a></li>
+            <li><a href="../werkgebied/">Werkgebied</a></li>
+            <li><a href="../kennisbank/">Kennisbank</a></li>
+            <li><a href="../voor-aannemers/">Voor aannemers en VvE's</a></li>
+            <li><a href="../werken-met-ons/">Werken met ons</a></li>
+          </ul>
+        </li>
         <li><a href="../contact/">Contact</a></li>
       </ul>
       <div class="header-cta">
         <a href="#" class="icon-btn" data-tel aria-label="Bel Sealcleaning">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
         </a>
-        <a href="../contact/" class="btn btn-primary btn-sm">Plan een kennismaking</a>
+        <a href="../contact/" class="btn btn-primary btn-sm">Offerte aanvragen</a>
       </div>
     </nav>
   </div>
@@ -73,47 +83,48 @@
 
 <main id="main">
 
-  <div class="container breadcrumbs"><ol><li><a href="../">Home</a></li><li>Privacy</li></ol></div>
-  <section class="section-tight">
-    <div class="container-narrow">
-      <p class="eyebrow">Privacy</p>
-      <h1>Privacyverklaring</h1>
-      <p class="lede">Laatst bijgewerkt: <span data-year>2026</span>. Dit is een conceptversie; juridische eindcontrole wordt aangeraden voordat deze verklaring als definitief wordt gepubliceerd.</p>
-    </div>
-  </section>
+  <section class="page-hero page-hero--plain"><div class="container page-hero-inner"><div class="container breadcrumbs"><ol><li><a href="../">Home</a></li><li>Privacy</li></ol></div><p class="eyebrow">Privacy</p><h1>Privacyverklaring</h1><p class="lede">Laatst bijgewerkt: <span data-year>2026</span>. Dit is een conceptversie; juridische eindcontrole wordt aangeraden voordat deze verklaring als definitief wordt gepubliceerd.</p></div></section>
+  
   <section class="section">
     <div class="container-narrow">
       <h2>Wie zijn wij?</h2>
-      <p>Sealcleaning Groenonderhoud en Aanleg, gevestigd aan de Romboutslaan 582, 3312 KP Dordrecht (KvK 83078665), is verantwoordelijk voor de verwerking van persoonsgegevens zoals beschreven in deze privacyverklaring.</p>
+      <p>Sealcleaning Groenonderhoud en Aanleg, gevestigd aan de Romboutslaan 582, 3312 KP Dordrecht (KvK 83078665, btw-id NL003773849B79), is verantwoordelijk voor de verwerking van persoonsgegevens zoals beschreven in deze privacyverklaring. Vragen? Neem contact op via <a href="#" data-email data-email-text>sealcleaningaanleg@gmail.com</a> of <a href="../contact/">de contactpagina</a>.</p>
 
-      <h2>Welke gegevens verwerken wij?</h2>
-      <ul class="checklist">
-        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg><span>Naam, telefoonnummer en e-mailadres, wanneer u een formulier invult, belt, mailt of appt.</span></li>
-        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg><span>Postcode en woonplaats, om te kunnen beoordelen of een bezichtiging mogelijk is.</span></li>
-        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg><span>Omschrijving van uw aanvraag en eventueel meegestuurde foto's van uw tuin.</span></li>
-        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg><span>Communicatie via telefoon, WhatsApp of e-mail die u met ons deelt.</span></li>
-      </ul>
+      <h2>Welke gegevens, voor welk doel en hoe lang</h2>
+      <p>Hieronder per categorie welke gegevens we verwerken, waarvoor, en op welke basis en termijn. Niet elke categorie is op u van toepassing — dat hangt af van hoe u de website gebruikt.</p>
+      <div class="price-table-wrap" tabindex="0" role="region" aria-label="Tabel persoonsgegevens (horizontaal scrollbaar)">
+        <table class="price-table">
+          <thead><tr><th>Categorie</th><th>Doel</th><th>Grondslag en termijn</th></tr></thead>
+          <tbody>
+            <tr><td>Niet-persoonlijk lokaal ontwerp (<a href="../project-samenstellen/">configurator</a>)</td><td>Tekenen en bewaren van uw eigen ontwerp</td><td>Blijft alleen in uw eigen browser (localStorage), maximaal 30 dagen; u kunt dit zelf altijd wissen via "Opnieuw beginnen"</td></tr>
+            <tr><td>Aanvraag, contactgegevens en foto's (contactformulier, configurator-overdracht)</td><td>Uw aanvraag beoordelen en opvolgen</td><td>Noodzakelijk voor het sluiten van een overeenkomst op uw verzoek; bewaartermijn wordt intern vastgesteld en niet onnodig lang aangehouden</td></tr>
+            <tr><td>Opdracht, offerte en werkbewijs</td><td>Uitvoering van de overeenkomst en aantoonbare afspraken</td><td>Uitvoering van de overeenkomst; bewaard zolang relevant voor de opdracht en eventuele garantie</td></tr>
+            <tr><td>Factuur en boekhouding</td><td>Financiële administratie</td><td>Wettelijke bewaarplicht — fiscale basisadministratie kent doorgaans 7 jaar, met situaties waarin 10 jaar geldt</td></tr>
+            <tr><td>Publieke projectfoto ("Uw werk als case")</td><td>Portfolio op de website</td><td>Alleen met uw aparte toestemming, los van de opdracht; weigering heeft geen gevolgen voor de dienstverlening</td></tr>
+            <tr><td>Sollicitatie/CV (<a href="../werken-met-ons/">werken met ons</a>)</td><td>Beoordelen van interesse in samenwerking</td><td>Uw toestemming/verzoek; beperkte toegang, niet gedeeld met analytics, niet publiek opgeslagen</td></tr>
+            <tr><td>Zakelijke aanvraag (<a href="../voor-aannemers/">voor aannemers</a>)</td><td>Beoordelen van een zakelijke samenwerkingsaanvraag</td><td>Uitvoering van (voorbereiding op) een overeenkomst</td></tr>
+            <tr><td>Technische logs van de webserver</td><td>Beveiliging en betrouwbaarheid van de website</td><td>Gerechtvaardigd belang, geminimaliseerd en kort bewaard</td></tr>
+          </tbody>
+        </table>
+      </div>
 
-      <h2>Waarvoor gebruiken we deze gegevens?</h2>
-      <p>We gebruiken uw gegevens uitsluitend om contact met u op te nemen over uw aanvraag, een bezichtiging in te plannen, een offerte op te stellen en een eventuele opdracht uit te voeren en te factureren.</p>
-
-      <h2>Contactformulier op de website</h2>
-      <p>Wanneer u het contactformulier invult, wordt de aanvraag via e-mail bij ons aangeleverd. We gebruiken geen trackingcookies of externe advertentienetwerken op deze website. Zodra dit verandert, wordt deze privacyverklaring hierop aangevuld.</p>
-
-      <h2>Bewaartermijn</h2>
-      <p>We bewaren uw gegevens niet langer dan noodzakelijk voor het doel waarvoor ze zijn verzameld, en in ieder geval niet langer dan de wettelijke bewaartermijnen voor administratie (o.a. fiscale bewaarplicht) vereisen.</p>
+      <h2>Contactformulier en bijlagen</h2>
+      <p>Het contactformulier (en de formulieren op <a href="../voor-aannemers/">voor aannemers</a> en <a href="../werken-met-ons/">werken met ons</a>) opent op dit moment een e-mail in uw eigen mailprogramma; er is geen serverbackend dat uw gegevens direct ontvangt. Geselecteerde foto's/bestanden worden <strong>niet</strong> automatisch meegestuurd — u voegt deze zelf toe als bijlage voordat u de e-mail verzendt. Zodra een echt formulierendpoint wordt aangesloten, wordt deze verklaring daarop aangevuld.</p>
 
       <h2>Delen met derden</h2>
-      <p>We delen uw gegevens niet met derden, tenzij dit noodzakelijk is voor de uitvoering van de overeenkomst (bijvoorbeeld een leverancier voor materiaalbestellingen) of wanneer we hiertoe wettelijk verplicht zijn.</p>
+      <p>We delen uw gegevens niet met derden, tenzij dit noodzakelijk is voor de uitvoering van de overeenkomst (bijvoorbeeld een leverancier voor materiaalbestellingen) of wanneer we hiertoe wettelijk verplicht zijn. We verkopen geen gegevens aan derden.</p>
 
       <h2>Uw rechten</h2>
-      <p>U heeft het recht om uw gegevens in te zien, te laten corrigeren of te laten verwijderen. Neem hiervoor contact op via <a href="#" data-email data-email-text>sealcleaningaanleg@gmail.com</a>.</p>
+      <p>U heeft het recht om uw gegevens in te zien, te laten corrigeren, te laten verwijderen, bezwaar te maken tegen verwerking en, waar van toepassing, gegevensoverdraagbaarheid te vragen. Neem hiervoor contact op via <a href="#" data-email data-email-text>sealcleaningaanleg@gmail.com</a>. Komt u er met ons niet uit, dan kunt u een klacht indienen bij de <a href="https://autoriteitpersoonsgegevens.nl/" target="_blank" rel="noopener">Autoriteit Persoonsgegevens</a>.</p>
 
-      <h2>Cookies</h2>
-      <p>Deze website gebruikt geen cookies voor advertentie- of trackingdoeleinden. Mocht dit in de toekomst veranderen (bijvoorbeeld bij gebruik van Google Analytics), dan wordt hiervoor eerst passende toestemming gevraagd en deze verklaring aangepast.</p>
+      <h2>Cookies en toestemming</h2>
+      <p>Deze website gebruikt geen trackingcookies, advertentienetwerken of analytics die toestemming vereisen. Noodzakelijke functionaliteit (zoals het onthouden van uw configurator-ontwerp in uw eigen browser) is geen tracking en vraagt geen cookiebanner. Mocht dit in de toekomst veranderen, dan vragen we eerst passende toestemming en passen we deze verklaring aan — weigeren blijft dan altijd mogelijk zonder dat de kernfuncties van de website stoppen met werken.</p>
 
-      <h2>Vragen</h2>
-      <p>Heeft u vragen over deze privacyverklaring? Neem contact met ons op via <a href="../contact/">de contactpagina</a>.</p>
+      <h2>Projectfoto's en herkenbaarheid</h2>
+      <p>Bij het gebruik van eigen projectfoto's op de website wordt zoveel mogelijk vermeden dat herkenbare gezichten, kentekens of volledige huisadressen zichtbaar zijn; locatiegegevens (EXIF) worden uit gepubliceerde foto's verwijderd.</p>
+
+      <h2>Wijzigingen</h2>
+      <p>Deze verklaring kan worden aangepast wanneer onze verwerkingen veranderen, bijvoorbeeld bij een nieuw formulierendpoint of een toekomstig klantportaal. De datum bovenaan deze pagina geeft aan wanneer de verklaring voor het laatst is bijgewerkt.</p>
     </div>
   </section>
 
@@ -143,19 +154,26 @@
       <li><a href="../tuinrenovatie/">Tuinrenovatie</a></li>
       <li><a href="../bestrating/">Bestrating</a></li>
       <li><a href="../schuttingen/">Schuttingen</a></li>
+      <li><a href="../plantenbakken/">Plantenbakken</a></li>
       <li><a href="../snoeiwerk/">Snoeiwerk</a></li>
     </ul></div>
     <div><h4>Bedrijf</h4><ul>
       <li><a href="../projecten/">Projecten</a></li>
+      <li><a href="../project-samenstellen/">Project samenstellen</a></li>
+      <li><a href="../prijzen/">Prijzen</a></li>
       <li><a href="../werkwijze/">Werkwijze</a></li>
       <li><a href="../over-ons/">Over ons</a></li>
       <li><a href="../werkgebied/">Werkgebied</a></li>
+      <li><a href="../voor-aannemers/">Voor aannemers</a></li>
+      <li><a href="../werken-met-ons/">Werken met ons</a></li>
       <li><a href="../contact/">Contact</a></li>
+      <li><a href="../zoeken/">Zoeken</a></li>
+      <li><a href="../inspiratie/">Inspiratie</a></li>
     </ul></div>
     <div><h4>Contact</h4><ul>
       <li data-address>Romboutslaan 582<br>3312 KP Dordrecht</li>
-      <li><a href="#" data-tel data-tel-text>06 15 71 09 65</a></li>
-      <li><a href="#" data-whatsapp data-whatsapp-text>06 48 87 19 86</a></li>
+      <li><a href="#" data-tel data-tel-text>078 204 95 17</a></li>
+      <li><a href="#" data-whatsapp>WhatsApp</a></li>
       <li><a href="#" data-email data-email-text>sealcleaningaanleg@gmail.com</a></li>
       <li data-hours>Dagelijks bereikbaar van 10:00 tot 19:00 uur</li>
     </ul></div>
@@ -170,7 +188,7 @@
   <div class="mobile-cta-inner">
     <a href="#" data-tel><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Bellen</a>
     <a href="#" data-whatsapp data-whatsapp-msg="Hallo Sealcleaning, ik wil graag informatie over jullie diensten."><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20z"/></svg>WhatsApp</a>
-    <a href="../contact/" class="cta-primary">Kennismaking</a>
+    <a href="../contact/" class="cta-primary">Offerte</a>
   </div>
 </div>
 

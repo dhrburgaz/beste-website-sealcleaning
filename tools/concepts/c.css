@@ -1,0 +1,20 @@
+/* Concept C — Warm Craft & Nature: warme zandtinten, terracotta als actiekleur, zachte kaarten met
+   ronde hoeken, vriendelijkere typografie; foto als afgeronde kaart met tekst op een effen vlak. */
+:root { --c-sand:#f4ecdf; --c-sand-deep:#eadcc6; --c-line:#dccbad; --c-clay:#9a4f2c; --c-forest:#2f4a33; --c-forest-mid:#3e5d42; --radius-s: 12px; --radius-m: 18px; }
+h1, h2, h3 { font-weight: 600 !important; }
+.eyebrow { color: #8a4626; }
+.btn { border-radius: 999px; }
+.btn-primary { background: #9a4f2c; border-color: #9a4f2c; }
+.btn-primary:hover { background: #7f3f22; border-color: #7f3f22; }
+.hero, .page-hero { padding: clamp(.75rem, 2vw, 1.5rem); background: var(--c-sand); min-height: 0; display: block; color: var(--c-ink); }
+.hero .hero-media, .page-hero .hero-media { position: relative; height: clamp(240px, 50vh, 600px); border-radius: 20px; overflow: hidden; }
+.hero-scrim, .page-hero .hero-scrim { display: none; }
+.hero-inner, .page-hero-inner { background: #fffaf2; border-radius: 20px; margin-top: -3.5rem; position: relative; padding: clamp(1.5rem, 3vw, 2.75rem); max-width: 860px; margin-inline: clamp(.5rem, 3vw, 3rem); box-shadow: 0 18px 40px -24px rgba(60,40,20,.35); }
+.hero h1, .page-hero h1 { color: var(--c-ink); font-size: clamp(2.1rem, 3vw + 1rem, 3.9rem); }
+.hero-lede, .page-hero .lede { color: var(--c-ink-soft); }
+.hero-copy .eyebrow, .page-hero .eyebrow { color: #8a4626; }
+.page-hero .breadcrumbs, .page-hero .breadcrumbs a { color: var(--c-ink-soft); }
+.hero .btn-ghost-light { color: var(--c-ink) !important; border-color: var(--c-ink) !important; }
+.hero .link-underline { color: var(--c-ink) !important; }
+.service-row { background: #fffaf2; border: 1px solid var(--c-line); border-radius: 16px; padding-inline: 1.25rem; margin-bottom: .75rem; }
+.service-index { border-top: 0; }

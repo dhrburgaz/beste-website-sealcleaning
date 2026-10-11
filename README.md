@@ -7,8 +7,8 @@ Deze site is gebouwd met alleen HTML, CSS en JavaScript (geen framework, geen bu
 Bijna alle bedrijfsgegevens staan op **één plek**: `js/config.js`. Pas daar telefoonnummer, WhatsApp-nummer, e-mail, adres, KvK, BTW-nummer of openingstijden aan — dit werkt automatisch door op elke pagina (header, footer, sticky balk onderin).
 
 ```js
-phoneDisplay: "06 15 71 09 65",
-phoneHref: "tel:+31615710965",
+phoneDisplay: "078 204 95 17",
+phoneHref: "tel:+31782049517",
 whatsappNumber: "31648871986",
 ...
 ```

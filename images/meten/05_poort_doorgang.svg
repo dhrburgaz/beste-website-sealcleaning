@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc"><title id="title">Poortbreedte meten</title><desc id="desc">Voorbeeldpoort binnen een schutting met pijl over de vrije doorgang en uitleg dat de maat de opening tussen palen betreft.</desc><style>
+ .bg{fill:#faf9f5}.title{font:700 38px Arial, sans-serif;fill:#152c25}.body{font:24px Arial,sans-serif;fill:#273e35}.label{font:700 25px Arial,sans-serif;fill:#164e3b}.measure{stroke:#178053;stroke-width:8;fill:none;stroke-linecap:round}.outline{stroke:#31443c;stroke-width:3}.wood{fill:#b68d5b}.woodalt{fill:#c9a77d}.stone{fill:#a7a7a1}.card{fill:#fff;stroke:#e0ded6;stroke-width:3}
+</style><rect class="bg" width="1280" height="720"/><defs><marker id="ar" markerWidth="9" markerHeight="9" refX="4" refY="4" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z" fill="#178053"/></marker></defs>
+<text class="title" x="60" y="70">Hoe breed moet de doorgang zijn?</text>
+<text class="body" x="60" y="114">Meet de vrije opening waar je doorheen loopt, niet de dikte van de palen.</text>
+<rect class="card" x="55" y="154" width="1170" height="500" rx="22"/>
+<rect class="wood outline" x="170" y="250" width="320" height="270"/>
+<rect class="wood outline" x="795" y="250" width="320" height="270"/>
+<rect x="490" y="250" width="305" height="270" fill="#edf2eb" stroke="#255e45" stroke-width="6" stroke-dasharray="14 10"/>
+<rect x="475" y="233" width="20" height="300" fill="#6b7067"/><rect x="792" y="233" width="20" height="300" fill="#6b7067"/>
+<line class="measure" x1="520" y1="577" x2="764" y2="577" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="label" x="475" y="617">BREEDTE DOORGANG</text>
+</svg>

@@ -10,8 +10,8 @@
     businessName: "Sealcleaning Groenonderhoud en Aanleg",
     brandName: "Sealcleaning",
     tagline: "Groenonderhoud & Aanleg",
-    phoneDisplay: "06 15 71 09 65",
-    phoneHref: "tel:+31615710965",
+    phoneDisplay: "078 204 95 17",
+    phoneHref: "tel:+31782049517",
     whatsappNumber: "31648871986",
     whatsappDisplay: "06 48 87 19 86",
     email: "sealcleaningaanleg@gmail.com",
@@ -22,6 +22,9 @@
     hours: "Dagelijks bereikbaar van 10:00 tot 19:00 uur",
     primaryArea: "Dordrecht",
     region: "Drechtsteden en Rotterdam e.o.",
+    // Adres van de Sealcleaning-backend (bijv. "https://api.sealcleaning.nl"). Leeg = formulieren
+    // gebruiken het eigen mailprogramma van de bezoeker (huidige werking).
+    apiBase: "",
     defaultWhatsappMessage: "Hallo Sealcleaning, ik wil graag meer informatie over jullie diensten."
   };
 
