@@ -63,7 +63,7 @@ export function createThreeScene(host, project, opts = {}) {
   function woodTexture(hex, horizontal) {
     const c = document.createElement("canvas"); c.width = 256; c.height = 256;
     const g = c.getContext("2d");
-    const base = new THREE.Color(hex);
+    const base = new THREE.Color(hex).lerp(new THREE.Color(0xffffff), 0.16);
     g.fillStyle = "#" + base.getHexString(); g.fillRect(0, 0, 256, 256);
     const n = 9;
     for (let i = 0; i < n; i++) {
@@ -209,7 +209,7 @@ export function createThreeScene(host, project, opts = {}) {
         if (seg.kind === "gate") continue; // opening blijft open; geen vast paneel
         const lengthM = seg.lengthMm * MM;
         const geom = track(new THREE.BoxGeometry(lengthM, heightM, panelThicknessM));
-        const mesh = new THREE.Mesh(geom, seg.kind === "fit" ? fitMaterial : panelMaterial);
+        const mesh = new THREE.Mesh(geom, seg.kind === "fit" && !scenic ? fitMaterial : panelMaterial);
         const midX = ((seg.start.xMm + seg.end.xMm) / 2) * MM;
         const midZ = ((seg.start.zMm + seg.end.zMm) / 2) * MM;
         mesh.position.set(midX, baseM + heightM / 2, midZ);

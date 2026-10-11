@@ -209,6 +209,17 @@ Resultaat per punt uit het hervattingsdossier:
 
 Nog steeds niet bewezen: fysieke toestellen, schermlezer, zoom 200 %, gebruikerstest, veldmetrics, Docker-build, juridische toets, hosting/SMTP/Mollie/back-up, concurrentieaudit.
 
+## v12-pilots (11 oktober 2026): wachten op designakkoord
+
+Opdracht: `docs/v12/KERNCONTRACT_V12_KORT.md` (volledige masterprompt staat in het v12-pakket van de eigenaar). Beleid is nu: SEAL verkoopt materiaal los en met montage (`docs/MATERIAL_POLICY.md`); online bestellen blijft uit.
+
+- **Pilot 1, homepage** (`index.html`, `css/v12.css`, `js/v12/home3d.js`): groene balk, hero met echte foto, 3D-voorbeeld direct eronder, zes keuzes, echte projecten, twee materiaalroutes, uitleg, FAQ.
+- **Pilot 2, productpagina** (`/materialen/elephant-finch-grenen-scherm/`): eerlijke fotoplekken, geschiktheidscheck, kostenkaart, drie knoppen.
+- **Pilot 3, beginnersroute** (`/schutting-ontwerpen/`, `js/v12/beginner/*`): één vraag per scherm, drie meetroutes, maatpijlen en schaalfiguur in 3D, uitleg per stap, 2D-terugval, aanvraag via het bestaande formulier.
+- Documenten: `docs/V12_VERSCHILKAART.md`, `docs/V12_ONTWERPLOG.md`, `docs/IMAGE_PRODUCT_MATCH_REPORT.md`, `docs/SEO_PAGE_MATRIX.md`, `docs/MEETPLAN.md`, `docs/v12/`.
+- Tests: 68 unit-tests, e2e `beginner.mjs` (11 scenario's), `pilots-v12.mjs`, site-crawl (44 pagina's, 0 problemen, 0 axe-meldingen). Echte gebruikers, toestellen en schermlezer: niet getest.
+- Open: ontwerpakkoord op de pilots; avondfoto en teamfoto's; beeldrechten voor productfoto's; juridische toetsing; hosting en betalingen. De overige pagina's zijn nog niet in de nieuwe stijl.
+
 ## Nog niet gestart
 
 - **Tier 9 (documentarchitectuur):** offerte/werkbon/factuurconcept,
