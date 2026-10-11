@@ -15,6 +15,8 @@ if (!root) throw new Error("beginner root ontbreekt");
 
 const STORE = "sealBeginnerSchuttingV12";
 const BASE = new URL("../../../", import.meta.url); // site-root
+// Directory-links: op hosts zonder directory-index (statische previews) eindigt de pagina op index.html; dan wijzen onze links ook naar index.html.
+const dir = (p) => new URL(p + (p.endsWith("/") && /\/index\.html$/.test(location.pathname) ? "index.html" : ""), BASE).href;
 const SIDES = { recht: ["Achterkant"], hoek: ["Achterkant", "Zijkant"], drie: ["Linkerkant", "Achterkant", "Rechterkant"] };
 const DEFAULT_LEN_MM = 5000;
 const DOEL = { nieuw: "Een nieuwe schutting plaatsen", herstel: "Mijn schutting repareren", "weet-niet": "Ik weet het niet" };
@@ -264,7 +266,7 @@ function helpBlock(key) {
     h("h4", { text: "Zo doe je dat" }), h("ol", {}, c.zo.map((z) => h("li", { text: z }))),
     h("h4", { text: "Waarom vragen we dit?" }), h("p", { text: c.waarom }),
     h("h4", { text: "Voorbeeld" }), h("p", { text: c.voorbeeld }),
-    h("h4", { text: "Ik weet het niet" }), h("p", {}, c.weetniet, " ", h("a", { href: new URL("contact/", BASE).href + "?help=schutting", text: "Of laat SEAL je helpen." })));
+    h("h4", { text: "Ik weet het niet" }), h("p", {}, c.weetniet, " ", h("a", { href: dir("contact/") + "?help=schutting", text: "Of laat SEAL je helpen." })));
   const btn = h("button", { type: "button", class: "b-info", "aria-expanded": "false", "aria-controls": id, onclick: () => {
     const open = panel.hidden; panel.hidden = !open; btn.setAttribute("aria-expanded", String(open)); btn.querySelector("span").textContent = open ? "Uitleg sluiten" : "Uitleg: wat bedoelen we?";
     if (open) emit("measurement_help_opened", {});
@@ -340,7 +342,7 @@ const STEPS = {
       { id: "weet-niet", label: "Ik weet het niet", sub: "Wij denken met je mee." }
     ], st.doel, (v) => { st.doel = v; save(); emit("service_choice", { service: "schutting", route: v }); render(); }, { label: "Wat wil je doen?", cls: "b-cards-3" }));
     body.append(h("div", { class: "b-other" }, h("h3", { text: "Iets anders ontwerpen?" }), h("p", { class: "b-note", text: "Voor een terras, tuinindeling of plantenbakken gebruik je onze volledige 2D/3D-ontwerper." }),
-      h("ul", { class: "b-other-list" }, [["Bestrating of terras", "Teken een terras of tuinpad"], ["Tuinindeling", "Teken je hele tuin"], ["Plantenbakken", "Plaats plantenbakken in je tuin"]].map(([t, d]) => h("li", {}, h("a", { class: "b-other-link", href: new URL("project-samenstellen/", BASE).href, onclick: () => emit("service_choice", { service: t.toLowerCase(), route: "volledige-ontwerper" }) }, h("strong", { text: t }), h("span", { text: d })))))));
+      h("ul", { class: "b-other-list" }, [["Bestrating of terras", "Teken een terras of tuinpad"], ["Tuinindeling", "Teken je hele tuin"], ["Plantenbakken", "Plaats plantenbakken in je tuin"]].map(([t, d]) => h("li", {}, h("a", { class: "b-other-link", href: dir("project-samenstellen/"), onclick: () => emit("service_choice", { service: t.toLowerCase(), route: "volledige-ontwerper" }) }, h("strong", { text: t }), h("span", { text: d })))))));
     body.append(nav(id, list, !!st.doel));
     return body;
   },
@@ -492,7 +494,7 @@ const STEPS = {
       h("p", { class: "b-muted", text: `Indicatie van onderdelen: ongeveer ${ind.panels + ind.fit} schuttingdelen en ${ind.posts} palen.` }),
       helpBlock("maten") || ""));
     const enc = encodeShare(p);
-    const shareUrl = enc ? new URL("project-samenstellen/", BASE).href + `#ontwerp=${enc}` : "";
+    const shareUrl = enc ? dir("project-samenstellen/") + `#ontwerp=${enc}` : "";
     const msg = h("p", { class: "b-muted", role: "status", "aria-live": "polite", text: "Je keuzes zijn bewaard op dit apparaat. Ze worden niet naar andere apparaten gestuurd." });
     const sides = sideNames().map((n, i) => { const m = sideMeasure(i), mm = sideMm(i); return `${n.toLowerCase()} ${m.mode === "onbekend" || !mm ? "onbekend" : mShort(mm)}`; }).join(", ");
     const row = (thumb, title, sub, stepId) => h("li", { class: "b-plan-row" }, thumb, h("span", { class: "b-plan-text" }, h("strong", { text: title }), h("span", { text: sub })), h("button", { type: "button", class: "btn btn-secondary btn-sm", onclick: () => go(stepId), "aria-label": `${title} bewerken` }, "Bewerken"));
@@ -517,7 +519,7 @@ const STEPS = {
     const body = h("div", {});
     const p = st.doel === "nieuw" ? buildProject() : null;
     const enc = p ? encodeShare(p) : null;
-    const designUrl = enc ? new URL("project-samenstellen/", BASE).href + `#ontwerp=${enc}` : "";
+    const designUrl = enc ? dir("project-samenstellen/") + `#ontwerp=${enc}` : "";
     const text = [...summaryLines(), designUrl ? `Ontwerp: ${designUrl}` : ""].filter(Boolean).join("\n");
     body.append(h("p", { class: "b-sub", text: "Vul je gegevens in. Wij nemen contact met je op. Dit is een vrijblijvende vraag, geen bestelling." }));
     body.append(h("div", { class: "b-plan" }, h("h3", { text: "Dit sturen we mee" }), h("ul", { class: "b-plan-list" }, summaryLines().map((l) => h("li", { text: l })))));
@@ -535,7 +537,7 @@ const STEPS = {
       h("input", { type: "hidden", name: "werkroute", value: st.werk || st.doel || "" }),
       h("div", { class: "field full" }, h("label", { for: "omschrijving", text: "Je omschrijving (je mag dit aanvullen)*" }), h("textarea", { id: "omschrijving", name: "omschrijving", class: "b-input", rows: 7, required: true }, text), h("span", { class: "error-msg", text: "Geef een korte omschrijving." })),
       h("div", { class: "field full" }, h("label", { for: "fotos", text: "Foto’s van de plek (niet verplicht)" }), h("input", { type: "file", id: "fotos", name: "fotos", accept: "image/*", multiple: true, "data-file-input": "" }), h("div", { class: "hint", "data-file-count": "" }), h("p", { class: "b-muted", text: "Foto’s gebruiken we alleen om je aanvraag te beoordelen. Een foto is geen exacte maat; wij controleren de maten zelf." })),
-      h("div", { class: "field full" }, h("div", { class: "b-check" }, h("input", { type: "checkbox", id: "privacy", name: "privacy", required: true }), h("label", { for: "privacy", html: `Ik ga akkoord met de <a href="${new URL("privacy/", BASE).href}" target="_blank" rel="noopener">privacyverklaring</a>*` })), h("span", { class: "error-msg", text: "Bevestig dat je akkoord gaat met de privacyverklaring." })),
+      h("div", { class: "field full" }, h("div", { class: "b-check" }, h("input", { type: "checkbox", id: "privacy", name: "privacy", required: true }), h("label", { for: "privacy", html: `Ik ga akkoord met de <a href="${dir("privacy/")}" target="_blank" rel="noopener">privacyverklaring</a>*` })), h("span", { class: "error-msg", text: "Bevestig dat je akkoord gaat met de privacyverklaring." })),
       h("button", { type: "submit", class: "btn btn-primary btn-lg btn-block", text: "Verstuur mijn aanvraag" }),
       h("a", { href: "#", "data-mailto-fallback": "", class: "btn btn-secondary btn-block", style: "margin-top:.8rem", hidden: true, text: "Verstuur mijn aanvraag via e-mail" }));
     body.append(h("div", { class: "form-status", "data-form-status": "", hidden: true, role: "status" }), form);
@@ -552,7 +554,7 @@ function lengteIllus() { return lengthIllustration(); }
 function showFailure(e) {
   stage.textContent = "";
   stage.append(h("h2", { class: "b-title", text: "Er ging iets mis" }), h("p", { class: "b-sub", text: "De ontwerphulp kon deze stap niet laten zien. Je keuzes zijn niet verloren. Je kunt ook zonder ontwerp een offerte aanvragen." }),
-    h("div", { class: "b-fallback-links" }, h("a", { class: "btn btn-primary btn-lg", href: new URL("contact/", BASE).href, text: "Vraag een offerte aan" }), h("button", { type: "button", class: "btn btn-secondary btn-lg", onclick: () => location.reload(), text: "Probeer opnieuw" })),
+    h("div", { class: "b-fallback-links" }, h("a", { class: "btn btn-primary btn-lg", href: dir("contact/"), text: "Vraag een offerte aan" }), h("button", { type: "button", class: "btn btn-secondary btn-lg", onclick: () => location.reload(), text: "Probeer opnieuw" })),
     h("details", {}, h("summary", { text: "Technische melding" }), h("pre", { text: String(e && e.stack || e).slice(0, 600) })));
 }
 window.addEventListener("error", (ev) => { if (!root.dataset.failed && ev.error && stage && !stage.children.length) { root.dataset.failed = "1"; showFailure(ev.error); } });

@@ -8,7 +8,7 @@ const FLAT = process.env.FLAT === "1", IDX = FLAT ? "index.html" : "";
 const b = await chromium.launch({ executablePath: process.env.CHROMIUM || undefined, args: ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"] });
 const results = []; const ok = (n) => { results.push(n); console.log("ok ", n); };
 const errors = [];
-async function page(w = 1440, h = 900) { const ctx = await b.newContext({ viewport: { width: w, height: h } }); const p = await ctx.newPage(); p.on("pageerror", (e) => errors.push(e.message)); p.on("console", (m) => { if (m.type() === "error" && !/Failed to load resource|ERR_/.test(m.text())) errors.push(m.text()); }); return p; }
+async function page(w = 1440, h = 900) { const ctx = await b.newContext({ viewport: { width: w, height: h } }); const p = await ctx.newPage(); p.on("pageerror", (e) => errors.push(e.message)); p.on("response", (r) => { if (r.status() >= 400 && !/favicon|\/api\//.test(r.url())) errors.push(`HTTP ${r.status()} ${r.url()}`); }); p.on("console", (m) => { if (m.type() === "error" && !/Failed to load resource|ERR_/.test(m.text())) errors.push(m.text()); }); return p; }
 const path = (p) => new URL(p.url()).pathname.replace(/index\.html$/, "");
 const base = new URL(BASE).pathname;
 const rel = (p) => path(p).slice(base.length - 1);
