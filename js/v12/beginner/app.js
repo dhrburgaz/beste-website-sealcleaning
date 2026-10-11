@@ -339,6 +339,8 @@ const STEPS = {
       { id: "herstel", label: "Mijn schutting repareren", sub: "Een losse plank of scheve paal? Dan hoeft er niets nieuws." },
       { id: "weet-niet", label: "Ik weet het niet", sub: "Wij denken met je mee." }
     ], st.doel, (v) => { st.doel = v; save(); emit("service_choice", { service: "schutting", route: v }); render(); }, { label: "Wat wil je doen?", cls: "b-cards-3" }));
+    body.append(h("div", { class: "b-other" }, h("h3", { text: "Iets anders ontwerpen?" }), h("p", { class: "b-note", text: "Voor een terras, tuinindeling of plantenbakken gebruik je onze volledige 2D/3D-ontwerper." }),
+      h("ul", { class: "b-other-list" }, [["Bestrating of terras", "Teken een terras of tuinpad"], ["Tuinindeling", "Teken je hele tuin"], ["Plantenbakken", "Plaats plantenbakken in je tuin"]].map(([t, d]) => h("li", {}, h("a", { class: "b-other-link", href: new URL("project-samenstellen/", BASE).href, onclick: () => emit("service_choice", { service: t.toLowerCase(), route: "volledige-ontwerper" }) }, h("strong", { text: t }), h("span", { text: d })))))));
     body.append(nav(id, list, !!st.doel));
     return body;
   },
