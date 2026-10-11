@@ -116,9 +116,10 @@ for (const w of [390, 320]) {
   await Promise.all([m.waitForURL(/schuttingen/), m.locator('.submenu a:text-is("Schuttingen")').click()]);
   await m.locator(".nav-toggle").click(); await Promise.all([m.waitForURL(/contact/), m.locator('.main-nav .nav-list > li > a:text-is("Contact")').click()]);
   assert.equal(await m.evaluate(() => document.documentElement.scrollWidth - innerWidth), 0, `overflow ${w}`);
-  assert.ok(await m.locator(".mobile-cta-bar").isVisible(), "vaste offertebalk"); await m.context().close();
+  assert.ok(!(await m.locator(".mobile-cta-bar").isVisible()), "vaste balk mag het contactformulier niet afdekken");
+  await m.goto(BASE + IDX); assert.ok(await m.locator(".mobile-cta-bar").isVisible(), "vaste offertebalk op de homepage"); await m.context().close();
 }
-ok("mobiel (390 en 320): menu opent, navigeert, offertebalk zichtbaar, geen horizontale scroll");
+ok("mobiel (390 en 320): menu opent, navigeert, offertebalk op home maar niet op formulier- en ontwerperpagina's, geen horizontale scroll");
 
 assert.deepEqual(errors, [], "onverklaarde consolefouten: " + errors.join(" | "));
 ok("geen onverklaarde console- of paginafouten"); await b.close(); console.log(`knoppen: OK (${results.length} groepen)`);

@@ -28,7 +28,7 @@ export function buildDemoProject() {
     obj("border", 8200, 1100, 700, 4600),
     obj("planter", 3600, 5100, 2200, 600),
     obj("planter", 6400, 5100, 2200, 600),
-    obj("hedge", 700, 5800, 2600, 500),
+    obj("hedge", 700, 5900, 2600, 420),
     obj("tree", 7600, 700, 2200, 2200),
     obj("plant", 1200, 700, 800, 800),
     obj("plant", 4400, 650, 900, 900),

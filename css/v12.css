@@ -655,3 +655,17 @@
 .v-acc-item[open] summary::after { content: "–"; }
 .v-acc-body { padding: 0 1.1rem 1.1rem; }
 .v-acc-body h3 { font-size: 1.05rem; }
+/* Mobiel: vaste contactbalk mag geen invoer afdekken */
+html { scroll-padding-bottom: 96px; }
+@media (max-width: 940px) { .no-cta-bar .mobile-cta-bar { display: none; } .no-cta-bar { padding-bottom: 0; } }
+.b-q-legend { margin: 0 0 .6rem; font-size: .9rem; color: var(--seal-ink); line-height: 1.5; }
+.b-q-key { font-weight: 700; padding: 0 .35rem; border-radius: 4px; }
+.b-q-key-len { color: #0f5a3b; background: #dff0e6; }
+.b-q-key-h { color: #7a4700; background: #f8e8cf; }
+.b-q-help { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1rem; margin-top: .8rem; }
+.b-q-nomeasure { min-height: 44px; }
+.b-q-nomeasure[aria-pressed="true"] { background: var(--seal-green); color: #fff; }
+.b-q-note { font-size: .88rem; color: var(--seal-muted); flex: 1 1 14rem; }
+.i-mat { font-size: .78rem !important; letter-spacing: .04em; text-transform: uppercase; color: #6b4f1d !important; font-weight: 600; }
+.i-cards .i-card-body p:not(.i-mat) { min-height: 2.9em; }
+@media (max-width: 700px) { .v-3d-stage--big { aspect-ratio: 1 / 1; } .b-preview-stage { aspect-ratio: 5 / 4; } }

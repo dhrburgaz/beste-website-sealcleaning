@@ -23,7 +23,7 @@ if (host) {
     try {
       const mod = await import("../configurator/three-scene.js");
       if (!mod.isWebGL2Supported()) { note("Voorbeeld in 2D: 3D wordt op dit apparaat niet ondersteund."); return showFlat(); }
-      const scene = mod.createThreeScene(host.querySelector("[data-home-3d-canvas]"), project, { scenic: true, zoom: 0.74 });
+      const scene = mod.createThreeScene(host.querySelector("[data-home-3d-canvas]"), project, { scenic: true, zoom: 0.82 });
       scene.update(project);
       
       host.classList.add("is-3d");

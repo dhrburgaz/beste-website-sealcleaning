@@ -191,7 +191,8 @@ function renderQuick() {
   q.hidden = false;
   const names = sideNames();
   const sel = (id, label, key, opts, val, onch) => { const [ib, ip] = infoBtn(key, true); return h("div", { class: "b-q-field" }, h("div", { class: "b-q-label" }, h("label", { for: id }, label), ib), ip, h("select", { id, class: "b-input", onchange: (e) => onch(e.target.value) }, opts.map(([v, t]) => h("option", { value: v, selected: String(val) === String(v) }, t)))); };
-  q.append(h("p", { class: "b-q-title", text: "Snel aanpassen" }), h("div", { class: "b-q-row" },
+  q.append(h("p", { class: "b-q-title", text: "Snel aanpassen" }),
+    h("p", { class: "b-q-legend" }, h("span", { class: "b-q-key b-q-key-len" }, "Lengte"), " = hoe ver de schutting loopt (groene pijl). ", h("span", { class: "b-q-key b-q-key-h" }, "Hoogte"), " = van de grond tot de bovenkant (oranje pijl)."), h("div", { class: "b-q-row" },
     sel("q-type", "Type schutting", "type", [["", "Kies een type"], ...MATERIALS.map((m) => [m.id, m.label])], st.materiaal || "", (v) => { st.materiaal = v || null; st.stijl = null; save(); emit("material_selected", { material: v }); render(); }),
     ...names.map((n, i) => { const m = sideMeasure(i); const fid = `q-len-${i}`;
       const [ib, ip] = i === 0 ? infoBtn("lengte", true) : [null, null];
@@ -199,6 +200,9 @@ function renderQuick() {
         h("input", { id: fid, class: "b-input", inputmode: "decimal", autocomplete: "off", placeholder: "bijv. 6,5", value: m.text || "", onchange: (e) => { const t = e.target.value.trim(); const mm = parseMetersToMm(t); if (t && (mm === null || mm < 500 || mm > 60000)) { e.target.setAttribute("aria-invalid", "true"); e.target.title = "Vul een lengte tussen 0,5 en 60 meter in, bijvoorbeeld 6,5"; e.target.value = ""; return; } e.target.removeAttribute("aria-invalid"); st.lengtes[i] = t ? { mode: m.mode === "ongeveer" ? "ongeveer" : "precies", text: t } : { mode: null, text: "" }; save(); render(); } }));
     }),
     sel("q-hoogte", "Hoogte", "hoogte", HEIGHTS_CM.map((c) => [c, `${c} cm`]), st.hoogteCm, (v) => { st.hoogteCm = +v; save(); render(); })));
+  const unknown = names.every((_, i) => sideMeasure(i).mode === "onbekend");
+  q.append(h("div", { class: "b-q-help" }, h("button", { type: "button", class: "btn btn-secondary b-q-nomeasure", "aria-pressed": String(unknown), onclick: () => { names.forEach((_, i) => { st.lengtes[i] = { mode: "onbekend", text: "" }; }); save(); emit("measurement_help_opened", {}); render(); } }, "Ik kan niet meten"),
+    h("span", { class: "b-q-note", text: unknown ? "Geen probleem. We tekenen 5 meter als voorbeeld. Wij komen de maten nameten voordat een prijs vaststaat." : "Weet je de maat niet? Kies dit. Je kunt gewoon een aanvraag doen." })));
 }
 const stageEl = () => root.querySelector(".b-preview-stage");
 async function ensureScene() {

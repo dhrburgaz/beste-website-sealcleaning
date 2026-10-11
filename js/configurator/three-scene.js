@@ -41,9 +41,16 @@ export function createThreeScene(host, project, opts = {}) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
   const pixelRatioCap = /Mobi|Android/i.test(navigator.userAgent) ? 1.5 : 2;
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, pixelRatioCap));
-  renderer.setClearColor(scenic ? 0xefebdd : 0xe9dfc9, 1);
+  renderer.setClearColor(scenic ? 0xdfe8ea : 0xe9dfc9, 1);
+  if (scenic) { renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0; }
 
   const scene = new THREE.Scene();
+  if (scenic) {
+    const sky = document.createElement("canvas"); sky.width = 4; sky.height = 256; const sg = sky.getContext("2d"), grad = sg.createLinearGradient(0, 0, 0, 256);
+    grad.addColorStop(0, "#7fa9d2"); grad.addColorStop(0.55, "#cfe0ee"); grad.addColorStop(1, "#eef2ee"); sg.fillStyle = grad; sg.fillRect(0, 0, 4, 256);
+    const skyTex = new THREE.CanvasTexture(sky); skyTex.colorSpace = THREE.SRGBColorSpace; scene.background = skyTex;
+    scene.fog = new THREE.Fog(0xe4ece8, 30, 95);
+  }
   const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 500);
 
   const controls = new OrbitControls(camera, renderer.domElement);
@@ -114,6 +121,38 @@ export function createThreeScene(host, project, opts = {}) {
     const m = track(new THREE.MeshStandardMaterial({ map: t, roughness: dark ? 0.55 : 0.82, metalness: dark ? 0.05 : 0 }));
     panelMatCache.set(key, m); return m;
   }
+  /** Scenic: bladtextuur en geïnstantieerde beplanting (weinig draw calls, geschikt voor mobiel). */
+  let leafTex = null;
+  function leafTexture() {
+    if (leafTex) return leafTex;
+    const c = document.createElement("canvas"); c.width = c.height = 256; const g = c.getContext("2d");
+    g.fillStyle = "#2f5a30"; g.fillRect(0, 0, 256, 256);
+    let sd = 3; const r = () => { sd = (sd * 16807) % 2147483647; return (sd - 1) / 2147483646; };
+    const cols = ["#3d7a3d", "#4f8f45", "#2a5128", "#63a050", "#36703a", "#1f4222"];
+    for (let i = 0; i < 1500; i++) { g.fillStyle = cols[Math.floor(r() * cols.length)]; g.beginPath(); g.ellipse(r() * 256, r() * 256, 2 + r() * 5, 1.5 + r() * 3, r() * 3.14, 0, 6.28); g.fill(); }
+    leafTex = new THREE.CanvasTexture(c); leafTex.colorSpace = THREE.SRGBColorSpace; leafTex.wrapS = leafTex.wrapT = THREE.RepeatWrapping; return leafTex;
+  }
+  function foliageMaterial(repX, repY, tint) {
+    const t = leafTexture().clone(); t.needsUpdate = true; t.repeat.set(repX, repY);
+    return track(new THREE.MeshStandardMaterial({ map: t, bumpMap: t, bumpScale: 2.2, roughness: 0.95, color: tint || 0xffffff }));
+  }
+  /** Eén InstancedMesh met n elementen; place(i, matrix, color) vult positie/schaal/kleur. */
+  function instancedSet(geom, material, n, place) {
+    const im = new THREE.InstancedMesh(track(geom), material, n); const m = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), col = new THREE.Color();
+    for (let i = 0; i < n; i++) { const o = place(i); e.set(0, o.ry || 0, 0); q.setFromEuler(e); m.compose(new THREE.Vector3(o.x, o.y, o.z), q, new THREE.Vector3(o.sx, o.sy ?? o.sx, o.sz ?? o.sx)); im.setMatrixAt(i, m); im.setColorAt(i, col.set(o.color)); }
+    im.instanceMatrix.needsUpdate = true; if (im.instanceColor) im.instanceColor.needsUpdate = true; im.castShadow = true; im.receiveShadow = true; im.userData.noShadowOverride = true; return im;
+  }
+  /** Beplanting in een vlak: struiken, siergras en bloemen (hortensia-achtig). baseY = bovenkant van de grond/bak. */
+  function plantBed(cx, cz, lenM, widM, baseY, density) {
+    const group = [];
+    const nShrub = Math.max(3, Math.min(34, Math.round(lenM * widM * 6 * density))), nGrass = Math.max(4, Math.min(48, Math.round(lenM * widM * 9 * density))), nBloom = Math.max(2, Math.min(16, Math.round(lenM * widM * 2.2 * density)));
+    const rx = () => cx + (rnd() - 0.5) * lenM * 0.9, rz = () => cz + (rnd() - 0.5) * widM * 0.8;
+    const GR = [0x2f5d34, 0x3e7a3f, 0x4f8a45, 0x24492b, 0x5f9a50];
+    group.push(instancedSet(new THREE.IcosahedronGeometry(1, 1), foliageMaterial(1, 1), nShrub, () => { const r = 0.2 + rnd() * 0.22; return { x: rx(), y: baseY + r * 0.8, z: rz(), sx: r, sy: r * (0.8 + rnd() * 0.3), sz: r, color: GR[Math.floor(rnd() * GR.length)] }; }));
+    group.push(instancedSet(new THREE.ConeGeometry(0.07, 0.8, 5, 1, true), track(new THREE.MeshStandardMaterial({ roughness: 0.9, side: THREE.DoubleSide })), nGrass * 4, () => { const h = 0.5 + rnd() * 0.5; const tan = rnd() > 0.78; return { x: rx(), y: baseY + h * 0.35, z: rz(), sx: 0.6 + rnd() * 0.6, sy: h, sz: 0.6 + rnd() * 0.6, ry: rnd() * 3, color: tan ? 0xb8a56e : 0x5f8a3c }; }));
+    group.push(instancedSet(new THREE.IcosahedronGeometry(1, 1), track(new THREE.MeshStandardMaterial({ roughness: 0.8 })), nBloom, () => { const r = 0.15 + rnd() * 0.1; const k = rnd(); return { x: rx(), y: baseY + 0.3 + rnd() * 0.12, z: rz(), sx: r * 1.3, sy: r * 0.7, sz: r * 1.3, color: k < 0.6 ? 0xdfe6c8 : k < 0.85 ? 0xcfdcae : 0x9a86c8 }; }));
+    return group;
+  }
   function lawnTexture(widthM, depthM) {
     const c = document.createElement("canvas"); c.width = 256; c.height = 256; const g = c.getContext("2d");
     for (let i = 0; i < 8; i++) { g.fillStyle = i % 2 ? "#86a864" : "#7aa05a"; g.fillRect(0, i * 32, 256, 32); }
@@ -129,7 +168,8 @@ export function createThreeScene(host, project, opts = {}) {
   const sun = new THREE.DirectionalLight(0xffffff, 0.9);
   sun.position.set(8, 12, 6);
   sun.castShadow = true;
-  sun.shadow.mapSize.set(1024, 1024);
+  const lowPower = scenic && (/Mobi|Android/i.test(navigator.userAgent) || (window.matchMedia && matchMedia("(max-width: 700px)").matches));
+  sun.shadow.mapSize.set(lowPower ? 512 : 1024, lowPower ? 512 : 1024);
   sun.shadow.bias = -0.0008;
   sun.shadow.normalBias = 0.03;
   scene.add(sun);
@@ -235,7 +275,7 @@ export function createThreeScene(host, project, opts = {}) {
     const panelColor = preset ? new THREE.Color(preset.colorHex) : new THREE.Color(0xc9a876);
     const woodLike = scenic && /wood|lamel/i.test(fence.systemId || "") ;
     const sid = fence.systemId || "", isDark = /composite/i.test(sid), horizontalPlanks = !/^generic-wood$/.test(sid);
-    const panelHex = "#" + panelColor.getHexString();
+    const panelHex = "#" + panelColor.clone().multiplyScalar(isDark ? 1 : 0.78).getHexString();
     const panelMaterial = track(
       new THREE.MeshStandardMaterial({
         color: woodLike ? 0xffffff : panelColor,
@@ -266,7 +306,7 @@ export function createThreeScene(host, project, opts = {}) {
       }
     }
 
-    const postSize = (system.postThicknessMm || 90) * MM;
+    const postSize = Math.max((system.postThicknessMm || 90) * MM, scenic ? 0.13 : 0);
     for (const post of layout.posts) {
       const geom = track(new THREE.BoxGeometry(postSize, heightM + baseM + 0.15, postSize));
       const mesh = new THREE.Mesh(geom, postMaterial);
@@ -309,6 +349,16 @@ export function createThreeScene(host, project, opts = {}) {
       allTiles = allTiles.concat(tiles);
     }
     if (allTiles.length === 0) return;
+    if (scenic && paving.areas.every((a) => !a.rotationDeg)) {
+      // Voegen: donkere onderlaag onder de tegels, zodat de naden zichtbaar zijn
+      for (const area of paving.areas) {
+        const ts = computeTileLayout(area, paving.nominalTileLengthMm || 600, paving.nominalTileWidthMm || 600, paving.pattern || "straight");
+        if (!ts.length) continue;
+        const x0 = Math.min(...ts.map((t) => t.xMm)), z0 = Math.min(...ts.map((t) => t.zMm)), x1 = Math.max(...ts.map((t) => t.xMm + t.lengthMm)), z1 = Math.max(...ts.map((t) => t.zMm + t.widthMm));
+        const under = new THREE.Mesh(track(new THREE.BoxGeometry((x1 - x0) * MM, 0.03, (z1 - z0) * MM)), track(new THREE.MeshStandardMaterial({ color: 0x6f6d68, roughness: 1 })));
+        under.position.set((x0 + x1) / 2 * MM, 0.015, (z0 + z1) / 2 * MM); dynamicGroup.add(under);
+      }
+    }
 
     const unitGeom = track(new THREE.BoxGeometry(1, 1, 1));
     const instanced = new THREE.InstancedMesh(unitGeom, material, allTiles.length);
@@ -366,7 +416,7 @@ export function createThreeScene(host, project, opts = {}) {
   /** Poortblad op 30° open, zodat draairichting en scharnier ook in 3D zichtbaar zijn (D05). */
   function buildGateLeaves(fence) {
     if (!fence) return;
-    const mat = track(new THREE.MeshStandardMaterial({ color: 0x8a5a3a, roughness: 0.8 }));
+    const mat = track(new THREE.MeshStandardMaterial({ color: scenic ? 0xffffff : 0x8a5a3a, map: scenic ? plankTexture("#9a6a3a", true, false) : null, roughness: 0.8 }));
     for (const gate of fence.gates || []) {
       const sw = computeGateSwing(fence, gate);
       if (!sw) continue;
@@ -398,23 +448,22 @@ export function createThreeScene(host, project, opts = {}) {
       const cx = (xMm + lengthMm / 2) * MM, cz = (zMm + widthMm / 2) * MM;
       if (o.type === "tree") {
         const crownR = Math.min(lengthMm, widthMm) / 2 * MM;
-        const trunk = new THREE.Mesh(track(new THREE.CylinderGeometry(0.12, 0.16, 2.2, 10)), track(new THREE.MeshStandardMaterial({ color: remove ? 0xb5523b : 0x6e5338, transparent: remove, opacity: remove ? 0.35 : 1 })));
-        trunk.position.set(cx, 1.1, cz);
-        const crown = new THREE.Mesh(track(new THREE.SphereGeometry(crownR, 16, 12)), scenic && !remove ? leafMaterial(0x3e7a3f) : mat);
-        crown.position.set(cx, 2.2 + crownR * 0.8, cz);
-        dynamicGroup.add(trunk, crown);
+        const trunk = new THREE.Mesh(track(new THREE.CylinderGeometry(0.1, 0.17, 2.4, 10)), track(new THREE.MeshStandardMaterial({ color: remove ? 0xb5523b : 0x6e5338, roughness: 1, transparent: remove, opacity: remove ? 0.35 : 1 })));
+        trunk.position.set(cx, 1.2, cz);
+        dynamicGroup.add(trunk);
         if (scenic && !remove) {
-          for (let i = 0; i < 4; i++) {
-            const lump = new THREE.Mesh(track(new THREE.SphereGeometry(crownR * (0.45 + rnd() * 0.2), 12, 10)), leafMaterial(GREENS[1 + (i % 4)]));
-            lump.position.set(cx + (rnd() - 0.5) * crownR * 1.2, 2.2 + crownR * (0.7 + rnd() * 0.7), cz + (rnd() - 0.5) * crownR * 1.2);
-            dynamicGroup.add(lump);
-          }
+          const GR = [0x3e7a3f, 0x4f8a45, 0x5f9a50, 0x2f5d34, 0x6aa557];
+          const crown = instancedSet(new THREE.IcosahedronGeometry(1, 1), foliageMaterial(1, 1), 9, (i) => { const rr = crownR * (0.4 + rnd() * 0.3); const a = rnd() * 6.28, d = crownR * 0.55 * Math.sqrt(rnd()); return { x: cx + Math.cos(a) * d, y: 2.5 + crownR * (0.5 + rnd() * 0.9), z: cz + Math.sin(a) * d, sx: rr, sy: rr * 0.85, sz: rr, color: GR[i % GR.length] }; });
+          dynamicGroup.add(crown);
+        } else {
+          const crown = new THREE.Mesh(track(new THREE.SphereGeometry(crownR, 16, 12)), mat);
+          crown.position.set(cx, 2.2 + crownR * 0.8, cz); dynamicGroup.add(crown);
         }
         continue;
       }
       if (o.type === "plant") {
         const r = Math.min(lengthMm, widthMm) / 2 * MM;
-        const bush = new THREE.Mesh(track(new THREE.SphereGeometry(r, 14, 10)), mat);
+        const bush = new THREE.Mesh(track(new THREE.SphereGeometry(r, 14, 10)), scenic && !remove ? foliageMaterial(1, 1) : mat);
         bush.position.set(cx, r, cz);
         dynamicGroup.add(bush);
         continue;
@@ -427,21 +476,21 @@ export function createThreeScene(host, project, opts = {}) {
         dynamicGroup.add(pole, glow);
         continue;
       }
-      if (scenic && !remove && (o.type === "hedge" || o.type === "border" || o.type === "planter")) {
-        const hh = HEIGHTS[o.type] ?? 1;
-        const baseH = o.type === "border" ? 0.1 : o.type === "hedge" ? 0.45 : hh;
-        const soil = new THREE.Mesh(track(new THREE.BoxGeometry(lengthMm * MM, baseH, widthMm * MM)), track(new THREE.MeshStandardMaterial({ color: o.type === "planter" ? 0x3b3f3d : o.type === "hedge" ? 0x2f5d34 : 0x5a4634, roughness: 1 })));
-        soil.position.set(cx, baseH / 2, cz);
-        dynamicGroup.add(soil);
-        const area = (lengthMm * MM) * (widthMm * MM);
-        const count = Math.max(4, Math.min(60, Math.round(area * (o.type === "hedge" ? 9 : 14))));
-        const top = baseH;
-        for (let i = 0; i < count; i++) {
-          const r = o.type === "hedge" ? 0.28 + rnd() * 0.12 : 0.14 + rnd() * 0.2;
-          const bush = new THREE.Mesh(track(new THREE.SphereGeometry(r, 10, 8)), leafMaterial(GREENS[Math.floor(rnd() * GREENS.length)]));
-          bush.position.set(cx + (rnd() - 0.5) * lengthMm * MM * 0.92, top + (o.type === "hedge" ? 0.35 + rnd() * 0.5 : r * 0.7), cz + (rnd() - 0.5) * widthMm * MM * 0.8);
-          dynamicGroup.add(bush);
-        }
+      if (scenic && !remove && o.type === "hedge") {
+        const hh = 1.15, lm = lengthMm * MM, wm = widthMm * MM;
+        const hedge = new THREE.Mesh(track(new THREE.BoxGeometry(lm, hh, wm)), foliageMaterial(Math.max(1, lm / 0.9), 1.3, 0xffffff));
+        hedge.position.set(cx, hh / 2 + 0.05, cz);
+        const top = new THREE.Mesh(track(new THREE.BoxGeometry(lm * 0.97, 0.12, wm * 0.9)), foliageMaterial(Math.max(1, lm / 0.9), 1, 0xe8f2d8));
+        top.position.set(cx, hh + 0.09, cz);
+        dynamicGroup.add(hedge, top);
+        continue;
+      }
+      if (scenic && !remove && (o.type === "border" || o.type === "planter")) {
+        const isPlanter = o.type === "planter", baseH = isPlanter ? 0.55 : 0.1, lm = lengthMm * MM, wm = widthMm * MM;
+        const body = new THREE.Mesh(track(new THREE.BoxGeometry(lm, baseH, wm)), track(new THREE.MeshStandardMaterial({ color: isPlanter ? 0x2b2f31 : 0x5a4634, roughness: isPlanter ? 0.55 : 1, metalness: isPlanter ? 0.3 : 0 })));
+        body.position.set(cx, baseH / 2, cz); dynamicGroup.add(body);
+        if (isPlanter) { const soil = new THREE.Mesh(track(new THREE.BoxGeometry(lm - 0.1, 0.04, wm - 0.1)), track(new THREE.MeshStandardMaterial({ color: 0x4a3a2d, roughness: 1 }))); soil.position.set(cx, baseH + 0.01, cz); dynamicGroup.add(soil); }
+        plantBed(cx, cz, lm, wm, baseH, isPlanter ? 1.3 : 1).forEach((im) => dynamicGroup.add(im));
         continue;
       }
       const h = HEIGHTS[o.type] ?? 1;
@@ -486,9 +535,9 @@ export function createThreeScene(host, project, opts = {}) {
     if (scenic && widthM && depthM) {
       camera.fov = 32; camera.updateProjectionMatrix();
       const span = Math.max(widthM, depthM);
-      controls.target.set(cx, 0.2, cz);
+      controls.target.set(cx, 0.7, cz);
       const d = span * 1.85 * zoomK;
-      camera.position.set(cx - d * 0.38, d * 0.44, cz + d * 0.8);
+      camera.position.set(cx - d * 0.34, d * 0.31, cz + d * 0.82);
     } else if (!controls.target.lengthSq() && widthM && depthM) {
       controls.target.set(cx, 0.3, cz);
       camera.position.set(cx + widthM * 0.7, Math.max(widthM, depthM) * 0.6, cz + depthM * 0.9);
@@ -514,7 +563,7 @@ export function createThreeScene(host, project, opts = {}) {
       camera.position.set(target.x, target.y + dist * 0.25, target.z + dist * 1.1);
     } else if (scenic) {
       const d = Math.max(dist, (gardenCenter.span || 8) * 1.75 * zoomK);
-      camera.position.set(target.x - d * 0.38, d * 0.5, target.z + d * 0.8);
+      camera.position.set(target.x - d * 0.34, d * 0.34, target.z + d * 0.82);
     } else {
       camera.position.set(target.x + dist * 0.7, dist * 0.55, target.z + dist * 0.9);
     }

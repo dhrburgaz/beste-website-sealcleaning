@@ -129,17 +129,18 @@ def home_main():
 </main>'''
 
 STIJLEN6 = [
- ("schutting-composiet-antraciet-terras", "Modern", "Strak en tijdloos", "composiet"),
- ("schutting-verticaal-hout-zwarte-palen", "Klassiek", "Rustiek en stijlvol", "hout"),
- ("schutting-hardhout-horizontaal-zonsondergang", "Horizontaal", "Modern en luxe", "lamellen"),
- ("tuin-terras-donkere-schutting-avond", "Composiet zwart", "Donker, strak en gesloten", "composiet"),
- ("schutting-grenen-betonpalen-dag", "Hout-beton", "Warm hout tussen betonpalen", "hout-beton"),
- ("poort-hout-pad-dag", "Met poort", "Schutting en poort in één stijl", None),
+ ("schutting-composiet-antraciet-terras", "Modern", "Strak en tijdloos", "composiet", "Composiet, antraciet"),
+ ("schutting-verticaal-hout-zwarte-palen", "Klassiek", "Rustiek en stijlvol", "hout", "Hout, verticale planken"),
+ ("schutting-hardhout-horizontaal-zonsondergang", "Horizontaal", "Modern en luxe", "lamellen", "Hout, horizontale planken"),
+ ("tuin-terras-donkere-schutting-avond", "Composiet zwart", "Donker, strak en gesloten", "composiet", "Composiet, zwart"),
+ ("schutting-grenen-betonpalen-dag", "Hout-beton", "Warm hout tussen betonpalen", "hout-beton", "Hout op betonnen onderplaat en betonpalen"),
+ ("poort-hout-pad-dag", "Met poort", "Schutting en poort in één stijl", None, "Hout, horizontale planken met poort"),
 ]
-def style_card(rel, n, t, sub, mat):
+def style_card(rel, n, t, sub, mat, badge=''):
+    mb = '<p class="i-mat">' + badge + '</p>' if badge else ''
     link = f"{rel}schutting-ontwerpen/" + (f"?materiaal={mat}" if mat else "")
     return (f'<li class="i-card"><figure class="i-card-img">{ipic(n, ALT[n], rel, "(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 380px")}<span class="i-tag">Impressie</span></figure>'
-            f'<div class="i-card-body"><h3>{t}</h3><p>{sub}</p><div class="i-card-actions"><a class="btn btn-primary" href="{link}">Bekijk mogelijkheden</a><a class="btn btn-secondary" href="{rel}contact/">Vraag offerte aan</a></div></div></li>')
+            f'<div class="i-card-body"><h3>{t}</h3>{mb}<p>{sub}</p><div class="i-card-actions"><a class="btn btn-primary" href="{link}">Bekijk mogelijkheden</a><a class="btn btn-secondary" href="{rel}contact/">Vraag offerte aan</a></div></div></li>')
 
 def hero_block(rel, img, eyebrow, h1, lede, b1, b2):
     return f"""<section class="v-hero v-hero--page" aria-labelledby="hero-titel">

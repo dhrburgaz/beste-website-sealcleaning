@@ -49,9 +49,9 @@ async function reprice() {
 function closedView() {
   return h("div", { class: "shop-closed" },
     h("div", { class: "notice notice--not-configured" }, h("strong", { text: config.reasons?.[0] || "Online bestellen is nog niet geopend." }),
-      h("span", { text: "Bij ons werkt het nu zo: wij adviseren over materiaal en hoeveelheid, u bestelt het zelf en wij verzorgen de werkzaamheden volgens een offerte die u zelf accepteert." })),
+      h("span", { text: "SEAL levert materialen los of samen met professionele montage. Online bestellen en betalen is nog niet geopend: u vraagt een materiaalaanvraag of offerte aan. Wij adviseren over materiaal en hoeveelheid en bevestigen vooraf prijs, levering en wat erbij zit." })),
     h("div", { class: "btn-row", style: "margin-top:1.5rem" },
-      h("a", { class: "btn btn-primary", href: "../contact/?materiaal=advies", text: "Vraag advies en een offerte aan" }),
+      h("a", { class: "btn btn-primary", href: "../contact/?materiaal=advies", text: "Vraag materiaal of een offerte aan" }),
       h("a", { class: "btn btn-secondary", href: "../materialen/", text: "Bekijk materialen" })));
 }
 function emptyView() {
