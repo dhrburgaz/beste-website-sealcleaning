@@ -431,8 +431,8 @@ export function createThreeScene(host, project, opts = {}) {
       camera.fov = 32; camera.updateProjectionMatrix();
       const span = Math.max(widthM, depthM);
       controls.target.set(cx, 0.2, cz);
-      const d = span * 2.05;
-      camera.position.set(cx - d * 0.38, d * 0.55, cz + d * 0.78);
+      const d = span * 1.85;
+      camera.position.set(cx - d * 0.38, d * 0.5, cz + d * 0.8);
     } else if (!controls.target.lengthSq() && widthM && depthM) {
       controls.target.set(cx, 0.3, cz);
       camera.position.set(cx + widthM * 0.7, Math.max(widthM, depthM) * 0.6, cz + depthM * 0.9);
@@ -457,8 +457,8 @@ export function createThreeScene(host, project, opts = {}) {
     } else if (viewName === "front") {
       camera.position.set(target.x, target.y + dist * 0.25, target.z + dist * 1.1);
     } else if (scenic) {
-      const d = Math.max(dist, (gardenCenter.span || 8) * 1.9);
-      camera.position.set(target.x - d * 0.38, d * 0.55, target.z + d * 0.78);
+      const d = Math.max(dist, (gardenCenter.span || 8) * 1.75);
+      camera.position.set(target.x - d * 0.38, d * 0.5, target.z + d * 0.8);
     } else {
       camera.position.set(target.x + dist * 0.7, dist * 0.55, target.z + dist * 0.9);
     }

@@ -93,7 +93,19 @@ function overallMeasure() {
   return any ? order[worst] : "onbekend";
 }
 
-function buildProject() {
+function decorFor(W, D) {
+  // Voorbeeldinrichting, alleen voor de weergave: nooit in samenvatting, deellink of aanvraag.
+  const o = (type, x, z, l, w) => ({ id: generateId("obj"), type, status: "new", footprint: { xMm: x, zMm: z, lengthMm: l, widthMm: w } });
+  if (W < 3000 || D < 2500) return { objects: [], paving: null };
+  const objects = [o("border", 750, 150, Math.max(500, W - 1500), 650), o("lawn", 750, 1000, Math.round(W * 0.42), Math.max(800, D - 1500))];
+  if (W >= 4500 && D >= 4500) objects.push(o("tree", W - 2100, 700, 1800, 1800));
+  objects.push(o("planter", Math.round(W * 0.5), Math.max(1200, D - 900), 1800, 500), o("plant", 900, 900, 700, 700), o("lamp", Math.round(W * 0.5) - 300, Math.max(1200, D - 1000), 300, 300));
+  const pl = Math.min(3600, Math.round(W * 0.4)), pw = Math.min(2400, D - 1800);
+  const paving = pw >= 1200 ? { areas: [{ id: generateId("area"), lengthMm: pl, widthMm: pw, position: { xMm: Math.round(W * 0.5), zMm: 1000 }, rotationDeg: 0, application: "terras" }], productId: null, nominalTileLengthMm: 600, nominalTileWidthMm: 600, pattern: "straight", colorPresetId: "light-grey" } : null;
+  return { objects, paving };
+}
+
+function buildProject(decor = false) {
   const p = createEmptyProject();
   const mat = material() || MATERIALS[1];
   const L = sideNames().map((_, i) => sideMm(i) || DEFAULT_LEN_MM);
@@ -118,6 +130,7 @@ function buildProject() {
   p.options = { ...p.options, route: st.werk, materialSupply: st.werk === "alleen-montage" ? "own" : "advice-needed", fenceIntent: "new" };
   p.removal = { ...p.removal, existingFence: !!st.oudWeg, removeFence: !!st.oudWeg, items: st.afvoer ? ["afvoer"] : [], disposal: st.afvoer ? "wanted" : "unknown" };
   p.notes = `Maten: ${overallMeasure()}`;
+  if (decor) { const d = decorFor(width, depth); p.existingObjects = d.objects; if (d.paving) { p.services = ["schutting", "bestrating"]; p.paving = d.paving; } }
   return p;
 }
 
@@ -154,7 +167,7 @@ function summaryLines() {
 }
 
 /* ---------------- preview (3D met 2D-terugval) ---------------- */
-const preview = { scene: null, host: null, overlay: null, tried: false, fallback: false, showDims: true, mode: "3d", flat: null };
+const preview = { scene: null, host: null, overlay: null, tried: false, fallback: false, showDims: true, mode: "3d", flat: null, decor: true };
 const stageEl = () => root.querySelector(".b-preview-stage");
 async function ensureScene() {
   if (preview.scene || preview.tried) return;
@@ -162,7 +175,7 @@ async function ensureScene() {
   try {
     const mod = await import("../../configurator/three-scene.js");
     if (!mod.isWebGL2Supported()) throw new Error("webgl");
-    preview.scene = mod.createThreeScene(preview.host, buildProject(), { scenic: true, figure: true });
+    preview.scene = mod.createThreeScene(preview.host, buildProject(preview.decor), { scenic: true, figure: true });
     preview.scene.onFrame(drawDims);
     updatePreview();
   } catch (e) {
@@ -175,15 +188,15 @@ async function ensureScene() {
 async function renderFlat() {
   if (!preview.flat) { preview.flat = h("svg", { class: "b-flat", role: "img", "aria-label": "Je schutting in 2D, bovenaanzicht" }); stageEl().append(preview.flat); }
   const { renderScene } = await import("../../configurator/svg-scene.js");
-  renderScene(preview.flat, buildProject(), {});
+  renderScene(preview.flat, buildProject(preview.decor), {});
 }
 function setMode(m) {
   preview.mode = m; root.dataset.view = m; const se = stageEl(); if (se) se.dataset.mode = m;
   document.querySelectorAll("[data-b-mode]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.bMode === m)));
-  if (m === "2d") renderFlat(); else if (preview.scene) { preview.scene.update(buildProject()); }
+  if (m === "2d") renderFlat(); else if (preview.scene) { preview.scene.update(buildProject(preview.decor)); }
 }
 function updatePreview() {
-  const p = buildProject();
+  const p = buildProject(preview.decor);
   if (preview.scene && preview.mode === "3d") preview.scene.update(p);
   if (preview.mode === "2d") renderFlat();
   renderFacts();
@@ -546,6 +559,8 @@ root.querySelector("[data-b-view-front]")?.addEventListener("click", () => previ
 root.querySelector("[data-b-view-reset]")?.addEventListener("click", () => preview.scene && preview.scene.resetCamera());
 const dimBtn = root.querySelector("[data-b-dims]");
 dimBtn?.addEventListener("click", () => { preview.showDims = !preview.showDims; dimBtn.setAttribute("aria-pressed", String(preview.showDims)); dimBtn.textContent = preview.showDims ? "Maten verbergen" : "Toon maten"; drawDims(); });
+const decorBtn = root.querySelector("[data-b-decor]");
+decorBtn?.addEventListener("click", () => { preview.decor = !preview.decor; decorBtn.setAttribute("aria-pressed", String(preview.decor)); decorBtn.textContent = preview.decor ? "Alleen mijn keuzes tonen" : "Voorbeeldtuin tonen"; updatePreview(); setStatus(preview.decor ? "De planten, het terras en het gras zijn een voorbeeldinrichting. Ze horen niet bij je aanvraag." : "Je ziet alleen de onderdelen die je zelf koos."); });
 root.querySelector("[data-b-reset]")?.addEventListener("click", reset);
 document.querySelectorAll("[data-b-mode]").forEach((b) => b.addEventListener("click", () => { if (!b.disabled) setMode(b.dataset.bMode); }));
 

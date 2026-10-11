@@ -89,6 +89,9 @@ function compareBtn(item) {
     onclick: () => { state.compare = on ? state.compare.filter((x) => x !== item.id) : [...state.compare, item.id]; writeUrl(); render(); announce(on ? `${item.title} uit vergelijking gehaald` : `${item.title} toegevoegd aan vergelijking`); } },
   on ? "✓ Vergelijken" : "Vergelijk");
 }
+function pageLink(item) {
+  return item.page ? h("a", { class: "chip chip--sm", href: item.page, text: "Productpagina" }) : null;
+}
 function saveBtn(item) {
   const I = window.SealInspiration;
   if (!I) return null;
@@ -115,7 +118,7 @@ function card(item) {
       h("p", { class: "catalog-summary", text: item.summary }),
       meta ? h("p", { class: "catalog-meta", text: meta }) : null,
       priceLine(item),
-      h("div", { class: "catalog-actions" }, compareBtn(item), saveBtn(item))));
+      h("div", { class: "catalog-actions" }, compareBtn(item), saveBtn(item), pageLink(item))));
 }
 
 function facetGroup(key, counts) {
@@ -301,7 +304,7 @@ function renderProduct(item) {
           h("a", { class: "btn btn-primary", href: `../contact/?materiaal=${encodeURIComponent(item.title)}`, text: "Vraag advies en een offerte voor de werkzaamheden aan" }),
           designHref ? h("a", { class: "btn btn-secondary", href: designHref, text: "Gebruik in mijn ontwerp" }) : null,
           shopButton(item),
-          compareBtn(item), saveBtn(item)))),
+          compareBtn(item), saveBtn(item), pageLink(item)))),
     alts.length ? h("section", { class: "product-alts" }, h("h2", { text: item.status === "unavailable" ? "Alternatieven" : "Vergelijkbare materialen" }), h("div", { class: "catalog-grid" }, ...alts.map(card))) : null,
     compareTray(), live);
   document.title = `${item.title} — Materialen — Sealcleaning`;

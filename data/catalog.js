@@ -54,6 +54,7 @@ export const CATALOG = [
     image: img("schutting-grenen-zwarte-voet-1.jpg", "Grenen schutting op zwarte onderplaat uit eigen werk", "grenen-schutting-zwarte-onderplaat", "visually-confirmed"),
     synonyms: ["vuren", "naaldhout", "geimpregneerd", "groen hout", "tuinscherm", "hek"] }),
   item({ id: "product-elephant-finch-grenen", category: "schutting", group: "Schermen", title: "Elephant Finch grenen scherm 180 × 180 cm", status: "verified-product", material: "hout",
+    page: "elephant-finch-grenen-scherm/",
     summary: "Recht grenen scherm, schermdikte 4,7 cm (referentieartikel van een externe leverancier).",
     formats: [{ label: "180 × 180 cm", lengthMm: 1800, widthMm: null, heightMm: 1800, thicknessMm: 47 }], unit: "stuk", sku: "007237", supplier: "Elephant (via HomingXL)",
     sourceUrl: "https://homingxl.nl/elephant-schutting-grenen-finch-recht-15l-rvs-groen-geimpregneerd-180x180cm-schermdikte-4-7-cm/",

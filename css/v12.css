@@ -480,3 +480,33 @@
 .b-plan-text, .b-plan-text strong, .b-plan-text span, .b-plan-row, .b-detail-body, .b-plan-total { min-width: 0; overflow-wrap: anywhere; }
 .b-check label { min-width: 0; overflow-wrap: anywhere; }
 .b-check { align-items: flex-start; padding-block: .4rem; }
+.v12 .route-choice { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 860px) { .v12 .route-choice { grid-template-columns: minmax(0, 1fr); } }
+.v12 .route-card { background: #fff; border-radius: var(--v-radius); }
+.v12 .route-card--best { border: 2px solid var(--seal-green); background: #F3F8F4; }
+.v12 .route-card--active { border-color: var(--seal-stroke); }
+.v12 .route-kicker { color: var(--seal-green); font-weight: 600; }
+.v12 .page-hero--plain { min-height: 0; background: var(--seal-header); }
+.v12 .page-hero--plain .page-hero-inner { padding-block: clamp(2rem, 5vw, 3.5rem); }
+.v12 .page-hero--plain h1 { max-width: 24ch; font-size: clamp(2rem, 2.4vw + 1rem, 3.2rem); }
+.v12 .page-hero .breadcrumbs ol { padding: 0; margin: 0 0 1rem; }
+.v12 .page-hero .breadcrumbs.container { padding-inline: 0; max-width: none; width: auto; }
+.v12 .checklist li { overflow-wrap: anywhere; min-width: 0; }
+
+/* mobiel: ontwerper onder elkaar, 3D bovenaan */
+@media (max-width: 900px) {
+  .b-wrap.has-preview { grid-template-columns: minmax(0, 1fr); }
+  .b-wrap.has-preview .b-preview { position: static; order: -1; }
+  .b-wrap.has-preview .b-cards-3:not(.b-cards-plain) .b-card, .b-wrap.has-preview .b-cards-2:not(.b-cards-plain):not(.b-cards-icons) .b-card { grid-template-columns: 96px minmax(0, 1fr); }
+}
+
+/* knop in de balk: warm goud zoals in de referentie (wit op #8B6B3A = 4,9:1) */
+.v12 .site-header .btn-primary { background: #8B6B3A; border-color: #B09261; color: #fff; }
+.v12 .site-header .btn-primary:hover { background: #A07D45; border-color: #C9AE7C; }
+.v-hero h1, .v12 .page-hero h1 { font-weight: 560; }
+.v-section.b-page { padding-block: 1rem 3rem; }
+.b-page .b-top .v-lede { font-size: 1rem; min-height: 0; margin-bottom: 0; }
+.b-page .b-stepper { margin: .6rem 0 .8rem; }
+.b-page .b-phase { margin-bottom: .6rem; }
+.b-page .b-phase-title { font-size: clamp(1.4rem, 1vw + 1.1rem, 2rem); }
+.b-wrap { min-height: 0; }
