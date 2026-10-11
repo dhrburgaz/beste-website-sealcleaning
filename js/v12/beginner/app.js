@@ -8,7 +8,7 @@ import { computeFenceLayout } from "../../configurator/geometry.js";
 import { getFenceSystem } from "../../../data/fence-systems.js";
 import { encodeShare } from "../../configurator/design-io.js";
 import { emit } from "../events.js";
-import { MATERIALS, HEIGHTS_CM, GATE_WIDTHS_CM, HELP, lengthIllustration, heightIllustration, shapeIcon, sideIllustration, gateIllustration } from "./content.js";
+import { STIJLEN, STIJL_NOTE, MATERIALS, HEIGHTS_CM, GATE_WIDTHS_CM, HELP, lengthIllustration, heightIllustration, shapeIcon, sideIllustration, gateIllustration } from "./content.js";
 
 const root = document.querySelector("[data-beginner]");
 if (!root) throw new Error("beginner root ontbreekt");
@@ -23,7 +23,7 @@ const MEET = { precies: "Ik weet de maten", ongeveer: "Ik weet het ongeveer", on
 const MEET_STATUS = { precies: "precies (door jou opgegeven)", ongeveer: "ongeveer (wij controleren dit)", onbekend: "onbekend (wij komen nameten)" };
 
 /* ---------------- state ---------------- */
-const fresh = () => ({ step: "doel", doel: null, herstel: { items: [], tekst: "" }, materiaal: null, vorm: null, lengtes: {}, hoogteCm: 180, poort: null, poortBreedteCm: 100, poortPlek: "midden", poortZijde: 0, werk: null, oudWeg: false, afvoer: false });
+const fresh = () => ({ step: "doel", doel: null, herstel: { items: [], tekst: "" }, materiaal: null, stijl: null, vorm: null, lengtes: {}, hoogteCm: 180, poort: null, poortBreedteCm: 100, poortPlek: "midden", poortZijde: 0, werk: null, oudWeg: false, afvoer: false });
 let st = fresh();
 let loadedFromStore = false;
 try { const raw = localStorage.getItem(STORE); if (raw) { st = { ...fresh(), ...JSON.parse(raw) }; loadedFromStore = st.step !== "doel" || !!st.doel; } } catch (e) { /* geen opslag: werkt gewoon door */ }
@@ -51,6 +51,7 @@ const h = (tag, attrs = {}, ...kids) => {
 const metersText = (mm) => { const m = Math.floor(mm / 1000), cm = Math.round((mm % 1000) / 10); return `${m} meter${cm ? ` en ${cm} centimeter` : ""}`; };
 const mShort = (mm) => `${(mm / 1000).toLocaleString("nl-NL", { maximumFractionDigits: 2 })} m`;
 const photoUrl = (name, w = 800) => new URL(`images/projects/${name}-${w}.webp`, BASE).href;
+const inspPic = (name, alt) => h("picture", {}, h("source", { srcset: ["640", "960"].map((w) => `${new URL(`images/inspiratie/${name}-${w}.webp`, BASE).href} ${w}w`).join(", "), sizes: "(max-width: 700px) 92vw, 420px", type: "image/webp" }), h("img", { src: new URL(`images/inspiratie/${name}.jpg`, BASE).href, alt, loading: "lazy", decoding: "async" }));
 const photoPic = (name, alt, cls) => h("picture", {}, h("source", { srcset: `${photoUrl(name, 640)} 640w, ${photoUrl(name, 800)} 800w, ${photoUrl(name, 960)} 960w`, sizes: "(max-width: 700px) 92vw, 420px", type: "image/webp" }), h("img", { src: new URL(`images/projects/${name}.jpg`, BASE).href, alt, loading: "lazy", decoding: "async", class: cls }));
 const material = () => MATERIALS.find((m) => m.id === st.materiaal) || null;
 const sideNames = () => SIDES[st.vorm === "onbekend" ? "recht" : st.vorm] || SIDES.recht;
@@ -154,6 +155,7 @@ function summaryLines() {
   if (st.doel === "weet-niet") return ["Ik weet nog niet wat ik wil. Ik wil graag advies over mijn schutting."];
   const mat = material();
   lines.push(`Schutting plaatsen: ${mat ? mat.label : "materiaal nog niet gekozen"}, ${st.hoogteCm} cm hoog`);
+  if (st.stijl) lines.push(`Gewenste uitstraling: ${(STIJLEN.find((x) => x.id === st.stijl) || {}).label || st.stijl}`);
   lines.push(`Vorm: ${st.vorm === "recht" ? "recht" : st.vorm === "hoek" ? "met een hoek" : st.vorm === "drie" ? "langs drie kanten" : "weet ik niet"}`);
   sideNames().forEach((n, i) => {
     const m = sideMeasure(i), mm = sideMm(i);
@@ -360,7 +362,10 @@ const STEPS = {
   },
   materiaal(id, list) {
     const body = h("div", {});
-    body.append(h("p", { class: "b-sub", text: "Dit zijn voorbeelden uit ons eigen werk. Je ziet direct wat je kiest in de 3D. Je kunt later nog wisselen." }), helpBlock("materiaal") || "");
+    body.append(h("div", { class: "b-inspire" }, h("h3", { text: "Welke uitstraling wil je?" }), h("p", { class: "b-style-note", text: STIJL_NOTE }),
+      choiceCards("stijl", STIJLEN.map((x) => ({ id: x.id, label: x.label, media: inspPic(x.photo, x.alt) })), st.stijl, (v) => { const x = STIJLEN.find((y) => y.id === v); st.stijl = v; st.materiaal = x.materiaal; save(); emit("material_selected", { material: x.materiaal }); render(); }, { label: "Kies een uitstraling", cls: "b-stijl" }),
+      h("p", { class: "b-note", text: "Dit zijn inspiratiebeelden van mogelijke uitvoeringen, geen opgeleverde projecten van SEAL en geen exacte producten." })));
+    body.append(h("p", { class: "b-sub", text: "Of kies direct het materiaal. Dit zijn voorbeelden uit ons eigen werk. Je ziet direct wat je kiest in de 3D. Je kunt later nog wisselen." }), helpBlock("materiaal") || "");
     body.append(choiceCards("materiaal", MATERIALS.map((m) => ({ id: m.id, label: m.label, media: photoPic(m.photo.name, m.photo.alt) })), st.materiaal, (v) => { st.materiaal = v; save(); emit("material_selected", { material: v }); render(); }, { label: "Kies een schutting", cls: "b-swatches" }));
     const cur = material();
     if (cur) {
@@ -442,7 +447,7 @@ const STEPS = {
   },
   poort(id, list) {
     const body = h("div", {});
-    body.append(h("p", { class: "b-sub", text: "Een poort is een deur in je schutting, zodat je erdoor kunt lopen." }), h("div", { class: "b-illus", html: gateIllustration() }), helpBlock("poort") || "");
+    body.append(h("p", { class: "b-sub", text: "Een poort is een deur in je schutting, zodat je erdoor kunt lopen." }), h("div", { class: "b-illus", html: gateIllustration() }), h("figure", { class: "b-gate-photo" }, inspPic("poort-hout-pad-dag", "Houten tuinpoort met horizontale planken en een pad van natuursteentegels"), h("figcaption", { text: "Inspiratiebeeld van een poort in dezelfde stijl als de schutting, geen opgeleverd project." })), helpBlock("poort") || "");
     body.append(choiceCards("poort", [{ id: "ja", label: "Ja" }, { id: "nee", label: "Nee" }, { id: "later", label: "Weet ik nog niet" }], st.poort, (v) => { st.poort = v; save(); render(); }, { label: "Wil je een poort?", cls: "b-cards-3 b-cards-plain" }));
     body.append(nav(id, list, !!st.poort));
     return body;

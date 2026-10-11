@@ -88,3 +88,13 @@ export function gateIllustration() {
   const panel = (x) => `<rect x="${x}" y="70" width="60" height="90" fill="${WOOD}" stroke="#8a6232"/>`;
   return svg("0 0 360 230", "Voorbeeld: de doorgangsbreedte is de vrije opening tussen de palen", `<rect x="0" y="166" width="360" height="30" fill="${GROUND}"/>${panel(30)}${panel(92)}${panel(235)}${panel(297)}<rect x="26" y="62" width="6" height="104" fill="${POST}"/><rect x="152" y="62" width="6" height="104" fill="${POST}"/><rect x="229" y="62" width="6" height="104" fill="${POST}"/><rect x="355" y="62" width="5" height="104" fill="${POST}"/>${arrowH(158, 229, 120, GREEN, "Doorgang: de vrije opening", 150)}`);
 }
+
+/** Uitstraling-keuzes (inspiratiebeelden, geen exacte producten). Elke stijl wijst naar een materiaaltype uit MATERIALS. */
+export const STIJLEN = [
+  { id: "warm-hout", label: "Warm hout, horizontaal", materiaal: "lamellen", photo: "schutting-hardhout-horizontaal-zonsondergang", alt: "Horizontale houten schutting in warm zonlicht, met plantenborder en terras" },
+  { id: "hout-beton", label: "Hout tussen betonpalen", materiaal: "hout-beton", photo: "schutting-grenen-betonpalen-dag", alt: "Horizontale houten planken tussen betonpalen, met siergras en hortensia" },
+  { id: "verticaal", label: "Verticaal hout, zwarte palen", materiaal: "hout", photo: "schutting-verticaal-hout-zwarte-palen", alt: "Verticale houten planken tussen zwarte palen langs een gazon en terras" },
+  { id: "antraciet", label: "Antraciet composiet", materiaal: "composiet", photo: "schutting-composiet-antraciet-terras", alt: "Antracietkleurige schutting bij een grijs terras en loungeset" },
+  { id: "sfeer", label: "Hout met sfeerverlichting", materiaal: "hout", photo: "schutting-hout-wandverlichting-avond", alt: "Houten schutting met lichtpunten op de zwarte palen, in de schemering" }
+];
+export const STIJL_NOTE = "Laat je inspireren door verschillende stijlen en afwerkingen. Wij bespreken samen de mogelijkheden en stemmen de definitieve materialen vooraf met je af.";

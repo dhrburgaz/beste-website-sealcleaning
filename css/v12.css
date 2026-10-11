@@ -510,3 +510,37 @@
 .b-page .b-phase { margin-bottom: .6rem; }
 .b-page .b-phase-title { font-size: clamp(1.4rem, 1vw + 1.1rem, 2rem); }
 .b-wrap { min-height: 0; }
+
+/* ---- Inspiratiefoto's (stijlkaarten, fotokaarten, galerij) ---- */
+.v12 .i-caption { position: absolute; right: clamp(.75rem, 2vw, 1.5rem); bottom: .7rem; z-index: 2; margin: 0; font-size: .74rem !important; line-height: 1.3; letter-spacing: .02em; color: #fff; background: rgba(10, 36, 30, .62); padding: .22rem .6rem; border-radius: 999px; }
+.i-cards, .i-photos { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 18.5rem), 1fr)); }
+.i-card { display: flex; flex-direction: column; background: var(--seal-surface); border: 1px solid var(--seal-stroke); border-radius: var(--v-radius); overflow: hidden; min-width: 0; }
+.i-card-img, .i-photo figure { margin: 0; aspect-ratio: 4 / 3; background: var(--seal-sand); overflow: hidden; }
+.i-card-img picture, .i-card-img img, .i-photo picture, .i-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.i-card-body { padding: 1rem 1.1rem 1.2rem; display: grid; gap: .5rem; align-content: start; flex: 1; }
+.i-card-body h3 { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: 1.25rem; }
+.i-card-body p { margin: 0; color: var(--seal-muted); font-size: .95rem; line-height: 1.5; }
+.i-card-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .5rem; }
+.i-card-actions .btn { flex: 1 1 auto; justify-content: center; min-height: 44px; padding-inline: 1rem; font-size: .92rem; }
+.i-photo { position: relative; border-radius: var(--v-radius); overflow: hidden; min-width: 0; }
+.i-photo figure { position: relative; height: 100%; }
+.i-photo figcaption { position: absolute; inset: auto 0 0 0; padding: 1.6rem 1rem .8rem; color: #fff; font-size: .95rem; background: linear-gradient(0deg, rgba(10, 36, 30, .82), rgba(10, 36, 30, 0)); }
+.i-disclaimer { margin: 1.2rem 0 0; font-size: .85rem; color: var(--seal-muted); max-width: 70ch; }
+.i-filter { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.4rem; padding: 0; list-style: none; }
+.i-filter button { min-height: 44px; padding: 0 1rem; border-radius: 999px; border: 1px solid var(--seal-stroke); background: var(--seal-surface); color: var(--seal-ink); font: inherit; cursor: pointer; }
+.i-filter button[aria-pressed="true"] { background: var(--seal-green); color: #fff; border-color: var(--seal-green); }
+.i-photo[hidden] { display: none; }
+.i-photo-actions { position: absolute; top: .6rem; right: .6rem; }
+.i-photo a.i-open { position: absolute; inset: 0; display: block; }
+.i-photo a.i-open:focus-visible { outline: 3px solid #fff; outline-offset: -6px; }
+.b-style-note { margin: .2rem 0 1rem; color: var(--seal-muted); font-size: .95rem; }
+.b-inspire { margin-bottom: 1.4rem; }
+.b-inspire h3 { margin: 0 0 .3rem; font-family: var(--font-display); font-weight: 500; }
+.b-gate-photo { margin: 0 0 1rem; max-width: 34rem; }
+.b-gate-photo img { width: 100%; height: auto; border-radius: var(--v-radius); display: block; }
+.b-gate-photo figcaption { font-size: .85rem; color: var(--seal-muted); margin-top: .3rem; }
+.b-cards.b-stijl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem; }
+.b-stijl .b-card { height: 100%; }
+.b-stijl .b-card picture, .b-stijl .b-card img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; height: auto; }
+.b-stijl .b-card-body { padding: .5rem .7rem .7rem; }
+.b-stijl .b-card-body strong { overflow-wrap: normal; word-break: normal; hyphens: none; font-size: 1rem; }

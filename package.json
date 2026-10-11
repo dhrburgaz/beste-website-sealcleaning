@@ -6,7 +6,7 @@
   "scripts": {
     "test": "node --disable-warning=ExperimentalWarning --test --test-timeout=30000 tests/*.test.mjs",
     "search-index": "node tools/build-search-index.mjs",
-    "e2e": "node --disable-warning=ExperimentalWarning tests/e2e/server-keten.mjs && node --disable-warning=ExperimentalWarning tests/e2e/webwinkel.mjs && node tests/e2e/beheer-kluis.mjs && node tests/e2e/beheer-facturatie.mjs && node tests/e2e/beginner.mjs && node tests/e2e/pilots-v12.mjs && node tests/e2e/site-crawl.mjs",
+    "e2e": "node --disable-warning=ExperimentalWarning tests/e2e/server-keten.mjs && node --disable-warning=ExperimentalWarning tests/e2e/webwinkel.mjs && node tests/e2e/beheer-kluis.mjs && node tests/e2e/beheer-facturatie.mjs && node tests/e2e/beginner.mjs && node tests/e2e/inspiratie.mjs && node tests/e2e/pilots-v12.mjs && node tests/e2e/site-crawl.mjs",
     "start": "node --disable-warning=ExperimentalWarning server/server.js"
   },
   "engines": {

@@ -271,3 +271,12 @@ gebouwd en getest. Volgende stappen hangen af van de BLOCKERS: na
 juridische toets en akkoord de PR mergen (live), daarna de backendkeuze
 voor portaal/akkoord/synchronisatie. De backend is gebouwd (zie hierboven);
 na hostingkeuze: installeren volgens docs/BACKEND.md.
+
+## Inspiratiefoto's (aanvullende instructie)
+
+- 14 aangeleverde beelden verwerkt tot `images/inspiratie/*` (jpg + webp 640/960/1448) met `tools/make-inspiratie-images.mjs` (+ `inspiratie-map.json`); geplaatst met `tools/apply-inspiratie.py` (idempotent).
+- Home: avondtuin als hero + fotokaarten; /schuttingen/: 5 stijlkaarten + poortkaart met "Bekijk mogelijkheden" (→ ontwerper met voorgekozen materiaal) en "Vraag offerte aan"; bestrating, tuinaanleg (incl. plantenbakken), tuinrenovatie, tuinonderhoud: nieuwe hero + inspiratiekaarten; /inspiratie/: galerij met filter; ontwerper: stap materiaal heeft "Welke uitstraling wil je?" (5 stijlen, zet materiaal, komt in de aanvraagtekst) en een poortinspiratiebeeld.
+- Transparantie: kleine tekstregel "Impressiebeeld, geen opgeleverd project" op de heros en een zin onder elke fotogroep; geen overlay-labels over alle foto's. Beelden worden nergens als eigen project gepresenteerd.
+- Tekst bij stijlkeuzes: "Laat je inspireren door verschillende stijlen en afwerkingen. Wij bespreken samen de mogelijkheden en stemmen de definitieve materialen vooraf met je af."
+- Test: `tests/e2e/inspiratie.mjs` (foto's laden, knoppen, filter, stijlkeuze, 320 px).
+- Open: een "V13-masterprompt" is niet aangeleverd/gevonden; uitgevoerd volgens deze instructie plus de V12-regels. Rechten/bron van de beelden en de AI-transparantieplicht (art. 50 AI Act) laten bevestigen door de eigenaar/jurist.
