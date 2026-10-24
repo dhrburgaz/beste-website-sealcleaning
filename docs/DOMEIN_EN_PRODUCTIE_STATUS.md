@@ -27,3 +27,8 @@ Waarschijnlijke oorzaken om als eerste te controleren door de eigenaar (kost 10 
 
 ## Taal
 Er is geen meertalige architectuur (geen i18n-laag, geen hreflang). Een Turkse versie vraagt om vertaalde pagina's per route en een taalkeuze; dit is niet "binnen de bestaande architectuur" en is niet gebouwd. Advies: eerst Turkse versie van home, contact en offerteflow door een moedertaalspreker laten vertalen.
+
+## Aanvullingen 24 oktober 2026
+- **Echte projectfoto's:** alle branches (`main`, `claude/website-deployment-check-sue9m8`, `review/v13-pilot-kwaliteit-20261011`) doorzocht. Er zijn geen foto's van de ~11,5 m composiet schutting in Hendrik-Ido-Ambacht (met verwijderen oude schutting/wortels, twee tuinen). Er is daarom bewust géén projectpagina voor gemaakt. Aanleveren: de foto's (voor/tijdens/na) + bevestiging van de gegevens; dan voeg ik de pagina toe.
+- **Offerte-/contactformulier:** `js/config.js` heeft `apiBase: ""`; zonder backend op de productiehost valt het formulier terug op `mailto:`. Echt verzenden zonder mailprogramma vraagt een gehoste backend of formulierdienst (extern, eigenaar-keuze, mogelijk betaald) — niet toegevoegd zonder toestemming. Lokaal getest: server-keten en fallback (zie `tests/e2e/server-keten.mjs`, `beginner.mjs` netwerkfout-test).
+- **Strato DNS (alleen eigenaar):** zie bovenstaand plan; MX/TXT-records van e-mail niet wijzigen.

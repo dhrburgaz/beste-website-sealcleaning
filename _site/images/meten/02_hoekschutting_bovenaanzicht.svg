@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc"><title id="title">Schutting met een hoek meten</title><desc id="desc">Een L-vormige schutting van boven gezien; afzonderlijke maatpijlen langs achterzijde en linker zijkant, zonder coordinaten.</desc><style>
+ .bg{fill:#faf9f5}.title{font:700 38px Arial, sans-serif;fill:#152c25}.body{font:24px Arial,sans-serif;fill:#273e35}.label{font:700 25px Arial,sans-serif;fill:#164e3b}.measure{stroke:#178053;stroke-width:8;fill:none;stroke-linecap:round}.outline{stroke:#31443c;stroke-width:3}.wood{fill:#b68d5b}.woodalt{fill:#c9a77d}.stone{fill:#a7a7a1}.card{fill:#fff;stroke:#e0ded6;stroke-width:3}
+</style><rect class="bg" width="1280" height="720"/><defs><marker id="ar" markerWidth="9" markerHeight="9" refX="4" refY="4" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z" fill="#178053"/></marker></defs>
+<text class="title" x="60" y="70">Heeft jouw schutting een hoek? Meet elke kant apart.</text>
+<text class="body" x="60" y="115">Bovenaanzicht: je kijkt alsof je boven de tuin zweeft.</text>
+<rect class="card" x="55" y="155" width="1170" height="495" rx="22"/>
+<path d="M310 550 V270 H1000" stroke="#8b633d" stroke-width="40" fill="none" stroke-linejoin="miter"/>
+<path d="M324 520 H970 V291" fill="none" stroke="#ddddcb" stroke-width="4" stroke-dasharray="12 12"/>
+<line class="measure" x1="335" y1="190" x2="980" y2="190" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="label" x="455" y="232">ACHTERKANT — bijvoorbeeld 6 meter</text>
+<line class="measure" x1="195" y1="287" x2="195" y2="537" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="label" x="80" y="400">ZIJKANT</text><text class="body" x="93" y="440">3 meter</text>
+<text class="body" x="520" y="470">Zo meet je twee aparte zijden.</text>
+</svg>
