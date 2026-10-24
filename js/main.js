@@ -113,6 +113,11 @@
         submitToApi(apiBase, statusEl).catch(function () { showMailto(statusEl); });
         return;
       }
+      var ep = window.SEAL_CONFIG && window.SEAL_CONFIG.formEndpoint;
+      if (ep && window.fetch && window.FormData) {
+        submitToForm(ep, statusEl).catch(function () { showMailto(statusEl); });
+        return;
+      }
       showMailto(statusEl);
     });
 
@@ -157,6 +162,35 @@
             throw new Error("server");
           });
         }, function (err) { if (submit) submit.disabled = false; throw err; });
+    }
+
+    /* Directe verzending zonder eigen backend: formulierdienst die de aanvraag per e-mail doorstuurt (incl. bijlagen). */
+    function submitToForm(ep, statusEl) {
+      var fd = new FormData(form);
+      if (fd.get("website")) return Promise.resolve();          /* honeypot: bot, stil negeren */
+      var nameField = form.querySelector("[name=naam]") || form.querySelector("[name=contactpersoon]");
+      fd.append("_subject", (form.getAttribute("data-subject-prefix") || "Offerteaanvraag via website") + (nameField ? " — " + nameField.value : ""));
+      fd.append("_template", "table"); fd.append("_captcha", "false");
+      var mail = form.querySelector("[name=email]");
+      if (mail && mail.value) fd.append("_replyto", mail.value);
+      var submit = form.querySelector("[type=submit]");
+      if (submit) submit.disabled = true;
+      if (statusEl) { statusEl.textContent = "Bezig met versturen…"; statusEl.className = "form-status"; statusEl.hidden = false; }
+      return fetch(ep, { method: "POST", body: fd, headers: { Accept: "application/json" } }).then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (data) {
+          if (submit) submit.disabled = false;
+          if (r.ok && (data.success === true || data.success === "true")) {
+            form.reset();
+            var label = document.querySelector("[data-file-count]");
+            if (label) label.textContent = "";
+            statusEl.textContent = "Bedankt, uw aanvraag is verstuurd. Wij nemen zo snel mogelijk contact met u op, meestal binnen één werkdag.";
+            statusEl.className = "form-status success";
+            statusEl.scrollIntoView({ behavior: "smooth", block: "center" });
+            return;
+          }
+          throw new Error("form");
+        });
+      }, function (err) { if (submit) submit.disabled = false; throw err; });
     }
 
     function showMailto(statusEl) {

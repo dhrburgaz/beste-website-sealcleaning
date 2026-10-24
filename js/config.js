@@ -25,6 +25,8 @@
     // Adres van de Sealcleaning-backend (bijv. "https://api.sealcleaning.nl"). Leeg = formulieren
     // gebruiken het eigen mailprogramma van de bezoeker (huidige werking).
     apiBase: "",
+    /* Directe verzending van aanvragen per e-mail (formulierdienst); bij een storing valt het formulier terug op e-mail via het eigen mailprogramma. */
+    formEndpoint: "https://formsubmit.co/ajax/sealcleaningaanleg@gmail.com",
     defaultWhatsappMessage: "Hallo Sealcleaning, ik wil graag meer informatie over jullie diensten."
   };
 

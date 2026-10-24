@@ -1,5 +1,7 @@
 """Handmatige aanvullingen: losse zinnen die de extractor niet vindt + woordenlijst voor 'Inbegrepen/Niet inbegrepen'-regels."""
 EXACT = {
+ "Bezig met versturen…":"Gönderiliyor…",
+ "Bedankt, uw aanvraag is verstuurd. Wij nemen zo snel mogelijk contact met u op, meestal binnen één werkdag.":"Teşekkürler, talebiniz gönderildi. En kısa sürede, genellikle bir iş günü içinde sizinle iletişime geçeceğiz.",
  "1. Uw project":"1. Projeniz","1/5 · Uw project":"1/5 · Projeniz","Voor wie is het project?":"Proje kimin için?","Wat is uw doel?":"Hedefiniz nedir?",
  "Kies een doel — wij zetten de passende dienst alvast aan. U kunt hieronder altijd aanpassen.":"Bir hedef seçin — uygun hizmeti biz önceden açarız. Aşağıdan her zaman değiştirebilirsiniz.",
  "Meerdere diensten combineren kan — kies alles wat van toepassing is.":"Birden fazla hizmeti birleştirebilirsiniz — geçerli olan her şeyi seçin.",
