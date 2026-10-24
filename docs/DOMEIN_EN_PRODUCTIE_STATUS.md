@@ -15,3 +15,15 @@ Waarschijnlijke oorzaken om als eerste te controleren door de eigenaar (kost 10 
 2. Strato DNS: voeg de drie overige A-records toe (185.199.109.153, .110.153, .111.153) en een CNAME `www` naar `dhrburgaz.github.io`.
 3. Domein bij Strato niet verlopen/opgeschort (domeinfactuur, e-mail van Strato of SIDN).
 4. Als het domein wel werkt maar de oude site toont: dat is main; de nieuwe site wordt pas live na goedkeuring en merge.
+
+## Herstelplan (stappen waar toegang voor nodig is)
+| # | Actie | Waar | Door |
+|---|---|---|---|
+| 1 | Pages-bron "GitHub Actions", custom domain sealcleaning.nl, Enforce HTTPS | GitHub > Settings > Pages | eigenaar |
+| 2 | Extra A-records .109/.110/.111.153 + CNAME www -> dhrburgaz.github.io | Strato DNS | eigenaar |
+| 3 | Domeinstatus/verlenging controleren | Strato / SIDN | eigenaar |
+| 4 | PR #3 goedkeuren en mergen -> workflow deployt automatisch | GitHub | eigenaar (expliciete goedkeuring) |
+| 5 | Na deploy: controleer https://sealcleaning.nl, https://www.sealcleaning.nl, /schuttingen/, /contact/ | browser | eigenaar of nieuwe sessie met internettoegang |
+
+## Taal
+Er is geen meertalige architectuur (geen i18n-laag, geen hreflang). Een Turkse versie vraagt om vertaalde pagina's per route en een taalkeuze; dit is niet "binnen de bestaande architectuur" en is niet gebouwd. Advies: eerst Turkse versie van home, contact en offerteflow door een moedertaalspreker laten vertalen.

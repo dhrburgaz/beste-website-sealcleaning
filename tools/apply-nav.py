@@ -3,7 +3,7 @@ Gebruik: python3 tools/apply-nav.py   (idempotent)"""
 import glob, re
 
 SERVICES = [("tuinonderhoud/", "Tuinonderhoud"), ("tuinaanleg/", "Tuinaanleg"), ("tuinrenovatie/", "Tuinrenovatie"),
-            ("bestrating/", "Bestrating"), ("schuttingen/", "Schuttingen"), ("plantenbakken/", "Plantenbakken"), ("snoeiwerk/", "Snoeiwerk"),
+            ("bestrating/", "Bestrating"), ("schuttingen/", "Schuttingen"), ("plantenbakken/", "Plantenbakken"), ("snoeiwerk/", "Snoeiwerk"), ("hogedrukreiniging/", "Hogedrukreiniging"), ("kunstgras/", "Kunstgras"), ("groenafval-en-onkruid/", "Onkruid en groenafval"),
             ("periodiek-tuinonderhoud/", "Periodiek onderhoud")]
 ABOUT = [("over-ons/", "Over Sealcleaning"), ("werkwijze/", "Werkwijze"), ("werkgebied/", "Werkgebied"),
          ("kennisbank/", "Kennisbank"), ("voor-aannemers/", "Voor aannemers en VvE's"), ("werken-met-ons/", "Werken met ons")]

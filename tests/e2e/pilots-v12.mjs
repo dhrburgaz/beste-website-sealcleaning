@@ -19,12 +19,12 @@ for (const [w, h] of [[1440, 900], [390, 844], [320, 700]]) {
   assert.match(await pg.locator("[data-home-3d-status]").innerText(), /Voorbeeld in 3D, geen echt project/);
   const text = await pg.locator("main").innerText();
   assert.doesNotMatch(text, FAKE, "geen verzonnen claims"); assert.doesNotMatch(text, /Elephant|€\s?\d/, "geen productprijzen op home");
-  assert.equal(await pg.locator("#diensten .v-cards li").count(), 8); assert.equal(await pg.locator(".v-project").count(), 3);
+  assert.equal(await pg.locator("#diensten .v-cards li").count(), 11); assert.equal(await pg.locator(".v-project").count(), 3);
   assert.doesNotMatch(text, /afrekenen|in winkelmand/i, "geen checkout-taal");
   const imgs = await pg.evaluate(() => [...document.images].filter((i) => !i.alt && !i.closest("[aria-hidden]")).length); assert.equal(imgs, 0, "alle afbeeldingen hebben alt");
   const over = await pg.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth); assert.ok(over <= 1, `overflow ${over}px bij ${w}`);
   assert.deepEqual(errs, [], `fouten bij ${w}: ${errs}`);
-  await ctx.close(); out.push(`homepage ${w}px: hero→3D, 8 diensten, echte projecten, geen verzonnen claims, geen overflow`);
+  await ctx.close(); out.push(`homepage ${w}px: hero→3D, 11 diensten, echte projecten, geen verzonnen claims, geen overflow`);
 }
 
 /* homepage zonder WebGL: 2D-voorbeeld */

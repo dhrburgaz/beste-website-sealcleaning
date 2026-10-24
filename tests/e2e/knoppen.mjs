@@ -49,9 +49,9 @@ ok("hoofdmenu: Tuin ontwerpen, Projecten, Contact, Diensten > Plantenbakken, Off
 // 3. hero, dienstenkaarten, projectkaarten, 3D-startknop
 await p.goto(BASE + IDX); await clickGo(p, p.locator(".v-hero .btn-primary"), "schutting-ontwerpen/");
 await p.goto(BASE + IDX); await clickGo(p, p.locator(".v-hero .btn-light"), "projecten/");
-await p.goto(BASE + IDX); const cards = await p.locator("#diensten .v-card").count(); assert.equal(cards, 8);
+await p.goto(BASE + IDX); const cards = await p.locator("#diensten .v-card").count(); assert.equal(cards, 11);
 for (let i = 0; i < cards; i++) { await p.goto(BASE + IDX); const a = p.locator("#diensten .v-card").nth(i); const href = new URL(await a.getAttribute("href"), p.url()).pathname; await a.click(); await p.waitForLoadState(); assert.ok(p.url().includes(href.replace(/\/$/, "").split("/").pop()), `dienstenkaart ${i} -> ${href}`); assert.ok((await p.locator("h1").first().textContent()).length > 3); }
-ok("homepage: hero-knoppen en 8 dienstenkaarten leiden naar een bestaande pagina met kop");
+ok("homepage: hero-knoppen en 11 dienstenkaarten leiden naar een bestaande pagina met kop");
 await p.goto(BASE + IDX); const pc = await p.locator(".v-project").count(); assert.equal(pc, 3);
 for (let i = 0; i < pc; i++) { await p.goto(BASE + IDX); await p.locator(".v-project").nth(i).click(); await p.waitForLoadState(); assert.ok(/projecten\//.test(p.url())); assert.ok(await p.locator("h1").count()); }
 ok("homepage: 3 projectkaarten openen een projectpagina");

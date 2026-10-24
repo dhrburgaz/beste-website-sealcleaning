@@ -678,3 +678,9 @@ body.v12 main > .v-section { padding-block: clamp(2rem, 4vw, 3.4rem); }
 .i-card-img img { transition: transform .5s; }
 .i-card:hover .i-card-img img { transform: scale(1.04); }
 .i-disclaimer { max-width: 62ch; }
+.v-why--cards { grid-template-columns: repeat(2, minmax(0, 1fr)); text-align: left; gap: 1rem; }
+.v-why-card { background: var(--seal-surface); border: 1px solid var(--seal-stroke); border-radius: var(--v-radius); padding: 1.1rem 1.2rem; }
+.v-why-card h3 { margin: 0 0 .3rem; font-family: var(--font-display); font-weight: 500; font-size: 1.15rem; }
+.v-why-card p { margin: 0; color: var(--seal-muted); font-size: .95rem; }
+@media (max-width: 700px) { .v-why--cards { grid-template-columns: minmax(0, 1fr); } }
+.v-why--cards li { justify-items: start; }

@@ -42,6 +42,9 @@ def home_main():
      ("materialen/", "Materialen", "Schuttingen en meer, los of met montage", ipic("schutting-grenen-betonpalen-dag", ALT["schutting-grenen-betonpalen-dag"], r, SIZES), True),
      ("plantenbakken/", "Plantenbakken", "Groen in elke tuin", ipic("plantenbakken-cortenstaal-avond", ALT["plantenbakken-cortenstaal-avond"], r, SIZES), True),
      ("tuinonderhoud/", "Tuinonderhoud", "Altijd een verzorgde tuin", rpic(r, "voortuin-haag-gesnoeid", "Strak gesnoeide haag in een voortuin, onderhoud door Sealcleaning", SIZES), False),
+     ("hogedrukreiniging/", "Hogedrukreiniging", "Terras, pad en schutting weer schoon", rpic(r, "tuin-voor-onderhoud-bemost-terras", "Terras met mos voor een schoonmaakbeurt", SIZES), False),
+     ("kunstgras/", "Kunstgras", "Strak gazon zonder onderhoud", rpic(r, "terras-kunstgras-opgeleverd", "Achtertuin met kunstgras, werk van Sealcleaning", SIZES), False),
+     ("groenafval-en-onkruid/", "Onkruid en groenafval", "Opruimen, verwijderen en afvoeren", rpic(r, "plantvak-leeggemaakt-voortuin", "Leeggemaakt plantvak in een voortuin", SIZES), False),
      ("snoeiwerk/", "Snoeiwerk", "Bomen, hagen en heesters", rpic(r, "boom-gesnoeid-voortuin", "Gesnoeide boom in een voortuin, werk van Sealcleaning", SIZES), False),
     ]
     proj = [("projecten/tuin-aan-het-water-compleet/", "waterzijde-tuin-terras-hortensia", "Tuin aan het water", "Terras en border, Dordrecht"),
@@ -261,3 +264,79 @@ def swap_main(path, html):
 if __name__ == "__main__":
     swap_main("index.html", home_main()); schuttingen_main(); plantenbakken_page()
     print("home ok")
+
+# ---- Extra dienstpagina's (bevestigde diensten) ----
+def real_hero(rel, img, alt, h1, lede, b1, b2, crumb):
+    return f"""<section class="v-hero v-hero--page" aria-labelledby="hero-titel">
+    <div class="v-hero-media">{rpic(rel, img, alt, "100vw", True)}</div>
+    <div class="v-hero-scrim"></div>
+    <div class="container v-hero-inner">
+      <nav class="v-crumbs" aria-label="Kruimelpad"><a href="{rel}">Home</a> <span aria-hidden="true">/</span> <a href="{rel}#diensten">Diensten</a> <span aria-hidden="true">/</span> {crumb}</nav>
+      <h1 id="hero-titel">{h1}</h1><p>{lede}</p><div class="btn-row">{b1}{b2}</div>
+    </div></section>"""
+
+SERVICE_PAGES = {
+ "hogedrukreiniging": dict(title="Hogedrukreiniging Dordrecht | Terras, pad en schutting — Sealcleaning", desc="Hogedrukreiniging en warmwaterhogedruk in Dordrecht, Zwijndrecht, Hendrik-Ido-Ambacht en Rotterdam: terras, oprit, tuinpad en schutting weer schoon. Vraag vrijblijvend een offerte aan.",
+   h1="Hogedrukreiniging", crumb="Hogedrukreiniging", img="tuin-voor-onderhoud-bemost-terras", alt="Terras met mos en vervuiling voor een schoonmaakbeurt, werk van Sealcleaning",
+   lede="Terras, oprit, tuinpad of schutting weer schoon, met koud water of warmwaterhogedruk. Wij beoordelen vooraf of het materiaal geschikt is.",
+   usp=[("vak","Koud of warmwaterhogedruk"),("plaatsing","Terras, pad, oprit en schutting"),("advies","Eerst advies over het materiaal"),("offerte","Duidelijke offerte")],
+   cards=[("Terras en tuinpad","Mos, algen en vuil verwijderen van tegels en klinkers."),("Oprit en bestrating","Grotere vlakken schoon, op de juiste druk voor het materiaal."),("Schutting en erfafscheiding","Groene aanslag van hout, beton of composiet halen."),("Warmwaterhogedruk","Voor hardnekkig vuil, vet en aanslag waar koud water te weinig doet.")],
+   faq=[("Beschadigt hogedruk mijn bestrating?","Te hoge druk kan voegen uitspoelen of zacht materiaal aantasten. Daarom kiezen wij druk en techniek op het materiaal en de staat van de voegen."),("Wanneer kies ik warmwaterhogedruk?","Bij hardnekkig vuil, vet of aanslag. Wij adviseren ter plaatse wat nodig is."),("Wat kost hogedrukreiniging?","Dat hangt af van oppervlakte, vervuiling en toegang. Na een korte beschrijving of bezichtiging krijgt u een offerte.")]),
+ "kunstgras": dict(title="Kunstgras aanleggen Dordrecht | Strak gazon zonder onderhoud — Sealcleaning", desc="Kunstgras laten aanleggen in Dordrecht, Zwijndrecht, Hendrik-Ido-Ambacht en Rotterdam. Goede ondergrond, strakke randen en nette afwerking. Vraag vrijblijvend een offerte aan.",
+   h1="Kunstgras aanleggen", crumb="Kunstgras", img="terras-houtlook-kunstgras-pad-1", alt="Terras met houtlook tegelpad tussen kunstgras, werk van Sealcleaning",
+   lede="Een strak gazon dat er het hele jaar goed uitziet. De ondergrond bepaalt het resultaat, dus die maken wij eerst goed.",
+   usp=[("vak","Goede ondergrond"),("plaatsing","Strakke randen en naden"),("materiaal","Materiaal in overleg"),("offerte","Duidelijke offerte")],
+   cards=[("Ondergrond en afwatering","Oud gras en grond weg, zand en verdichting voor een vlakke, waterdoorlatende basis."),("Aanleg en afwerking","Kunstgras strak gelegd, naden verlijmd en randen netjes afgewerkt."),("Combineren met terras en pad","Kunstgras naast bestrating of een houtlook pad, zoals in onze projecten."),("Oud gras verwijderen","Wij verwijderen en voeren het oude gazon af.")],
+   faq=[("Heeft kunstgras onderhoud nodig?","Veel minder dan gras, maar af en toe schoonmaken en afharken is verstandig."),("Welk kunstgras past bij mijn tuin?","Dat hangt af van gebruik, kleur en budget. Wij adviseren en nemen het gekozen materiaal op in de offerte."),("Kunt u ook het oude gras verwijderen?","Ja, inclusief afvoer.")],
+   gallery=[("terras-kunstgras-opgeleverd","Achtertuin met kunstgras"),("terras-houtlook-kunstgras-pad-1","Houtlook pad tussen kunstgras"),("terras-kunstgras-zwart-plantenbak-1","Kunstgras bij zwarte plantenbakken")]),
+ "groenafval-en-onkruid": dict(title="Onkruid verwijderen en groenafval afvoeren Dordrecht — Sealcleaning", desc="Onkruid verwijderen, kleine bomen en struiken weghalen en groenafval of oud materiaal afvoeren in Dordrecht en omgeving. Vraag vrijblijvend een offerte aan.",
+   h1="Onkruid, groenafval en opruimen", crumb="Onkruid en groenafval", img="plantvak-leeggemaakt-voortuin", alt="Leeggemaakt plantvak in een voortuin, werk van Sealcleaning",
+   lede="Een overwoekerde tuin weer vrij: onkruid weg, kleine bomen en struiken verwijderd en alles netjes afgevoerd.",
+   usp=[("vak","Onkruid en wortels"),("plaatsing","Kleine bomen en struiken"),("materiaal","Afvoer groenafval en oud materiaal"),("offerte","Duidelijke offerte")],
+   cards=[("Onkruid verwijderen","Borders, bestrating en kantjes schoon, met aandacht voor de wortels."),("Kleine bomen en struiken","Verwijderen van kleine bomen en struiken die in de weg staan of dood zijn."),("Groenafval afvoeren","Snoeiafval en tuinafval nemen wij mee."),("Oud materiaal afvoeren","Oude schutting, tegels of puin afvoeren bij een renovatie.")],
+   faq=[("Voeren jullie het afval ook af?","Ja, groenafval en oud materiaal kunnen worden afgevoerd. Dit staat apart in de offerte."),("Kunnen ook grotere bomen weg?","Wij verwijderen kleine bomen en struiken. Voor grotere bomen bespreken wij eerst de mogelijkheden."),("Kan dit samen met tuinonderhoud?","Ja, als eenmalige opruiming vooraf of als start van periodiek onderhoud.")]),
+}
+
+def service_page(slug, d):
+    r = "../"
+    t = (R / "tuinaanleg/index.html").read_text()
+    t = re.sub(r"<title>.*?</title>", f"<title>{d['title']}</title>", t, count=1)
+    t = re.sub(r'(<meta name="description" content=")[^"]*', lambda m: m.group(1) + d["desc"], t, count=1)
+    t = t.replace("sealcleaning.nl/tuinaanleg/", f"sealcleaning.nl/{slug}/").replace("Tuinaanleg Dordrecht — Sealcleaning", d["title"].split(" — ")[0])
+    t = re.sub(r'"serviceType": "[^"]*"', f'"serviceType": "{d["h1"]}"', t, count=1)
+    b1 = f'<a href="{r}contact/" class="btn btn-primary btn-lg">Vraag een offerte aan</a>'
+    b2 = f'<a href="#diensten-lijst" class="btn btn-light btn-lg">Bekijk wat we doen</a>'
+    cards = "".join(f'<li class="v-why-card"><h3>{a}</h3><p>{b}</p></li>' for a, b in d["cards"])
+    faq = "".join(f'<details class="faq-item"><summary>{q}<span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span></summary><p>{a}</p></details>' for q, a in d["faq"])
+    gal = ""
+    if d.get("gallery"):
+        gal = '<section class="v-section" aria-labelledby="titel-werk"><div class="container"><div class="v-section-head"><h2 class="v-h2" id="titel-werk">Uit onze projecten</h2></div><div class="v-projects v-projects-3">' + "".join(f'<a class="v-project" href="{r}projecten/"><figure style="margin:0;height:100%">{rpic(r, n, c + ", werk van Sealcleaning", "(max-width: 700px) 92vw, 360px")}<figcaption><strong>{c}</strong>Eigen werk</figcaption></figure></a>' for n, c in d["gallery"]) + '</div></div></section>'
+    area = "Wij werken in Dordrecht, Zwijndrecht, Hendrik-Ido-Ambacht, de Drechtsteden en Rotterdam e.o."
+    main = f"""<main id="main">
+
+  {real_hero(r, d["img"], d["alt"], d["h1"], d["lede"], b1, b2, d["crumb"])}
+
+  {usp(d["usp"])}
+
+  <section class="v-section" id="diensten-lijst" aria-labelledby="titel-doen"><div class="container">
+    <div class="v-section-head"><h2 class="v-h2" id="titel-doen">Wat wij voor u doen</h2><p class="v-lede">{area} Een vaste prijs hangt af van uw situatie; u ontvangt een duidelijke offerte.</p></div>
+    <ul class="v-why v-why--cards">{cards}</ul>
+  </div></section>
+
+  {gal}
+
+  <section class="v-section v-sand" aria-labelledby="titel-faq-d"><div class="container"><div class="v-section-head"><h2 class="v-h2" id="titel-faq-d">Veelgestelde vragen</h2></div><div class="faq-list">{faq}</div></div></section>
+
+  <section class="v-section" aria-labelledby="titel-advies"><div class="container">
+    <div class="v-advice"><div><h2 id="titel-advies">Vrijblijvend een offerte?</h2><p>Beschrijf uw situatie of stuur foto's mee. Wij komen graag langs voor een bezichtiging in Dordrecht en omgeving.</p></div>
+    <div class="btn-row"><a class="btn btn-primary btn-lg" href="{r}contact/">Vraag een offerte aan</a><a class="btn btn-secondary btn-lg" href="{r}schutting-ontwerpen/">Tuin ontwerpen in 3D</a></div></div>
+  </div></section>
+
+</main>"""
+    hs = t.index('<main id="main">'); he = t.index("</main>") + len("</main>")
+    t = t[:hs] + main + t[he:]
+    (R / slug).mkdir(exist_ok=True); (R / slug / "index.html").write_text(t)
+
+if __name__ == "__main__":
+    for k, v in SERVICE_PAGES.items(): service_page(k, v)
+    print("diensten ok")
