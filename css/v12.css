@@ -684,3 +684,8 @@ body.v12 main > .v-section { padding-block: clamp(2rem, 4vw, 3.4rem); }
 .v-why-card p { margin: 0; color: var(--seal-muted); font-size: .95rem; }
 @media (max-width: 700px) { .v-why--cards { grid-template-columns: minmax(0, 1fr); } }
 .v-why--cards li { justify-items: start; }
+
+/* Taalschakelaar NL/TR */
+.lang-switch{display:inline-flex;align-items:center;min-height:44px;padding:0 .6rem;margin-right:.4rem;border:1px solid currentColor;border-radius:999px;font-size:.8rem;font-weight:600;letter-spacing:.04em;text-decoration:none;color:inherit;opacity:.85}
+.lang-switch:hover,.lang-switch:focus-visible{opacity:1;background:rgba(127,127,127,.15)}
+@media (max-width:900px){.header-cta .lang-switch{margin-right:.25rem;padding:0 .5rem}}
