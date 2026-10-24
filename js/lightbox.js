@@ -15,6 +15,7 @@
   var source = root.querySelector("[data-lightbox-source]");
   var titleEl = root.querySelector("[data-lightbox-title]");
   var metaEl = root.querySelector("[data-lightbox-meta]");
+  var linkEl = root.querySelector("[data-lightbox-link]");
   var closeBtn = root.querySelector("[data-lightbox-close]");
   var prevBtn = root.querySelector("[data-lightbox-prev]");
   var nextBtn = root.querySelector("[data-lightbox-next]");
@@ -36,6 +37,15 @@
     img.setAttribute("alt", tile.getAttribute("data-alt") || "");
     titleEl.textContent = tile.getAttribute("data-title") || "";
     metaEl.textContent = tile.getAttribute("data-meta") || "";
+    var slug = tile.getAttribute("data-slug");
+    if (linkEl) {
+      if (slug) {
+        linkEl.href = slug + "/";
+        linkEl.hidden = false;
+      } else {
+        linkEl.hidden = true;
+      }
+    }
   }
 
   function open(tile) {

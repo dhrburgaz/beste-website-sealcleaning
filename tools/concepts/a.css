@@ -1,0 +1,24 @@
+/* Concept A — Architectural Forest: bosgroen, steentinten, editorial, nauwkeurige lijnen.
+   Mobiel: foto boven, tekst op een effen bosgroen vlak (geen tekst op foto → contrast altijd goed). */
+:root { --c-sand:#f2ede3; --c-sand-deep:#e7dfcf; --c-line:#d6cbb4; --c-clay:#8a5a3a; --sp-7:6rem; --sp-6:4.25rem; --sp-8:8rem; }
+.eyebrow { color: #6e4a30; }
+.hero-copy .eyebrow, .page-hero .eyebrow { color: #e6dcc6; }
+.hero-copy .eyebrow::before, .page-hero .eyebrow::before { background: #e6dcc6; }
+.hero-scrim { background: linear-gradient(90deg, rgba(10,14,9,.78) 0%, rgba(10,14,9,.55) 40%, rgba(10,14,9,.05) 75%), linear-gradient(0deg, rgba(10,14,9,.5), transparent 50%); }
+.page-hero .hero-scrim { background: linear-gradient(90deg, rgba(10,14,9,.8) 0%, rgba(10,14,9,.5) 45%, rgba(10,14,9,.1) 80%) !important; }
+.page-hero .breadcrumbs, .page-hero .breadcrumbs a { color: rgba(255,255,255,.88); }
+.hero { min-height: min(82vh, 820px); }
+@media (max-width: 780px) {
+  .hero, .page-hero { display: block; min-height: 0; background: var(--c-forest); }
+  .hero .hero-media, .page-hero .hero-media { position: relative; height: 44vh; min-height: 240px; }
+  .hero-scrim, .page-hero .hero-scrim { display: none; }
+  .hero-inner, .page-hero-inner { padding-block: 1.75rem 2rem; }
+  .hero h1 { font-size: 2.35rem; }
+  .page-hero h1 { font-size: 2.1rem; }
+  .hero-lede, .page-hero .lede { font-size: 1.05rem; }
+  .hero .btn-row .btn { flex: 1 1 100%; }
+  .trust-list { gap: .5rem 1.25rem; justify-content: flex-start; padding-block: 1rem; }
+  .trust-list li { font-size: .74rem; }
+}
+.btn { border-radius: 2px; }
+.service-row .name { font-weight: 400; }

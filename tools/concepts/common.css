@@ -1,0 +1,6 @@
+/* Gedeelde reparaties die in elk concept gelden (bugfixes uit de audit). */
+.service-row .num { grid-column: 1; grid-row: 1; }
+.service-row .name { grid-column: 2; grid-row: 1; }
+.service-row .desc { grid-column: 2; grid-row: 2; }
+.service-row .arrow { grid-column: 3; grid-row: 1 / span 2; }
+.page-hero .breadcrumbs { padding-inline: 0; }
