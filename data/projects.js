@@ -14,6 +14,134 @@
 
 export const PROJECTS = [
   {
+    "slug": "oprit-en-bestrating-gereinigd",
+    "title": "Oprit en bestrating gereinigd met hogedruk",
+    "primaryService": "hogedrukreiniging",
+    "services": [
+      "hogedrukreiniging",
+      "bestrating"
+    ],
+    "location": null,
+    "coverImage": "hogedrukreiniging-oprit-klinkers-aanhanger",
+    "gallery": [
+      {
+        "image": "hogedrukreiniging-oprit-klinkers-aanhanger",
+        "alt": "Klinkerbestrating van een oprit tijdens het reinigen met hogedruk, met werkslang en aanhanger",
+        "role": "cover"
+      },
+      {
+        "image": "hogedrukreiniging-klinkers-scheidslijn-voor-na",
+        "alt": "Klinkerbestrating met duidelijke scheidslijn: links hogedruk gereinigd, rechts nog niet gereinigd",
+        "role": "during"
+      },
+      {
+        "image": "hogedrukreiniging-oprit-klinkers-gereinigd-deel",
+        "alt": "Oprit van grijze klinkers in visgraatverband, deels gereinigd met hogedruk",
+        "role": "during"
+      },
+      {
+        "image": "hogedrukreiniging-oprit-klinkers-resultaat",
+        "alt": "Oprit met gereinigde grijze klinkers naast een donkere inrit met sierbed",
+        "role": "after"
+      },
+      {
+        "image": "hogedrukreiniging-zijpad-klinkers-avondzon",
+        "alt": "Gereinigd klinkerpad langs een woning en klimopheg in de avondzon",
+        "role": "after"
+      },
+      {
+        "image": "hogedrukreiniging-zijpad-klinkers-heg",
+        "alt": "Lang klinkerpad met houten hekwerk en klimopheg",
+        "role": "after"
+      },
+      {
+        "image": "hogedrukreiniging-pad-glazen-overkapping",
+        "alt": "Smal klinkerpad langs een overkapping met glazen panelen en een houten hekwerk",
+        "role": "detail"
+      }
+    ],
+    "summary": "Klinkerbestrating van oprit en zijpad met hogedruk gereinigd.",
+    "situation": null,
+    "workDone": [
+      "Klinkerbestrating van de oprit en het zijpad gereinigd met een hogedrukreiniger",
+      "Verkleuring en vuil van de stenen verwijderd, zodat het patroon van de bestrating weer duidelijk zichtbaar is"
+    ],
+    "materials": [],
+    "duration": null,
+    "dimensions": null,
+    "tags": [
+      "hogedrukreiniging",
+      "bestrating"
+    ],
+    "featured": true,
+    "verification": "visually-confirmed",
+    "publishStatus": "published"
+  },
+  {
+    "slug": "klimopheg-gesnoeid-langs-oprit",
+    "title": "Klimopheg strak gesnoeid langs lange oprit",
+    "primaryService": "snoeiwerk",
+    "services": [
+      "snoeiwerk",
+      "tuinonderhoud"
+    ],
+    "location": null,
+    "coverImage": "klimopheg-gesnoeid-oprit-lang",
+    "gallery": [
+      {
+        "image": "klimopheg-gesnoeid-oprit-lang",
+        "alt": "Lange gesnoeide klimopheg langs een klinkeroprit naast een witte woning",
+        "role": "cover"
+      },
+      {
+        "image": "klimopheg-gesnoeid-houten-hekwerk",
+        "alt": "Gesnoeide klimopheg langs een klinkeroprit met bruin houten hekwerk en terras",
+        "role": "detail"
+      },
+      {
+        "image": "klimopheg-gesnoeid-zijkant-detail",
+        "alt": "Zijkant van een strak gesnoeide klimopheg langs de klinkerbestrating",
+        "role": "detail"
+      },
+      {
+        "image": "klimopheg-gesnoeid-bovenkant-vlak",
+        "alt": "Klimopheg met vlakke bovenkant gesnoeid, gezien vanaf het terras",
+        "role": "detail"
+      },
+      {
+        "image": "klimopheg-gesnoeid-terras-schuur",
+        "alt": "Gesnoeide klimopheg achter een terras met loungestoelen en een witte schuur",
+        "role": "detail"
+      },
+      {
+        "image": "klimopheg-gesnoeid-hek-kunstgras-detail",
+        "alt": "Gesnoeide klimopheg naast een zwart hekwerk en kunstgras",
+        "role": "detail"
+      },
+      {
+        "image": "kunstgras-speelveld-zwart-hekwerk-klimopheg",
+        "alt": "Kunstgras speelveld met zwart hekwerk en een gesnoeide klimopheg erachter",
+        "role": "detail"
+      }
+    ],
+    "summary": "Lange klimopheg langs een oprit in model gesnoeid.",
+    "situation": null,
+    "workDone": [
+      "Klimopheg over de volle lengte van de oprit in model gesnoeid, met rechte zijkanten en een vlakke bovenkant",
+      "Ook de heg achter het kunstgras speelveld is in model gehouden"
+    ],
+    "materials": [],
+    "duration": null,
+    "dimensions": null,
+    "tags": [
+      "snoeiwerk",
+      "tuinonderhoud"
+    ],
+    "featured": true,
+    "verification": "visually-confirmed",
+    "publishStatus": "published"
+  },
+  {
     slug: "tuin-aan-het-water-compleet",
     title: "Tuin aan het water, compleet ingericht",
     primaryService: "tuinaanleg",

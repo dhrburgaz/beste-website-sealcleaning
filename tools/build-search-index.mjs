@@ -8,7 +8,7 @@ import { readFileSync, writeFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 
 const ROOT = new URL("..", import.meta.url).pathname;
-const SKIP = new Set(["vendor", "node_modules", ".git", "zoeken", "inspiratie", "docs", "tools", "images"]);
+const SKIP = new Set(["_site", "tr", "vendor", "node_modules", ".git", "zoeken", "inspiratie", "docs", "tools", "images"]);
 const SERVICES = ["tuinonderhoud", "tuinaanleg", "tuinrenovatie", "bestrating", "schuttingen", "snoeiwerk", "periodiek-tuinonderhoud"];
 
 function walk(dir, out = []) {

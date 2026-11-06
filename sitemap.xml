@@ -252,6 +252,16 @@
     <xhtml:link rel="alternate" hreflang="tr" href="https://sealcleaning.nl/tr/groenafval-en-onkruid/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://sealcleaning.nl/groenafval-en-onkruid/"/>
   </url>
+  <url><loc>https://sealcleaning.nl/projecten/klimopheg-gesnoeid-langs-oprit/</loc><changefreq>yearly</changefreq><priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://sealcleaning.nl/projecten/klimopheg-gesnoeid-langs-oprit/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://sealcleaning.nl/tr/projecten/klimopheg-gesnoeid-langs-oprit/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sealcleaning.nl/projecten/klimopheg-gesnoeid-langs-oprit/"/>
+  </url>
+  <url><loc>https://sealcleaning.nl/projecten/oprit-en-bestrating-gereinigd/</loc><changefreq>yearly</changefreq><priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://sealcleaning.nl/projecten/oprit-en-bestrating-gereinigd/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://sealcleaning.nl/tr/projecten/oprit-en-bestrating-gereinigd/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sealcleaning.nl/projecten/oprit-en-bestrating-gereinigd/"/>
+  </url>
 
   <url><loc>https://sealcleaning.nl/tr/bestrating/</loc>
     <xhtml:link rel="alternate" hreflang="nl" href="https://sealcleaning.nl/bestrating/"/>
@@ -378,6 +388,11 @@
     <xhtml:link rel="alternate" hreflang="tr" href="https://sealcleaning.nl/tr/projecten/kastanjehouten-paaltjesschutting/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://sealcleaning.nl/projecten/kastanjehouten-paaltjesschutting/"/>
   </url>
+  <url><loc>https://sealcleaning.nl/tr/projecten/klimopheg-gesnoeid-langs-oprit/</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://sealcleaning.nl/projecten/klimopheg-gesnoeid-langs-oprit/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://sealcleaning.nl/tr/projecten/klimopheg-gesnoeid-langs-oprit/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sealcleaning.nl/projecten/klimopheg-gesnoeid-langs-oprit/"/>
+  </url>
   <url><loc>https://sealcleaning.nl/tr/projecten/klimopheg-in-model/</loc>
     <xhtml:link rel="alternate" hreflang="nl" href="https://sealcleaning.nl/projecten/klimopheg-in-model/"/>
     <xhtml:link rel="alternate" hreflang="tr" href="https://sealcleaning.nl/tr/projecten/klimopheg-in-model/"/>
@@ -387,6 +402,11 @@
     <xhtml:link rel="alternate" hreflang="nl" href="https://sealcleaning.nl/projecten/kunstgras-achter-nieuwe-schutting/"/>
     <xhtml:link rel="alternate" hreflang="tr" href="https://sealcleaning.nl/tr/projecten/kunstgras-achter-nieuwe-schutting/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://sealcleaning.nl/projecten/kunstgras-achter-nieuwe-schutting/"/>
+  </url>
+  <url><loc>https://sealcleaning.nl/tr/projecten/oprit-en-bestrating-gereinigd/</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://sealcleaning.nl/projecten/oprit-en-bestrating-gereinigd/"/>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://sealcleaning.nl/tr/projecten/oprit-en-bestrating-gereinigd/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sealcleaning.nl/projecten/oprit-en-bestrating-gereinigd/"/>
   </url>
   <url><loc>https://sealcleaning.nl/tr/projecten/sierboom-teruggesnoeid-voortuin/</loc>
     <xhtml:link rel="alternate" hreflang="nl" href="https://sealcleaning.nl/projecten/sierboom-teruggesnoeid-voortuin/"/>
