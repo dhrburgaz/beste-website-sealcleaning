@@ -1,0 +1,74 @@
+{
+ "slug": "klimop-en-beplanting-teruggesnoeid",
+ "title": "Klimop en beplanting teruggesnoeid in voor- en achtertuin",
+ "category": "tuinonderhoud",
+ "services": [
+  "tuinonderhoud",
+  "snoeiwerk"
+ ],
+ "location": null,
+ "tag": "Tuinonderhoud · Snoeiwerk",
+ "summary": "Klimophaag en beplanting in voor- en achtertuin teruggesnoeid.",
+ "intro": "Voor deze klant hebben wij de klimop en de beplanting in de voor- en achtertuin teruggesnoeid. De foto's tonen het werk onderweg.",
+ "work": [
+  "Klimophaag in de voortuin teruggesnoeid",
+  "Snoeiwerk aan beplanting en klimplanten in de voor- en achtertuin"
+ ],
+ "result": "De haag en beplanting zijn weer in vorm gebracht en de tuin heeft weer een open, verzorgde indeling. Op de foto's ligt het snoeiafval nog op de grond: het werk is nog bezig.",
+ "seoTitle": "Klimop en tuinbeplanting snoeien — project",
+ "seoDescription": "Project: klimophaag en beplanting in een voor- en achtertuin teruggesnoeid. Bekijk het werk in foto's.",
+ "related": [
+  [
+   "tuinonderhoud",
+   "Meer over tuinonderhoud"
+  ],
+  [
+   "snoeiwerk",
+   "Meer over snoeiwerk"
+  ],
+  [
+   "groenafval-en-onkruid",
+   "Onkruid en groenafval"
+  ]
+ ],
+ "photos": [
+  {
+   "src": "851ae1ff-image.jpg",
+   "name": "klimop-teruggesnoeid-voortuin-grind-hortensia",
+   "alt": "Teruggesnoeide klimophaag in een voortuin met grind, stapplaten en hortensia",
+   "role": "cover",
+   "caption": "Tijdens het werk",
+   "blur": []
+  },
+  {
+   "src": "9c8754e2-image.jpg",
+   "name": "klimop-teruggesnoeid-voortuin-struiken",
+   "alt": "Voortuin met grind, stapplaten, struiken en teruggesnoeide klimop",
+   "role": "during",
+   "caption": "Tijdens het werk",
+   "blur": []
+  },
+  {
+   "src": "714309ed-image.jpg",
+   "name": "beplanting-gesnoeid-achtertuin-hortensia-pergola",
+   "alt": "Achtertuin met hortensia's, snoeiafval en klimplanten aan een pergola tijdens het snoeien",
+   "role": "during",
+   "caption": "Tijdens het werk",
+   "blur": []
+  },
+  {
+   "src": "2081d0fe-image.jpg",
+   "name": "achtertuin-hortensia-schutting-kruiwagen",
+   "alt": "Achtertuin met hortensia's langs een antracietkleurige schutting en een kruiwagen",
+   "role": "detail",
+   "blur": []
+  },
+  {
+   "src": "dc9171e2-image.jpg",
+   "name": "achtertuin-terras-schutting-hortensia-stapplaten",
+   "alt": "Achtertuin met houten terras, plantenbak, hortensia's en stapplaten langs een donkere schutting",
+   "role": "detail",
+   "blur": []
+  }
+ ]
+}

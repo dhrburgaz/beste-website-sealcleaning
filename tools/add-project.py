@@ -169,4 +169,5 @@ def main():
     if u not in sm: sm = sm.replace("</urlset>", f'  <url><loc>{u}</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>\n</urlset>'); wr("sitemap.xml", sm)
     print("project toegevoegd:", m["slug"], "-", len(m["photos"]), "foto's")
 
-main()
+if __name__ == "__main__":
+    main()

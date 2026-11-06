@@ -1,0 +1,84 @@
+{
+ "slug": "voortuin-heesters-in-vorm-gesnoeid",
+ "title": "Heesters en lage haag in vorm gesnoeid in voortuin",
+ "category": "snoeiwerk",
+ "services": [
+  "snoeiwerk",
+  "tuinonderhoud"
+ ],
+ "location": null,
+ "tag": "Snoeiwerk · Tuinonderhoud",
+ "summary": "Heesters tot bol en lage haag langs de gevel in vorm gesnoeid.",
+ "intro": "Voor deze klant hebben wij de heesters en de lage haag in de voortuin in vorm gesnoeid.",
+ "work": [
+  "Heester tot een ronde bolvorm geknipt",
+  "Lage haag langs de gevel strak en rechthoekig in model gebracht"
+ ],
+ "result": "Een verzorgde voortuin met duidelijke vormen. Het plantvak ligt er open bij, zodat de beplanting goed tot zijn recht komt.",
+ "seoTitle": "Heesters en haag snoeien in de voortuin — project",
+ "seoDescription": "Project: heesters tot bol en lage haag in een voortuin in vorm gesnoeid. Bekijk het resultaat in foto's.",
+ "related": [
+  [
+   "snoeiwerk",
+   "Meer over snoeiwerk"
+  ],
+  [
+   "tuinonderhoud",
+   "Meer over tuinonderhoud"
+  ]
+ ],
+ "photos": [
+  {
+   "src": "4d1bbc41-image.jpg",
+   "name": "voortuin-heesters-bol-haag-gesnoeid-pad",
+   "alt": "Voortuin met tot bol geknipte heester en lage gesnoeide haag langs de gevel",
+   "role": "cover",
+   "blur": [
+    [
+     106,
+     836,
+     40,
+     18
+    ],
+    [
+     240,
+     822,
+     32,
+     14
+    ],
+    [
+     335,
+     806,
+     25,
+     14
+    ],
+    [
+     1358,
+     548,
+     78,
+     82
+    ]
+   ]
+  },
+  {
+   "src": "05911129-image.jpg",
+   "name": "voortuin-heesters-bol-haag-gesnoeid-plantvak",
+   "alt": "Voortuin met bolvormige heester, gesnoeide haag en een open plantvak",
+   "role": "detail",
+   "blur": [
+    [
+     105,
+     592,
+     50,
+     22
+    ],
+    [
+     475,
+     603,
+     32,
+     18
+    ]
+   ]
+  }
+ ]
+}

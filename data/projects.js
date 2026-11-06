@@ -14,6 +14,137 @@
 
 export const PROJECTS = [
   {
+    "slug": "klimop-en-beplanting-teruggesnoeid",
+    "title": "Klimop en beplanting teruggesnoeid in voor- en achtertuin",
+    "primaryService": "tuinonderhoud",
+    "services": [
+      "tuinonderhoud",
+      "snoeiwerk"
+    ],
+    "location": null,
+    "coverImage": "klimop-teruggesnoeid-voortuin-grind-hortensia",
+    "gallery": [
+      {
+        "image": "klimop-teruggesnoeid-voortuin-grind-hortensia",
+        "alt": "Teruggesnoeide klimophaag in een voortuin met grind, stapplaten en hortensia",
+        "role": "cover"
+      },
+      {
+        "image": "klimop-teruggesnoeid-voortuin-struiken",
+        "alt": "Voortuin met grind, stapplaten, struiken en teruggesnoeide klimop",
+        "role": "during"
+      },
+      {
+        "image": "beplanting-gesnoeid-achtertuin-hortensia-pergola",
+        "alt": "Achtertuin met hortensia's, snoeiafval en klimplanten aan een pergola tijdens het snoeien",
+        "role": "during"
+      },
+      {
+        "image": "achtertuin-hortensia-schutting-kruiwagen",
+        "alt": "Achtertuin met hortensia's langs een antracietkleurige schutting en een kruiwagen",
+        "role": "detail"
+      },
+      {
+        "image": "achtertuin-terras-schutting-hortensia-stapplaten",
+        "alt": "Achtertuin met houten terras, plantenbak, hortensia's en stapplaten langs een donkere schutting",
+        "role": "detail"
+      }
+    ],
+    "summary": "Klimophaag en beplanting in voor- en achtertuin teruggesnoeid.",
+    "situation": null,
+    "workDone": [
+      "Klimophaag in de voortuin teruggesnoeid",
+      "Snoeiwerk aan beplanting en klimplanten in de voor- en achtertuin"
+    ],
+    "materials": [],
+    "duration": null,
+    "dimensions": null,
+    "tags": [
+      "tuinonderhoud",
+      "snoeiwerk"
+    ],
+    "featured": true,
+    "verification": "visually-confirmed",
+    "publishStatus": "published"
+  },
+  {
+    "slug": "haag-langs-hekwerk-gesnoeid",
+    "title": "Haag langs smeedijzeren hekwerk gesnoeid",
+    "primaryService": "snoeiwerk",
+    "services": [
+      "snoeiwerk",
+      "tuinonderhoud"
+    ],
+    "location": null,
+    "coverImage": "haag-hekwerk-gesnoeid-stoep-witte-split",
+    "gallery": [
+      {
+        "image": "haag-hekwerk-gesnoeid-stoep-witte-split",
+        "alt": "Gesnoeide haag langs een smeedijzeren hekwerk en stoep met een strook witte split",
+        "role": "cover"
+      },
+      {
+        "image": "haag-hekwerk-gesnoeid-langs-stoeprand",
+        "alt": "Gesnoeide haag langs een hekwerk, met witte split langs de stoeprand",
+        "role": "detail"
+      }
+    ],
+    "summary": "Haag langs een hekwerk en stoeprand in model gesnoeid.",
+    "situation": null,
+    "workDone": [
+      "Haag over de volle lengte langs het hekwerk en de stoep in model gesnoeid"
+    ],
+    "materials": [],
+    "duration": null,
+    "dimensions": null,
+    "tags": [
+      "snoeiwerk",
+      "tuinonderhoud"
+    ],
+    "featured": true,
+    "verification": "visually-confirmed",
+    "publishStatus": "published"
+  },
+  {
+    "slug": "voortuin-heesters-in-vorm-gesnoeid",
+    "title": "Heesters en lage haag in vorm gesnoeid in voortuin",
+    "primaryService": "snoeiwerk",
+    "services": [
+      "snoeiwerk",
+      "tuinonderhoud"
+    ],
+    "location": null,
+    "coverImage": "voortuin-heesters-bol-haag-gesnoeid-pad",
+    "gallery": [
+      {
+        "image": "voortuin-heesters-bol-haag-gesnoeid-pad",
+        "alt": "Voortuin met tot bol geknipte heester en lage gesnoeide haag langs de gevel",
+        "role": "cover"
+      },
+      {
+        "image": "voortuin-heesters-bol-haag-gesnoeid-plantvak",
+        "alt": "Voortuin met bolvormige heester, gesnoeide haag en een open plantvak",
+        "role": "detail"
+      }
+    ],
+    "summary": "Heesters tot bol en lage haag langs de gevel in vorm gesnoeid.",
+    "situation": null,
+    "workDone": [
+      "Heester tot een ronde bolvorm geknipt",
+      "Lage haag langs de gevel strak en rechthoekig in model gebracht"
+    ],
+    "materials": [],
+    "duration": null,
+    "dimensions": null,
+    "tags": [
+      "snoeiwerk",
+      "tuinonderhoud"
+    ],
+    "featured": true,
+    "verification": "visually-confirmed",
+    "publishStatus": "published"
+  },
+  {
     "slug": "oprit-en-bestrating-gereinigd",
     "title": "Oprit en bestrating gereinigd met hogedruk",
     "primaryService": "hogedrukreiniging",
