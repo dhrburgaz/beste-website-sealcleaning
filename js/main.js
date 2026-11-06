@@ -179,11 +179,12 @@
       return fetch(ep, { method: "POST", body: fd, headers: { Accept: "application/json" } }).then(function (r) {
         return r.json().catch(function () { return {}; }).then(function (data) {
           if (submit) submit.disabled = false;
-          if (r.ok && (data.success === true || data.success === "true")) {
+          var needsActivation = /activat/i.test(String(data.message || ""));
+          if (r.ok && (data.success === true || data.success === "true") && !needsActivation) {
             form.reset();
             var label = document.querySelector("[data-file-count]");
             if (label) label.textContent = "";
-            statusEl.textContent = "Bedankt, uw aanvraag is verstuurd. Wij nemen zo snel mogelijk contact met u op, meestal binnen één werkdag.";
+            statusEl.textContent = "Bedankt, uw aanvraag is verstuurd. Wij nemen contact met u op. Wilt u liever direct contact? Bel 078 204 95 17 of stuur een WhatsApp-bericht.";
             statusEl.className = "form-status success";
             statusEl.scrollIntoView({ behavior: "smooth", block: "center" });
             return;
@@ -214,10 +215,12 @@
       var attachmentAltChannel = form.getAttribute("data-attachment-alt-channel");
 
       if (statusEl) {
+        var contactLine = " U kunt ook direct bellen (078 204 95 17) of een WhatsApp-bericht sturen.";
+        var base = "Het versturen via de website is niet gelukt, uw aanvraag is dus nog niet verzonden. Klik hieronder om haar via uw e-mailprogramma te versturen. Uw ingevulde gegevens worden meegenomen.";
         statusEl.innerHTML = hasPhotos
-          ? "Bijna klaar — klik hieronder om uw aanvraag via e-mail naar ons te versturen. Uw ingevulde gegevens worden automatisch meegenomen. <strong>Let op: uw geselecteerde " + attachmentNoun + " worden niet automatisch bijgevoegd</strong> — voeg ze in uw mailprogramma zelf als bijlage toe voordat u verstuurt" + (attachmentAltChannel ? ", of stuur ze apart via " + attachmentAltChannel + "." : ".")
-          : "Bijna klaar — klik hieronder om uw aanvraag via e-mail naar ons te versturen. Uw ingevulde gegevens worden automatisch meegenomen.";
-        statusEl.className = "form-status success";
+          ? base + " <strong>Let op: uw geselecteerde " + attachmentNoun + " worden niet automatisch bijgevoegd.</strong> Voeg ze in uw mailprogramma zelf toe" + (attachmentAltChannel ? ", of stuur ze apart via " + attachmentAltChannel : "") + "." + contactLine
+          : base + contactLine;
+        statusEl.className = "form-status error";
         statusEl.hidden = false;
         statusEl.scrollIntoView({ behavior: "smooth", block: "center" });
       }
@@ -249,72 +252,4 @@
     }
   }
   bindFileInput();
-
-  /* Inspiratiebord (I06/I07): eigen cases en materialen bewaren zonder account,
-     alleen in deze browser. Geen klantfoto's, geen server. */
-  var INSP_KEY = "sealInspiration";
-  var INSP_MAX = 24;
-  function inspRead() {
-    try {
-      var raw = JSON.parse(window.localStorage.getItem(INSP_KEY) || "null");
-      return raw && Array.isArray(raw.items) ? raw.items : [];
-    } catch (e) { return []; }
-  }
-  function inspWrite(items) {
-    try {
-      window.localStorage.setItem(INSP_KEY, JSON.stringify({ savedAt: new Date().toISOString(), items: items.slice(0, INSP_MAX) }));
-      return true;
-    } catch (e) { return false; }
-  }
-  window.SealInspiration = {
-    list: inspRead,
-    has: function (kind, id) { return inspRead().some(function (i) { return i.kind === kind && i.id === id; }); },
-    add: function (item) {
-      var items = inspRead().filter(function (i) { return !(i.kind === item.kind && i.id === item.id); });
-      items.unshift(item);
-      return inspWrite(items);
-    },
-    remove: function (kind, id) {
-      return inspWrite(inspRead().filter(function (i) { return !(i.kind === kind && i.id === id); }));
-    },
-    clear: function () { try { window.localStorage.removeItem(INSP_KEY); } catch (e) {} }
-  };
-
-  /* Bewaarknop op projectdetailpagina's (/projecten/<slug>/) */
-  var caseMatch = /\/projecten\/([a-z0-9-]+)\/?$/.exec(window.location.pathname);
-  var caseMeta = document.querySelector(".case-meta");
-  if (caseMatch && caseMeta) {
-    var slug = caseMatch[1];
-    var h1 = document.querySelector("h1");
-    var heroImg = document.querySelector(".hero-media img");
-    var tag = caseMeta.querySelector(".tag");
-    var btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "btn btn-secondary btn-sm inspiration-save";
-    var sync = function () {
-      var saved = window.SealInspiration.has("case", slug);
-      btn.setAttribute("aria-pressed", saved ? "true" : "false");
-      btn.textContent = saved ? "Bewaard op inspiratiebord ✓" : "Bewaar op inspiratiebord";
-    };
-    btn.addEventListener("click", function () {
-      if (window.SealInspiration.has("case", slug)) {
-        window.SealInspiration.remove("case", slug);
-      } else {
-        window.SealInspiration.add({
-          kind: "case", id: slug,
-          title: h1 ? h1.textContent.trim() : slug,
-          image: heroImg ? heroImg.getAttribute("src").replace(/^(\.\.\/)+/, "") : null,
-          service: tag ? tag.textContent.trim() : null
-        });
-      }
-      sync();
-    });
-    sync();
-    caseMeta.appendChild(btn);
-    var link = document.createElement("a");
-    link.href = "../../inspiratie/";
-    link.className = "inspiration-link";
-    link.textContent = "Bekijk inspiratiebord";
-    caseMeta.appendChild(link);
-  }
 })();

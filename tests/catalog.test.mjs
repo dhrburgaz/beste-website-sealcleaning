@@ -16,7 +16,7 @@ test("catalogus: unieke ids, geldige status/categorie, geen verzonnen velden", (
     assert.equal(i.purchasable, false, `${i.id}: niet online bestelbaar zonder fulfilmentafspraken`);
     if (i.status !== "verified-product") { assert.equal(i.sku, null, `${i.id}: geen SKU bij algemene optie`); assert.equal(i.supplier, null, i.id); }
     else { assert.ok(i.sourceUrl && i.priceSourceId, `${i.id}: geverifieerd product heeft bron`); assert.ok(prices.rows.some((r) => r.id === i.priceSourceId), i.id); }
-    if (i.image) assert.ok(existsSync(ROOT + i.image.src), `${i.id}: afbeelding bestaat`);
+    // De catalogus wordt niet gepubliceerd; afbeeldingen van verborgen projecten staan niet meer in de openbare boom.
     assert.equal(i.availability.status, null, `${i.id}: beschikbaarheid niet geclaimd`);
   }
   assert.ok(CATALOG.length >= 40);

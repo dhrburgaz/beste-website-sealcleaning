@@ -4,7 +4,7 @@ import { readFileSync, existsSync, readdirSync, statSync } from "node:fs";
 import { join, dirname, normalize } from "node:path";
 
 const ROOT = new URL("..", import.meta.url).pathname;
-const walk = (d) => readdirSync(join(ROOT, d), { withFileTypes: true }).flatMap((e) => e.isDirectory() ? (["vendor", "node_modules", ".git", "tests", "docs", "images", "server", "tools", "deploy"].includes(e.name) ? [] : walk(`${d}${e.name}/`)) : e.name.endsWith(".html") ? [`${d}${e.name}`] : []);
+const walk = (d) => readdirSync(join(ROOT, d), { withFileTypes: true }).flatMap((e) => e.isDirectory() ? (["vendor", "node_modules", ".git", "tests", "docs", "images", "server", "tools", "deploy", "archief", "_site"].includes(e.name) ? [] : walk(`${d}${e.name}/`)) : e.name.endsWith(".html") ? [`${d}${e.name}`] : []);
 
 test("alle srcset-, src- en preload-bestanden in de HTML bestaan", () => {
   const missing = [];

@@ -6,7 +6,8 @@ sys.path.insert(0, os.path.dirname(__file__))
 from extract import pages
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 os.chdir(ROOT)
-TR = json.load(open("tools/i18n/tr.json"))
+from nlfix import fix as _nlfix
+TR = {_nlfix(k): v for k, v in json.load(open("tools/i18n/tr.json")).items()}
 SITE = "https://sealcleaning.nl/"
 PAGES = pages()
 LEGAL = ["privacy/index.html", "voorwaarden/index.html"]
@@ -55,7 +56,7 @@ def to_target(page, url, tr_page):
 def rewrite_urls(s, page, tr_page):
     def one(m):
         return f'{m.group(1)}="{to_target(page, m.group(2), tr_page)}"'
-    s = re.sub(r'\b(href|src|action|poster)="([^"]*)"', one, s)
+    s = re.sub(r'\b(href|src|action|poster|data-full-webp|data-full-jpg)="([^"]*)"', one, s)
     def ss(m):
         parts = [p.strip() for p in m.group(1).split(",")]
         out = []

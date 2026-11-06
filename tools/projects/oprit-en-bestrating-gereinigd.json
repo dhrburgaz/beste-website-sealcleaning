@@ -1,22 +1,22 @@
 {
  "slug": "oprit-en-bestrating-gereinigd",
- "title": "Oprit en bestrating gereinigd met hogedruk",
+ "title": "Bestrating gereinigd met hogedruk",
  "category": "hogedrukreiniging",
  "services": [
   "hogedrukreiniging",
   "bestrating"
  ],
  "location": null,
- "tag": "Hogedrukreiniging · Bestrating",
- "summary": "Klinkerbestrating van oprit en zijpad met hogedruk gereinigd.",
- "intro": "Voor deze klant hebben wij de klinkerbestrating rond de woning gereinigd: de oprit en het pad langs het huis.",
+ "tag": "Hogedrukreiniging",
+ "summary": "Klinkerbestrating met hogedruk gereinigd, gericht op mos, onkruid en vuil tussen de voegen.",
+ "intro": "Voor deze klant hebben wij de klinkerbestrating rond de woning met hogedruk gereinigd. Het doel was vooral het verwijderen van mos, onkruid en vuil tussen de voegen.",
  "work": [
-  "Klinkerbestrating van de oprit en het zijpad gereinigd met een hogedrukreiniger",
-  "Verkleuring en vuil van de stenen verwijderd, zodat het patroon van de bestrating weer duidelijk zichtbaar is"
+  "Mos, onkruid en vuil tussen de stenen verwijderd met een hogedrukreiniger",
+  "Oprit en pad langs de woning gereinigd"
  ],
- "result": "De gereinigde klinkers hebben weer een egale, lichtere kleur. Op de foto met de duidelijke scheidslijn ziet u het verschil tussen het gereinigde deel (links) en het deel dat nog niet was gereinigd (rechts).",
- "seoTitle": "Oprit en bestrating reinigen met hogedruk — project",
- "seoDescription": "Project: klinkerbestrating van oprit en pad gereinigd met hogedruk. Bekijk de foto's en het verschil tussen gereinigd en niet gereinigd.",
+ "result": "De bestrating is schoongemaakt en de voegen zijn weer open en zichtbaar. Het werk was gericht op de voegen en niet op een volledig egaal, nieuw uiterlijk van de stenen. Om onkruid in de voegen minder kans te geven, kunnen de voegen na het reinigen worden aangevuld met geschikt voegzand; dat bespreken we per situatie.",
+ "seoTitle": "Bestrating reinigen met hogedruk: mos en onkruid uit de voegen",
+ "seoDescription": "Project: klinkerbestrating met hogedruk gereinigd, gericht op mos, onkruid en vuil tussen de voegen. Bekijk de foto's.",
  "related": [
   [
    "hogedrukreiniging",
@@ -31,7 +31,7 @@
   {
    "src": "da28bc07-image.jpg",
    "name": "hogedrukreiniging-oprit-klinkers-aanhanger",
-   "alt": "Klinkerbestrating van een oprit tijdens het reinigen met hogedruk, met werkslang en aanhanger",
+   "alt": "Klinkeroprit met werkslang en aanhanger tijdens het reinigen met hogedruk",
    "role": "cover",
    "blur": [
     [
@@ -40,20 +40,21 @@
      170,
      56
     ]
-   ]
+   ],
+   "caption": "Tijdens het werk"
   },
   {
    "src": "e445f462-image.jpg",
    "name": "hogedrukreiniging-klinkers-scheidslijn-voor-na",
-   "alt": "Klinkerbestrating met duidelijke scheidslijn: links hogedruk gereinigd, rechts nog niet gereinigd",
+   "alt": "Klinkerbestrating met een scheidslijn: links gereinigd, rechts nog niet gereinigd",
    "role": "during",
-   "caption": "Links gereinigd, rechts nog niet gereinigd",
-   "blur": []
+   "blur": [],
+   "caption": "Links gereinigd, rechts nog niet gereinigd"
   },
   {
    "src": "0dfac95b-image.jpg",
    "name": "hogedrukreiniging-oprit-klinkers-gereinigd-deel",
-   "alt": "Oprit van grijze klinkers in visgraatverband, deels gereinigd met hogedruk",
+   "alt": "Klinkeroprit waarvan een deel is gereinigd",
    "role": "during",
    "blur": [
     [
@@ -62,12 +63,13 @@
      85,
      34
     ]
-   ]
+   ],
+   "caption": "Tijdens het werk"
   },
   {
    "src": "a149c88e-image.jpg",
    "name": "hogedrukreiniging-oprit-klinkers-resultaat",
-   "alt": "Oprit met gereinigde grijze klinkers naast een donkere inrit met sierbed",
+   "alt": "Klinkeroprit, gereinigd, naast een donkere inrit",
    "role": "after",
    "blur": [
     [
@@ -81,7 +83,7 @@
   {
    "src": "6ecac149-image.jpg",
    "name": "hogedrukreiniging-zijpad-klinkers-avondzon",
-   "alt": "Gereinigd klinkerpad langs een woning en klimopheg in de avondzon",
+   "alt": "Klinkerpad langs een woning in de avondzon",
    "role": "after",
    "blur": [
     [
@@ -93,25 +95,14 @@
    ]
   },
   {
-   "src": "8d86bf21-image.jpg",
-   "name": "hogedrukreiniging-zijpad-klinkers-heg",
-   "alt": "Lang klinkerpad met houten hekwerk en klimopheg",
-   "role": "after",
-   "blur": [
-    [
-     505,
-     560,
-     85,
-     45
-    ]
-   ]
-  },
-  {
-   "src": "db3013ab-image.jpg",
-   "name": "hogedrukreiniging-pad-glazen-overkapping",
-   "alt": "Smal klinkerpad langs een overkapping met glazen panelen en een houten hekwerk",
+   "src": "ae4e96b4-image.jpg",
+   "name": "hogedrukunit-op-aanhanger",
+   "alt": "Mobiele hogedrukunit op een aanhanger",
    "role": "detail",
+   "caption": "Onze mobiele unit voor hogedrukreiniging",
    "blur": []
   }
- ]
+ ],
+ "status": "published",
+ "order": 1
 }

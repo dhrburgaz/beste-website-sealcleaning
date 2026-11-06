@@ -1,12 +1,12 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { execSync } from "node:child_process";
 import { DEFAULT_SETTINGS } from "../data/calc-defaults.js";
 
 const ROOT = new URL("..", import.meta.url).pathname;
 const tracked = execSync("git ls-files", { cwd: ROOT }).toString().split("\n")
-  .filter((f) => f && !f.startsWith("vendor/") && !f.startsWith("images/") && !f.startsWith("docs/") && !f.startsWith("tests/") && /\.(html|js|mjs|json|css|txt|xml)$/.test(f));
+  .filter((f) => f && existsSync(new URL("../" + f, import.meta.url)) && !f.startsWith("vendor/") && !f.startsWith("images/") && !f.startsWith("docs/") && !f.startsWith("tests/") && /\.(html|js|mjs|json|css|txt|xml)$/.test(f));
 
 test("geen geheimen of bankgegevens in openbare bestanden", () => {
   const patterns = [/-----BEGIN [A-Z ]*PRIVATE KEY/, /\bAKIA[0-9A-Z]{16}\b/, /\bsk-[A-Za-z0-9]{20,}/, /\bNL\d{2}[A-Z]{4}\d{10}\b/, /ghp_[A-Za-z0-9]{30,}/];
@@ -57,7 +57,9 @@ test("server-UI zet geen data via innerHTML en laadt geen externe scripts", () =
 
 test("GitHub Pages publiceert geen backend, deploy- of databestanden", () => {
   const wf = readFileSync(ROOT + ".github/workflows/deploy-pages.yml", "utf8");
-  for (const p of ["./server", "./deploy", "./docs", "./tests", "./Dockerfile", "./server-data"]) assert.ok(wf.includes(`--exclude='${p}'`), `workflow sluit ${p} niet uit`);
+  assert.ok(wf.includes("deploy-exclude.txt"), "workflow gebruikt deploy-exclude.txt");
+  const ex = readFileSync(ROOT + "deploy-exclude.txt", "utf8").split("\n");
+  for (const p of ["./server", "./deploy", "./docs", "./tests", "./Dockerfile", "./server-data", "./archief", "./data/price-sources.json"]) assert.ok(ex.includes(p), `deploy-exclude.txt sluit ${p} niet uit`);
 });
 
 test("voorbeeldconfiguratie bevat geen geheimen", () => {

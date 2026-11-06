@@ -19,9 +19,9 @@
     addressLine2: "3312 KP Dordrecht",
     kvk: "83078665",
     btw: "NL003773849B79",
-    hours: "Dagelijks bereikbaar van 10:00 tot 19:00 uur",
+    hours: "",
     primaryArea: "Dordrecht",
-    region: "Drechtsteden en Rotterdam e.o.",
+    region: "Dordrecht, Hendrik-Ido-Ambacht, Zwijndrecht en de Drechtsteden",
     // Adres van de Sealcleaning-backend (bijv. "https://api.sealcleaning.nl"). Leeg = formulieren
     // gebruiken het eigen mailprogramma van de bezoeker (huidige werking).
     apiBase: "",

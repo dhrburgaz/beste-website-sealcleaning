@@ -7,9 +7,11 @@
 import { readFileSync, writeFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 
-const ROOT = new URL("..", import.meta.url).pathname;
-const SKIP = new Set(["_site", "tr", "vendor", "node_modules", ".git", "zoeken", "inspiratie", "docs", "tools", "images"]);
-const SERVICES = ["tuinonderhoud", "tuinaanleg", "tuinrenovatie", "bestrating", "schuttingen", "snoeiwerk", "periodiek-tuinonderhoud"];
+const BASE = new URL("..", import.meta.url).pathname;
+const LANG = process.argv[2] === "tr" ? "tr" : "nl";
+const ROOT = LANG === "tr" ? BASE + "tr/" : BASE;
+const SKIP = new Set(["_site", "archief", "tr", "winkelmandje", "bestelling", "vendor", "node_modules", ".git", "zoeken", "inspiratie", "docs", "tools", "images"]);
+const SERVICES = ["tuinonderhoud", "tuinaanleg", "tuinrenovatie", "bestrating", "schuttingen", "snoeiwerk", "periodiek-tuinonderhoud", "hogedrukreiniging", "kunstgras", "groenafval-en-onkruid", "plantenbakken"];
 
 function walk(dir, out = []) {
   for (const name of readdirSync(dir)) {
@@ -41,19 +43,6 @@ for (const file of walk(ROOT)) {
   entries.push({ url: path, type, title: title || h1, h1, description, text });
 }
 
-async function importData(rel) {
-  const src = readFileSync(join(ROOT, rel), "utf8");
-  return import("data:text/javascript," + encodeURIComponent(src));
-}
-const { PAVING_VERIFIED_PRODUCTS } = await importData("data/materials.js");
-const { FENCE_SYSTEMS } = await importData("data/fence-systems.js");
-for (const p of PAVING_VERIFIED_PRODUCTS) {
-  entries.push({ url: "prijzen/", type: "Materiaal", title: p.label, h1: "", description: `Onderzocht referentieartikel bestrating (${p.materialType}), met bron en peildatum op de prijzenpagina.`, text: "tegel terrastegel bestrating" });
-}
-for (const f of FENCE_SYSTEMS) {
-  entries.push({ url: "project-samenstellen/?service=schutting", type: "Materiaal", title: `Schutting: ${f.label}`, h1: "", description: `${f.description} Generiek systeem — te visualiseren in de configurator.`, text: `${f.buildUp || ""} ${f.maintenance || ""}` });
-}
-
 entries.sort((a, b) => a.url.localeCompare(b.url));
-writeFileSync(join(ROOT, "data/search-index.json"), JSON.stringify({ generatedAt: new Date().toISOString().slice(0, 10), entries }, null, 1));
+writeFileSync(join(BASE, LANG === "tr" ? "data/search-index-tr.json" : "data/search-index.json"), JSON.stringify({ generatedAt: new Date().toISOString().slice(0, 10), entries }, null, 1));
 console.log(`search-index: ${entries.length} items`);

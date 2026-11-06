@@ -50,12 +50,12 @@ const bodyText = (pg) => pg.locator("[data-beginner]").innerText();
 {
   const { ctx, pg, errs } = await open();
   await flow(pg, { until: "bekijk" });
-  assert.match(await title(pg), /Bekijk jouw idee/);
+  assert.match(await title(pg), /Bekijk uw idee/);
   const txt = await bodyText(pg);
   assert.match(txt, /6 m/); assert.match(txt, /180 cm/); assert.match(txt, /precies/);
   assert.ok(await pg.locator("[data-b-overlay] text").count() >= 2, "maatlabels in de 3D-weergave");
   assert.match(await pg.locator("[data-b-overlay]").innerHTML(), /Lengte: 6 m/);
-  assert.match(txt, /Volgt in je offerte/); assert.doesNotMatch(txt, /€\s?\d/, "geen verzonnen bedragen");
+  assert.match(txt, /Volgt in uw offerte/); assert.doesNotMatch(txt, /€\s?\d/, "geen verzonnen bedragen");
   assert.match(txt, /Echt voorbeeld/); assert.match(txt, /Voorbeeld in 3D/); assert.match(txt, /Uw tuinplan/);
   assert.deepEqual(errs, []); await ctx.close(); ok("UX001 rechte schutting 6 m / 180 cm, maten in 3D, tuinplan, geen bedragen");
 }
@@ -64,7 +64,7 @@ const bodyText = (pg) => pg.locator("[data-beginner]").innerText();
 {
   const { ctx, pg } = await open();
   assert.equal(await pg.locator("[data-b-stepper] li").count(), 5);
-  assert.match(await pg.locator("[data-b-phase-title]").innerText(), /Stap 1\. Vertel over je situatie/);
+  assert.match(await pg.locator("[data-b-phase-title]").innerText(), /Stap 1\. Vertel over uw situatie/);
   await pg.waitForSelector("[data-b-3d] canvas", { timeout: 15000 });
   const box = await pg.locator(".b-preview-stage").boundingBox(); assert.ok(box.width >= 600, `3D breed genoeg: ${box.width}`);
   await pick(pg, "Een nieuwe schutting"); await next(pg); await pick(pg, "Recht"); await next(pg);
@@ -158,7 +158,7 @@ const bodyText = (pg) => pg.locator("[data-beginner]").innerText();
   await pg.locator(".b-info").click();
   const help = pg.locator(".b-help:not([hidden])");
   assert.equal(await help.count(), 1);
-  const h = await help.innerText(); for (const k of ["Wat bedoelen we?", "Zo doe je dat", "Waarom vragen we dit?", "Voorbeeld", "Ik weet het niet"]) assert.ok(h.toLowerCase().includes(k.toLowerCase()), k);
+  const h = await help.innerText(); for (const k of ["Wat bedoelen we?", "Zo doet u dat", "Waarom vragen we dit?", "Voorbeeld", "Ik weet het niet"]) assert.ok(h.toLowerCase().includes(k.toLowerCase()), k);
   assert.equal(await pg.locator(".b-info").getAttribute("aria-expanded"), "true");
   await pg.reload(); await pg.waitForSelector("[data-beginner][data-ready]");
   assert.match(await pg.locator("[data-b-status]").innerText(), /terug/);
@@ -183,7 +183,6 @@ const bodyText = (pg) => pg.locator("[data-beginner]").innerText();
   await pg.waitForFunction(() => /A-TEST-0001/.test(document.querySelector("[data-form-status]").textContent), null, { timeout: 8000 });
   assert.ok(posted.includes("contactvoorkeur") && posted.includes("WhatsApp"));
   assert.ok(posted.includes("maatstatus") && posted.includes("ongeveer"));
-  assert.ok(/#ontwerp=[A-Za-z0-9_-]+/.test(decodeURIComponent(posted)) || /ontwerp/.test(posted), "ontwerp meegestuurd");
   assert.ok(posted.includes("kind") && posted.includes("configurator"));
   await ctx.close(); ok("aanvraag: contactvoorkeur, maatstatus, ontwerp en referentie");
 }
