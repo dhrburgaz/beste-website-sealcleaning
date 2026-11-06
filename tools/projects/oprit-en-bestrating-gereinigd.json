@@ -32,7 +32,7 @@
    "src": "da28bc07-image.jpg",
    "name": "hogedrukreiniging-oprit-klinkers-aanhanger",
    "alt": "Klinkeroprit met werkslang en aanhanger tijdens het reinigen met hogedruk",
-   "role": "cover",
+   "role": "during",
    "blur": [
     [
      1535,
@@ -84,7 +84,7 @@
    "src": "6ecac149-image.jpg",
    "name": "hogedrukreiniging-zijpad-klinkers-avondzon",
    "alt": "Klinkerpad langs een woning in de avondzon",
-   "role": "after",
+   "role": "cover",
    "blur": [
     [
      692,

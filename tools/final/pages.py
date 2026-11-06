@@ -209,7 +209,7 @@ def materialen():
     main = f'''<main id="main">
   {hero(r, [], "Materialen", "Materiaaladvies", "Welk materiaal past bij uw tuin? Wij adviseren en leveren los of samen met montage.")}
   <section class="section"><div class="container"><ul class="v-why v-why--cards">{"".join(f'<li class="v-why-card"><h3>{e(t)}</h3><p>{e(d)}</p></li>' for t, d in cards)}</ul></div></section>
-  {sec(f"""<h2>Los of met montage</h2><p>Heeft uw opdracht materiaal nodig? Dan kunt u het in overleg zelf aanschaffen of via Sealcleaning laten opnemen in de offerte, los of samen met de montage. Online bestellen is niet mogelijk; u vraagt een offerte aan. Wilt u zelf een schutting ontwerpen? Probeer dan onze <a href="{r}schutting-ontwerpen/">3D-ontwerper</a>.</p>""", "section section-sand-deep")}
+  {sec(f"""<h2>Los of met montage</h2><p>Heeft uw opdracht materiaal nodig? Dan kunt u het in overleg zelf aanschaffen of via Sealcleaning laten opnemen in de offerte, los of samen met de montage. Wij adviseren u graag over geschikte materialen. Wilt u zelf een schutting ontwerpen? Probeer dan onze <a href="{r}schutting-ontwerpen/">3D-ontwerper</a>.</p>""", "section section-sand-deep")}
   {cta(r, "Advies over materiaal", "Vertel ons wat u wilt laten doen. Wij adviseren over het juiste materiaal.", "Vraag een offerte aan")}
 </main>'''
     put_main("materialen/index.html", main)

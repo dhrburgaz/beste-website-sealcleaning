@@ -9,12 +9,12 @@ export const PROJECTS = [
       "bestrating"
     ],
     "location": null,
-    "coverImage": "hogedrukreiniging-oprit-klinkers-aanhanger",
+    "coverImage": "hogedrukreiniging-zijpad-klinkers-avondzon",
     "gallery": [
       {
         "image": "hogedrukreiniging-oprit-klinkers-aanhanger",
         "alt": "Klinkeroprit met werkslang en aanhanger tijdens het reinigen met hogedruk",
-        "role": "cover"
+        "role": "during"
       },
       {
         "image": "hogedrukreiniging-klinkers-scheidslijn-voor-na",
@@ -34,7 +34,7 @@ export const PROJECTS = [
       {
         "image": "hogedrukreiniging-zijpad-klinkers-avondzon",
         "alt": "Klinkerpad langs een woning in de avondzon",
-        "role": "after"
+        "role": "cover"
       },
       {
         "image": "hogedrukunit-op-aanhanger",

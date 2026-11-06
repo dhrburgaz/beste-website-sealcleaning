@@ -44,7 +44,7 @@
     });
 
     root.querySelectorAll("[data-whatsapp]").forEach(function (el) {
-      var msg = el.getAttribute("data-whatsapp-msg") || SEAL.defaultWhatsappMessage;
+      var msg = el.getAttribute("data-whatsapp-msg") || (document.documentElement.lang === "tr" ? "Merhaba Sealcleaning, hizmetleriniz hakkında bilgi almak istiyorum." : SEAL.defaultWhatsappMessage);
       el.setAttribute("href", waLink(msg));
       el.setAttribute("target", "_blank");
       el.setAttribute("rel", "noopener");

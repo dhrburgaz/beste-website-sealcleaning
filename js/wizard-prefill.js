@@ -10,7 +10,7 @@
   // ?materiaal= vanuit /materialen/: alleen als tekst in de omschrijving (textarea.value, geen HTML).
   var materiaal = (params.get("materiaal") || "").slice(0, 140);
 
-  /* Overdracht vanuit /project-samenstellen/: een leesbare samenvatting die
+  /* Overdracht vanuit de 3D-ontwerper: een leesbare samenvatting die
      daar in sessionStorage is gezet (zie js/configurator/app.js,
      storeHandoffSummary). Eenmalig gebruik: direct verwijderen na lezen. */
   var configuratorSummary = null;

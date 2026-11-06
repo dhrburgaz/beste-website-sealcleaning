@@ -51,7 +51,7 @@ if (host) {
 
   if ("IntersectionObserver" in window) {
     const io = new IntersectionObserver((entries) => {
-      if (entries.some((e) => e.isIntersecting)) { io.disconnect(); start(); }
+      if (entries.some((e) => e.isIntersecting)) { io.disconnect(); (window.requestIdleCallback || ((f) => setTimeout(f, 60)))(start); }
     }, { rootMargin: "700px" });
     io.observe(host);
   } else start();
