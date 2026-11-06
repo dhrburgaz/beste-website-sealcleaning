@@ -16,6 +16,15 @@ TRSET = set(PAGES) | set(EXTRA_TR)
 esc = lambda s: s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 escq = lambda s: html.escape(s, quote=True)
 
+WA_TOPICS = {"tuinrenovatie": "bahçe yenileme", "tuinonderhoud": "bahçe bakımı", "tuinaanleg": "bahçe yapımı", "snoeiwerk": "budama", "schuttingen": "çitler", "plantenbakken": "bitki saksıları",
+ "periodiek tuinonderhoud": "düzenli bahçe bakımı", "onkruid en groenafval": "yabani ot ve bahçe atığı", "kunstgras": "suni çim", "hogedrukreiniging": "yüksek basınçlı temizlik", "bestrating": "zemin kaplama", "een klus in mijn tuin": "bahçemdeki bir iş"}
+def wa_tr(msg):
+    """Vooraf ingevulde WhatsApp-tekst in het Turks."""
+    if msg == "Hallo Sealcleaning, ik wil graag informatie over jullie diensten.": return "Merhaba Sealcleaning, hizmetleriniz hakkında bilgi almak istiyorum."
+    m = re.match(r"^Hallo Sealcleaning, ik heb een vraag over (.+)\.$", msg)
+    if m and m.group(1) in WA_TOPICS: return f"Merhaba Sealcleaning, {WA_TOPICS[m.group(1)]} hakkında bir sorum var."
+    return msg
+
 def tr_text(m):
     raw = m.group(1); u = html.unescape(raw).strip()
     t = TR.get(u)
@@ -109,23 +118,32 @@ def add_switch(s, page, lang):
     return s.replace('<div class="header-cta">', '<div class="header-cta">' + sw, 1)
 
 TR_SCRIPT = '<script src="{p}js/i18n-tr.js"></script>\n'
-LEGAL_TR = {
- "privacy/index.html": ("Gizlilik beyanı", "Gizlilik beyanımız Hollandaca yayımlanmıştır ve yasal olarak geçerli olan sürümdür. Kişisel verilerinizle ilgili sorularınız için bize e-posta veya telefonla ulaşabilirsiniz.", "Gizlilik beyanını Hollandaca oku"),
- "voorwaarden/index.html": ("Genel koşullar", "Genel koşullarımız Hollandaca yayımlanmıştır ve yasal olarak geçerli olan sürümdür. Bu metinler henüz hukuki incelemeden geçmemiş taslak metinlerdir. Sorularınız için bize ulaşabilirsiniz.", "Genel koşulları Hollandaca oku"),
-}
+import tr_legal as _tl
+def _legal_main(data, nl_href, nl_label, unreviewed):
+    title, upd, secs = data
+    out = [f'<h1 class="v-h2">{esc(title)}</h1>', f'<p class="v-lede">{esc(_tl.NOTE)}</p>', f'<p>{esc(upd)}</p>']
+    if unreviewed: out.append(f'<p><strong>{esc(_tl.OPEN_NOTE)}</strong></p>')
+    for h, items in secs:
+        out.append(f"<h2>{esc(h)}</h2>")
+        for it in items:
+            out.append("<ul>" + "".join(f"<li>{esc(x)}</li>" for x in it[1]) + "</ul>" if isinstance(it, tuple) else f"<p>{esc(it)}</p>")
+    out.append(f'<p><a class="btn btn-primary btn-lg" href="{nl_href}" lang="nl">{nl_label}</a></p>')
+    return '<main id="main"><section class="v-section"><div class="container" style="max-width:46rem">' + "".join(out) + '</div></section></main>'
+LEGAL_TR = {"privacy/index.html": (_tl.PRIVACY, "Hollandaca metni oku", False), "voorwaarden/index.html": (_tl.TERMS, "Hollandaca metni oku", True)}
 
 def build(page):
     s = open(page).read()
     tr_page = "tr/" + page
     if page in LEGAL_TR:
-        t, p, b = LEGAL_TR[page]
-        main = f'<main id="main"><section class="v-section"><div class="container" style="max-width:46rem"><h1 class="v-h2">{t}</h1><p class="v-lede">{p}</p><p><a class="btn btn-primary btn-lg" href="{posixpath.relpath(posixpath.dirname(page), posixpath.dirname(tr_page))}/" lang="nl">{b}</a></p></div></section></main>'
+        data, lbl, unrev = LEGAL_TR[page]; t = data[0]; p = _tl.NOTE
+        main = _legal_main(data, posixpath.relpath(posixpath.dirname(page), posixpath.dirname(tr_page)) + "/", lbl, unrev)
         s = re.sub(r'<main id="main">.*?</main>', lambda m: main, s, count=1, flags=re.S)
         s = re.sub(r"<title>.*?</title>", f"<title>{t} — Sealcleaning</title>", s, count=1)
         s = re.sub(r'(<meta name="description" content=")[^"]*', lambda m: m.group(1) + p[:150], s, count=1)
     # tekst en attributen
     s = re.sub(r">([^<>]+)<", tr_text, s)
     s = re.sub(r'\s(alt|aria-label|placeholder|title)="([^"]*)"', tr_attr, s)
+    s = re.sub(r'(data-whatsapp-msg=")([^"]*)(")', lambda m: m.group(1) + escq(wa_tr(html.unescape(m.group(2)))) + m.group(3), s)
     s = re.sub(r'(<meta (?:name="description"|property="og:title"|property="og:description") content=")([^"]*)(")', lambda m: m.group(1) + (escq(TR.get(html.unescape(m.group(2)).strip(), html.unescape(m.group(2)))) ) + m.group(3), s)
     s = re.sub(r"<title>(.*?)</title>", lambda m: "<title>" + esc(TR.get(html.unescape(m.group(1)).strip(), html.unescape(m.group(1)).strip())) + "</title>", s, count=1, flags=re.S)
     # taal + canonical

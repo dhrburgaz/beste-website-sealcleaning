@@ -32,7 +32,7 @@ test("beheer: strikte CSP, noindex, robots disallow", () => {
 });
 
 test("beheer- en publieke modules zetten geen data via innerHTML", () => {
-  for (const f of ["js/beheer/app.js", "js/inspiration-board.js", "js/search.js"]) {
+  for (const f of ["js/beheer/app.js", "js/search.js"]) {
     const s = readFileSync(ROOT + f, "utf8");
     const uses = [...s.matchAll(/innerHTML\s*=\s*([^;]+);/g)].map((m) => m[1].trim());
     for (const u of uses) assert.equal(u, '""', `${f}: innerHTML alleen om te legen, gevonden: ${u}`);

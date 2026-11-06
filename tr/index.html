@@ -25,6 +25,14 @@
 <link rel="preload" href="../vendor/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../css/style.css">
 <link rel="stylesheet" href="../css/v12.css">
+<script type="importmap">
+{
+  "imports": {
+    "three": "../vendor/three/three.module.js",
+    "three/addons/": "../vendor/three/examples/jsm/"
+  }
+}
+</script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -113,20 +121,66 @@
 
 <main id="main">
 
-  <section class="v-hero v-hero--plain" aria-labelledby="hero-titel"><div class="container v-hero-inner">
-    <h1 id="hero-titel">Dordrecht'te bahçe bakımı ve bahçe düzenleme</h1>
-    <p>Bahçelerin bakımını yapıyor, bitki çitlerini buduyor, çit kuruyor, zemin döşeme yapıyor ve yüksek basınçla temizliyoruz. Dordrecht, Hendrik-Ido-Ambacht, Zwijndrecht ve Drechtsteden'de çalışıyoruz.</p>
-    <div class="btn-row"><a href="contact/" class="btn btn-primary btn-lg">Teklif isteyin</a><a href="#" class="btn btn-light btn-lg" data-tel>Bizi arayın</a><a href="#" class="btn btn-light btn-lg" data-whatsapp data-whatsapp-msg="Hallo Sealcleaning, ik heb een vraag over een klus in mijn tuin.">WhatsApp</a></div>
-  </div></section>
+  <section class="v-hero v-hero--stage" aria-labelledby="hero-titel">
+    <div class="v-hero-media"><picture><source srcset="../images/inspiratie/tuin-loungehoek-avond-640.webp 640w, ../images/inspiratie/tuin-loungehoek-avond-960.webp 960w, ../images/inspiratie/tuin-loungehoek-avond.webp 1448w" sizes="100vw" type="image/webp"><img src="../images/inspiratie/tuin-loungehoek-avond.jpg" alt="Akşam bahçesi: oturma köşesi, aydınlatmalı bitkiler ve ahşap çit" width="1448" height="1086" fetchpriority="high" decoding="async"></picture></div>
+    <div class="v-hero-scrim"></div>
+    <div class="container v-hero-grid">
+      <div class="v-hero-copy">
+        <p class="v-eyebrow v-eyebrow--light">Sealcleaning Bahçe Bakımı ve Yapımı</p>
+        <h1 id="hero-titel">Dordrecht'te bahçe bakımı ve bahçe düzenleme</h1>
+        <p class="v-hero-lede">Bahçe bakımı, budama, çitler, zemin kaplama, yüksek basınçlı temizlik ve suni çim. Sağda 3B bir örnek bahçeye bakın ve kendi bahçeniz için teklif isteyin.</p>
+        <div class="btn-row"><a href="contact/" class="btn btn-primary btn-lg">Teklif isteyin</a><a href="#" class="btn btn-light btn-lg v-hide-sm" data-tel>Bizi arayın</a><a href="#" class="btn btn-light btn-lg v-hide-sm" data-whatsapp data-whatsapp-msg="Merhaba Sealcleaning, bahçemdeki bir iş hakkında bir sorum var.">WhatsApp</a></div>
+      </div>
+      <div class="v-hero-3d" id="ontwerp3d">
+        <div class="v-3d-stage" data-home-3d>
+          <div class="v-3d-poster"><img src="../images/home-3d-poster.jpg" alt="3B örnek bahçe: beton taban plakası üzerinde ahşap çit, teras ve borderlar" width="1284" height="884" decoding="async"><span>3B örnek yükleniyor…</span></div>
+          <div data-home-3d-canvas></div>
+          <svg data-home-3d-flat hidden role="img" aria-label="2B örnek bahçe, kuşbakışı"></svg>
+        </div>
+        <div class="v-3d-bar v-3d-bar--hero">
+          <div class="v-3d-tools" role="group" aria-label="Örnekte bir çit seçin">
+            <button type="button" class="v-chip" data-3d-mat="hout" aria-pressed="false">Ahşap</button>
+            <button type="button" class="v-chip" data-3d-mat="hout-beton" aria-pressed="true">Betonlu ahşap</button>
+            <button type="button" class="v-chip" data-3d-mat="composiet" aria-pressed="false">Kompozit</button>
+            <button type="button" class="v-chip" data-3d-mat="lamellen" aria-pressed="false">Yatay tahtalar</button>
+          </div>
+          <div class="v-3d-tools" role="group" aria-label="Sfeer">
+            <button type="button" class="v-chip" data-3d-mood="day" aria-pressed="true">Gündüz</button>
+            <button type="button" class="v-chip" data-3d-mood="evening" aria-pressed="false">Aydınlatmalı akşam</button>
+          </div>
+          <div class="v-3d-tools" role="group" aria-label="Camera">
+            <button type="button" class="v-chip" data-3d-iso>Yukarıdan çapraz</button>
+            <button type="button" class="v-chip" data-3d-top>Yukarıdan</button>
+            <button type="button" class="v-chip" data-3d-reset>Başa dön</button>
+          </div>
+        </div>
+        <p class="v-3d-status" data-home-3d-status role="status">3B örnek, gerçek bir proje değildir. Etrafa bakmak için sürükleyin.</p>
+      </div>
+    </div>
+    <p class="i-caption">Örnek görsel, tamamlanmış bir proje değildir</p>
+  </section>
+
+  <div class="v-usp" aria-label="Kenmerken"><div class="container"><ul>
+    <li><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Dordrecht ve Drechtsteden</span></li>
+    <li><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8l9-5 9 5v8l-9 5-9-5z M3 8l9 5 9-5 M12 13v8"/></svg><span>Malzeme tek başına veya montajla birlikte</span></li>
+    <li><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 20h16 M6 20V8l6-4 6 4v12 M10 20v-6h4v6"/></svg><span>Ahşap, beton üzerinde ahşap ve kompozit</span></li>
+    <li><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 4h14v16H5z M8 9h8 M8 13h8 M8 17h5"/></svg><span>Durumunuza özel teklif</span></li>
+  </ul></div></div>
 
   <section class="v-section" id="diensten" aria-labelledby="titel-diensten"><div class="container">
-    <div class="v-section-head"><h2 class="v-h2" id="titel-diensten">Sizin için neler yapıyoruz</h2><p class="v-lede">Size uyan işi seçin. Kararsız mısınız? Bizimle iletişime geçin, birlikte düşünürüz.</p></div>
-    <ul class="v-why v-why--cards"><li class="v-why-card"><h3><a href="tuinonderhoud/">Bahçe bakımı</a></h3><p>Bitki çitleri, çalılar, yabani ot, yapraklar ve kışa hazırlık.</p></li><li class="v-why-card"><h3><a href="periodiek-tuinonderhoud/">Düzenli bahçe bakımı</a></h3><p>Bahçeniz için sabit bakım zamanları.</p></li><li class="v-why-card"><h3><a href="snoeiwerk/">Budama</a></h3><p>Bitki çitleri, çalılar ve uygun küçük ağaçlar.</p></li><li class="v-why-card"><h3><a href="schuttingen/">Çitler</a></h3><p>Ahşap, ahşap-beton ve kompozit; yapma veya değiştirme.</p></li><li class="v-why-card"><h3><a href="bestrating/">Zemin döşeme</a></h3><p>Yolları, terasları ve araç yollarını yapma, yükseltme veya onarma.</p></li><li class="v-why-card"><h3><a href="hogedrukreiniging/">Yüksek basınçlı yıkama</a></h3><p>Yosun, yabani ot ve kiri temizleme.</p></li><li class="v-why-card"><h3><a href="kunstgras/">Yapay çim</a></h3><p>Zemin, yapım ve son işlem.</p></li><li class="v-why-card"><h3><a href="groenafval-en-onkruid/">Yabani ot ve bahçe atıkları</a></h3><p>Kaldırma ve gerekirse taşıma.</p></li><li class="v-why-card"><h3><a href="tuinaanleg/">Bahçe düzenleme</a></h3><p>Size uyan bir bahçe.</p></li><li class="v-why-card"><h3><a href="tuinrenovatie/">Bahçe yenileme</a></h3><p>Mevcut bir bahçeyi yenileme.</p></li><li class="v-why-card"><h3><a href="plantenbakken/">Bitki kasaları</a></h3><p>Bitki kasaları ve yükseltilmiş tarhlar.</p></li></ul>
+    <div class="v-section-head"><p class="v-eyebrow">Hizmetler</p><h2 class="v-h2" id="titel-diensten">Sizin için neler yapıyoruz</h2><p class="v-lede">Size uygun işi seçin. Kararsız mısınız? İletişime geçin, sizinle birlikte düşünürüz. "Örnek" yazan görseller olanakları gösterir ve tamamlanmış proje değildir.</p></div>
+    <ul class="v-cards v-cards-4"><li><a class="v-card" href="schuttingen/"><span class="v-card-img"><picture><source srcset="../images/inspiratie/schutting-hardhout-horizontaal-zonsondergang-640.webp 640w, ../images/inspiratie/schutting-hardhout-horizontaal-zonsondergang-960.webp 960w" sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 300px" type="image/webp"><img src="../images/inspiratie/schutting-hardhout-horizontaal-zonsondergang.jpg" alt="Sıcak akşam ışığında yatay ahşap çit, bitki yatağı ve oturma köşesi" width="1448" height="1086" loading="lazy" decoding="async"></picture><span class="i-tag">Örnek</span></span><span class="v-card-body"><strong>Çitler</strong><span class="v-card-txt">Ahşap, ahşap-beton ve kompozit; yapma veya değiştirme.</span></span></a></li><li><a class="v-card" href="bestrating/"><span class="v-card-img"><picture><source srcset="../images/inspiratie/tuinpad-stapplaten-avond-640.webp 640w, ../images/inspiratie/tuinpad-stapplaten-avond-960.webp 960w" sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 300px" type="image/webp"><img src="../images/inspiratie/tuinpad-stapplaten-avond.jpg" alt="Çakıl arasında büyük basamak taşlarından bahçe yolu, aydınlatma ve bitkilerle" width="1448" height="1086" loading="lazy" decoding="async"></picture><span class="i-tag">Örnek</span></span><span class="v-card-body"><strong>Zemin döşeme</strong><span class="v-card-txt">Yolları, terasları ve araç yollarını yapma, yükseltme veya onarma.</span></span></a></li><li><a class="v-card" href="tuinaanleg/"><span class="v-card-img"><picture><source srcset="../images/inspiratie/tuin-pergola-avond-blauw-640.webp 640w, ../images/inspiratie/tuin-pergola-avond-blauw-960.webp 960w" sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 300px" type="image/webp"><img src="../images/inspiratie/tuin-pergola-avond-blauw.jpg" alt="Alacakaranlıkta pergola, oturma köşesi ve bahçe aydınlatmalı bahçe" width="1448" height="1086" loading="lazy" decoding="async"></picture><span class="i-tag">Örnek</span></span><span class="v-card-body"><strong>Bahçe düzenleme</strong><span class="v-card-txt">Size uyan bir bahçe.</span></span></a></li><li><a class="v-card" href="tuinrenovatie/"><span class="v-card-img"><picture><source srcset="../images/inspiratie/tuin-gazon-terras-dag-640.webp 640w, ../images/inspiratie/tuin-gazon-terras-dag-960.webp 960w" sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 300px" type="image/webp"><img src="../images/inspiratie/tuin-gazon-terras-dag.jpg" alt="Çimli, geniş teras plakalı, bitki kasalı ve üstü kapalı alanlı geniş bahçe" width="1448" height="1086" loading="lazy" decoding="async"></picture><span class="i-tag">Örnek</span></span><span class="v-card-body"><strong>Bahçe yenileme</strong><span class="v-card-txt">Mevcut bir bahçeyi yenileme.</span></span></a></li><li><a class="v-card" href="tuinonderhoud/"><span class="v-card-img"><picture><source srcset="../images/inspiratie/tuin-terras-eettafel-dag-640.webp 640w, ../images/inspiratie/tuin-terras-eettafel-dag-960.webp 960w" sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 300px" type="image/webp"><img src="../images/inspiratie/tuin-terras-eettafel-dag.jpg" alt="Güneşli bir günde yemek masası, çim ve bitki saksılarıyla teras" width="1448" height="1086" loading="lazy" decoding="async"></picture><span class="i-tag">Örnek</span></span><span class="v-card-body"><strong>Bahçe bakımı</strong><span class="v-card-txt">Bitki çitleri, çalılar, yabani ot, yapraklar ve kışa hazırlık.</span></span></a></li><li><a class="v-card" href="periodiek-tuinonderhoud/"><span class="v-card-img"><picture><source srcset="../images/inspiratie/schutting-hout-wandverlichting-avond-640.webp 640w, ../images/inspiratie/schutting-hout-wandverlichting-avond-960.webp 960w" sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 300px" type="image/webp"><img src="../images/inspiratie/schutting-hout-wandverlichting-avond.jpg" alt="Akşam duvar aydınlatmalı ahşap çit ve süs otlu bitki yatağı" width="1448" height="1086" loading="lazy" decoding="async"></picture><span class="i-tag">Örnek</span></span><span class="v-card-body"><strong>Düzenli bahçe bakımı</strong><span class="v-card-txt">Bahçeniz için sabit bakım zamanları.</span></span></a></li><li><a class="v-card" href="snoeiwerk/"><span class="v-card-img"><picture><source srcset="../images/inspiratie/poort-hout-pad-dag-640.webp 640w, ../images/inspiratie/poort-hout-pad-dag-960.webp 960w" sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 300px" type="image/webp"><img src="../images/inspiratie/poort-hout-pad-dag.jpg" alt="Bahçe yolu ve bitkilerle birlikte çitte ahşap kapı" width="1448" height="1086" loading="lazy" decoding="async"></picture><span class="i-tag">Örnek</span></span><span class="v-card-body"><strong>Budama</strong><span class="v-card-txt">Bitki çitleri, çalılar ve uygun küçük ağaçlar.</span></span></a></li><li><a class="v-card" href="hogedrukreiniging/"><span class="v-card-img"><picture><source srcset="../images/projects/hogedrukreiniging-oprit-klinkers-resultaat-640.webp 640w, ../images/projects/hogedrukreiniging-oprit-klinkers-resultaat-800.webp 800w" sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 300px" type="image/webp"><img src="../images/projects/hogedrukreiniging-oprit-klinkers-resultaat.jpg" alt="Çitli ve siyah döşemeli bir bölümü olan temizlenmiş klinker araç yolu" width="1200" height="1600" loading="lazy" decoding="async"></picture></span><span class="v-card-body"><strong>Yüksek basınçlı yıkama</strong><span class="v-card-txt">Yosun, yabani ot ve kiri temizleme.</span></span></a></li><li><a class="v-card" href="plantenbakken/"><span class="v-card-img"><picture><source srcset="../images/inspiratie/plantenbakken-cortenstaal-avond-640.webp 640w, ../images/inspiratie/plantenbakken-cortenstaal-avond-960.webp 960w" sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 300px" type="image/webp"><img src="../images/inspiratie/plantenbakken-cortenstaal-avond.jpg" alt="Teras yanında süs otları ve zeytin ağacı olan corten çelik bitki saksıları" width="1448" height="1086" loading="lazy" decoding="async"></picture><span class="i-tag">Örnek</span></span><span class="v-card-body"><strong>Bitki kasaları</strong><span class="v-card-txt">Bitki kasaları ve yükseltilmiş tarhlar.</span></span></a></li><li><a class="v-card" href="kunstgras/"><span class="v-card-img"><picture><source srcset="../images/inspiratie/tuin-terras-donkere-schutting-avond-640.webp 640w, ../images/inspiratie/tuin-terras-donkere-schutting-avond-960.webp 960w" sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 300px" type="image/webp"><img src="../images/inspiratie/tuin-terras-donkere-schutting-avond.jpg" alt="Akşamları koyu renkli çit, aydınlatma ve bitki saksılarıyla teras" width="1448" height="1086" loading="lazy" decoding="async"></picture><span class="i-tag">Örnek</span></span><span class="v-card-body"><strong>Yapay çim</strong><span class="v-card-txt">Zemin, yapım ve son işlem.</span></span></a></li><li><a class="v-card" href="groenafval-en-onkruid/"><span class="v-card-img"><picture><source srcset="../images/inspiratie/tuin-cortenbakken-grindpad-avond-640.webp 640w, ../images/inspiratie/tuin-cortenbakken-grindpad-avond-960.webp 960w" sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 300px" type="image/webp"><img src="../images/inspiratie/tuin-cortenbakken-grindpad-avond.jpg" alt="Corten çelik bitki saksıları ve çakıl boyunca akşam aydınlatmalı basamak taşı yolu" width="1448" height="1086" loading="lazy" decoding="async"></picture><span class="i-tag">Örnek</span></span><span class="v-card-body"><strong>Yabani ot ve bahçe atıkları</strong><span class="v-card-txt">Kaldırma ve gerekirse taşıma.</span></span></a></li></ul>
   </div></section>
 
+  <section class="v-section v-band" aria-labelledby="titel-band">
+    <div class="v-band-media"><picture><source srcset="../images/inspiratie/schutting-composiet-antraciet-terras-640.webp 640w, ../images/inspiratie/schutting-composiet-antraciet-terras-960.webp 960w, ../images/inspiratie/schutting-composiet-antraciet-terras.webp 1448w" sizes="100vw" type="image/webp"><img src="../images/inspiratie/schutting-composiet-antraciet-terras.jpg" alt="Bitki yatağı olan terasın yanında antrasit renkli yatay çit" width="1448" height="1086" loading="lazy" decoding="async"></picture></div><div class="v-band-scrim"></div>
+    <div class="container v-band-inner"><h2 id="titel-band">Ahşap, beton üzerinde ahşap ve kompozit çitler</h2><p>Çit ve kapı yerleştirir, malzeme ve bitiş konusunda tavsiye veririz. Malzemeyi kendiniz temin edebilir ya da teklife dahil ettirebilirsiniz; ayrı olarak veya montajla birlikte.</p><div class="btn-row"><a class="btn btn-light btn-lg" href="schuttingen/">Çitlere bakın</a><a class="btn btn-line-light btn-lg" href="schutting-ontwerpen/">Çitinizi 3B tasarlayın</a></div></div>
+    <p class="i-caption">Örnek görsel, tamamlanmış bir proje değildir</p>
+  </section>
+
   <section class="v-section v-sand" aria-labelledby="titel-werk"><div class="container">
-    <div class="v-section-head"><h2 class="v-h2" id="titel-werk">Çalışmalarımız</h2><p class="v-lede">Yaptığımız işlerden bir seçki.</p></div>
-    <div class="v-projects v-projects-3"><a class="v-project" href="projecten/oprit-en-bestrating-gereinigd/"><figure style="margin:0;height:100%"><picture><source srcset="../images/projects/hogedrukreiniging-oprit-klinkers-aanhanger-640.webp 640w, ../images/projects/hogedrukreiniging-oprit-klinkers-aanhanger-800.webp 800w, ../images/projects/hogedrukreiniging-oprit-klinkers-aanhanger-960.webp 960w" sizes="(max-width: 700px) 92vw, 360px" type="image/webp"><img src="../images/projects/hogedrukreiniging-oprit-klinkers-aanhanger.jpg" alt="Yüksek basınçla temizlik sırasında hortum ve römorklu klinker araç yolu" loading="lazy" decoding="async" width="1600" height="1200"></picture><figcaption><strong>Zemin yüksek basınçla temizlendi</strong>Yüksek basınçlı yıkama</figcaption></figure></a><a class="v-project" href="projecten/grenen-schutting-zwarte-onderplaat/"><figure style="margin:0;height:100%"><picture><source srcset="../images/projects/schutting-grenen-zwarte-voet-1-640.webp 640w, ../images/projects/schutting-grenen-zwarte-voet-1-800.webp 800w, ../images/projects/schutting-grenen-zwarte-voet-1-960.webp 960w" sizes="(max-width: 700px) 92vw, 360px" type="image/webp"><img src="../images/projects/schutting-grenen-zwarte-voet-1.jpg" alt="Siyah taban plakası üzerinde yeni çam çit" loading="lazy" decoding="async" width="1170" height="1516"></picture><figcaption><strong>Siyah taban plakalı yeni çam çit</strong>Çit</figcaption></figure></a><a class="v-project" href="projecten/kastanjehouten-paaltjesschutting/"><figure style="margin:0;height:100%"><picture><source srcset="../images/projects/schutting-kastanje-paaltjes-1-640.webp 640w, ../images/projects/schutting-kastanje-paaltjes-1-800.webp 800w, ../images/projects/schutting-kastanje-paaltjes-1-960.webp 960w" sizes="(max-width: 700px) 92vw, 360px" type="image/webp"><img src="../images/projects/schutting-kastanje-paaltjes-1.jpg" alt="Kestane kazıklı çit" loading="lazy" decoding="async" width="1137" height="1527"></picture><figcaption><strong>Yeni kestane kazıklı çit</strong>Çit</figcaption></figure></a></div>
+    <div class="v-section-head"><p class="v-eyebrow">Projeler</p><h2 class="v-h2" id="titel-werk">Çalışmalarımız</h2><p class="v-lede">Yaptığımız işlerden bir seçki.</p></div>
+    <div class="v-projects v-projects-3"><a class="v-project" href="projecten/oprit-en-bestrating-gereinigd/"><figure style="margin:0;height:100%"><picture><source srcset="../images/projects/hogedrukreiniging-zijpad-klinkers-avondzon-640.webp 640w, ../images/projects/hogedrukreiniging-zijpad-klinkers-avondzon-800.webp 800w, ../images/projects/hogedrukreiniging-zijpad-klinkers-avondzon-960.webp 960w" sizes="(max-width: 700px) 92vw, 360px" type="image/webp"><img src="../images/projects/hogedrukreiniging-zijpad-klinkers-avondzon.jpg" alt="Akşam güneşinde, çitli bir evin yanında klinker yol" loading="lazy" decoding="async" width="1200" height="1600"></picture><figcaption><strong>Zemin yüksek basınçla temizlendi</strong>Yüksek basınçlı yıkama</figcaption></figure></a><a class="v-project" href="projecten/grenen-schutting-zwarte-onderplaat/"><figure style="margin:0;height:100%"><picture><source srcset="../images/projects/schutting-grenen-zwarte-voet-1-640.webp 640w, ../images/projects/schutting-grenen-zwarte-voet-1-800.webp 800w, ../images/projects/schutting-grenen-zwarte-voet-1-960.webp 960w" sizes="(max-width: 700px) 92vw, 360px" type="image/webp"><img src="../images/projects/schutting-grenen-zwarte-voet-1.jpg" alt="Siyah taban plakası üzerinde yeni çam çit" loading="lazy" decoding="async" width="1170" height="1516"></picture><figcaption><strong>Siyah taban plakalı yeni çam çit</strong>Çit</figcaption></figure></a><a class="v-project" href="projecten/kastanjehouten-paaltjesschutting/"><figure style="margin:0;height:100%"><picture><source srcset="../images/projects/schutting-kastanje-paaltjes-1-640.webp 640w, ../images/projects/schutting-kastanje-paaltjes-1-800.webp 800w, ../images/projects/schutting-kastanje-paaltjes-1-960.webp 960w" sizes="(max-width: 700px) 92vw, 360px" type="image/webp"><img src="../images/projects/schutting-kastanje-paaltjes-1.jpg" alt="Kestane kazıklı çit" loading="lazy" decoding="async" width="1137" height="1527"></picture><figcaption><strong>Yeni kestane kazıklı çit</strong>Çit</figcaption></figure></a></div>
     <p style="margin-top:1.25rem"><a class="link-underline" href="projecten/">Tüm projeleri gör</a></p>
   </div></section>
 
@@ -140,15 +194,11 @@
     <p style="margin-top:1.25rem"><a class="link-underline" href="prijzen/">Fiyata nasıl ulaştığımızı okuyun</a></p>
   </div></section>
 
-  <section class="v-section v-sand" aria-labelledby="titel-ontwerp"><div class="container">
-    <div class="v-advice"><div><h2 id="titel-ontwerp">Bir çiti kendiniz tasarlayın</h2><p>Bir çitin bahçenizde nasıl duracağını önce görmek ister misiniz? 3B tasarımcıda malzemeyi ve ölçüleri seçer, seçimlerinizi talebinizle birlikte gönderirsiniz. Bu bir yardımcı araçtır; kesin seçimi sizinle birlikte yaparız.</p></div>
-    <div class="btn-row"><a class="btn btn-secondary btn-lg" href="schutting-ontwerpen/">3B'de tasarla</a></div></div>
-  </div></section>
-
-  <section class="v-section" aria-labelledby="titel-regio"><div class="container container-narrow">
-    <h2 class="v-h2" id="titel-regio">Nerede çalışıyoruz</h2>
-    <p>Sealcleaning Dordrecht'te kuruludur ve Dordrecht, Hendrik-Ido-Ambacht, Zwijndrecht ve Drechtsteden'de çalışır. Bunun dışında mı çalışıyorsunuz? Bizimle iletişime geçin, neyin mümkün olduğuna bakarız. <a href="werkgebied/">Hizmet bölgemiz hakkında daha fazlası</a>.</p>
-  </div></section>
+  <section class="v-section v-band v-band--evening" aria-labelledby="titel-regio">
+    <div class="v-band-media"><picture><source srcset="../images/inspiratie/schutting-hout-wandverlichting-avond-640.webp 640w, ../images/inspiratie/schutting-hout-wandverlichting-avond-960.webp 960w, ../images/inspiratie/schutting-hout-wandverlichting-avond.webp 1448w" sizes="100vw" type="image/webp"><img src="../images/inspiratie/schutting-hout-wandverlichting-avond.jpg" alt="Akşam duvar aydınlatmalı ahşap çit ve süs otlu bitki yatağı" width="1448" height="1086" loading="lazy" decoding="async"></picture></div><div class="v-band-scrim"></div>
+    <div class="container v-band-inner"><h2 id="titel-regio">Nerede çalışıyoruz</h2><p>Sealcleaning Dordrecht'te kuruludur ve Dordrecht, Hendrik-Ido-Ambacht, Zwijndrecht ve Drechtsteden'de çalışır. Bunun dışında mı çalışıyorsunuz? Bizimle iletişime geçin, neyin mümkün olduğuna bakarız.</p><div class="btn-row"><a class="btn btn-primary btn-lg" href="contact/">Teklif isteyin</a><a class="btn btn-line-light btn-lg" href="werkgebied/">Hizmet bölgemiz</a></div></div>
+    <p class="i-caption">Örnek görsel, tamamlanmış bir proje değildir</p>
+  </section>
 
 </main>
 
@@ -196,7 +246,7 @@
 <div class="mobile-cta-bar">
   <div class="mobile-cta-inner">
     <a href="#" data-tel><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Ara</a>
-    <a href="#" data-whatsapp data-whatsapp-msg="Hallo Sealcleaning, ik wil graag informatie over jullie diensten."><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20z"/></svg>WhatsApp</a>
+    <a href="#" data-whatsapp data-whatsapp-msg="Merhaba Sealcleaning, hizmetleriniz hakkında bilgi almak istiyorum."><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20z"/></svg>WhatsApp</a>
     <a href="contact/" class="cta-primary">Teklif</a>
   </div>
 </div>
@@ -204,5 +254,6 @@
 <script src="../js/i18n-tr.js"></script>
 <script src="../js/config.js"></script>
 <script src="../js/main.js"></script>
+<script type="module" src="../js/v12/home3d.js"></script>
 </body>
 </html>

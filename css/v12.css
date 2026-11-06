@@ -718,3 +718,64 @@ body.v12 main > .v-section { padding-block: clamp(2rem, 4vw, 3.4rem); }
 .v-steps li{counter-increment:s;background:#fff;border:1px solid var(--c-line,#ddd);border-radius:12px;padding:1.1rem 1.2rem;position:static}
 .v-steps li::before{position:static;content:counter(s);display:inline-grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:var(--c-forest,#1c4a3b);color:#fff;font-weight:600;margin-bottom:.5rem}
 .v-steps h3{margin:.1rem 0 .3rem;font-size:1.05rem}.v-steps p{margin:0}
+
+/* ===== Premium homepage: avondhero met interactieve 3D-tuin in het eerste scherm ===== */
+.v-hero--stage { min-height: min(92vh, 860px); align-items: center; }
+.v-hero--stage .v-hero-scrim { background: linear-gradient(95deg, rgba(8, 30, 25, .92) 0%, rgba(8, 30, 25, .74) 38%, rgba(8, 30, 25, .30) 100%); }
+.v-hero-grid { position: relative; width: 100%; display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.25fr); gap: clamp(1.5rem, 3.5vw, 3.5rem); align-items: center; padding-block: clamp(5.5rem, 9vw, 7.5rem) clamp(2.2rem, 4vw, 3.5rem); }
+.v-hero-grid > * { min-width: 0; }
+.v-hero--stage h1 { max-width: 13ch; font-size: clamp(2.3rem, 2.6vw + 1.2rem, 4rem); }
+.v-hero--stage .v-hero-lede { max-width: 38ch; }
+.v-hero-3d { position: relative; }
+.v-hero--stage .v-3d-stage { aspect-ratio: 16 / 11; min-height: 0; border-radius: 18px; box-shadow: 0 24px 60px rgba(0, 0, 0, .5), 0 0 0 1px rgba(255, 255, 255, .18); }
+.v-3d-bar--hero { margin-top: .8rem; display: flex; flex-wrap: wrap; gap: .5rem .9rem; justify-content: flex-start; }
+.v-hero--stage .v-chip { background: rgba(255, 255, 255, .12); color: #fff; border-color: rgba(255, 255, 255, .45); min-height: 40px; padding: 0 .85rem; font-size: .88rem; backdrop-filter: blur(4px); }
+.v-hero--stage .v-chip:hover, .v-hero--stage .v-chip[aria-pressed="true"] { background: #fff; color: var(--seal-green-deep); }
+.v-hero--stage .v-3d-status { color: rgba(255, 255, 255, .82); margin: .55rem 0 0; font-size: .84rem; }
+.v-hero--stage .v-3d-tools { margin-top: 0; }
+.v-hero--stage .v-eyebrow--light { color: rgba(255, 255, 255, .85); margin-bottom: .8rem; }
+@media (max-width: 960px) {
+  .v-hero--stage { min-height: 0; align-items: flex-start; }
+  .v-hero-grid { grid-template-columns: minmax(0, 1fr); gap: 1.2rem; padding-block: 5rem 3rem; }
+  .v-hero--stage .v-hero-scrim { background: linear-gradient(180deg, rgba(8, 30, 25, .78) 0%, rgba(8, 30, 25, .66) 55%, rgba(8, 30, 25, .86) 100%); }
+  .v-hero--stage h1 { max-width: 18ch; font-size: clamp(2rem, 6.4vw, 2.7rem); }
+  .v-hero--stage .v-hero-lede { font-size: 1rem; margin-bottom: 1rem; }
+  .v-hide-sm { display: none !important; }
+  .v-hero--stage .v-3d-stage { aspect-ratio: 4 / 3; }
+  .v-hero--stage .btn { width: auto; }
+}
+@media (max-width: 480px) { .v-hero--stage .v-hero-lede { display: none; } .v-hero-grid { padding-block: 4.6rem 2.4rem; } .v-3d-bar--hero .v-3d-tools { flex-wrap: nowrap; overflow-x: auto; width: 100%; padding-bottom: 2px; } .v-hero--stage .v-chip { flex: 0 0 auto; } }
+
+/* fotobanden en fotokaarten */
+.v-band { position: relative; color: #fff; padding: 0; min-height: clamp(340px, 42vw, 520px); display: flex; align-items: center; overflow: hidden; background: var(--seal-green-deep); }
+.v-band-media, .v-band-media picture, .v-band-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.v-band-scrim { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(8, 30, 25, .86) 0%, rgba(8, 30, 25, .55) 50%, rgba(8, 30, 25, .12) 100%); }
+.v-band-inner { position: relative; padding-block: clamp(2.5rem, 6vw, 4.5rem); }
+.v-band h2 { color: #fff; font-family: var(--font-display); font-weight: 500; font-size: clamp(1.9rem, 1.8vw + 1.3rem, 3rem); line-height: 1.1; max-width: 18ch; margin: 0 0 .8rem; }
+.v-band p { color: rgba(255, 255, 255, .92); max-width: 52ch; }
+.v-band .btn-row { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.2rem; }
+@media (max-width: 700px) { .v-band-scrim { background: linear-gradient(0deg, rgba(8, 30, 25, .9) 0%, rgba(8, 30, 25, .6) 70%, rgba(8, 30, 25, .35) 100%); } .v-band { align-items: flex-end; } }
+.v-card-body { display: flex; flex-direction: column; gap: .25rem; padding: .9rem 1rem 1.1rem; }
+.v-card-body strong { font-family: var(--font-display); font-weight: 500; font-size: 1.12rem; }
+.v-card-txt { color: var(--seal-muted); font-size: .9rem; line-height: 1.4; }
+.v-card-img { overflow: hidden; }
+.v-card-img img { transition: transform .5s ease; }
+.v-card:hover .v-card-img img { transform: scale(1.04); }
+.v-photo-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: 0; padding: 0; list-style: none; }
+.v-photo-row li { position: relative; border-radius: 14px; overflow: hidden; aspect-ratio: 4 / 3; background: var(--seal-sand); }
+.v-photo-row picture, .v-photo-row img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.v-photo-row li:first-child { grid-column: span 2; aspect-ratio: auto; }
+@media (max-width: 700px) { .v-photo-row { grid-template-columns: minmax(0, 1fr); } .v-photo-row li:first-child { grid-column: auto; aspect-ratio: 4 / 3; } }
+.v-hero--photo { min-height: min(62vh, 560px); align-items: flex-end; }
+.v-hero--photo .v-hero-inner { padding-block: clamp(5.5rem, 9vw, 7rem) clamp(2rem, 4vw, 3.2rem); }
+.v-hero--photo .v-hero-scrim { background: linear-gradient(0deg, rgba(8, 30, 25, .88) 0%, rgba(8, 30, 25, .55) 55%, rgba(8, 30, 25, .25) 100%); }
+.v-hero--photo h1 { max-width: 18ch; }
+@media (prefers-reduced-motion: no-preference) { .v-hero-copy, .v-hero-3d { animation: vFade .8s ease both; } .v-hero-3d { animation-delay: .12s; } @keyframes vFade { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } } }
+.v-hero--stage .v-eyebrow--light { font-size: .76rem; letter-spacing: .14em; text-transform: uppercase; }
+.v-hero--stage .btn-lg { padding: .8rem 1.25rem; font-size: .95rem; min-height: 48px; }
+.v-hero--stage .btn-row { gap: .6rem; }
+.v-hero--stage .v-3d-poster img { object-fit: cover; }
+.v-photo-row--portrait { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.v-photo-row--portrait li, .v-photo-row--portrait li:first-child { grid-column: auto; aspect-ratio: 3 / 4; }
+.v-hero--real .v-hero-media img { object-position: center 62%; }
+@media (max-width: 700px) { .v-photo-row--portrait { grid-template-columns: minmax(0, 1fr); } }
