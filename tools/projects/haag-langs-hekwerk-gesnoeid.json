@@ -1,0 +1,45 @@
+{
+ "slug": "haag-langs-hekwerk-gesnoeid",
+ "title": "Haag langs smeedijzeren hekwerk gesnoeid",
+ "category": "snoeiwerk",
+ "services": [
+  "snoeiwerk",
+  "tuinonderhoud"
+ ],
+ "location": null,
+ "tag": "Snoeiwerk · Tuinonderhoud",
+ "summary": "Haag langs een hekwerk en stoeprand in model gesnoeid.",
+ "intro": "Voor deze klant hebben wij de haag langs het smeedijzeren hekwerk aan de stoeprand gesnoeid.",
+ "work": [
+  "Haag over de volle lengte langs het hekwerk en de stoep in model gesnoeid"
+ ],
+ "result": "Een dichte, strakke groene haag die netjes aansluit op de stoep. Langs de onderkant ligt een strook witte split.",
+ "seoTitle": "Haag snoeien langs hekwerk en stoep — project",
+ "seoDescription": "Project: haag langs een smeedijzeren hekwerk en stoeprand gesnoeid, met witte split langs de onderkant. Bekijk de foto's.",
+ "related": [
+  [
+   "snoeiwerk",
+   "Meer over snoeiwerk"
+  ],
+  [
+   "tuinonderhoud",
+   "Meer over tuinonderhoud"
+  ]
+ ],
+ "photos": [
+  {
+   "src": "39e3ac44-image.jpg",
+   "name": "haag-hekwerk-gesnoeid-stoep-witte-split",
+   "alt": "Gesnoeide haag langs een smeedijzeren hekwerk en stoep met een strook witte split",
+   "role": "cover",
+   "blur": []
+  },
+  {
+   "src": "a3c5c8ee-image.jpg",
+   "name": "haag-hekwerk-gesnoeid-langs-stoeprand",
+   "alt": "Gesnoeide haag langs een hekwerk, met witte split langs de stoeprand",
+   "role": "detail",
+   "blur": []
+  }
+ ]
+}
