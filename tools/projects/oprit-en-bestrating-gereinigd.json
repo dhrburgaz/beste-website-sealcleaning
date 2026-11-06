@@ -1,0 +1,117 @@
+{
+ "slug": "oprit-en-bestrating-gereinigd",
+ "title": "Oprit en bestrating gereinigd met hogedruk",
+ "category": "hogedrukreiniging",
+ "services": [
+  "hogedrukreiniging",
+  "bestrating"
+ ],
+ "location": null,
+ "tag": "Hogedrukreiniging · Bestrating",
+ "summary": "Klinkerbestrating van oprit en zijpad met hogedruk gereinigd.",
+ "intro": "Voor deze klant hebben wij de klinkerbestrating rond de woning gereinigd: de oprit en het pad langs het huis.",
+ "work": [
+  "Klinkerbestrating van de oprit en het zijpad gereinigd met een hogedrukreiniger",
+  "Verkleuring en vuil van de stenen verwijderd, zodat het patroon van de bestrating weer duidelijk zichtbaar is"
+ ],
+ "result": "De gereinigde klinkers hebben weer een egale, lichtere kleur. Op de foto met de duidelijke scheidslijn ziet u het verschil tussen het gereinigde deel (links) en het deel dat nog niet was gereinigd (rechts).",
+ "seoTitle": "Oprit en bestrating reinigen met hogedruk — project",
+ "seoDescription": "Project: klinkerbestrating van oprit en pad gereinigd met hogedruk. Bekijk de foto's en het verschil tussen gereinigd en niet gereinigd.",
+ "related": [
+  [
+   "hogedrukreiniging",
+   "Meer over hogedrukreiniging"
+  ],
+  [
+   "bestrating",
+   "Meer over bestrating"
+  ]
+ ],
+ "photos": [
+  {
+   "src": "da28bc07-image.jpg",
+   "name": "hogedrukreiniging-oprit-klinkers-aanhanger",
+   "alt": "Klinkerbestrating van een oprit tijdens het reinigen met hogedruk, met werkslang en aanhanger",
+   "role": "cover",
+   "blur": [
+    [
+     1535,
+     648,
+     170,
+     56
+    ]
+   ]
+  },
+  {
+   "src": "e445f462-image.jpg",
+   "name": "hogedrukreiniging-klinkers-scheidslijn-voor-na",
+   "alt": "Klinkerbestrating met duidelijke scheidslijn: links hogedruk gereinigd, rechts nog niet gereinigd",
+   "role": "during",
+   "caption": "Links gereinigd, rechts nog niet gereinigd",
+   "blur": []
+  },
+  {
+   "src": "0dfac95b-image.jpg",
+   "name": "hogedrukreiniging-oprit-klinkers-gereinigd-deel",
+   "alt": "Oprit van grijze klinkers in visgraatverband, deels gereinigd met hogedruk",
+   "role": "during",
+   "blur": [
+    [
+     640,
+     594,
+     85,
+     34
+    ]
+   ]
+  },
+  {
+   "src": "a149c88e-image.jpg",
+   "name": "hogedrukreiniging-oprit-klinkers-resultaat",
+   "alt": "Oprit met gereinigde grijze klinkers naast een donkere inrit met sierbed",
+   "role": "after",
+   "blur": [
+    [
+     1468,
+     952,
+     44,
+     46
+    ]
+   ]
+  },
+  {
+   "src": "6ecac149-image.jpg",
+   "name": "hogedrukreiniging-zijpad-klinkers-avondzon",
+   "alt": "Gereinigd klinkerpad langs een woning en klimopheg in de avondzon",
+   "role": "after",
+   "blur": [
+    [
+     692,
+     642,
+     64,
+     34
+    ]
+   ]
+  },
+  {
+   "src": "8d86bf21-image.jpg",
+   "name": "hogedrukreiniging-zijpad-klinkers-heg",
+   "alt": "Lang klinkerpad met houten hekwerk en klimopheg",
+   "role": "after",
+   "blur": [
+    [
+     505,
+     560,
+     85,
+     45
+    ]
+   ]
+  },
+  {
+   "src": "db3013ab-image.jpg",
+   "name": "hogedrukreiniging-pad-glazen-overkapping",
+   "alt": "Smal klinkerpad langs een overkapping met glazen panelen en een houten hekwerk",
+   "role": "detail",
+   "blur": []
+  }
+ ]
+}
