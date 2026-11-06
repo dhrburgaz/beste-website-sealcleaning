@@ -6,7 +6,6 @@
 import { createEmptyProject, generateId, parseMetersToMm, validateFenceGates, deriveFenceLengths } from "../../project-state.js";
 import { computeFenceLayout } from "../../configurator/geometry.js";
 import { getFenceSystem } from "../../../data/fence-systems.js";
-import { encodeShare } from "../../configurator/design-io.js";
 import { emit } from "../events.js";
 import { GLOSS, STIJLEN, STIJL_NOTE, MATERIALS, HEIGHTS_CM, GATE_WIDTHS_CM, HELP, lengthIllustration, heightIllustration, shapeIcon, sideIllustration, gateIllustration } from "./content.js";
 
@@ -22,7 +21,7 @@ const DEFAULT_LEN_MM = 5000;
 const DOEL = { nieuw: "Een nieuwe schutting plaatsen", herstel: "Mijn schutting repareren", "weet-niet": "Ik weet het niet" };
 const WERK = { "alleen-materiaal": "Alleen de materialen", "met-montage": "Materialen én plaatsing door SEAL", "alleen-montage": "Alleen plaatsing, ik heb het materiaal zelf" };
 const MEET = { precies: "Ik weet de maten", ongeveer: "Ik weet het ongeveer", onbekend: "Ik kan niet meten" };
-const MEET_STATUS = { precies: "precies (door jou opgegeven)", ongeveer: "ongeveer (wij controleren dit)", onbekend: "onbekend (wij komen nameten)" };
+const MEET_STATUS = { precies: "precies (door u opgegeven)", ongeveer: "ongeveer (wij controleren dit)", onbekend: "onbekend (wij komen nameten)" };
 
 /* ---------------- state ---------------- */
 const fresh = () => ({ step: "doel", doel: null, herstel: { items: [], tekst: "" }, materiaal: null, stijl: null, vorm: null, lengtes: {}, hoogteCm: 180, poort: null, poortBreedteCm: 100, poortPlek: "midden", poortZijde: 0, werk: null, oudWeg: false, afvoer: false });
@@ -69,15 +68,15 @@ function steps() {
   return s;
 }
 const PHASES = [
-  { label: "Situatie", title: "Vertel over je situatie", steps: ["doel", "herstel", "hulp", "vorm"] },
+  { label: "Situatie", title: "Vertel over uw situatie", steps: ["doel", "herstel", "hulp", "vorm"] },
   { label: "Maten", title: "Voer de maten in", steps: ["lengte", "hoogte"] },
-  { label: "Materialen", title: "Kies je materiaal", steps: ["materiaal"] },
-  { label: "Extra's", title: "Kies je extra's", steps: ["poort", "poortdetails", "werk"] },
-  { label: "Resultaat", title: "Bekijk je idee en vraag een voorstel aan", steps: ["bekijk", "aanvraag"] }
+  { label: "Materialen", title: "Kiest u materiaal", steps: ["materiaal"] },
+  { label: "Extra's", title: "Kiest u extra's", steps: ["poort", "poortdetails", "werk"] },
+  { label: "Resultaat", title: "Bekijk uw idee en vraag een voorstel aan", steps: ["bekijk", "aanvraag"] }
 ];
 const baseId = (id) => id.split(":")[0];
 function activePhases(list) { return PHASES.filter((p) => list.some((id) => p.steps.includes(baseId(id)))); }
-const STEP_TITLE = { doel: "Wat wil je doen?", herstel: "Wat is er stuk?", hulp: "Wij denken met je mee", materiaal: "Welke schutting vind je mooi?", vorm: "Hoe loopt de schutting?", hoogte: "Hoe hoog wil je de schutting?", poort: "Wil je ook een poort?", poortdetails: "Hoe breed en waar komt de poort?", werk: "Wie regelt het werk?", bekijk: "Bekijk jouw idee", aanvraag: "Vraag een voorstel aan" };
+const STEP_TITLE = { doel: "Wat wilt u doen?", herstel: "Wat is er stuk?", hulp: "Wij denken met u mee", materiaal: "Welke schutting vindt u mooi?", vorm: "Hoe loopt de schutting?", hoogte: "Hoe hoog wilt u de schutting?", poort: "Wilt u ook een poort?", poortdetails: "Hoe breed en waar komt de poort?", werk: "Wie regelt het werk?", bekijk: "Bekijk uw idee", aanvraag: "Vraag een voorstel aan" };
 const titleOf = (id) => (id.startsWith("lengte:") ? `Hoe lang is de ${sideNames()[+id.split(":")[1]].toLowerCase()}?` : STEP_TITLE[id]);
 const shortOf = (id) => (id.startsWith("lengte:") ? `Lengte ${sideNames()[+id.split(":")[1]].toLowerCase()}` : STEP_TITLE[id]);
 
@@ -202,7 +201,7 @@ function renderQuick() {
     sel("q-hoogte", "Hoogte", "hoogte", HEIGHTS_CM.map((c) => [c, `${c} cm`]), st.hoogteCm, (v) => { st.hoogteCm = +v; save(); render(); })));
   const unknown = names.every((_, i) => sideMeasure(i).mode === "onbekend");
   q.append(h("div", { class: "b-q-help" }, h("button", { type: "button", class: "btn btn-secondary b-q-nomeasure", "aria-pressed": String(unknown), onclick: () => { names.forEach((_, i) => { st.lengtes[i] = { mode: "onbekend", text: "" }; }); save(); emit("measurement_help_opened", {}); render(); } }, "Ik kan niet meten"),
-    h("span", { class: "b-q-note", text: unknown ? "Geen probleem. We tekenen 5 meter als voorbeeld. Wij komen de maten nameten voordat een prijs vaststaat." : "Weet je de maat niet? Kies dit. Je kunt gewoon een aanvraag doen." })));
+    h("span", { class: "b-q-note", text: unknown ? "Geen probleem. We tekenen 5 meter als voorbeeld. Wij komen de maten nameten voordat een prijs vaststaat." : "Weet u de maat niet? Kies dit. U kunt gewoon een aanvraag doen." })));
 }
 const stageEl = () => root.querySelector(".b-preview-stage");
 async function ensureScene() {
@@ -219,11 +218,11 @@ async function ensureScene() {
     preview.fallback = true;
     document.querySelectorAll("[data-b-mode='3d']").forEach((b) => { b.disabled = true; b.title = "3D werkt op dit apparaat niet"; });
     setMode("2d");
-    setStatus("Het 3D-voorbeeld werkt op dit apparaat niet. Je ziet een tekening van boven. Alle keuzes en maten werken gewoon.");
+    setStatus("Het 3D-voorbeeld werkt op dit apparaat niet. U ziet een tekening van boven. Alle keuzes en maten werken gewoon.");
   }
 }
 async function renderFlat() {
-  if (!preview.flat) { preview.flat = h("svg", { class: "b-flat", role: "img", "aria-label": "Je schutting in 2D, bovenaanzicht" }); stageEl().append(preview.flat); }
+  if (!preview.flat) { preview.flat = h("svg", { class: "b-flat", role: "img", "aria-label": "Uw schutting in 2D, bovenaanzicht" }); stageEl().append(preview.flat); }
   const { renderScene } = await import("../../configurator/svg-scene.js");
   renderScene(preview.flat, buildProject(preview.decor), {});
 }
@@ -238,7 +237,7 @@ function updatePreview() {
   if (preview.mode === "2d") renderFlat();
   renderFacts();
   const any = sideNames().some((_, i) => sideMeasure(i).mode);
-  if (!any && !preview.fallback) setStatus("Dit is een voorbeeld van 5 meter. Zodra je maten invult, past de tekening zich aan.");
+  if (!any && !preview.fallback) setStatus("Dit is een voorbeeld van 5 meter. Zodra u uw maten invult, past de tekening zich aan.");
 }
 function drawDims() {
   const o = preview.overlay; if (!o || !preview.scene) return;
@@ -296,10 +295,10 @@ function helpBlock(key) {
   const id = `help-${key}`;
   const panel = h("div", { class: "b-help", id, hidden: true, role: "region", "aria-label": "Uitleg" },
     h("h3", { text: "Wat bedoelen we?" }), h("p", { text: c.wat }),
-    h("h4", { text: "Zo doe je dat" }), h("ol", {}, c.zo.map((z) => h("li", { text: z }))),
+    h("h4", { text: "Zo doet u dat" }), h("ol", {}, c.zo.map((z) => h("li", { text: z }))),
     h("h4", { text: "Waarom vragen we dit?" }), h("p", { text: c.waarom }),
     h("h4", { text: "Voorbeeld" }), h("p", { text: c.voorbeeld }),
-    h("h4", { text: "Ik weet het niet" }), h("p", {}, c.weetniet, " ", h("a", { href: dir("contact/") + "?help=schutting", text: "Of laat SEAL je helpen." })));
+    h("h4", { text: "Ik weet het niet" }), h("p", {}, c.weetniet, " ", h("a", { href: dir("contact/") + "?help=schutting", text: "Of laat SEAL u helpen." })));
   const btn = h("button", { type: "button", class: "b-info", "aria-expanded": "false", "aria-controls": id, onclick: () => {
     const open = panel.hidden; panel.hidden = !open; btn.setAttribute("aria-expanded", String(open)); btn.querySelector("span").textContent = open ? "Uitleg sluiten" : "Uitleg: wat bedoelen we?";
     if (open) emit("measurement_help_opened", {});
@@ -319,7 +318,7 @@ function choiceCards(name, options, current, onPick, opts = {}) {
 
 function nav(id, list, canNext) {
   const i = list.indexOf(id), next = list[i + 1], prev = list[i - 1];
-  const nextLabel = { materiaal: "Kies je schutting", vorm: "Kies de vorm" }[next] || (next === "aanvraag" ? "Vraag een voorstel aan" : next === "bekijk" ? "Bekijk jouw idee" : "Volgende");
+  const nextLabel = { materiaal: "Kiest u schutting", vorm: "Kies de vorm" }[next] || (next === "aanvraag" ? "Vraag een voorstel aan" : next === "bekijk" ? "Bekijk uw idee" : "Volgende");
   return h("div", { class: "b-nav" },
     prev ? h("button", { type: "button", class: "btn btn-secondary", onclick: () => go(prev) }, "Terug") : h("span"),
     next ? h("button", { type: "button", class: "btn btn-primary btn-lg", disabled: !canNext, onclick: () => go(next) }, nextLabel) : null);
@@ -369,14 +368,13 @@ function render(focus) {
 const STEPS = {
   doel(id, list) {
     const body = h("div", {});
-    body.append(h("p", { class: "b-sub", text: "Kies wat het beste past. Je kunt altijd terug." }), helpBlock("doel") || "");
+    body.append(h("p", { class: "b-sub", text: "Kies wat het beste past. U kunt altijd terug." }), helpBlock("doel") || "");
     body.append(choiceCards("doel", [
-      { id: "nieuw", label: "Een nieuwe schutting plaatsen", sub: "Je kiest materiaal, maten en eventueel een poort." },
+      { id: "nieuw", label: "Een nieuwe schutting plaatsen", sub: "U kiest materiaal, maten en eventueel een poort." },
       { id: "herstel", label: "Mijn schutting repareren", sub: "Een losse plank of scheve paal? Dan hoeft er niets nieuws." },
-      { id: "weet-niet", label: "Ik weet het niet", sub: "Wij denken met je mee." }
-    ], st.doel, (v) => { st.doel = v; save(); emit("service_choice", { service: "schutting", route: v }); render(); }, { label: "Wat wil je doen?", cls: "b-cards-3" }));
-    body.append(h("div", { class: "b-other" }, h("h3", { text: "Iets anders ontwerpen?" }), h("p", { class: "b-note", text: "Voor een terras, tuinindeling of plantenbakken gebruik je onze volledige 2D/3D-ontwerper." }),
-      h("ul", { class: "b-other-list" }, [["Bestrating of terras", "Teken een terras of tuinpad"], ["Tuinindeling", "Teken je hele tuin"], ["Plantenbakken", "Plaats plantenbakken in je tuin"]].map(([t, d]) => h("li", {}, h("a", { class: "b-other-link", href: dir("project-samenstellen/"), onclick: () => emit("service_choice", { service: t.toLowerCase(), route: "volledige-ontwerper" }) }, h("strong", { text: t }), h("span", { text: d })))))));
+      { id: "weet-niet", label: "Ik weet het niet", sub: "Wij denken met u mee." }
+    ], st.doel, (v) => { st.doel = v; save(); emit("service_choice", { service: "schutting", route: v }); render(); }, { label: "Wat wilt u doen?", cls: "b-cards-3" }));
+    body.append(h("p", { class: "b-note", text: "Wilt u iets anders laten maken, zoals bestrating of een tuinindeling? Neem dan contact met ons op." }));
     body.append(nav(id, list, !!st.doel));
     return body;
   },
@@ -388,8 +386,8 @@ const STEPS = {
       const cid = `herstel-${i}`;
       return h("div", { class: "b-check" }, h("input", { type: "checkbox", id: cid, checked: st.herstel.items.includes(t), onchange: (e) => { st.herstel.items = e.target.checked ? [...st.herstel.items, t] : st.herstel.items.filter((x) => x !== t); save(); } }), h("label", { for: cid, text: t }));
     })));
-    body.append(h("p", { class: "b-note", text: "Wij stellen op afstand geen diagnose. Staat een schutting scheef of is er stormschade, dan komen we eerst kijken. Je hoeft geen nieuwe schutting te bestellen." }));
-    body.append(h("label", { for: "herstel-tekst", class: "b-label", text: "Vertel kort wat je ziet (niet verplicht)" }), h("textarea", { id: "herstel-tekst", rows: 3, class: "b-input", oninput: (e) => { st.herstel.tekst = e.target.value.slice(0, 600); save(); } }, st.herstel.tekst));
+    body.append(h("p", { class: "b-note", text: "Wij stellen op afstand geen diagnose. Staat een schutting scheef of is er stormschade, dan komen we eerst kijken. U hoeft geen nieuwe schutting te bestellen." }));
+    body.append(h("label", { for: "herstel-tekst", class: "b-label", text: "Vertel kort wat u ziet (niet verplicht)" }), h("textarea", { id: "herstel-tekst", rows: 3, class: "b-input", oninput: (e) => { st.herstel.tekst = e.target.value.slice(0, 600); save(); } }, st.herstel.tekst));
     body.append(nav(id, list, true));
     return body;
   },
@@ -400,10 +398,10 @@ const STEPS = {
   },
   materiaal(id, list) {
     const body = h("div", {});
-    body.append(h("div", { class: "b-inspire" }, h("h3", { text: "Welke uitstraling wil je?" }), h("p", { class: "b-style-note", text: STIJL_NOTE }),
+    body.append(h("div", { class: "b-inspire" }, h("h3", { text: "Welke uitstraling wilt u?" }), h("p", { class: "b-style-note", text: STIJL_NOTE }),
       choiceCards("stijl", STIJLEN.map((x) => ({ id: x.id, label: x.label, media: inspPic(x.photo, x.alt) })), st.stijl, (v) => { const x = STIJLEN.find((y) => y.id === v); st.stijl = v; st.materiaal = x.materiaal; save(); emit("material_selected", { material: x.materiaal }); render(); }, { label: "Kies een uitstraling", cls: "b-stijl" }),
       h("p", { class: "b-note", text: "Dit zijn inspiratiebeelden van mogelijke uitvoeringen, geen opgeleverde projecten van SEAL en geen exacte producten." })));
-    body.append(h("p", { class: "b-sub", text: "Of kies direct het materiaal. Dit zijn voorbeelden uit ons eigen werk. Je ziet direct wat je kiest in de 3D. Je kunt later nog wisselen." }), helpBlock("materiaal") || "");
+    body.append(h("p", { class: "b-sub", text: "Of kies direct het materiaal. Dit zijn voorbeelden uit ons eigen werk. U ziet direct wat u kiest in de 3D. U kunt later nog wisselen." }), helpBlock("materiaal") || "");
     body.append(choiceCards("materiaal", MATERIALS.map((m) => ({ id: m.id, label: m.label, media: photoPic(m.photo.name, m.photo.alt) })), st.materiaal, (v) => { st.materiaal = v; save(); emit("material_selected", { material: v }); render(); }, { label: "Kies een schutting", cls: "b-swatches" }));
     body.append(h("div", { class: "b-gloss" }, h("span", { class: "b-gloss-t", text: "Onbekende woorden?" }), ["composiet", "hout-beton", "lamellen"].map((k) => h("span", { class: "b-gloss-i" }, GLOSS[k].t.replace(/^Wat (is|zijn) /, "").replace(/\?$/, ""), infoBtn(k)))));
     const cur = material();
@@ -414,15 +412,15 @@ const STEPS = {
         h("div", { class: "b-detail-body" }, h("h3", { text: cur.label }), h("p", { text: cur.care }),
           h("details", {}, h("summary", { text: "Wat is dit precies?" }), h("p", { text: sys ? sys.buildUp : "" })),
           h("details", {}, h("summary", { text: "Onderhoud" }), h("p", { text: sys ? sys.maintenance : "" })),
-          h("details", {}, h("summary", { text: "Welke hoogte past bij mij?" }), h("p", { text: "Dat hangt af van hoeveel privacy je wilt en wat in jouw gemeente is toegestaan. In de eerdere stap zie je wat 180 cm is. Wij denken graag mee." })),
-          h("details", {}, h("summary", { text: "Is dit geschikt voor mijn tuin?" }), h("p", { text: "Dat hangt af van de ondergrond, de plek en de wind. Wij controleren dat voordat een prijs vaststaat. Je kunt altijd een ander materiaal kiezen." })))));
+          h("details", {}, h("summary", { text: "Welke hoogte past bij mij?" }), h("p", { text: "Dat hangt af van hoeveel privacy u wilt en wat in uw gemeente is toegestaan. In de eerdere stap ziet u wat 180 cm is. Wij denken graag mee." })),
+          h("details", {}, h("summary", { text: "Is dit geschikt voor mijn tuin?" }), h("p", { text: "Dat hangt af van de ondergrond, de plek en de wind. Wij controleren dat voordat een prijs vaststaat. U kunt altijd een ander materiaal kiezen." })))));
     } else body.append(h("p", { class: "b-note", text: "Kies een schutting om meer te lezen." }));
     body.append(nav(id, list, !!st.materiaal));
     return body;
   },
   vorm(id, list) {
     const body = h("div", {});
-    body.append(h("p", { class: "b-sub", text: "Kijk naar de rand van je tuin waar de schutting komt." }), helpBlock("vorm") || "");
+    body.append(h("p", { class: "b-sub", text: "Kijk naar de rand van uw tuin waar de schutting komt." }), helpBlock("vorm") || "");
     const icon = (k) => { const s = h("span", { class: "b-icon", html: shapeIcon(k) }); return s; };
     body.append(choiceCards("vorm", [
       { id: "recht", label: "Recht", sub: "Eén rechte lijn", media: icon("recht") },
@@ -440,7 +438,7 @@ const STEPS = {
     body.append(h("p", { class: "b-sub", text: shape === "recht" ? "Meet langs de plek waar de schutting komt: van begin tot eind." : `Meet alleen de ${names[i].toLowerCase()}, van begin tot eind.` }));
     body.append(h("div", { class: "b-illus", html: shape === "recht" ? lengteIllus() : sideIllustration(shape, i) }));
     body.append(helpBlock("lengte") || "");
-    const group = h("div", { class: "b-routes", role: "radiogroup", "aria-label": "Hoe zeker ben je van deze maat?" });
+    const group = h("div", { class: "b-routes", role: "radiogroup", "aria-label": "Hoe zeker bent u van deze maat?" });
     ["precies", "ongeveer", "onbekend"].forEach((k) => {
       const rid = `route-${i}-${k}`;
       group.append(h("div", { class: "b-route" }, h("input", { type: "radio", name: `route-${i}`, id: rid, checked: m.mode === k, onchange: () => { st.lengtes[i] = { mode: k, text: k === "onbekend" ? "" : (st.lengtes[i] ? st.lengtes[i].text : "") }; save(); render(); } }), h("label", { for: rid, text: MEET[k] })));
@@ -461,11 +459,11 @@ const STEPS = {
         const nb = stage.querySelector(".b-nav .btn-primary"); if (nb) nb.disabled = !ok;
         if (ok) updatePreview();
       };
-      body.append(h("div", { class: "b-field" }, h("label", { for: fid, class: "b-label", text: m.mode === "precies" ? `Hoeveel meter is de ${shape === "recht" ? "schutting" : names[i].toLowerCase()}?` : "Ongeveer hoeveel meter?" }), h("div", { class: "b-unit" }, input, h("span", { text: "meter" })), out, h("span", { id: `${fid}-msg`, class: "visually-hidden", text: "Je mag een komma of een punt gebruiken." })));
+      body.append(h("div", { class: "b-field" }, h("label", { for: fid, class: "b-label", text: m.mode === "precies" ? `Hoeveel meter is de ${shape === "recht" ? "schutting" : names[i].toLowerCase()}?` : "Ongeveer hoeveel meter?" }), h("div", { class: "b-unit" }, input, h("span", { text: "meter" })), out, h("span", { id: `${fid}-msg`, class: "visually-hidden", text: "U mag een komma of een punt gebruiken." })));
       canNext = !!sideMm(i) && sideMm(i) === parseMetersToMm(input.value);
       setTimeout(check, 0);
     } else if (m.mode === "onbekend") {
-      body.append(h("p", { class: "b-note", text: "Geen probleem. In het voorbeeld tekenen we 5 meter, alleen om te laten zien hoe het eruit kan zien. Straks kun je een foto of omschrijving meesturen. Wij komen de maten controleren voordat een prijs vaststaat." }));
+      body.append(h("p", { class: "b-note", text: "Geen probleem. In het voorbeeld tekenen we 5 meter, alleen om te laten zien hoe het eruit kan zien. Straks kunt u een foto of omschrijving meesturen. Wij komen de maten controleren voordat een prijs vaststaat." }));
       canNext = true;
     }
     body.append(nav(id, list, canNext));
@@ -480,14 +478,14 @@ const STEPS = {
       const rid = `hoogte-${cm}`;
       return h("div", { class: "b-chipwrap" }, h("input", { type: "radio", name: "hoogte", id: rid, checked: st.hoogteCm === cm, onchange: () => { st.hoogteCm = cm; save(); il.innerHTML = heightIllustration(cm); updatePreview(); } }), h("label", { for: rid, text: `${cm} cm` }));
     })));
-    body.append(h("p", { class: "b-note", text: "Het poppetje is een schematische schaalfiguur van 1,75 meter. Welke hoogtes er echt leverbaar zijn, hangt van het product af en bevestigen we in je offerte. Voor de toegestane hoogte in jouw tuin gelden lokale regels. Wij denken daarover mee." }));
+    body.append(h("p", { class: "b-note", text: "Het poppetje is een schematische schaalfiguur van 1,75 meter. Welke hoogtes er echt leverbaar zijn, hangt van het product af en bevestigen we in uw offerte. Voor de toegestane hoogte in uw tuin gelden lokale regels. Wij denken daarover mee." }));
     body.append(nav(id, list, true));
     return body;
   },
   poort(id, list) {
     const body = h("div", {});
-    body.append(h("p", { class: "b-sub", text: "Een poort is een deur in je schutting, zodat je erdoor kunt lopen." }), h("div", { class: "b-illus", html: gateIllustration() }), h("p", { class: "b-gloss" }, h("span", { class: "b-gloss-t", text: "Doorgang uitgelegd" }), infoBtn("doorgang")), h("figure", { class: "b-gate-photo" }, inspPic("poort-hout-pad-dag", "Houten tuinpoort met horizontale planken en een pad van natuursteentegels"), h("figcaption", { text: "Inspiratiebeeld van een poort in dezelfde stijl als de schutting, geen opgeleverd project." })), helpBlock("poort") || "");
-    body.append(choiceCards("poort", [{ id: "ja", label: "Ja" }, { id: "nee", label: "Nee" }, { id: "later", label: "Weet ik nog niet" }], st.poort, (v) => { st.poort = v; save(); render(); }, { label: "Wil je een poort?", cls: "b-cards-3 b-cards-plain" }));
+    body.append(h("p", { class: "b-sub", text: "Een poort is een deur in uw schutting, zodat u erdoor kunt lopen." }), h("div", { class: "b-illus", html: gateIllustration() }), h("p", { class: "b-gloss" }, h("span", { class: "b-gloss-t", text: "Doorgang uitgelegd" }), infoBtn("doorgang")), h("figure", { class: "b-gate-photo" }, inspPic("poort-hout-pad-dag", "Houten tuinpoort met horizontale planken en een pad van natuursteentegels"), h("figcaption", { text: "Inspiratiebeeld van een poort in dezelfde stijl als de schutting, geen opgeleverd project." })), helpBlock("poort") || "");
+    body.append(choiceCards("poort", [{ id: "ja", label: "Ja" }, { id: "nee", label: "Nee" }, { id: "later", label: "Weet ik nog niet" }], st.poort, (v) => { st.poort = v; save(); render(); }, { label: "Wilt u een poort?", cls: "b-cards-3 b-cards-plain" }));
     body.append(nav(id, list, !!st.poort));
     return body;
   },
@@ -507,10 +505,10 @@ const STEPS = {
   },
   werk(id, list) {
     const body = h("div", {});
-    body.append(h("p", { class: "b-sub", text: "Kies wat je wilt. Je ziet altijd eerst een offerte, je zit nergens aan vast." }), helpBlock("werk") || "");
-    body.append(choiceCards("werk", Object.entries(WERK).map(([k, v]) => ({ id: k, label: v, sub: { "alleen-materiaal": "Wij plaatsen niets.", "met-montage": "Eén offerte, materiaal en werk apart zichtbaar.", "alleen-montage": "Wij controleren vooraf of je materiaal geschikt is." }[k] })), st.werk, (v) => { st.werk = v; save(); render(); }, { label: "Wie regelt het werk?", cls: "b-cards-3 b-cards-plain" }));
+    body.append(h("p", { class: "b-sub", text: "Kies wat u wilt. U ziet altijd eerst een offerte, u zit nergens aan vast." }), helpBlock("werk") || "");
+    body.append(choiceCards("werk", Object.entries(WERK).map(([k, v]) => ({ id: k, label: v, sub: { "alleen-materiaal": "Wij plaatsen niets.", "met-montage": "Eén offerte, materiaal en werk apart zichtbaar.", "alleen-montage": "Wij controleren vooraf of uw materiaal geschikt is." }[k] })), st.werk, (v) => { st.werk = v; save(); render(); }, { label: "Wie regelt het werk?", cls: "b-cards-3 b-cards-plain" }));
     if (st.werk === "met-montage" || st.werk === "alleen-montage") {
-      body.append(h("div", { class: "b-field" }, h("p", { class: "b-label", text: "Extra (niet vooraf aangevinkt)" }), h("div", { class: "b-check" }, h("input", { type: "checkbox", id: "oudweg", checked: st.oudWeg, onchange: (e) => { st.oudWeg = e.target.checked; if (!st.oudWeg) st.afvoer = false; save(); render(); } }), h("label", { for: "oudweg", text: "Mijn oude schutting weghalen" })), st.oudWeg ? h("div", { class: "b-check" }, h("input", { type: "checkbox", id: "afvoer", checked: st.afvoer, onchange: (e) => { st.afvoer = e.target.checked; save(); } }), h("label", { for: "afvoer", text: "En het afval meenemen" })) : null, h("p", { class: "b-note", text: "Weghalen en afvoeren kan extra kosten. Dat staat dan apart in je offerte." })));
+      body.append(h("div", { class: "b-field" }, h("p", { class: "b-label", text: "Extra (niet vooraf aangevinkt)" }), h("div", { class: "b-check" }, h("input", { type: "checkbox", id: "oudweg", checked: st.oudWeg, onchange: (e) => { st.oudWeg = e.target.checked; if (!st.oudWeg) st.afvoer = false; save(); render(); } }), h("label", { for: "oudweg", text: "Mijn oude schutting weghalen" })), st.oudWeg ? h("div", { class: "b-check" }, h("input", { type: "checkbox", id: "afvoer", checked: st.afvoer, onchange: (e) => { st.afvoer = e.target.checked; save(); } }), h("label", { for: "afvoer", text: "En het afval meenemen" })) : null, h("p", { class: "b-note", text: "Weghalen en afvoeren kan extra kosten. Dat staat dan apart in uw offerte." })));
     }
     body.append(nav(id, list, !!st.werk));
     return body;
@@ -518,19 +516,17 @@ const STEPS = {
   bekijk(id, list) {
     const body = h("div", {});
     const mat = material(), p = buildProject(), ind = indication(p);
-    body.append(h("p", { class: "b-sub", text: "Dit is een voorbeeld op basis van jouw keuzes. Het is geen exacte bouwtekening." }));
+    body.append(h("p", { class: "b-sub", text: "Dit is een voorbeeld op basis van uw keuzes. Het is geen exacte bouwtekening." }));
     body.append(h("div", { class: "b-compare" },
       h("figure", { class: "b-fig" }, photoPic(mat.photo.name, mat.photo.alt), h("figcaption", {}, h("strong", { text: "Echt voorbeeld" }), h("span", { text: mat.photo.note }))),
-      h("div", { class: "b-fig b-fig-3d" }, h("strong", { text: "Voorbeeld in 3D" }), h("span", { text: "Het 3D-voorbeeld hierboven toont het materiaaltype dat je koos. Het is een weergave van de uitstraling, niet het exacte artikel." }))));
-    body.append(h("div", { class: "b-card-info", "data-transparantie": "" }, h("h3", { text: "Wat kost het en wat staat nog open?" }),
-      h("p", { class: "b-note", text: "Dit is een indicatie, geen offerte. Er staan nog geen bedragen, omdat de maten en het product eerst gecontroleerd worden. Daarna zie je alle prijzen apart." }),
+      h("div", { class: "b-fig b-fig-3d" }, h("strong", { text: "Voorbeeld in 3D" }), h("span", { text: "Het 3D-voorbeeld hierboven toont het materiaaltype dat u koos. Het is een weergave van de uitstraling, niet het exacte artikel." }))));
+    body.append(h("div", { class: "b-card-info", "data-transparantie": "" }, h("h3", { text: "Wat staat er in uw offerte?" }),
+      h("p", { class: "b-note", text: "Een prijs noemen wij pas na controle van de maten en het materiaal. Hieronder ziet u wat in de offerte komt." }),
       h("dl", { class: "b-costs" },
-        ...[["Materialen", st.werk === "alleen-montage" ? "Heb je zelf" : "Wordt berekend na controle"], ["Bezorgen", st.werk === "alleen-montage" ? "Niet nodig" : "Wordt berekend na controle"], ["Montage", st.werk === "alleen-materiaal" ? "Niet gekozen" : "Wordt berekend na controle"], ["Oude materialen verwijderen", st.oudWeg ? "Wordt berekend na controle" : "Niet gekozen"], ["Btw", "Staat in je offerte"], ["Nog te controleren", [overallMeasure() !== "precies" ? "de maten" : null, "de ondergrond en toegang", "het gekozen product en de hoogte"].filter(Boolean).join(", ")]].flatMap(([k, v]) => [h("dt", { text: k }), h("dd", { text: v })])),
+        ...[["Materialen", st.werk === "alleen-montage" ? "Heeft u zelf" : "Wordt berekend na controle"], ["Bezorgen", st.werk === "alleen-montage" ? "Niet nodig" : "Wordt berekend na controle"], ["Montage", st.werk === "alleen-materiaal" ? "Niet gekozen" : "Wordt berekend na controle"], ["Oude materialen verwijderen", st.oudWeg ? "Wordt berekend na controle" : "Niet gekozen"], ["Btw", "Staat in uw offerte"], ["Nog te controleren", [overallMeasure() !== "precies" ? "de maten" : null, "de ondergrond en toegang", "het gekozen product en de hoogte"].filter(Boolean).join(", ")]].flatMap(([k, v]) => [h("dt", { text: k }), h("dd", { text: v })])),
       h("p", { class: "b-muted", text: `Indicatie van onderdelen: ongeveer ${ind.panels + ind.fit} schuttingdelen en ${ind.posts} palen.` }),
       helpBlock("maten") || ""));
-    const enc = encodeShare(p);
-    const shareUrl = enc ? dir("project-samenstellen/") + `#ontwerp=${enc}` : "";
-    const msg = h("p", { class: "b-muted", role: "status", "aria-live": "polite", text: "Je keuzes zijn bewaard op dit apparaat. Ze worden niet naar andere apparaten gestuurd." });
+    const msg = h("p", { class: "b-muted", role: "status", "aria-live": "polite", text: "Uw keuzes zijn bewaard op dit apparaat. Ze worden niet naar andere apparaten gestuurd." });
     const sides = sideNames().map((n, i) => { const m = sideMeasure(i), mm = sideMm(i); return `${n.toLowerCase()} ${m.mode === "onbekend" || !mm ? "onbekend" : mShort(mm)}`; }).join(", ");
     const row = (thumb, title, sub, stepId) => h("li", { class: "b-plan-row" }, thumb, h("span", { class: "b-plan-text" }, h("strong", { text: title }), h("span", { text: sub })), h("button", { type: "button", class: "btn btn-secondary btn-sm", onclick: () => go(stepId), "aria-label": `${title} bewerken` }, "Bewerken"));
     const icon = (path) => h("span", { class: "b-plan-icon", html: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="${path}"/></svg>` });
@@ -538,41 +534,37 @@ const STEPS = {
     if (st.poort === "ja") rows.push(row(icon("M4 20V6l8-3 8 3v14M9 20v-7h6v7"), "Poort", `${st.poortBreedteCm} cm doorgang, plek: ${st.poortPlek === "seal" ? "SEAL bepaalt" : st.poortPlek}`, "poortdetails"));
     rows.push(row(icon("M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5"), WERK[st.werk] || "Nog geen keuze", st.oudWeg ? "Oude schutting weghalen" + (st.afvoer ? " en afvoeren" : "") : "Geen extra werk gekozen", "werk"));
     body.append(h("div", { class: "b-plan b-tuinplan", id: "tuinplan" }, h("h3", { text: "Uw tuinplan" }),
-      h("p", { class: "b-muted", text: "Dit is een overzicht van je keuzes. Er staan geen prijzen: die volgen in je offerte, na controle van maten en product." }),
+      h("p", { class: "b-muted", text: "Dit is een overzicht van uw keuzes. Er staan geen prijzen: die volgen in uw offerte, na controle van maten en product." }),
       h("ul", { class: "b-plan-rows" }, rows),
-      h("div", { class: "b-plan-total" }, h("strong", { text: "Prijs" }), h("span", { text: "Volgt in je offerte" })),
+      h("div", { class: "b-plan-total" }, h("strong", { text: "Prijs" }), h("span", { text: "Volgt in uw offerte" })),
       h("div", { class: "b-plan-actions" },
-        h("button", { type: "button", class: "btn btn-secondary btn-sm", onclick: async () => { if (!shareUrl) { msg.textContent = "Dit ontwerp is te groot voor een link."; return; } try { await navigator.clipboard.writeText(shareUrl); msg.textContent = "Link gekopieerd. Wie de link opent, ziet dit ontwerp."; } catch (e) { msg.textContent = "Kopiëren lukte niet. Gebruik de link onderaan."; } } }, "Delen"),
         h("button", { type: "button", class: "btn btn-secondary btn-sm", onclick: () => { save(); msg.textContent = "Opgeslagen op dit apparaat."; } }, "Opslaan"),
         h("button", { type: "button", class: "btn btn-secondary btn-sm", onclick: () => { document.body.classList.add("print-plan"); window.print(); setTimeout(() => document.body.classList.remove("print-plan"), 500); } }, "Afdrukken of pdf")),
-      msg,
-      shareUrl ? h("a", { class: "v-link", href: shareUrl, text: "Nauwkeurig tekenen (voor ervaren gebruikers)" }) : null));
+      msg));
     body.append(nav(id, list, true));
     return body;
   },
   aanvraag(id, list) {
     const body = h("div", {});
     const p = st.doel === "nieuw" ? buildProject() : null;
-    const enc = p ? encodeShare(p) : null;
-    const designUrl = enc ? dir("project-samenstellen/") + `#ontwerp=${enc}` : "";
-    const text = [...summaryLines(), designUrl ? `Ontwerp: ${designUrl}` : ""].filter(Boolean).join("\n");
-    body.append(h("p", { class: "b-sub", text: "Vul je gegevens in. Wij nemen contact met je op. Dit is een vrijblijvende vraag, geen bestelling." }));
+    const text = summaryLines().filter(Boolean).join("\n");
+    body.append(h("p", { class: "b-sub", text: "Vul uw gegevens in. Wij nemen contact met u op. Dit is een vrijblijvende vraag, geen bestelling." }));
     body.append(h("div", { class: "b-plan" }, h("h3", { text: "Dit sturen we mee" }), h("ul", { class: "b-plan-list" }, summaryLines().map((l) => h("li", { text: l })))));
     const f = (label, name, attrs = {}) => h("div", { class: "field" }, h("label", { for: name, text: label + (attrs.required ? "*" : "") }), h("input", { id: name, name, class: "b-input", ...attrs }), attrs.required ? h("span", { class: "error-msg", text: attrs.err || "Dit veld is verplicht." }) : null);
     const form = h("form", { "data-contact-form": "", "data-lead-kind": "configurator", "data-subject-prefix": "Aanvraag schutting via website", novalidate: true, class: "b-form" },
       h("div", { class: "form-grid" },
-        f("Naam", "naam", { type: "text", required: true, autocomplete: "name", err: "Vul je naam in." }),
+        f("Naam", "naam", { type: "text", required: true, autocomplete: "name", err: "Vul uw naam in." }),
         f("Telefoonnummer", "telefoon", { type: "tel", required: true, autocomplete: "tel", err: "Vul een telefoonnummer in." }),
         f("E-mailadres", "email", { type: "email", required: true, autocomplete: "email", err: "Vul een geldig e-mailadres in." }),
-        f("Postcode", "postcode", { type: "text", required: true, autocomplete: "postal-code", err: "Vul je postcode in." }),
-        f("Woonplaats", "woonplaats", { type: "text", required: true, autocomplete: "address-level2", err: "Vul je woonplaats in." }),
-        h("div", { class: "field" }, h("label", { for: "contactvoorkeur", text: "Hoe neem je liefst contact op?" }), h("select", { id: "contactvoorkeur", name: "contactvoorkeur", class: "b-input" }, ["Geen voorkeur", "Bel mij", "WhatsApp", "E-mail"].map((o) => h("option", { text: o }))))),
+        f("Postcode", "postcode", { type: "text", required: true, autocomplete: "postal-code", err: "Vul uw postcode in." }),
+        f("Woonplaats", "woonplaats", { type: "text", required: true, autocomplete: "address-level2", err: "Vul uw woonplaats in." }),
+        h("div", { class: "field" }, h("label", { for: "contactvoorkeur", text: "Hoe neemt u liefst contact op?" }), h("select", { id: "contactvoorkeur", name: "contactvoorkeur", class: "b-input" }, ["Geen voorkeur", "Bel mij", "WhatsApp", "E-mail"].map((o) => h("option", { text: o }))))),
       h("input", { type: "hidden", name: "werkzaamheden", value: "Schutting plaatsen/vervangen" }),
       h("input", { type: "hidden", name: "maatstatus", value: st.doel === "nieuw" ? overallMeasure() : "onbekend" }),
       h("input", { type: "hidden", name: "werkroute", value: st.werk || st.doel || "" }),
-      h("div", { class: "field full" }, h("label", { for: "omschrijving", text: "Je omschrijving (je mag dit aanvullen)*" }), h("textarea", { id: "omschrijving", name: "omschrijving", class: "b-input", rows: 7, required: true }, text), h("span", { class: "error-msg", text: "Geef een korte omschrijving." })),
-      h("div", { class: "field full" }, h("label", { for: "fotos", text: "Foto’s van de plek (niet verplicht)" }), h("input", { type: "file", id: "fotos", name: "fotos", accept: "image/*", multiple: true, "data-file-input": "" }), h("div", { class: "hint", "data-file-count": "" }), h("p", { class: "b-muted", text: "Foto’s gebruiken we alleen om je aanvraag te beoordelen. Een foto is geen exacte maat; wij controleren de maten zelf." })),
-      h("div", { class: "field full" }, h("div", { class: "b-check" }, h("input", { type: "checkbox", id: "privacy", name: "privacy", required: true }), h("label", { for: "privacy", html: `Ik ga akkoord met de <a href="${dir("privacy/")}" target="_blank" rel="noopener">privacyverklaring</a>*` })), h("span", { class: "error-msg", text: "Bevestig dat je akkoord gaat met de privacyverklaring." })),
+      h("div", { class: "field full" }, h("label", { for: "omschrijving", text: "Uw omschrijving (u mag dit aanvullen)*" }), h("textarea", { id: "omschrijving", name: "omschrijving", class: "b-input", rows: 7, required: true }, text), h("span", { class: "error-msg", text: "Geef een korte omschrijving." })),
+      h("div", { class: "field full" }, h("label", { for: "fotos", text: "Foto’s van de plek (niet verplicht)" }), h("input", { type: "file", id: "fotos", name: "fotos", accept: "image/*", multiple: true, "data-file-input": "" }), h("div", { class: "hint", "data-file-count": "" }), h("p", { class: "b-muted", text: "Foto’s gebruiken we alleen om uw aanvraag te beoordelen. Een foto is geen exacte maat; wij controleren de maten zelf." })),
+      h("div", { class: "field full" }, h("div", { class: "b-check" }, h("input", { type: "checkbox", id: "privacy", name: "privacy", required: true }), h("label", { for: "privacy", html: `Ik ga akkoord met de <a href="${dir("privacy/")}" target="_blank" rel="noopener">privacyverklaring</a>*` })), h("span", { class: "error-msg", text: "Bevestig dat u akkoord gaat met de privacyverklaring." })),
       h("button", { type: "submit", class: "btn btn-primary btn-lg btn-block", text: "Verstuur mijn aanvraag" }),
       h("a", { href: "#", "data-mailto-fallback": "", class: "btn btn-secondary btn-block", style: "margin-top:.8rem", hidden: true, text: "Verstuur mijn aanvraag via e-mail" }));
     body.append(h("div", { class: "form-status", "data-form-status": "", hidden: true, role: "status" }), form);
@@ -588,9 +580,10 @@ function lengteIllus() { return lengthIllustration(); }
 
 function showFailure(e) {
   stage.textContent = "";
-  stage.append(h("h2", { class: "b-title", text: "Er ging iets mis" }), h("p", { class: "b-sub", text: "De ontwerphulp kon deze stap niet laten zien. Je keuzes zijn niet verloren. Je kunt ook zonder ontwerp een offerte aanvragen." }),
-    h("div", { class: "b-fallback-links" }, h("a", { class: "btn btn-primary btn-lg", href: dir("contact/"), text: "Vraag een offerte aan" }), h("button", { type: "button", class: "btn btn-secondary btn-lg", onclick: () => location.reload(), text: "Probeer opnieuw" })),
-    h("details", {}, h("summary", { text: "Technische melding" }), h("pre", { text: String(e && e.stack || e).slice(0, 600) })));
+  stage.append(h("h2", { class: "b-title", text: "Er ging iets mis" }), h("p", { class: "b-sub", text: "De ontwerphulp kon deze stap niet laten zien. Uw keuzes zijn niet verloren. U kunt ook zonder ontwerp een offerte aanvragen." }),
+    h("div", { class: "b-fallback-links" }, h("a", { class: "btn btn-primary btn-lg", href: dir("contact/"), text: "Vraag een offerte aan" }), h("button", { type: "button", class: "btn btn-secondary btn-lg", onclick: () => location.reload(), text: "Probeer opnieuw" }))
+  );
+  if (window.console) console.error(e);
 }
 window.addEventListener("error", (ev) => { if (!root.dataset.failed && ev.error && stage && !stage.children.length) { root.dataset.failed = "1"; showFailure(ev.error); } });
 
@@ -605,10 +598,10 @@ root.querySelector("[data-b-view-reset]")?.addEventListener("click", () => previ
 const dimBtn = root.querySelector("[data-b-dims]");
 dimBtn?.addEventListener("click", () => { preview.showDims = !preview.showDims; dimBtn.setAttribute("aria-pressed", String(preview.showDims)); dimBtn.textContent = preview.showDims ? "Maten verbergen" : "Toon maten"; drawDims(); });
 const decorBtn = root.querySelector("[data-b-decor]");
-decorBtn?.addEventListener("click", () => { preview.decor = !preview.decor; decorBtn.setAttribute("aria-pressed", String(preview.decor)); decorBtn.textContent = preview.decor ? "Alleen mijn keuzes tonen" : "Voorbeeldtuin tonen"; updatePreview(); setStatus(preview.decor ? "De planten, het terras en het gras zijn een voorbeeldinrichting. Ze horen niet bij je aanvraag." : "Je ziet alleen de onderdelen die je zelf koos."); });
+decorBtn?.addEventListener("click", () => { preview.decor = !preview.decor; decorBtn.setAttribute("aria-pressed", String(preview.decor)); decorBtn.textContent = preview.decor ? "Alleen mijn keuzes tonen" : "Voorbeeldtuin tonen"; updatePreview(); setStatus(preview.decor ? "De planten, het terras en het gras zijn een voorbeeldinrichting. Ze horen niet bij uw aanvraag." : "U ziet alleen de onderdelen die u zelf koos."); });
 root.querySelector("[data-b-reset]")?.addEventListener("click", reset);
 document.querySelectorAll("[data-b-mode]").forEach((b) => b.addEventListener("click", () => { if (!b.disabled) setMode(b.dataset.bMode); }));
 
-if (loadedFromStore) setStatus("Je eerdere keuzes zijn terug. Ze zijn bewaard op dit apparaat.");
+if (loadedFromStore) setStatus("Uw eerdere keuzes zijn terug. Ze zijn bewaard op dit apparaat.");
 try { render(false); } catch (e) { showFailure(e); }
 root.dataset.ready = "1";

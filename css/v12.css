@@ -706,3 +706,15 @@ body.v12 main > .v-section { padding-block: clamp(2rem, 4vw, 3.4rem); }
 .ba .ba-label{position:absolute;top:.6rem;padding:.2rem .6rem;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;font-size:.8rem;pointer-events:none}
 .ba .ba-label.l{left:.6rem}.ba .ba-label.r{right:.6rem}
 .ba:focus-within{outline:3px solid #8cc9a3;outline-offset:2px}
+
+/* Pagina's zonder foto: rustige groene kop */
+.v-hero--plain{min-height:0;background:linear-gradient(135deg,var(--seal-green-deep),#1d4a3b)}
+.v-hero--plain .v-hero-inner{padding-block:clamp(2.5rem,6vw,4.5rem)}
+.v-hero--plain h1{max-width:20ch}.v-hero--plain p{max-width:56ch}
+.page-hero--plain{min-height:0;display:block;background:linear-gradient(135deg,var(--c-forest-deep),var(--c-forest))}
+.page-hero--plain .page-hero-inner{padding-block:clamp(2.5rem,6vw,4.5rem)}
+.v-note{background:var(--c-sand-deep,#efe9dc);border-radius:12px;padding:1rem 1.25rem;margin:1rem 0}
+.v-steps{counter-reset:s;list-style:none;padding:0;display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+.v-steps li{counter-increment:s;background:#fff;border:1px solid var(--c-line,#ddd);border-radius:12px;padding:1.1rem 1.2rem;position:static}
+.v-steps li::before{position:static;content:counter(s);display:inline-grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:var(--c-forest,#1c4a3b);color:#fff;font-weight:600;margin-bottom:.5rem}
+.v-steps h3{margin:.1rem 0 .3rem;font-size:1.05rem}.v-steps p{margin:0}

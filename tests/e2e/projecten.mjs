@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 const pw = await import(process.env.PLAYWRIGHT || "playwright"); const chromium = pw.chromium || pw.default.chromium;
 const BASE = (process.env.BASE || "http://127.0.0.1:8941/").replace(/\/?$/, "/"), IDX = process.env.FLAT === "1" ? "index.html" : "";
 const b = await chromium.launch({ executablePath: process.env.CHROMIUM || undefined }); const errs = [];
-const SLUGS = ["oprit-en-bestrating-gereinigd", "klimopheg-gesnoeid-langs-oprit", "voortuin-heesters-in-vorm-gesnoeid", "haag-langs-hekwerk-gesnoeid", "klimop-en-beplanting-teruggesnoeid"];
+const SLUGS = ["oprit-en-bestrating-gereinigd", "grenen-schutting-zwarte-onderplaat", "kastanjehouten-paaltjesschutting"];
 for (const [w, h] of [[1280, 900], [390, 844]]) {
   const p = await b.newPage({ viewport: { width: w, height: h } });
   p.on("pageerror", (e) => errs.push(e.message)); p.on("response", (r) => { if (r.status() >= 400 && !/favicon/.test(r.url())) errs.push(r.status() + " " + r.url()); });

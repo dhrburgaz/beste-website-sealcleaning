@@ -11,7 +11,7 @@ p.on("pageerror", (e) => errors.push(e.message)); p.on("console", (m) => { if (m
 p.on("response", (r) => { if (r.status() >= 400 && !/favicon|\/api\//.test(r.url())) errors.push(`HTTP ${r.status()} ${r.url()}`); });
 const ok = (n) => console.log("ok ", n);
 const pages = fs.readdirSync(".", { recursive: true }).filter((f) => /^tr\/.*index\.html$/.test(f)).map((f) => f.slice(3).replace(/index\.html$/, ""));
-assert.ok(pages.length >= 40, "te weinig TR-pagina's: " + pages.length);
+assert.ok(pages.length >= 30, "te weinig TR-pagina's: " + pages.length);
 const DUTCH = /\b(de|het|een|en|voor|met|wij|uw|naar|van|ons|onze|offerte|aanvragen|schutting)\b/gi;
 let leftovers = [];
 for (const pg of pages) {

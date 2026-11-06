@@ -84,7 +84,7 @@
   input.addEventListener("input", function () { if (index && input.value.trim().length >= 2) render(input.value.slice(0, 80)); else if (!input.value.trim()) render(""); });
 
   input.value = (new URLSearchParams(location.search).get("q") || "").slice(0, 80);
-  fetch("../data/search-index.json").then(function (r) { return r.json(); }).then(function (data) {
+  fetch("../data/search-index" + (window.SEAL_LANG === "tr" ? "-tr" : "") + ".json").then(function (r) { return r.json(); }).then(function (data) {
     index = prepare(data.entries || []);
     render(input.value);
   }).catch(function () {

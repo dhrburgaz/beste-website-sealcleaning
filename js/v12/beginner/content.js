@@ -3,30 +3,30 @@
 export const MATERIALS = [
   { id: "hout", label: "Hout", system: "generic-wood", preset: "natural-wood",
     care: "Natuurlijke uitstraling. Af en toe behandelen met beits of olie.",
-    photo: { name: "schutting-lichthout-appartement", alt: "Houten schutting met zwarte palen bij een nieuwbouwwoning, eigen werk", note: "Voorbeeld van een houten schutting uit eigen werk. Merk, soort hout en afmetingen staan in je offerte." } },
+    photo: { name: "schutting-lichthout-appartement", alt: "Houten schutting met zwarte palen bij een nieuwbouwwoning, eigen werk", note: "Voorbeeld van een houten schutting uit eigen werk. Merk, soort hout en afmetingen staan in uw offerte." } },
   { id: "hout-beton", label: "Hout met beton", system: "generic-wood-concrete", preset: "natural-wood-grey-concrete",
-    care: "Het hout staat niet in de grond. Het hout behandel je af en toe.",
-    photo: { name: "schutting-grenen-zwarte-voet-1", alt: "Houten schutting op een zwarte betonnen onderplaat, eigen werk", note: "Voorbeeld van een houten schutting op een betonnen onderplaat uit eigen werk. Het exacte product staat in je offerte." } },
+    care: "Het hout staat niet in de grond. Het hout behandel u af en toe.",
+    photo: { name: "schutting-grenen-zwarte-voet-1", alt: "Houten schutting op een zwarte betonnen onderplaat, eigen werk", note: "Voorbeeld van een houten schutting op een betonnen onderplaat uit eigen werk. Het exacte product staat in uw offerte." } },
   { id: "composiet", label: "Composiet", system: "generic-composite", preset: "anthracite-composite",
     care: "Weinig onderhoud. Meestal is schoonmaken genoeg.",
-    photo: { name: "schutting-antraciet-composiet-hoek", alt: "Antracietkleurige schutting bij een parkeerplaats, eigen werk", note: "Antracietkleurige schutting uit eigen werk. Het precieze materiaal en product bevestigen we in je offerte." } },
+    photo: { name: "schutting-antraciet-composiet-hoek", alt: "Antracietkleurige schutting bij een parkeerplaats, eigen werk", note: "Antracietkleurige schutting uit eigen werk. Het precieze materiaal en product bevestigen we in uw offerte." } },
   { id: "lamellen", label: "Horizontale planken", system: "generic-horizontal-lamellen", preset: "natural-wood",
     care: "Moderne uitstraling. Onderhoud hangt af van het materiaal.",
-    photo: { name: "schutting-horizontaal-lamellen-border", alt: "Schutting met horizontale houten planken en zwarte palen, eigen werk", note: "Voorbeeld van een schutting met horizontale planken uit eigen werk. Het exacte product staat in je offerte." } }
+    photo: { name: "schutting-horizontaal-lamellen-border", alt: "Schutting met horizontale houten planken en zwarte palen, eigen werk", note: "Voorbeeld van een schutting met horizontale planken uit eigen werk. Het exacte product staat in uw offerte." } }
 ];
 
 export const HEIGHTS_CM = [100, 120, 150, 180, 200];
 export const GATE_WIDTHS_CM = [80, 90, 100, 120];
 
 export const HELP = {
-  doel: { wat: "Hier kies je wat je met je schutting wilt.", zo: ["Kies ‘nieuwe schutting’ als je een nieuwe wilt laten plaatsen.", "Is er maar iets stuk, kies dan ‘repareren’. Je hoeft dan niets nieuws te kopen.", "Twijfel je? Kies ‘ik weet het niet’."], waarom: "Zo vragen we je alleen wat bij jouw situatie past.", voorbeeld: "Eén losse plank of een scheve paal is vaak te herstellen.", weetniet: "Kies ‘ik weet het niet’. Wij kijken met je mee." },
-  materiaal: { wat: "Het materiaal bepaalt hoe je schutting eruitziet en hoeveel onderhoud hij vraagt.", zo: ["Kijk naar de foto’s. Dat zijn echte schuttingen uit ons eigen werk.", "Lees het onderhoudsregeltje.", "Je kunt later nog wisselen."], waarom: "Zodat het voorbeeld in 3D bij jouw keuze past.", voorbeeld: "Hout met beton: het houten scherm staat op een betonnen plaat, niet in de grond.", weetniet: "Kies ‘hout’ als beginpunt en vraag ons om advies." },
-  vorm: { wat: "De vorm is de weg die je schutting volgt langs je tuin.", zo: ["Loop in gedachten langs de rand van je tuin waar de schutting komt.", "Eén rechte lijn? Kies ‘recht’.", "Gaat hij om een hoek? Kies ‘met een hoek’."], waarom: "Dan vragen we alleen de maten van de zijden die je echt nodig hebt.", voorbeeld: "Een schutting langs de achterkant van je tuin is meestal ‘recht’.", weetniet: "Kies ‘weet ik niet’. Je kunt een foto of omschrijving meesturen." },
-  lengte: { wat: "De lengte is hoe ver de schutting loopt, van het begin tot het einde.", zo: ["Leg een rolmaat langs de plek waar de schutting komt.", "Meet van het begin tot het einde.", "Heeft je tuin een hoek? Meet elke kant apart."], waarom: "Zo kunnen we berekenen hoeveel schuttingdelen en palen je ongeveer nodig hebt.", voorbeeld: "6,5 meter is 6 meter en 50 centimeter. Je mag een komma of een punt gebruiken.", weetniet: "Kies ‘ik kan niet meten’. Stuur straks een foto of omschrijving. Dan komen wij de maten controleren." },
-  hoogte: { wat: "De hoogte meet je van de grond tot de bovenkant van de schutting.", zo: ["Zet een rolmaat op de grond.", "Meet omhoog tot waar de bovenkant moet komen.", "180 centimeter is 1 meter en 80 centimeter."], waarom: "De hoogte bepaalt hoeveel privacy je krijgt en welk scherm nodig is.", voorbeeld: "Een schutting van 180 cm is hoger dan een gemiddeld persoon. Het poppetje laat dat zien.", weetniet: "Kies 180 cm als beginpunt. Wij adviseren je. Voor de toegestane hoogte gelden lokale regels." },
-  poort: { wat: "Een poort is een deur in de schutting, zodat je erdoor kunt lopen.", zo: ["Bedenk waar je doorheen wilt lopen.", "Bepaal hoe breed de opening moet zijn.", "Dat is de vrije ruimte, niet de dikte van de paal."], waarom: "Een poort heeft een eigen opening in de schutting. Daar houden we rekening mee.", voorbeeld: "Voor een fiets is 100 cm doorgang meestal genoeg.", weetniet: "Kies ‘weet ik nog niet’. Je kunt later een poort toevoegen." },
-  werk: { wat: "Hier kies je wie het werk doet.", zo: ["‘Alleen materialen’: je krijgt een offerte voor het materiaal. Wij plaatsen niets.", "‘Materialen en plaatsing’: wij leveren én plaatsen. Dat staat in één offerte.", "Een oude schutting weghalen kan er optioneel bij."], waarom: "Zo weten we welke prijzen we in de offerte moeten zetten.", voorbeeld: "Oude schutting meenemen kan extra kosten. Dat zie je dan apart in de offerte.", weetniet: "Kies ‘materialen en plaatsing’. Wij leggen de verschillen uit." },
-  maten: { wat: "Hier zie je hoe zeker de maten zijn.", zo: ["‘Precies’ betekent: jij hebt het opgemeten.", "‘Ongeveer’ betekent: een schatting. Wij controleren het.", "‘Onbekend’ betekent: nog niet gemeten."], waarom: "Een definitieve prijs kan pas als de maten kloppen.", voorbeeld: "Heb je ‘ongeveer 6 meter’ ingevuld, dan komen wij het opmeten voordat de prijs vaststaat.", weetniet: "Geen probleem. Je kunt zo ook een aanvraag doen." }
+  doel: { wat: "Hier kiest u wat u met uw schutting wilt.", zo: ["Kies ‘nieuwe schutting’ als u een nieuwe wilt laten plaatsen.", "Is er maar iets stuk, kies dan ‘repareren’. U hoeft dan niets nieuws te kopen.", "Twijfel u? Kies ‘ik weet het niet’."], waarom: "Zo vragen we u alleen wat bij uw situatie past.", voorbeeld: "Eén losse plank of een scheve paal is vaak te herstellen.", weetniet: "Kies ‘ik weet het niet’. Wij kijken met u mee." },
+  materiaal: { wat: "Het materiaal bepaalt hoe uw schutting eruitziet en hoeveel onderhoud hij vraagt.", zo: ["Kijk naar de foto’s. Dat zijn echte schuttingen uit ons eigen werk.", "Lees het onderhoudsregeltje.", "U kunt later nog wisselen."], waarom: "Zodat het voorbeeld in 3D bij uw keuze past.", voorbeeld: "Hout met beton: het houten scherm staat op een betonnen plaat, niet in de grond.", weetniet: "Kies ‘hout’ als beginpunt en vraag ons om advies." },
+  vorm: { wat: "De vorm is de weg die uw schutting volgt langs uw tuin.", zo: ["Loop in gedachten langs de rand van uw tuin waar de schutting komt.", "Eén rechte lijn? Kies ‘recht’.", "Gaat hij om een hoek? Kies ‘met een hoek’."], waarom: "Dan vragen we alleen de maten van de zijden die u echt nodig hebt.", voorbeeld: "Een schutting langs de achterkant van uw tuin is meestal ‘recht’.", weetniet: "Kies ‘weet ik niet’. U kunt een foto of omschrijving meesturen." },
+  lengte: { wat: "De lengte is hoe ver de schutting loopt, van het begin tot het einde.", zo: ["Leg een rolmaat langs de plek waar de schutting komt.", "Meet van het begin tot het einde.", "Heeft uw tuin een hoek? Meet elke kant apart."], waarom: "Zo kunnen we berekenen hoeveel schuttingdelen en palen u ongeveer nodig hebt.", voorbeeld: "6,5 meter is 6 meter en 50 centimeter. U mag een komma of een punt gebruiken.", weetniet: "Kies ‘ik kan niet meten’. Stuur straks een foto of omschrijving. Dan komen wij de maten controleren." },
+  hoogte: { wat: "De hoogte meet u van de grond tot de bovenkant van de schutting.", zo: ["Zet een rolmaat op de grond.", "Meet omhoog tot waar de bovenkant moet komen.", "180 centimeter is 1 meter en 80 centimeter."], waarom: "De hoogte bepaalt hoeveel privacy u krijgt en welk scherm nodig is.", voorbeeld: "Een schutting van 180 cm is hoger dan een gemiddeld persoon. Het poppetje laat dat zien.", weetniet: "Kies 180 cm als beginpunt. Wij adviseren u. Voor de toegestane hoogte gelden lokale regels." },
+  poort: { wat: "Een poort is een deur in de schutting, zodat u erdoor kunt lopen.", zo: ["Bedenk waar u doorheen wilt lopen.", "Bepaal hoe breed de opening moet zijn.", "Dat is de vrije ruimte, niet de dikte van de paal."], waarom: "Een poort heeft een eigen opening in de schutting. Daar houden we rekening mee.", voorbeeld: "Voor een fiets is 100 cm doorgang meestal genoeg.", weetniet: "Kies ‘weet ik nog niet’. U kunt later een poort toevoegen." },
+  werk: { wat: "Hier kiest u wie het werk doet.", zo: ["‘Alleen materialen’: u krijgt een offerte voor het materiaal. Wij plaatsen niets.", "‘Materialen en plaatsing’: wij leveren én plaatsen. Dat staat in één offerte.", "Een oude schutting weghalen kan er optioneel bij."], waarom: "Zo weten we welke prijzen we in de offerte moeten zetten.", voorbeeld: "Oude schutting meenemen kan extra kosten. Dat ziet u dan apart in de offerte.", weetniet: "Kies ‘materialen en plaatsing’. Wij leggen de verschillen uit." },
+  maten: { wat: "Hier ziet u hoe zeker de maten zijn.", zo: ["‘Precies’ betekent: u hebt het opgemeten.", "‘Ongeveer’ betekent: een schatting. Wij controleren het.", "‘Onbekend’ betekent: nog niet gemeten."], waarom: "Een definitieve prijs kan pas als de maten kloppen.", voorbeeld: "Heeft u ‘ongeveer 6 meter’ ingevuld, dan komen wij het opmeten voordat de prijs vaststaat.", weetniet: "Geen probleem. U kunt zo ook een aanvraag doen." }
 };
 
 /* ---- SVG-illustraties (schematisch, geen bouwtekeningen) ---- */
@@ -38,7 +38,7 @@ export function lengthIllustration() {
   let panels = "";
   for (let i = 0; i < 5; i++) panels += `<rect x="${40 + i * 56}" y="70" width="52" height="90" fill="${WOOD}" stroke="#8a6232"/>`;
   let posts = ""; for (let i = 0; i <= 5; i++) posts += `<rect x="${37 + i * 56}" y="62" width="6" height="104" fill="${POST}"/>`;
-  return svg("0 0 360 230", "Voorbeeld: de lengte van de schutting meet je langs de hele schutting, van begin tot eind", `<rect x="0" y="166" width="360" height="30" fill="${GROUND}"/>${panels}${posts}${arrowH(40, 320, 206, GREEN, "Bijvoorbeeld 6 meter", 224)}`);
+  return svg("0 0 360 230", "Voorbeeld: de lengte van de schutting meet u langs de hele schutting, van begin tot eind", `<rect x="0" y="166" width="360" height="30" fill="${GROUND}"/>${panels}${posts}${arrowH(40, 320, 206, GREEN, "Bijvoorbeeld 6 meter", 224)}`);
 }
 
 export function heightIllustration(cm) {
@@ -81,7 +81,7 @@ export function sideIllustration(shape, activeIndex) {
       arrow = `<g stroke="${GREEN}" stroke-width="2.5" fill="none"><line x1="${x}" y1="${ya}" x2="${x}" y2="${yb}"/><path d="M${x - 6} ${ya + 10}L${x} ${ya}L${x + 6} ${ya + 10}M${x - 6} ${yb - 10}L${x} ${yb}L${x + 6} ${yb - 10}"/></g><text x="${left ? x + 10 : x - 10}" y="${(ya + yb) / 2 + 4}" text-anchor="${left ? "start" : "end"}" font-size="13" font-weight="700" fill="${GREEN}">${s.name}</text>`;
     }
   });
-  return svg("0 0 240 150", `Bovenaanzicht van je tuin. De gevraagde zijde is groen: ${sides[activeIndex] ? sides[activeIndex].name : ""}`, `<rect x="30" y="30" width="180" height="90" fill="#EAF0DC"/><text x="120" y="108" text-anchor="middle" font-size="11" fill="#5D675E">je tuin, gezien van boven</text>${lines}${arrow}`);
+  return svg("0 0 240 150", `Bovenaanzicht van uw tuin. De gevraagde zijde is groen: ${sides[activeIndex] ? sides[activeIndex].name : ""}`, `<rect x="30" y="30" width="180" height="90" fill="#EAF0DC"/><text x="120" y="108" text-anchor="middle" font-size="11" fill="#5D675E">uw tuin, gezien van boven</text>${lines}${arrow}`);
 }
 
 export function gateIllustration() {
@@ -97,15 +97,15 @@ export const STIJLEN = [
   { id: "antraciet", label: "Antraciet composiet", materiaal: "composiet", photo: "schutting-composiet-antraciet-terras", alt: "Antracietkleurige schutting bij een grijs terras en loungeset" },
   { id: "sfeer", label: "Hout met sfeerverlichting", materiaal: "hout", photo: "schutting-hout-wandverlichting-avond", alt: "Houten schutting met lichtpunten op de zwarte palen, in de schemering" }
 ];
-export const STIJL_NOTE = "Laat je inspireren door verschillende stijlen en afwerkingen. Wij bespreken samen de mogelijkheden en stemmen de definitieve materialen vooraf met je af.";
+export const STIJL_NOTE = "Laat u inspireren door verschillende stijlen en afwerkingen. Wij bespreken samen de mogelijkheden en stemmen de definitieve materialen vooraf met u af.";
 
 /** Uitleg bij begrippen (informatieknoppen). Gewone taal; geen productclaims. */
 export const GLOSS = {
-  lengte: { t: "Lengte", d: "Hoe ver de schutting loopt, van het begin tot het einde. Leg een rolmaat langs de plek en meet het hele stuk. Een poort telt mee als je erdoor wilt lopen." },
-  hoogte: { t: "Hoogte", d: "Gemeten van de grond tot de bovenkant. 180 cm is 1 meter en 80 centimeter, hoger dan een gemiddeld persoon. In sommige gemeenten gelden regels voor de maximale hoogte. Wij denken met je mee." },
-  type: { t: "Type schutting", d: "Het materiaal en de stijl van de schutting. Je kunt het later nog wisselen. Het exacte product en de houtsoort bevestigen wij vooraf met je." },
+  lengte: { t: "Lengte", d: "Hoe ver de schutting loopt, van het begin tot het einde. Leg een rolmaat langs de plek en meet het hele stuk. Een poort telt mee als u erdoor wilt lopen." },
+  hoogte: { t: "Hoogte", d: "Gemeten van de grond tot de bovenkant. 180 cm is 1 meter en 80 centimeter, hoger dan een gemiddeld persoon. In sommige gemeenten gelden regels voor de maximale hoogte. Wij denken met u mee." },
+  type: { t: "Type schutting", d: "Het materiaal en de stijl van de schutting. U kunt het later nog wisselen. Het exacte product en de houtsoort bevestigen wij vooraf met u." },
   composiet: { t: "Wat is composiet?", d: "Een mengsel van houtvezels en kunststof dat eruitziet als hout. De kleur blijft meestal gelijkmatiger dan hout. Het onderhoud hangt af van het gekozen product." },
   "hout-beton": { t: "Wat is hout met beton?", d: "Een houten schutting die op een betonnen onderplaat en tussen betonpalen staat. Zo staat het hout niet in de grond." },
-  lamellen: { t: "Wat zijn horizontale planken?", d: "Een schutting waarbij de planken horizontaal liggen. Dat geeft een moderne, rustige uitstraling. Met open ruimte tussen de planken heb je minder privacy." },
+  lamellen: { t: "Wat zijn horizontale planken?", d: "Een schutting waarbij de planken horizontaal liggen. Dat geeft een moderne, rustige uitstraling. Met open ruimte tussen de planken heeft u minder privacy." },
   doorgang: { t: "Wat is de doorgang?", d: "De vrije opening van een poort tussen de palen. Voor een fiets is meestal 100 cm genoeg." }
 };

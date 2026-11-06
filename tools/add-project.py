@@ -56,7 +56,7 @@ def lightbox_block():
     return s[a:b].rstrip() + "\n"
 
 def detail_page(m, sizes):
-    s = rd("projecten/klimopheg-in-model/index.html")
+    s = rd("tools/projects/template.html")
     url = f"{SITE}projecten/{m['slug']}/"; title = f"{m['seoTitle']} — Sealcleaning"
     cover = next(p for p in m["photos"] if p["role"] == "cover"); coverjpg = f"{SITE}images/projects/{cover['name']}.jpg"
     head = (f'<title>{esc(title)}</title>\n<meta name="description" content="{esc(m["seoDescription"])}">\n<link rel="canonical" href="{url}">\n'
@@ -138,36 +138,12 @@ def detail_page(m, sizes):
     return s
 
 def main():
+    """Foto's verwerken en project aan de site toevoegen: python3 -I tools/add-project.py <manifest.json> <map-met-foto's>"""
     manifest, srcdir = sys.argv[1], sys.argv[2]
     m = json.load(open(manifest, encoding="utf-8"))
-    if os.path.exists(os.path.join(ROOT, "projecten", m["slug"])):
-        sys.exit(f"Project {m['slug']} bestaat al; verwijder het eerst bewust als u het wilt vervangen.")
-    for p in m["photos"]:
-        if os.path.exists(os.path.join(ROOT, "images", "projects", p["name"] + ".jpg")): sys.exit(f"Afbeeldingsnaam bestaat al: {p['name']}")
-    sizes = {p["name"]: process(p, srcdir) for p in m["photos"]}
-    os.makedirs(os.path.join(ROOT, "projecten", m["slug"]), exist_ok=True)
-    wr(f"projecten/{m['slug']}/index.html", detail_page(m, sizes))
-    # overzichtspagina: filterknop + tegel vooraan
-    idx = rd("projecten/index.html")
-    if f'data-filter="{m["category"]}"' not in idx:
-        idx = re.sub(r'(<button class="filter-btn" data-filter="snoeiwerk"[^>]*>[^<]*</button>)', lambda mm: mm.group(1) + f'\n        <button class="filter-btn" data-filter="{m["category"]}" aria-pressed="false">{CATS.get(m["category"], m["category"].title())}</button>', idx, 1)
-    cover = next(p for p in m["photos"] if p["role"] == "cover"); w, h = sizes[cover["name"]]
-    tile = (f'        <button type="button" class="project-tile reveal" data-category="{m["category"]}" data-lightbox data-slug="{m["slug"]}" data-full-webp="../images/projects/{cover["name"]}.webp" data-full-jpg="../images/projects/{cover["name"]}.jpg" data-alt="{esc(cover["alt"])}" data-title="{esc(m["title"])}" data-meta="{esc(meta_line(m))}">\n'
-            f'          <div class="media-frame">{pic(cover["name"], (w, h), cover["alt"], "../", "(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 440px")}</div>\n'
-            f'          <h3>{esc(m["title"])}</h3>\n          <p class="meta">{esc(meta_line(m))}</p>\n        </button>\n')
-    idx = idx.replace('<div class="project-grid">\n', '<div class="project-grid">\n' + tile, 1)
-    wr("projecten/index.html", idx)
-    # datamodel
-    dp = rd("data/projects.js")
-    entry = {"slug": m["slug"], "title": m["title"], "primaryService": m["services"][0], "services": m["services"], "location": ({"city": m["location"], "verified": True} if m.get("location") else None),
-             "coverImage": cover["name"], "gallery": [{"image": p["name"], "alt": p["alt"], "role": p["role"]} for p in m["photos"]], "summary": m["summary"],
-             "situation": None, "workDone": m.get("work", []), "materials": [], "duration": None, "dimensions": None, "tags": m["services"], "featured": True, "verification": "visually-confirmed", "publishStatus": "published"}
-    dp = dp.replace("export const PROJECTS = [\n", "export const PROJECTS = [\n  " + json.dumps(entry, ensure_ascii=False, indent=2).replace("\n", "\n  ") + ",\n", 1)
-    wr("data/projects.js", dp)
-    # sitemap
-    sm = rd("sitemap.xml"); u = f"{SITE}projecten/{m['slug']}/"
-    if u not in sm: sm = sm.replace("</urlset>", f'  <url><loc>{u}</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>\n</urlset>'); wr("sitemap.xml", sm)
-    print("project toegevoegd:", m["slug"], "-", len(m["photos"]), "foto's")
+    for p in m["photos"]: process(p, srcdir)
+    import importlib.util
+    sp = importlib.util.spec_from_file_location("render", os.path.join(ROOT, "tools/projects/render.py")); r = importlib.util.module_from_spec(sp); sp.loader.exec_module(r); r.main()
 
 if __name__ == "__main__":
     main()

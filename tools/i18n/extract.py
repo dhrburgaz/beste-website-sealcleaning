@@ -1,6 +1,6 @@
 """Extraheert vertaalbare tekst (tekstknopen + attributen) uit de NL-pagina's naar tools/i18n/strings.json (volgorde: frequentie)."""
 import re, glob, html, json, collections, sys
-EXCL = ("vendor","server","beheer","node_modules","docs","tests","deploy","tools","tr","bestelling","winkelmandje","zoeken","privacy","voorwaarden","_site")
+EXCL = ("vendor","server","beheer","node_modules","docs","tests","deploy","tools","tr","bestelling","winkelmandje","privacy","voorwaarden","_site","archief")
 def pages():
     return sorted(f for f in glob.glob("**/index.html", recursive=True) if not f.startswith(EXCL))
 ATTR = re.compile(r'\s(alt|aria-label|placeholder|title|content)="([^"]*)"')

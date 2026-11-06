@@ -1,0 +1,39 @@
+{
+ "slug": "kastanjehouten-paaltjesschutting",
+ "title": "Nieuwe kastanjehouten paaltjesschutting",
+ "category": "schutting",
+ "services": [
+  "schutting"
+ ],
+ "location": null,
+ "tag": "Schutting",
+ "status": "published",
+ "order": 3,
+ "summary": "Voor deze klant hebben wij een paaltjesschutting van kastanjehout geplaatst.",
+ "intro": "Voor deze klant hebben wij een paaltjesschutting van kastanjehout geplaatst.",
+ "work": [
+  "Paaltjesschutting van kastanjehout geplaatst"
+ ],
+ "result": "Een open, natuurlijke erfafscheiding van kastanjehout.",
+ "seoTitle": "Kastanjehouten paaltjesschutting plaatsen",
+ "seoDescription": "Project: paaltjesschutting van kastanjehout geplaatst. Bekijk de foto's.",
+ "related": [
+  [
+   "schuttingen",
+   "Meer over schuttingen"
+  ]
+ ],
+ "photos": [
+  {
+   "name": "schutting-kastanje-paaltjes-1",
+   "alt": "Kastanjehouten paaltjesschutting",
+   "role": "cover"
+  },
+  {
+   "name": "schutting-kastanje-paaltjes-2",
+   "alt": "Kastanjehouten paaltjesschutting, detail",
+   "role": "detail"
+  }
+ ],
+ "existing": true
+}
