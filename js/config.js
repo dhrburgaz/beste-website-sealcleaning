@@ -1,6 +1,6 @@
 /**
  * Centrale bedrijfsgegevens Sealcleaning.
- * Pas hier telefoon, WhatsApp, e-mail en openingstijden aan — dit werkt overal op de site door.
+ * Pas hier telefoon, e-mail en openingstijden aan — dit werkt overal op de site door.
  * Zie README.md in de hoofdmap voor uitleg.
  */
 (function () {
@@ -12,8 +12,6 @@
     tagline: "Groenonderhoud & Aanleg",
     phoneDisplay: "078 204 95 17",
     phoneHref: "tel:+31782049517",
-    whatsappNumber: "31648871986",
-    whatsappDisplay: "06 48 87 19 86",
     email: "sealcleaningaanleg@gmail.com",
     addressLine1: "Romboutslaan 582",
     addressLine2: "3312 KP Dordrecht",
@@ -26,14 +24,8 @@
     // gebruiken het eigen mailprogramma van de bezoeker (huidige werking).
     apiBase: "",
     /* Directe verzending van aanvragen per e-mail (formulierdienst); bij een storing valt het formulier terug op e-mail via het eigen mailprogramma. */
-    formEndpoint: "https://formsubmit.co/ajax/sealcleaningaanleg@gmail.com",
-    defaultWhatsappMessage: "Hallo Sealcleaning, ik wil graag meer informatie over jullie diensten."
+    formEndpoint: "https://formsubmit.co/ajax/sealcleaningaanleg@gmail.com"
   };
-
-  function waLink(message) {
-    var text = encodeURIComponent(message || SEAL.defaultWhatsappMessage);
-    return "https://wa.me/" + SEAL.whatsappNumber + "?text=" + text;
-  }
 
   function applyConfig(root) {
     root = root || document;
@@ -43,12 +35,11 @@
       if (el.hasAttribute("data-tel-text")) el.textContent = SEAL.phoneDisplay;
     });
 
+    // WhatsApp is niet langer een contactkanaal op deze website.
+    // Verwijder de knoppen inclusief hun eigen lijstitem, zodat de layout netjes blijft.
     root.querySelectorAll("[data-whatsapp]").forEach(function (el) {
-      var msg = el.getAttribute("data-whatsapp-msg") || (document.documentElement.lang === "tr" ? "Merhaba Sealcleaning, hizmetleriniz hakkında bilgi almak istiyorum." : SEAL.defaultWhatsappMessage);
-      el.setAttribute("href", waLink(msg));
-      el.setAttribute("target", "_blank");
-      el.setAttribute("rel", "noopener");
-      if (el.hasAttribute("data-whatsapp-text")) el.textContent = SEAL.whatsappDisplay;
+      var listItem = el.closest("li");
+      (listItem || el).remove();
     });
 
     root.querySelectorAll("[data-email]").forEach(function (el) {
@@ -66,6 +57,5 @@
   }
 
   window.SEAL_CONFIG = SEAL;
-  window.sealWaLink = waLink;
   document.addEventListener("DOMContentLoaded", function () { applyConfig(document); });
 })();
