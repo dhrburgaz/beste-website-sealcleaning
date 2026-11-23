@@ -1265,3 +1265,8 @@ html body input:focus-visible, html body select:focus-visible, html body textare
 @media (max-width: 700px) { .choice-card { grid-template-columns: 1fr; } }
 .scope-note { margin-bottom: 2.5rem; }
 [data-v7-scope] + h2, .scope-note + h2 { margin-top: 2rem; }
+
+/* WhatsApp-contactkanalen verwijderd; 078-bellen en offerteformulier blijven zichtbaar. */
+[data-whatsapp] { display: none !important; }
+.site-footer li:has(> [data-whatsapp]) { display: none !important; }
+.mobile-cta-bar [data-whatsapp] { display: none !important; }
