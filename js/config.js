@@ -12,7 +12,7 @@
     tagline: "Groenonderhoud & Aanleg",
     phoneDisplay: "078 204 95 17",
     phoneHref: "tel:+31782049517",
-    email: "sealcleaningaanleg@gmail.com",
+    email: "info@sealcleaning.nl",
     addressLine1: "Romboutslaan 582",
     addressLine2: "3312 KP Dordrecht",
     kvk: "83078665",
@@ -23,7 +23,7 @@
     // Adres van de Sealcleaning-backend (bijv. "https://api.sealcleaning.nl"). Leeg = formulieren
     // gebruiken het eigen mailprogramma van de bezoeker (huidige werking).
     apiBase: "",
-    /* Directe verzending van aanvragen per e-mail (formulierdienst); bij een storing valt het formulier terug op e-mail via het eigen mailprogramma. */
+    /* FormSubmit-ontvanger is nog het bestaande adres totdat info@sealcleaning.nl als ontvanger is geactiveerd en end-to-end getest. De publieke mailto gebruikt alvast het zakelijke adres. */
     formEndpoint: "https://formsubmit.co/ajax/sealcleaningaanleg@gmail.com"
   };
 
