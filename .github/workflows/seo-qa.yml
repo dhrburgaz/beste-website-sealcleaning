@@ -1,0 +1,21 @@
+name: SEO controles
+on:
+  pull_request:
+    paths:
+      - 'sitemap.xml'
+      - 'robots.txt'
+      - 'CNAME'
+      - '**/*.html'
+      - 'tests/seo-launch.test.mjs'
+      - '.github/workflows/seo-qa.yml'
+permissions:
+  contents: read
+jobs:
+  seo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test tests/seo-launch.test.mjs

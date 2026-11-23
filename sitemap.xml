@@ -212,11 +212,7 @@
     <xhtml:link rel="alternate" hreflang="tr" href="https://sealcleaning.nl/tr/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://sealcleaning.nl/"/>
   </url>
-  <url><loc>https://sealcleaning.nl/tr/inspiratie/</loc>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://sealcleaning.nl/inspiratie/"/>
-    <xhtml:link rel="alternate" hreflang="tr" href="https://sealcleaning.nl/tr/inspiratie/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://sealcleaning.nl/inspiratie/"/>
-  </url>
+
   <url><loc>https://sealcleaning.nl/tr/kennisbank/bestratingsoppervlak-berekenen/</loc>
     <xhtml:link rel="alternate" hreflang="nl" href="https://sealcleaning.nl/kennisbank/bestratingsoppervlak-berekenen/"/>
     <xhtml:link rel="alternate" hreflang="tr" href="https://sealcleaning.nl/tr/kennisbank/bestratingsoppervlak-berekenen/"/>
@@ -347,9 +343,5 @@
     <xhtml:link rel="alternate" hreflang="tr" href="https://sealcleaning.nl/tr/werkwijze/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://sealcleaning.nl/werkwijze/"/>
   </url>
-  <url><loc>https://sealcleaning.nl/tr/zoeken/</loc>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://sealcleaning.nl/zoeken/"/>
-    <xhtml:link rel="alternate" hreflang="tr" href="https://sealcleaning.nl/tr/zoeken/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://sealcleaning.nl/zoeken/"/>
-  </url>
+
 </urlset>
