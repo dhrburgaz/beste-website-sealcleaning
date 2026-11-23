@@ -343,9 +343,5 @@
     <xhtml:link rel="alternate" hreflang="tr" href="https://sealcleaning.nl/tr/werkwijze/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://sealcleaning.nl/werkwijze/"/>
   </url>
-  <url><loc>https://sealcleaning.nl/tr/zoeken/</loc>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://sealcleaning.nl/zoeken/"/>
-    <xhtml:link rel="alternate" hreflang="tr" href="https://sealcleaning.nl/tr/zoeken/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://sealcleaning.nl/zoeken/"/>
-  </url>
+
 </urlset>
