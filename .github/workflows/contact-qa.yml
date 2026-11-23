@@ -1,0 +1,26 @@
+name: Contactkanalen controle
+on:
+  pull_request:
+    paths:
+      - 'js/config.js'
+      - 'js/main.js'
+      - 'css/style.css'
+      - '**/*.html'
+      - 'tests/no-whatsapp.test.mjs'
+      - '.github/workflows/contact-qa.yml'
+permissions:
+  contents: read
+jobs:
+  contact-qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Controleer JavaScript syntaxis
+        run: |
+          node --check js/config.js
+          node --check js/main.js
+      - name: Test behoud 078 en verwijder WhatsApp
+        run: node --test tests/no-whatsapp.test.mjs
