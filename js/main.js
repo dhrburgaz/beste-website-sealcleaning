@@ -184,7 +184,7 @@
             form.reset();
             var label = document.querySelector("[data-file-count]");
             if (label) label.textContent = "";
-            statusEl.textContent = "Bedankt, uw aanvraag is verstuurd. Wij nemen contact met u op. Wilt u liever direct contact? Bel 078 204 95 17 of stuur een WhatsApp-bericht.";
+            statusEl.textContent = "Bedankt, uw aanvraag is verstuurd. Wij nemen contact met u op. Wilt u liever direct contact? Bel 078 204 95 17.";
             statusEl.className = "form-status success";
             statusEl.scrollIntoView({ behavior: "smooth", block: "center" });
             return;
@@ -215,7 +215,7 @@
       var attachmentAltChannel = form.getAttribute("data-attachment-alt-channel");
 
       if (statusEl) {
-        var contactLine = " U kunt ook direct bellen (078 204 95 17) of een WhatsApp-bericht sturen.";
+        var contactLine = " U kunt ook direct bellen via 078 204 95 17.";
         var base = "Het versturen via de website is niet gelukt, uw aanvraag is dus nog niet verzonden. Klik hieronder om haar via uw e-mailprogramma te versturen. Uw ingevulde gegevens worden meegenomen.";
         statusEl.innerHTML = hasPhotos
           ? base + " <strong>Let op: uw geselecteerde " + attachmentNoun + " worden niet automatisch bijgevoegd.</strong> Voeg ze in uw mailprogramma zelf toe" + (attachmentAltChannel ? ", of stuur ze apart via " + attachmentAltChannel : "") + "." + contactLine
